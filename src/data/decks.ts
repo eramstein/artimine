@@ -1,0 +1,48 @@
+import type { CardTemplate } from '@/lib/_model';
+import { cards } from './cards';
+
+export const PLAYER_DECK: CardTemplate[] = [
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+];
+
+export const FOE_DECK: CardTemplate[] = [
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+  cards.lion,
+];

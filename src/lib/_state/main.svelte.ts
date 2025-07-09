@@ -3,8 +3,14 @@ import type { BattleState, GameState } from '../_model';
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
 
+const defaultBattleState: BattleState = {
+  turn: 0,
+  players: [],
+  units: [],
+};
+
 export const gs: GameState = $state({});
-export const bs: BattleState = $state({ turn: 0, players: [] });
+export const bs: BattleState = $state(defaultBattleState);
 
 export const saveStateToLocalStorage = (): void => {
   try {
