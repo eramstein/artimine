@@ -5,6 +5,7 @@ const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
 
 const defaultBattleState: BattleState = {
   turn: 0,
+  isPlayersTurn: true,
   players: [],
   units: [],
 };

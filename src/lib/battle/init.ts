@@ -8,6 +8,7 @@ export const initBattle = () => {
   bs.turn = 1;
   bs.players = [
     {
+      id: 0,
       name: 'Henry',
       isPlayer: true,
       mana: config.initialMana,
@@ -17,7 +18,7 @@ export const initBattle = () => {
       deck: shuffleDeck(
         PLAYER_DECK.map((card) => ({
           ...card,
-          owner: bs.players[0],
+          ownerPlayerId: 0,
           instanceId: crypto.randomUUID(),
         }))
       ),
@@ -31,6 +32,7 @@ export const initBattle = () => {
       })),
     },
     {
+      id: 1,
       name: 'The Dude',
       isPlayer: false,
       mana: config.initialMana,
@@ -40,7 +42,7 @@ export const initBattle = () => {
       deck: shuffleDeck(
         FOE_DECK.map((card) => ({
           ...card,
-          owner: bs.players[1],
+          ownerPlayerId: 1,
           instanceId: crypto.randomUUID(),
         }))
       ),

@@ -2,11 +2,13 @@ import { CardColor } from './enums';
 
 export interface BattleState {
   turn: number;
+  isPlayersTurn: boolean;
   players: Player[];
   units: CardDeployed[];
 }
 
 export interface Player {
+  id: number;
   isPlayer: boolean;
   name: string;
   mana: number;
@@ -24,17 +26,20 @@ export interface CardTemplate {
   name: string;
   cost: number;
   colors: { color: CardColor; count: number }[];
-  power: number;
-  health: number;
+  power?: number;
+  health?: number;
 }
 
 export interface Card extends CardTemplate {
   instanceId: string;
-  owner: Player;
+  ownerPlayerId: number;
 }
 
 export interface CardDeployed extends Card {
   position: { row: number; column: number };
+  hasAttacked: boolean;
+  hasMoved: boolean;
+  exhausted: boolean;
 }
 
 export interface LandTemplate {
