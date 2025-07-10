@@ -36,8 +36,8 @@
   .hand {
     display: flex;
     gap: 0;
-    padding: 1rem;
-    overflow: hidden;
+    padding: 0 1rem;
+    overflow: visible;
     min-height: 220px;
     align-items: center;
     justify-content: center;
@@ -70,7 +70,9 @@
   /* Only apply hover effects to player hands */
   .hand.player-hand .card-wrapper:hover {
     margin-left: -10px !important;
+    margin-top: -10px !important;
     z-index: 10;
+    transform: scale(1.05);
   }
 
   /* When a card is hovered, only shift the immediately adjacent card to the right */
@@ -84,10 +86,13 @@
   }
 
   .gray-card {
-    width: var(--card-width, 120px);
-    height: 180px;
-    background-color: #666;
-    border-radius: 8px;
+    width: var(--card-width, 200px);
+    height: var(--card-height, 240px);
+    background-image: url('/src/assets/images/card_back.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 12px;
     border: 2px solid #444;
     flex-shrink: 0;
   }

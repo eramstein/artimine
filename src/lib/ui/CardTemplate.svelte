@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { CardTemplate } from '../_model/model-battle';
   import { CARD_WIDTH, CARD_HEIGHT } from '../_config/ui-config';
+  import { CardColor } from '../_model/enums';
 
   let { card, playerMana }: { card: CardTemplate; playerMana?: number } = $props();
 
@@ -10,7 +11,18 @@
   // Determine border color based on mana availability
   function getBorderColor() {
     if (playerMana === undefined) return '#bfa14a'; // Default golden color
-    return playerMana >= card.cost ? '#2ecc71' : '#e74c3c'; // Green if affordable, red if not
+    return playerMana >= card.cost ? '#005825' : '#e74c3c'; // Green if affordable, red if not
+  }
+
+  // Get color style for each color using CSS variables
+  function getColorStyle(color: CardColor) {
+    const colorMap = {
+      [CardColor.Red]: 'var(--color-red)',
+      [CardColor.Blue]: 'var(--color-blue)',
+      [CardColor.Green]: 'var(--color-green)',
+      [CardColor.Black]: 'var(--color-black)',
+    };
+    return colorMap[color] || 'var(--color-golden)';
   }
 </script>
 
@@ -26,6 +38,20 @@
   <div class="name">
     <div class="cost">
       {card.cost}
+    </div>
+    <!-- Color indicators -->
+    <div class="colors">
+      {#each card.colors as colorInfo}
+        <div
+          class="color-indicator"
+          style="background-color: {getColorStyle(colorInfo.color)};"
+          title="{colorInfo.color} ({colorInfo.count})"
+        >
+          {#if colorInfo.count > 1}
+            <span class="color-count">{colorInfo.count}</span>
+          {/if}
+        </div>
+      {/each}
     </div>
     <span class="name-text">{card.name}</span>
   </div>
@@ -85,7 +111,7 @@
     font-size: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
   .cost {
@@ -104,6 +130,42 @@
     justify-content: center;
     text-shadow: 0 1px 2px #000;
     flex-shrink: 0;
+  }
+
+  .colors {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid var(--color-golden);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .color-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #000;
+    color: white;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-golden);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   .name-text {

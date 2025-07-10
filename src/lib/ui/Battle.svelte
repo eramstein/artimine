@@ -6,13 +6,13 @@
 </script>
 
 <div class="battle">
-  <div class="player-section">
+  <div class="top-section">
     <Player player={bs.players[0]} />
-    <Hand player={bs.players[0]} />
-  </div>
-  <Board />
-  <div class="player-section">
+    <Board />
     <Player player={bs.players[1]} />
+  </div>
+  <div class="bottom-section">
+    <Hand player={bs.players[0]} />
     <Hand player={bs.players[1]} />
   </div>
 </div>
@@ -20,17 +20,30 @@
 <style>
   .battle {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/src/assets/images/table.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+  }
+
+  .top-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .bottom-section {
+    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    padding: 1rem;
-    min-height: 100vh;
-  }
-
-  .player-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
+    width: 100%;
   }
 </style>

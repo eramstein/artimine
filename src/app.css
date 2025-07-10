@@ -9,6 +9,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Card color variables for consistent theming */
+  --color-red: #e74c3c;
+  --color-blue: #3498db;
+  --color-green: #27ae60;
+  --color-black: #2c3e50;
+  --color-golden: #bfa14a;
 }
 
 html,
@@ -16,6 +23,10 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 #app {

@@ -1,7 +1,8 @@
 import { bs } from '../_state';
-import { FOE_DECK, PLAYER_DECK } from '@/data';
+import { FOE_DECK, FOE_LANDS, PLAYER_DECK, PLAYER_LANDS } from '@/data';
 import { drawCard, shuffleDeck } from './deck';
 import { config } from '../_config';
+import { incrementColorsFromLands } from './land';
 
 export const initBattle = () => {
   bs.turn = 1;
@@ -21,6 +22,13 @@ export const initBattle = () => {
         }))
       ),
       graveyard: [],
+      colors: {},
+      lands: PLAYER_LANDS.map((land, index) => ({
+        ...land,
+        ownerPlayerId: 0,
+        instanceId: crypto.randomUUID(),
+        position: index,
+      })),
     },
     {
       name: 'The Dude',
@@ -37,10 +45,19 @@ export const initBattle = () => {
         }))
       ),
       graveyard: [],
+      colors: {},
+      lands: FOE_LANDS.map((land, index) => ({
+        ...land,
+        ownerPlayerId: 1,
+        instanceId: crypto.randomUUID(),
+        position: index,
+      })),
     },
   ];
   for (let i = 0; i < config.initialHandSize; i++) {
     drawCard(bs.players[0]);
     drawCard(bs.players[1]);
   }
+  incrementColorsFromLands(bs.players[0]);
+  incrementColorsFromLands(bs.players[1]);
 };

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Player } from '../_model/model-battle';
+  import { CardColor } from '../_model/enums';
 
   let { player }: { player: Player } = $props();
 
@@ -8,28 +9,53 @@
 
   // Create the image path
   let characterImagePath = $derived(`/src/assets/images/characters/${characterImageName}.png`);
+
+  // Get available colors for the player
+  let availableColors = $derived(
+    Object.entries(player.colors || {}).filter(([_, count]) => count > 0)
+  );
 </script>
 
-<div class="player">
-  <div class="mana-display">
-    <div class="mana-value">{player.mana}</div>
-    <div class="max-mana">{player.maxMana}</div>
-  </div>
+<div class="player-container">
+  <div class="player">
+    <div class="mana-display">
+      <div class="mana-value">{player.mana}</div>
+      <div class="max-mana">{player.maxMana}</div>
+    </div>
 
-  <div class="player-info" style="background-image: url('{characterImagePath}')">
-    <div class="life-display">
-      <span class="life-value">{player.life}</span>
+    <div class="player-info" style="background-image: url('{characterImagePath}')">
+      <div class="life-display">
+        <span class="life-value">{player.life}</span>
+      </div>
     </div>
   </div>
+
+  {#if availableColors.length > 0}
+    <div class="color-display">
+      {#each availableColors as [color, count]}
+        <div class="color-item" data-color={color}>
+          <div class="color-symbol">
+            <span class="color-count">{count}</span>
+          </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style>
+  .player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem;
+  }
+
   .player {
     padding: 0.5rem;
     background: linear-gradient(135deg, #2c3e50, #34495e);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 0.5rem;
     width: 200px;
     height: 200px;
     position: relative;
@@ -115,5 +141,58 @@
 
   .life-value {
     color: white;
+  }
+
+  .color-display {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    width: 200px;
+  }
+
+  .color-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .color-symbol {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 2px solid #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .color-item[data-color='red'] .color-symbol {
+    background-color: var(--color-red);
+  }
+
+  .color-item[data-color='blue'] .color-symbol {
+    background-color: var(--color-blue);
+  }
+
+  .color-item[data-color='green'] .color-symbol {
+    background-color: var(--color-green);
+  }
+
+  .color-item[data-color='black'] .color-symbol {
+    background-color: var(--color-black);
+  }
+
+  .color-count {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   }
 </style>

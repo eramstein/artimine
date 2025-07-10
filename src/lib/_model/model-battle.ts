@@ -1,3 +1,5 @@
+import { CardColor } from './enums';
+
 export interface BattleState {
   turn: number;
   players: Player[];
@@ -13,12 +15,15 @@ export interface Player {
   hand: Card[];
   deck: Card[];
   graveyard: Card[];
+  lands: Land[];
+  colors: Partial<Record<CardColor, number>>;
 }
 
 export interface CardTemplate {
   id: string;
   name: string;
   cost: number;
+  colors: { color: CardColor; count: number }[];
   power: number;
   health: number;
 }
@@ -30,4 +35,17 @@ export interface Card extends CardTemplate {
 
 export interface CardDeployed extends Card {
   position: { row: number; column: number };
+}
+
+export interface LandTemplate {
+  id: string;
+  name: string;
+  colors: { color: CardColor; count: number }[];
+  health: number;
+}
+
+export interface Land extends LandTemplate {
+  instanceId: string;
+  ownerPlayerId: number;
+  position: number;
 }

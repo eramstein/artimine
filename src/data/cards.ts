@@ -1,4 +1,4 @@
-import type { CardTemplate } from '@/lib/_model';
+import { CardColor, type CardTemplate } from '@/lib/_model';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -7,5 +7,6 @@ export const cards: Record<string, CardTemplate> = {
     cost: 1,
     power: 2,
     health: 1,
+    colors: [{ color: CardColor.Red, count: 1 }],
   },
 };
