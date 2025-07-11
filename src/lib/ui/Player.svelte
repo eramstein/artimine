@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Player } from '../_model/model-battle';
-  import { CardColor } from '../_model/enums';
+  import Deck from './Deck.svelte';
+  import Graveyard from './Graveyard.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -41,6 +42,11 @@
       {/each}
     </div>
   {/if}
+
+  <div class="deck-section">
+    <Deck {player} />
+    <Graveyard {player} />
+  </div>
 </div>
 
 <style>
@@ -148,8 +154,9 @@
     justify-content: center;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
     width: 200px;
   }
@@ -194,5 +201,12 @@
     font-weight: bold;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .deck-section {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
   }
 </style>

@@ -1,6 +1,7 @@
 import type { Player } from '../_model';
 import { bs } from '../_state';
 import { playAiTurn } from './ai/main';
+import { drawCard } from './deck';
 
 export function nextTurn() {
   console.log('next turn');
@@ -17,6 +18,7 @@ function initPlayerTurn(player: Player) {
   player.maxMana++;
   player.mana = player.maxMana;
   resetUnits(player);
+  drawCard(player);
 }
 
 function resetUnits(player: Player) {

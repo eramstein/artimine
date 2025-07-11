@@ -58,7 +58,7 @@
   }
 
   .end-turn-btn {
-    background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
+    background: linear-gradient(135deg, #e74c3c 0%, #a93226 100%);
     color: white;
     border: 3px solid rgba(255, 255, 255, 0.3);
     width: 80px;
