@@ -2,6 +2,7 @@
   import type { CardTemplate } from '../_model/model-battle';
   import { CARD_WIDTH, CARD_HEIGHT } from '../_config/ui-config';
   import { CardColor } from '../_model/enums';
+  import { isUnitCard } from '../_model/model-battle';
 
   let { card, playerMana }: { card: CardTemplate; playerMana?: number } = $props();
 
@@ -56,15 +57,17 @@
     <span class="name-text">{card.name}</span>
   </div>
 
-  <!-- Stats display in bottom-left corner -->
-  <div class="stats">
-    <div class="power">
-      {card.power}
+  <!-- Stats display in bottom-left corner - only for Unit cards -->
+  {#if isUnitCard(card)}
+    <div class="stats">
+      <div class="power">
+        {card.power}
+      </div>
+      <div class="health">
+        {card.maxHealth}
+      </div>
     </div>
-    <div class="health">
-      {card.health}
-    </div>
-  </div>
+  {/if}
 </div>
 
 <style>
