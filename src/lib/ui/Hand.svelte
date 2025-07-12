@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Player } from '../_model/model-battle';
-  import CardTemplate from './CardTemplate.svelte';
+  import Card from './Card.svelte';
   import { CARD_WIDTH } from '../_config/ui-config';
 
   let { player }: { player: Player } = $props();
@@ -49,7 +49,7 @@
       style="margin-left: {index === 0 ? 0 : -calculateOverlap()}px;"
     >
       {#if player.isPlayer}
-        <CardTemplate {card} playerMana={player.mana} />
+        <Card {card} />
       {:else}
         <div class="gray-card"></div>
       {/if}

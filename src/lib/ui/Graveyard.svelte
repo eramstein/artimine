@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Player } from '../_model';
-  import CardTemplate from './CardTemplate.svelte';
+  import Card from './Card.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -21,7 +21,7 @@
   {#if topCard}
     <!-- Show the top card from graveyard -->
     <div class="graveyard-card">
-      <CardTemplate card={topCard} />
+      <Card card={topCard} />
     </div>
   {:else}
     <!-- Show empty dotted placeholder -->

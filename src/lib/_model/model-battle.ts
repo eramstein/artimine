@@ -57,7 +57,12 @@ export type Card = UnitCard | SpellCard;
 
 // CARD DEPLOYED INTERFACES (for permanents, once on the board)
 export interface BaseCardDeployed extends BaseCard {
-  position: { row: number; column: number };
+  position: Position;
+}
+
+export interface Position {
+  row: number;
+  column: number;
 }
 
 export interface UnitCardDeployed extends UnitCard, BaseCardDeployed {

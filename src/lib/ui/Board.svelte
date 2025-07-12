@@ -1,7 +1,12 @@
 <script lang="ts">
   import { config } from '@lib/_config';
   import Land from './Land.svelte';
+  import UnitDeployed from './UnitDeployed.svelte';
   import { bs } from '@lib/_state';
+  import { deployUnit } from '@lib/battle/unit';
+  import { isUnitCard } from '@lib/_model';
+  import type { Position, Card } from '@lib/_model';
+  import { isOnPlayersSide } from '../battle/boards';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -13,6 +18,69 @@
   // Get lands from battle state
   const leftLands = $derived(bs.players[0]?.lands || []);
   const rightLands = $derived(bs.players[1]?.lands || []);
+
+  // Create a map of position to unit for efficient lookup
+  const unitsByPosition = $derived(() => {
+    const map = new Map<string, (typeof bs.units)[0]>();
+    for (const unit of bs.units) {
+      const key = `${unit.position.row},${unit.position.column}`;
+      map.set(key, unit);
+    }
+    return map;
+  });
+
+  // Function to get unit at a specific position
+  function getUnitAtPosition(row: number, column: number) {
+    const key = `${row},${column}`;
+    return unitsByPosition().get(key);
+  }
+
+  // Track drag state for each cell
+  let dragOverCell = $state<{ row: number; column: number } | null>(null);
+
+  // Drop event handlers
+  function handleDragOver(event: DragEvent) {
+    // Only allow drops during player's turn
+    if (!bs.isPlayersTurn) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  function handleDragEnter(event: DragEvent, row: number, column: number) {
+    // Only show visual feedback during player's turn
+    if (!bs.isPlayersTurn) return;
+    dragOverCell = { row, column };
+  }
+
+  function handleDragLeave(event: DragEvent, row: number, column: number) {
+    // Only clear if we're leaving the current drag-over cell
+    if (dragOverCell?.row === row && dragOverCell?.column === column) {
+      dragOverCell = null;
+    }
+  }
+
+  function handleDrop(event: DragEvent, row: number, column: number) {
+    event.preventDefault();
+    dragOverCell = null;
+    if (!event.dataTransfer) return;
+    try {
+      const cardData = event.dataTransfer.getData('application/json');
+      if (!cardData) return;
+      const position: Position = { row, column };
+      const card: Card = JSON.parse(cardData);
+      if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
+        deployUnit(card, position);
+      }
+    } catch (error) {
+      console.error('Error deploying unit:', error);
+    }
+  }
 </script>
 
 <div class="board-container">
@@ -35,10 +103,17 @@
           <div
             class="board-cell"
             class:middle-gap={column === middleColumnIndex}
+            class:drag-over={dragOverCell?.row === row && dragOverCell?.column === column}
             data-row={row}
             data-column={column}
+            ondragover={handleDragOver}
+            ondragenter={(event) => handleDragEnter(event, row, column)}
+            ondragleave={(event) => handleDragLeave(event, row, column)}
+            ondrop={(event) => handleDrop(event, row, column)}
           >
-            <!-- Cards will be placed here later -->
+            {#if getUnitAtPosition(row, column)}
+              <UnitDeployed unit={getUnitAtPosition(row, column)!} />
+            {/if}
           </div>
         {/each}
       </div>
@@ -133,5 +208,12 @@
   .board-cell:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .board-cell.drag-over {
+    background: #5a5a5a;
+    border-color: #bfa14a;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(191, 161, 74, 0.6);
   }
 </style>
