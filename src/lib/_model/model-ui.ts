@@ -8,6 +8,7 @@ export type UiState = {
       units?: Record<string, boolean>;
       lands?: Record<string, boolean>;
       players?: Record<number, boolean>;
+      moves?: Record<string, boolean>;
     } | null;
   };
 };

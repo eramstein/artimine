@@ -2,11 +2,13 @@
   import { config } from '@lib/_config';
   import Land from './Land.svelte';
   import UnitDeployed from './UnitDeployed.svelte';
-  import { bs } from '@lib/_state';
+  import { bs, uiState } from '@lib/_state';
   import { deployUnit } from '@lib/battle/unit';
   import { isUnitCard } from '@lib/_model';
   import type { Position, Card } from '@lib/_model';
-  import { isOnPlayersSide } from '../battle/boards';
+  import { isOnPlayersSide, getPositionKey } from '../battle/boards';
+  import { moveUnit } from '../battle/move';
+  import { clearSelections } from './_helpers/selections';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -107,6 +109,22 @@
       console.error('Error deploying unit:', error);
     }
   }
+
+  // Function to check if a position is a valid move target
+  function isValidMoveTarget(row: number, column: number) {
+    const positionKey = getPositionKey({ row, column });
+    return uiState.battle.validTargets?.moves?.[positionKey] === true;
+  }
+
+  // Click handler for board cells
+  function handleCellClick(row: number, column: number) {
+    const selectedUnit = uiState.battle.selectedUnit;
+    if (selectedUnit && isValidMoveTarget(row, column)) {
+      const targetPosition: Position = { row, column };
+      moveUnit(selectedUnit, targetPosition);
+      clearSelections();
+    }
+  }
 </script>
 
 <div class="board-container">
@@ -126,19 +144,22 @@
     {#each rows as row}
       <div class="board-row">
         {#each columns as column}
+          {@const unit = getUnitAtPosition(row, column)}
           <div
             class="board-cell"
             class:middle-gap={column === middleColumnIndex}
             class:drag-over={dragOverCell?.row === row && dragOverCell?.column === column}
+            class:valid-move-target={isValidMoveTarget(row, column)}
             data-row={row}
             data-column={column}
             ondragover={handleDragOver}
             ondragenter={(event) => handleDragEnter(event, row, column)}
             ondragleave={(event) => handleDragLeave(event, row, column)}
             ondrop={(event) => handleDrop(event, row, column)}
+            onclick={() => handleCellClick(row, column)}
           >
-            {#if getUnitAtPosition(row, column)}
-              <UnitDeployed unit={getUnitAtPosition(row, column)!} />
+            {#if unit}
+              <UnitDeployed {unit} />
             {/if}
           </div>
         {/each}
@@ -241,5 +262,10 @@
     border-color: #bfa14a;
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(191, 161, 74, 0.6);
+  }
+
+  .board-cell.valid-move-target {
+    border-color: #4caf50; /* Green border for valid move targets */
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
   }
 </style>

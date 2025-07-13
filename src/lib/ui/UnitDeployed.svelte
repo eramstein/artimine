@@ -42,7 +42,11 @@
     border-radius: 6px;
     overflow: hidden;
     border: 3px solid;
-    transition: border-color 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    transform: translateZ(0); /* Enable hardware acceleration */
   }
 
   .unit-deployed.active {
@@ -51,6 +55,8 @@
 
   .unit-deployed.selected {
     outline: 2px solid #eecd6c;
+    transform: translateZ(0) scale(1.02);
+    box-shadow: 0 4px 12px rgba(238, 205, 108, 0.3);
   }
 
   .unit-deployed.inactive {

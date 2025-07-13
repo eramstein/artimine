@@ -32,7 +32,11 @@ export function isUnitActive(unit: UnitCardDeployed) {
 export function damageUnit(unit: UnitCardDeployed, damage: number) {
   unit.health -= damage;
   if (unit.health <= 0) {
-    bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
-    bs.players[unit.ownerPlayerId].graveyard.push(unit);
+    destroyUnit(unit);
   }
+}
+
+export function destroyUnit(unit: UnitCardDeployed) {
+  bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
+  bs.players[unit.ownerPlayerId].graveyard.push(unit);
 }
