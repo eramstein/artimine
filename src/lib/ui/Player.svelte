@@ -2,6 +2,9 @@
   import type { Player } from '../_model/model-battle';
   import Deck from './Deck.svelte';
   import Graveyard from './Graveyard.svelte';
+  import { uiState } from '../_state';
+  import { attackPlayer } from '../battle/combat';
+  import { clearSelections } from './_helpers/selections';
 
   let { player }: { player: Player } = $props();
 
@@ -15,10 +18,21 @@
   let availableColors = $derived(
     Object.entries(player.colors || {}).filter(([_, count]) => count > 0)
   );
+
+  // Check if this player is a valid target
+  let isValidTarget = $derived(uiState.battle.validTargets?.players?.[player.id] === true);
+
+  function handlePlayerClick() {
+    const selectedUnit = uiState.battle.selectedUnit;
+    if (selectedUnit && isValidTarget) {
+      attackPlayer(selectedUnit, player.id);
+      clearSelections();
+    }
+  }
 </script>
 
 <div class="player-container">
-  <div class="player">
+  <div class="player {isValidTarget ? 'valid-target' : ''}" onclick={handlePlayerClick}>
     <div class="mana-display">
       <div class="mana-value">{player.mana}</div>
       <div class="max-mana">{player.maxMana}</div>
@@ -65,6 +79,12 @@
     width: 200px;
     height: 200px;
     position: relative;
+  }
+
+  .player.valid-target {
+    outline: 2px solid #ff0000;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+    cursor: pointer;
   }
 
   .mana-display {

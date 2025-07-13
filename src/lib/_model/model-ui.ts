@@ -1,5 +1,15 @@
+import type { UnitCardDeployed } from './model-battle';
+
 export type UiState = {
   currentView: UiView;
+  battle: {
+    selectedUnit: UnitCardDeployed | null;
+    validTargets: {
+      units?: Record<string, boolean>;
+      lands?: Record<string, boolean>;
+      players?: Record<number, boolean>;
+    } | null;
+  };
 };
 
 export enum UiView {

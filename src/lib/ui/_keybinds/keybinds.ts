@@ -1,4 +1,10 @@
-import { loadGameStateFromLocalStorage, saveStateToLocalStorage, gs } from '../../_state';
+import {
+  loadGameStateFromLocalStorage,
+  saveStateToLocalStorage,
+  resetBattleState,
+  getCurrentBattleState,
+  bs,
+} from '../../_state';
 
 export function handleKeybinds(event: KeyboardEvent) {
   // Skip keybinds if user is typing in an input field
@@ -21,5 +27,11 @@ export function handleKeybinds(event: KeyboardEvent) {
     event.preventDefault();
     saveStateToLocalStorage();
     console.log('State saved to localStorage');
+  } else if (event.key === 'r') {
+    event.preventDefault();
+    resetBattleState();
+    console.log('Battle state reset');
+  } else if (event.key === 'l') {
+    console.log('Current battle state:', getCurrentBattleState());
   }
 }

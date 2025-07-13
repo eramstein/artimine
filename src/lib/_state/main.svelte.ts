@@ -42,3 +42,18 @@ export const loadGameStateFromLocalStorage = async () => {
     return null;
   }
 };
+
+export const resetBattleState = (): void => {
+  try {
+    // Reset to default battle state
+    Object.assign(bs, defaultBattleState);
+    // Save the reset state to localStorage
+    localStorage.setItem(LOCAL_STORAGE_KEY_BATTLE, JSON.stringify(bs));
+  } catch (error) {
+    console.error('Failed to reset battle state:', error);
+  }
+};
+
+export const getCurrentBattleState = () => {
+  return { ...bs };
+};

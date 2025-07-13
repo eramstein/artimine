@@ -6,7 +6,7 @@ import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit } from './unit';
 
 export function canAttack(unit: UnitCardDeployed) {
-  return !unit.exhausted && !unit.hasAttacked && !unit.hasMoved;
+  return !unit.exhausted;
 }
 
 export function validAttackTargets(unit: UnitCardDeployed): UnitCardDeployed[] | Land | Player {
@@ -15,7 +15,7 @@ export function validAttackTargets(unit: UnitCardDeployed): UnitCardDeployed[] |
     return [firstBlocker];
   }
   const opponent = getOpposingPlayer(unit);
-  const landBlocker = opponent.lands.find((_, i) => i === unit.position.row);
+  const landBlocker = opponent.lands.find((l) => l.position === unit.position.row);
   if (landBlocker) {
     return landBlocker;
   }
@@ -46,7 +46,7 @@ export function attackUnit(unit: UnitCardDeployed, target: UnitCardDeployed) {
     throw new Error('Invalid attack target');
   }
   damageUnit(target, unit.power);
-  unit.hasAttacked = true;
+  recordUnitHasAttacked(unit);
 }
 
 export function attackLand(unit: UnitCardDeployed, target: Land) {
@@ -54,7 +54,7 @@ export function attackLand(unit: UnitCardDeployed, target: Land) {
     throw new Error('Invalid attack target');
   }
   damageLand(target, unit.power);
-  unit.hasAttacked = true;
+  recordUnitHasAttacked(unit);
 }
 
 export function attackPlayer(unit: UnitCardDeployed, playerId: number) {
@@ -63,5 +63,10 @@ export function attackPlayer(unit: UnitCardDeployed, playerId: number) {
     throw new Error('Invalid attack target');
   }
   damagePlayer(targetPlayer, unit.power);
+  recordUnitHasAttacked(unit);
+}
+
+function recordUnitHasAttacked(unit: UnitCardDeployed) {
   unit.hasAttacked = true;
+  unit.exhausted = true;
 }

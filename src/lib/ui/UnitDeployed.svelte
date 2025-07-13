@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { UnitCardDeployed } from '../_model';
   import { isUnitActive } from '../battle/unit';
+  import { uiState } from '../_state';
+  import { toggleUnitSelection } from './_helpers/selections';
 
   let { unit }: { unit: UnitCardDeployed } = $props();
 
@@ -9,11 +11,15 @@
 
   // Determine if unit is active for border styling
   let isActive = $derived(isUnitActive(unit));
+
+  // Check if this unit is currently selected
+  let isSelected = $derived(uiState.battle.selectedUnit?.instanceId === unit.instanceId);
 </script>
 
 <div
-  class="unit-deployed {isActive ? 'active' : 'inactive'}"
+  class="unit-deployed {isActive ? 'active' : 'inactive'} {isSelected ? 'selected' : ''}"
   style="background-image: url('{cardImagePath}')"
+  onclick={() => toggleUnitSelection(unit)}
 >
   <div class="stats">
     <div class="power">
@@ -41,6 +47,10 @@
 
   .unit-deployed.active {
     border-color: #bfa14a;
+  }
+
+  .unit-deployed.selected {
+    outline: 2px solid #eecd6c;
   }
 
   .unit-deployed.inactive {

@@ -3,7 +3,12 @@
   import Board from './Board.svelte';
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
+  import GameWonModal from './GameWonModal.svelte';
   import { nextTurn } from '../battle/turn';
+
+  // Derived value to check if game is won
+  let gameWon = $derived(bs.playerIdWon !== null);
+  let winningPlayer = $derived(gameWon ? bs.players[bs.playerIdWon!] : null);
 </script>
 
 <div class="battle">
@@ -27,6 +32,10 @@
     <Hand player={bs.players[1]} />
   </div>
 </div>
+
+{#if gameWon && winningPlayer}
+  <GameWonModal {winningPlayer} />
+{/if}
 
 <style>
   .battle {

@@ -19,6 +19,32 @@
   const leftLands = $derived(bs.players[0]?.lands || []);
   const rightLands = $derived(bs.players[1]?.lands || []);
 
+  // Create maps of position to land for efficient lookup
+  const leftLandsByPosition = $derived(() => {
+    const map = new Map<number, (typeof leftLands)[0]>();
+    for (const land of leftLands) {
+      map.set(land.position, land);
+    }
+    return map;
+  });
+
+  const rightLandsByPosition = $derived(() => {
+    const map = new Map<number, (typeof rightLands)[0]>();
+    for (const land of rightLands) {
+      map.set(land.position, land);
+    }
+    return map;
+  });
+
+  // Function to get land at a specific position
+  function getLeftLandAtPosition(position: number) {
+    return leftLandsByPosition().get(position);
+  }
+
+  function getRightLandAtPosition(position: number) {
+    return rightLandsByPosition().get(position);
+  }
+
   // Create a map of position to unit for efficient lookup
   const unitsByPosition = $derived(() => {
     const map = new Map<string, (typeof bs.units)[0]>();
@@ -88,8 +114,8 @@
   <div class="side-column left-column">
     {#each rows as row}
       <div class="side-cell" data-row={row} data-side="left">
-        {#if leftLands[row]}
-          <Land land={leftLands[row]} />
+        {#if getLeftLandAtPosition(row)}
+          <Land land={getLeftLandAtPosition(row)!} />
         {/if}
       </div>
     {/each}
@@ -124,8 +150,8 @@
   <div class="side-column right-column">
     {#each rows as row}
       <div class="side-cell" data-row={row} data-side="right">
-        {#if rightLands[row]}
-          <Land land={rightLands[row]} />
+        {#if getRightLandAtPosition(row)}
+          <Land land={getRightLandAtPosition(row)!} />
         {/if}
       </div>
     {/each}

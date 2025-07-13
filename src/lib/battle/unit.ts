@@ -26,7 +26,7 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
 }
 
 export function isUnitActive(unit: UnitCardDeployed) {
-  return !unit.exhausted && (!unit.hasAttacked || !unit.hasMoved);
+  return !unit.exhausted;
 }
 
 export function damageUnit(unit: UnitCardDeployed, damage: number) {

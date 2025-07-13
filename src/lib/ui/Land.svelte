@@ -1,12 +1,28 @@
 <script lang="ts">
   import type { Land } from '../_model/model-battle';
+  import { uiState } from '../_state';
+  import { attackLand } from '../battle/combat';
+  import { clearSelections } from './_helpers/selections';
 
   let { land }: { land: Land } = $props();
 
   let imagePath = $derived(`/src/assets/images/lands/${land.id}.png`);
+  let isValidTarget = $derived(uiState.battle.validTargets?.lands?.[land.instanceId] === true);
+
+  function handleLandClick() {
+    const selectedUnit = uiState.battle.selectedUnit;
+    if (selectedUnit && isValidTarget) {
+      attackLand(selectedUnit, land);
+      clearSelections();
+    }
+  }
 </script>
 
-<div class="land" style="background-image: url('{imagePath}')">
+<div
+  class="land {isValidTarget ? 'valid-target' : ''}"
+  style="background-image: url('{imagePath}')"
+  onclick={handleLandClick}
+>
   <div class="health">
     {land.health}
   </div>
@@ -25,6 +41,11 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
+  }
+
+  .land.valid-target {
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
   }
 
   .health {
