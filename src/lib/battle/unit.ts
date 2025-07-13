@@ -28,3 +28,11 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
 export function isUnitActive(unit: UnitCardDeployed) {
   return !unit.exhausted && (!unit.hasAttacked || !unit.hasMoved);
 }
+
+export function damageUnit(unit: UnitCardDeployed, damage: number) {
+  unit.health -= damage;
+  if (unit.health <= 0) {
+    bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
+    bs.players[unit.ownerPlayerId].graveyard.push(unit);
+  }
+}

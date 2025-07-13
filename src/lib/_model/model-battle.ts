@@ -3,6 +3,7 @@ import { CardColor, CardType } from './enums';
 export interface BattleState {
   turn: number;
   isPlayersTurn: boolean;
+  playerIdWon: number | null;
   players: Player[];
   units: UnitCardDeployed[];
 }
