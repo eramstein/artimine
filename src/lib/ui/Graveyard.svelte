@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Player } from '../_model';
-  import Card from './Card.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -11,6 +10,9 @@
   let topCard = $derived(
     player.graveyard.length > 0 ? player.graveyard[player.graveyard.length - 1] : null
   );
+
+  // Create the background image path using the card id
+  let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.png` : '');
 </script>
 
 <div
@@ -20,9 +22,7 @@
 >
   {#if topCard}
     <!-- Show the top card from graveyard -->
-    <div class="graveyard-card">
-      <Card card={topCard} />
-    </div>
+    <div class="graveyard-card" style="background-image: url('{cardImagePath}');"></div>
   {:else}
     <!-- Show empty dotted placeholder -->
     <div class="empty-graveyard">
@@ -50,6 +50,11 @@
     height: 180px;
     opacity: 0.7;
     transition: opacity 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    border: 2px solid #666;
   }
 
   .graveyard-card:hover {

@@ -9,6 +9,7 @@
   import { isOnPlayersSide, getPositionKey } from '../battle/boards';
   import { moveUnit } from '../battle/move';
   import { clearSelections } from './_helpers/selections';
+  import { fly } from 'svelte/transition';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -46,16 +47,6 @@
   function getRightLandAtPosition(position: number) {
     return rightLandsByPosition().get(position);
   }
-
-  // Create a map of position to unit for efficient lookup
-  const unitsByPosition = $derived(() => {
-    const map = new Map<string, (typeof bs.units)[0]>();
-    for (const unit of bs.units) {
-      const key = `${unit.position.row},${unit.position.column}`;
-      map.set(key, unit);
-    }
-    return map;
-  });
 
   // Track drag state for each cell
   let dragOverCell = $state<{ row: number; column: number } | null>(null);
@@ -178,9 +169,14 @@
       </div>
     {/each}
   </div>
-  {#each bs.units as unit}
+  {#each bs.units as unit (unit.instanceId)}
     {@const position = getUnitPosition(unit)}
-    <div class="unit-container" style="left: {position.left}px; top: {position.top}px;">
+    {@const isAiUnit = unit.ownerPlayerId === 1}
+    <div
+      class="unit-container"
+      style="left: {position.left}px; top: {position.top}px;"
+      in:fly={isAiUnit ? { y: 0, x: 200, duration: 600 } : undefined}
+    >
       <UnitDeployed {unit} />
     </div>
   {/each}

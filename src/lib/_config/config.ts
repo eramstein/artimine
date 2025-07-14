@@ -4,4 +4,5 @@ export const config = {
   initialLife: 10,
   boardRows: 4,
   boardColumns: 4,
+  aiActionInterval: 500,
 };

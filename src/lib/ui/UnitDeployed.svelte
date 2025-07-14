@@ -3,6 +3,8 @@
   import { isUnitActive } from '../battle/unit';
   import { uiState } from '../_state';
   import { toggleUnitSelection } from './_helpers/selections';
+  import { attackUnit } from '../battle/combat';
+  import { clearSelections } from './_helpers/selections';
 
   let { unit }: { unit: UnitCardDeployed } = $props();
 
@@ -14,12 +16,27 @@
 
   // Check if this unit is currently selected
   let isSelected = $derived(uiState.battle.selectedUnit?.instanceId === unit.instanceId);
+
+  // Check if this unit is a valid attack target
+  let isValidTarget = $derived(uiState.battle.validTargets?.units?.[unit.instanceId] === true);
+
+  function handleUnitClick() {
+    const selectedUnit = uiState.battle.selectedUnit;
+    if (selectedUnit && isValidTarget) {
+      attackUnit(selectedUnit, unit);
+      clearSelections();
+    } else {
+      toggleUnitSelection(unit);
+    }
+  }
 </script>
 
 <div
-  class="unit-deployed {isActive ? 'active' : 'inactive'} {isSelected ? 'selected' : ''}"
+  class="unit-deployed {isActive ? 'active' : 'inactive'} {isSelected
+    ? 'selected'
+    : ''} {isValidTarget ? 'valid-target' : ''}"
   style="background-image: url('{cardImagePath}')"
-  onclick={() => toggleUnitSelection(unit)}
+  onclick={handleUnitClick}
 >
   <div class="stats">
     <div class="power">
@@ -61,6 +78,11 @@
 
   .unit-deployed.inactive {
     border-color: #666;
+  }
+
+  .unit-deployed.valid-target {
+    border-color: #ff0000;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
   }
 
   .stats {

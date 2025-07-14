@@ -1,15 +1,7 @@
 import { uiState } from '../../_state';
-import type { Land, Player, UnitCardDeployed } from '../../_model';
+import { isLand, isPlayer, type UnitCardDeployed } from '../../_model';
 import { canAttack, validAttackTargets } from '@/lib/battle/combat';
 import { canMove, validMoveTargets } from '@/lib/battle/move';
-
-function isLand(target: UnitCardDeployed[] | Land | Player): target is Land {
-  return 'position' in target && 'health' in target;
-}
-
-function isPlayer(target: UnitCardDeployed[] | Land | Player): target is Player {
-  return 'life' in target && 'mana' in target && 'isPlayer' in target;
-}
 
 export function toggleUnitSelection(unit: UnitCardDeployed) {
   if (uiState.battle.selectedUnit?.instanceId === unit.instanceId) {

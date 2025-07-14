@@ -11,3 +11,7 @@ export function damagePlayer(player: Player, damage: number) {
 export function getOpposingPlayer(unit: UnitCardDeployed): Player {
   return unit.ownerPlayerId === 0 ? bs.players[1] : bs.players[0];
 }
+
+export function isHumanPlayer(playerId: number): boolean {
+  return playerId === 0;
+}

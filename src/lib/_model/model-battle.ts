@@ -36,12 +36,6 @@ export interface UnitCardTemplate extends BaseCardTemplate {
   maxHealth: number;
 }
 
-export function isUnitCard(card: CardTemplate): card is UnitCardTemplate {
-  return card.type === CardType.Unit;
-}
-export function isSpellCard(card: CardTemplate): card is SpellCardTemplate {
-  return card.type === CardType.Spell;
-}
 export interface SpellCardTemplate extends BaseCardTemplate {
   effect: string;
 }
