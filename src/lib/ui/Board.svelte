@@ -57,12 +57,6 @@
     return map;
   });
 
-  // Function to get unit at a specific position
-  function getUnitAtPosition(row: number, column: number) {
-    const key = `${row},${column}`;
-    return unitsByPosition().get(key);
-  }
-
   // Track drag state for each cell
   let dragOverCell = $state<{ row: number; column: number } | null>(null);
 
@@ -116,6 +110,18 @@
     return uiState.battle.validTargets?.moves?.[positionKey] === true;
   }
 
+  // Function to calculate unit position in pixels
+  function getUnitPosition(unit: (typeof bs.units)[0]) {
+    // +1 column to account for the left player lands, 8 for the gap with lands, 4 time column for the gap between units, +20 if over middle gap
+    const left =
+      (unit.position.column + 1) * 144 +
+      8 +
+      unit.position.column * 4 +
+      (unit.position.column > middleColumnIndex ? 20 : 0);
+    const top = unit.position.row * (144 + 4);
+    return { left, top };
+  }
+
   // Click handler for board cells
   function handleCellClick(row: number, column: number) {
     const selectedUnit = uiState.battle.selectedUnit;
@@ -144,7 +150,6 @@
     {#each rows as row}
       <div class="board-row">
         {#each columns as column}
-          {@const unit = getUnitAtPosition(row, column)}
           <div
             class="board-cell"
             class:middle-gap={column === middleColumnIndex}
@@ -157,11 +162,7 @@
             ondragleave={(event) => handleDragLeave(event, row, column)}
             ondrop={(event) => handleDrop(event, row, column)}
             onclick={() => handleCellClick(row, column)}
-          >
-            {#if unit}
-              <UnitDeployed {unit} />
-            {/if}
-          </div>
+          ></div>
         {/each}
       </div>
     {/each}
@@ -177,13 +178,19 @@
       </div>
     {/each}
   </div>
+  {#each bs.units as unit}
+    {@const position = getUnitPosition(unit)}
+    <div class="unit-container" style="left: {position.left}px; top: {position.top}px;">
+      <UnitDeployed {unit} />
+    </div>
+  {/each}
 </div>
 
 <style>
   .board-container {
+    position: relative;
     display: flex;
     gap: 8px;
-    padding: 0 16px;
   }
 
   .side-column {
@@ -267,5 +274,16 @@
   .board-cell.valid-move-target {
     border-color: #4caf50; /* Green border for valid move targets */
     box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  }
+
+  .unit-container {
+    position: absolute;
+    width: 138px;
+    height: 138px;
+    pointer-events: auto;
+    z-index: 10;
+    transition:
+      left 0.3s ease,
+      top 0.3s ease;
   }
 </style>
