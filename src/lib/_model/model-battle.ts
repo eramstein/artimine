@@ -34,6 +34,7 @@ export interface BaseCardTemplate {
 export interface UnitCardTemplate extends BaseCardTemplate {
   power: number;
   maxHealth: number;
+  keywords?: UnitKeywords;
 }
 
 export interface SpellCardTemplate extends BaseCardTemplate {
@@ -84,4 +85,19 @@ export interface Land extends LandTemplate {
   instanceId: string;
   ownerPlayerId: number;
   position: number;
+}
+
+export type UnitKeywordDefinition = {
+  key: keyof UnitKeywords;
+  value: boolean | number;
+};
+
+export interface UnitKeywords {
+  ranged?: boolean;
+  haste?: boolean;
+  moveAndAttack?: boolean;
+  retaliate?: number;
+  armor?: number;
+  // poison?: number;
+  // regeneration?: number;
 }

@@ -6,13 +6,26 @@ import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit } from './unit';
 
 export function canAttack(unit: UnitCardDeployed) {
-  return !unit.exhausted;
+  return !unit.exhausted && !unit.hasAttacked;
 }
 
 export function validAttackTargets(unit: UnitCardDeployed): UnitCardDeployed[] | Land | Player {
-  const firstBlocker = getClosestBlocker(unit);
-  if (firstBlocker) {
-    return [firstBlocker];
+  let blockers: UnitCardDeployed[] = [];
+  if (unit.keywords?.ranged) {
+    const unitsInRow = bs.units.filter(
+      (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+    );
+    if (unitsInRow.length > 0) {
+      blockers = unitsInRow;
+    }
+  } else {
+    const firstBlocker = getClosestBlocker(unit);
+    if (firstBlocker) {
+      blockers.push(firstBlocker);
+    }
+  }
+  if (blockers.length > 0) {
+    return blockers;
   }
   const opponent = getOpposingPlayer(unit);
   const landBlocker = opponent.lands.find((l) => l.position === unit.position.row);
@@ -45,7 +58,11 @@ export function attackUnit(unit: UnitCardDeployed, target: UnitCardDeployed) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
-  damageUnit(target, unit.power);
+  const preventedDamage = target.keywords?.armor || 0;
+  const wasDestroyed = damageUnit(target, unit.power - preventedDamage);
+  if (!wasDestroyed && target.keywords?.retaliate) {
+    damageUnit(unit, target.keywords.retaliate);
+  }
   recordUnitHasAttacked(unit);
 }
 
@@ -68,5 +85,7 @@ export function attackPlayer(unit: UnitCardDeployed, playerId: number) {
 
 function recordUnitHasAttacked(unit: UnitCardDeployed) {
   unit.hasAttacked = true;
-  unit.exhausted = true;
+  if (!unit.keywords?.moveAndAttack || unit.hasMoved) {
+    unit.exhausted = true;
+  }
 }

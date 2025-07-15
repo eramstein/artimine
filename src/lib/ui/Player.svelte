@@ -4,7 +4,7 @@
   import Graveyard from './Graveyard.svelte';
   import { uiState } from '../_state';
   import { attackPlayer } from '../battle/combat';
-  import { clearSelections } from './_helpers/selections';
+  import { clearSelections, setValidTargets } from './_helpers/selections';
 
   let { player }: { player: Player } = $props();
 
@@ -26,7 +26,11 @@
     const selectedUnit = uiState.battle.selectedUnit;
     if (selectedUnit && isValidTarget) {
       attackPlayer(selectedUnit, player.id);
-      clearSelections();
+      if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
+        setValidTargets(selectedUnit);
+      } else {
+        clearSelections();
+      }
     }
   }
 </script>

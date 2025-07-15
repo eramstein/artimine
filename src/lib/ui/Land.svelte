@@ -2,7 +2,7 @@
   import type { Land } from '../_model/model-battle';
   import { uiState } from '../_state';
   import { attackLand } from '../battle/combat';
-  import { clearSelections } from './_helpers/selections';
+  import { clearSelections, setValidTargets } from './_helpers/selections';
 
   let { land }: { land: Land } = $props();
 
@@ -13,7 +13,11 @@
     const selectedUnit = uiState.battle.selectedUnit;
     if (selectedUnit && isValidTarget) {
       attackLand(selectedUnit, land);
-      clearSelections();
+      if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
+        setValidTargets(selectedUnit);
+      } else {
+        clearSelections();
+      }
     }
   }
 </script>

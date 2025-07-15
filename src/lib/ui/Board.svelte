@@ -8,7 +8,7 @@
   import type { Position, Card } from '@lib/_model';
   import { isOnPlayersSide, getPositionKey } from '../battle/boards';
   import { moveUnit } from '../battle/move';
-  import { clearSelections } from './_helpers/selections';
+  import { clearSelections, setValidTargets, toggleUnitSelection } from './_helpers/selections';
   import { fly } from 'svelte/transition';
 
   // Create arrays for rows and columns based on config
@@ -89,6 +89,9 @@
       const card: Card = JSON.parse(cardData);
       if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
         deployUnit(card, position);
+        if (card.keywords?.haste) {
+          toggleUnitSelection(bs.units[bs.units.length - 1]);
+        }
       }
     } catch (error) {
       console.error('Error deploying unit:', error);
@@ -119,7 +122,11 @@
     if (selectedUnit && isValidMoveTarget(row, column)) {
       const targetPosition: Position = { row, column };
       moveUnit(selectedUnit, targetPosition);
-      clearSelections();
+      if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasAttacked) {
+        setValidTargets(selectedUnit);
+      } else {
+        clearSelections();
+      }
     }
   }
 </script>

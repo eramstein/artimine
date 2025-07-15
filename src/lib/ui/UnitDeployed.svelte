@@ -2,7 +2,7 @@
   import type { UnitCardDeployed } from '../_model';
   import { isUnitActive } from '../battle/unit';
   import { uiState } from '../_state';
-  import { toggleUnitSelection } from './_helpers/selections';
+  import { setValidTargets, toggleUnitSelection } from './_helpers/selections';
   import { attackUnit } from '../battle/combat';
   import { clearSelections } from './_helpers/selections';
 
@@ -24,7 +24,11 @@
     const selectedUnit = uiState.battle.selectedUnit;
     if (selectedUnit && isValidTarget) {
       attackUnit(selectedUnit, unit);
-      clearSelections();
+      if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
+        setValidTargets(selectedUnit);
+      } else {
+        clearSelections();
+      }
     } else {
       toggleUnitSelection(unit);
     }

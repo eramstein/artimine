@@ -3,7 +3,7 @@ import type { Position, UnitCardDeployed } from '../_model/model-battle';
 import { getPositionKey, isCellFree, isOnPlayersSide } from './boards';
 
 export function canMove(unit: UnitCardDeployed) {
-  return !unit.exhausted;
+  return !unit.exhausted && !unit.hasMoved;
 }
 
 export function validMoveTargets(unit: UnitCardDeployed): Record<string, boolean> {
@@ -39,6 +39,8 @@ export function moveUnit(unit: UnitCardDeployed, targetPosition: Position) {
   // move unit
   unit.position = targetPosition;
   console.log('moved unit to', targetPosition);
-  unit.exhausted = true;
   unit.hasMoved = true;
+  if (!unit.keywords?.moveAndAttack || unit.hasAttacked) {
+    unit.exhausted = true;
+  }
 }

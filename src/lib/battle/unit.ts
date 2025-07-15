@@ -9,6 +9,7 @@ export function deployUnit(unit: UnitCard, position: Position) {
   }
   payCost(unit);
   bs.units.push(makeDeployedUnit(unit, position));
+  console.log('deployed unit', bs.units[bs.units.length - 1]);
   bs.players[unit.ownerPlayerId].hand = bs.players[unit.ownerPlayerId].hand.filter(
     (card) => card.instanceId !== unit.instanceId
   );
@@ -21,7 +22,7 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
     health: unit.maxHealth,
     hasAttacked: false,
     hasMoved: false,
-    exhausted: true,
+    exhausted: !unit.keywords?.haste,
   };
 }
 
@@ -29,11 +30,13 @@ export function isUnitActive(unit: UnitCardDeployed) {
   return !unit.exhausted;
 }
 
-export function damageUnit(unit: UnitCardDeployed, damage: number) {
+export function damageUnit(unit: UnitCardDeployed, damage: number): boolean {
   unit.health -= damage;
   if (unit.health <= 0) {
     destroyUnit(unit);
+    return true;
   }
+  return false;
 }
 
 export function destroyUnit(unit: UnitCardDeployed) {
