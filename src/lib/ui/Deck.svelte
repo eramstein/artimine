@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Player } from '../_model';
+  import Tooltip from './Tooltip.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -10,28 +11,24 @@
   let isHovered = $state(false);
 </script>
 
-<div
-  class="deck-container"
-  onmouseenter={() => (isHovered = true)}
-  onmouseleave={() => (isHovered = false)}
->
-  <div class="deck-stack">
-    {#each Array(stackSize) as _, index}
-      <div
-        class="card-back"
-        style="z-index: {stackSize - index}; transform: translateY({index * 3}px);"
-      >
-        <img src="/src/assets/images/card_back.png" alt="Card Back" class="card-image" />
-      </div>
-    {/each}
-  </div>
-
-  {#if isHovered}
-    <div class="tooltip">
-      {player.deck.length} cards in deck
+<Tooltip content="{player.deck.length} cards in deck" show={isHovered} placement="bottom">
+  <div
+    class="deck-container"
+    onmouseenter={() => (isHovered = true)}
+    onmouseleave={() => (isHovered = false)}
+  >
+    <div class="deck-stack">
+      {#each Array(stackSize) as _, index}
+        <div
+          class="card-back"
+          style="z-index: {stackSize - index}; transform: translateY({index * 3}px);"
+        >
+          <img src="/src/assets/images/card_back.png" alt="Card Back" class="card-image" />
+        </div>
+      {/each}
     </div>
-  {/if}
-</div>
+  </div>
+</Tooltip>
 
 <style>
   .deck-container {
@@ -72,31 +69,5 @@
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
-  }
-
-  .tooltip {
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    white-space: nowrap;
-    z-index: 1000;
-    pointer-events: none;
-  }
-
-  .tooltip::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-bottom: 4px solid rgba(0, 0, 0, 0.8);
   }
 </style>

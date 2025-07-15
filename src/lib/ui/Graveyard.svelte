@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Player } from '../_model';
+  import Tooltip from './Tooltip.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -15,29 +16,25 @@
   let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.png` : '');
 </script>
 
-<div
-  class="graveyard-container"
-  onmouseenter={() => (isHovered = true)}
-  onmouseleave={() => (isHovered = false)}
->
-  {#if topCard}
-    <!-- Show the top card from graveyard -->
-    <div class="graveyard-card" style="background-image: url('{cardImagePath}');"></div>
-  {:else}
-    <!-- Show empty dotted placeholder -->
-    <div class="empty-graveyard">
-      <div class="dotted-border">
-        <div class="placeholder-text">Graveyard</div>
+<Tooltip content="{player.graveyard.length} cards in graveyard" show={isHovered} placement="bottom">
+  <div
+    class="graveyard-container"
+    onmouseenter={() => (isHovered = true)}
+    onmouseleave={() => (isHovered = false)}
+  >
+    {#if topCard}
+      <!-- Show the top card from graveyard -->
+      <div class="graveyard-card" style="background-image: url('{cardImagePath}');"></div>
+    {:else}
+      <!-- Show empty dotted placeholder -->
+      <div class="empty-graveyard">
+        <div class="dotted-border">
+          <div class="placeholder-text">Graveyard</div>
+        </div>
       </div>
-    </div>
-  {/if}
-
-  {#if isHovered}
-    <div class="tooltip">
-      {player.graveyard.length} cards in graveyard
-    </div>
-  {/if}
-</div>
+    {/if}
+  </div>
+</Tooltip>
 
 <style>
   .graveyard-container {
@@ -92,31 +89,5 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-  }
-
-  .tooltip {
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    white-space: nowrap;
-    z-index: 1000;
-    pointer-events: none;
-  }
-
-  .tooltip::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-bottom: 4px solid rgba(0, 0, 0, 0.8);
   }
 </style>

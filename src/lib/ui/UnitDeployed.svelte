@@ -5,6 +5,7 @@
   import { setValidTargets, toggleUnitSelection } from './_helpers/selections';
   import { attackUnit } from '../battle/combat';
   import { clearSelections } from './_helpers/selections';
+  import Keywords from './Keywords.svelte';
 
   let { unit }: { unit: UnitCardDeployed } = $props();
 
@@ -50,6 +51,12 @@
       {unit.health}
     </div>
   </div>
+
+  {#if unit.keywords}
+    <div class="keywords-container">
+      <Keywords keywords={unit.keywords} />
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -61,7 +68,7 @@
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 6px;
-    overflow: hidden;
+    overflow: visible;
     border: 3px solid;
     transition:
       border-color 0.2s ease,
@@ -97,6 +104,14 @@
     flex-direction: column;
     gap: 4px;
     z-index: 2;
+  }
+
+  .keywords-container {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    z-index: 2;
+    width: 100px;
   }
 
   .power,
