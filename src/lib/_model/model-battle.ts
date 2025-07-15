@@ -66,6 +66,7 @@ export interface UnitCardDeployed extends UnitCard, BaseCardDeployed {
   hasAttacked: boolean;
   hasMoved: boolean;
   exhausted: boolean;
+  statuses: UnitStatuses;
 }
 
 export interface SpellCardDeployed extends SpellCard, BaseCardDeployed {
@@ -98,6 +99,13 @@ export interface UnitKeywords {
   moveAndAttack?: boolean;
   retaliate?: number;
   armor?: number;
-  // poison?: number;
-  // regeneration?: number;
+  poisonous?: number;
+  regeneration?: number;
+}
+
+export interface UnitStatuses {
+  poison?: number;
+  mezz?: number;
+  root?: number;
+  stun?: number;
 }

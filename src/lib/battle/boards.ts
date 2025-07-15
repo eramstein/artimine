@@ -8,6 +8,7 @@ export function getPositionKey(position: Position) {
 }
 
 export function isCellFree(position: Position) {
+  if (!position) return false;
   return !bs.units.some(
     (unit) => unit.position.row === position.row && unit.position.column === position.column
   );

@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { power, health }: { power: number; health: number } = $props();
+  let { power, health, maxHealth }: { power: number; health?: number; maxHealth?: number } =
+    $props();
 </script>
 
 <div class="stats">
@@ -7,7 +8,7 @@
     {power}
   </div>
   <div class="health">
-    {health}
+    {health || maxHealth}
   </div>
 </div>
 

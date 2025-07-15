@@ -14,6 +14,8 @@
     moveAndAttack: '🔄',
     retaliate: '⚔️',
     armor: '🛡️',
+    poisonous: '☠️',
+    regeneration: '💚',
   };
 
   // Tooltip content for each keyword
@@ -24,6 +26,10 @@
     retaliate: (value: number) =>
       `Retaliate ${value}: When this unit is attacked, it deals ${value} damage back to the attacker.`,
     armor: (value: number) => `Armor ${value}: This unit takes ${value} less damage from attacks.`,
+    poisonous:
+      'Poisonous: When this unit deals damage, the target is poisoned and takes 1 damage at the start of each turn.',
+    regeneration: (value: number) =>
+      `Regeneration ${value}: This unit heals ${value} health at the start of each turn.`,
   };
 
   function handleMouseEnter(keyword: string) {

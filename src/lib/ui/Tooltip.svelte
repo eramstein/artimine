@@ -79,7 +79,7 @@
     max-width: 300px;
     min-width: 200px;
     text-align: center;
-    z-index: 1000;
+    z-index: 9001;
     pointer-events: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     border: 1px solid var(--color-golden);

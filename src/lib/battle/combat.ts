@@ -59,6 +59,9 @@ export function attackUnit(unit: UnitCardDeployed, target: UnitCardDeployed) {
     throw new Error('Invalid attack target');
   }
   const preventedDamage = target.keywords?.armor || 0;
+  if (unit.keywords?.poisonous) {
+    target.statuses.poison = (target.statuses.poison || 0) + unit.keywords.poisonous;
+  }
   const wasDestroyed = damageUnit(target, unit.power - preventedDamage);
   if (!wasDestroyed && target.keywords?.retaliate) {
     damageUnit(unit, target.keywords.retaliate);

@@ -7,6 +7,7 @@
   import { clearSelections } from './_helpers/selections';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
+  import Statuses from './Statuses.svelte';
 
   let { unit }: { unit: UnitCardDeployed } = $props();
 
@@ -44,6 +45,12 @@
   style="background-image: url('{cardImagePath}')"
   onclick={handleUnitClick}
 >
+  {#if unit.statuses}
+    <div class="statuses-container">
+      <Statuses statuses={unit.statuses} />
+    </div>
+  {/if}
+
   <div class="stats-container">
     <Stats power={unit.power} health={unit.health} />
   </div>
@@ -102,6 +109,14 @@
   .keywords-container {
     position: absolute;
     bottom: 8px;
+    right: 4px;
+    z-index: 2;
+    width: 100px;
+  }
+
+  .statuses-container {
+    position: absolute;
+    top: 8px;
     right: 4px;
     z-index: 2;
     width: 100px;

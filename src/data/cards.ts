@@ -6,7 +6,7 @@ export const cards: Record<string, CardTemplate> = {
     name: 'Savannah Lion',
     type: CardType.Unit,
     cost: 1,
-    power: 3,
+    power: 2,
     maxHealth: 5,
     colors: [{ color: CardColor.Red, count: 1 }],
     keywords: {
@@ -15,6 +15,8 @@ export const cards: Record<string, CardTemplate> = {
       retaliate: 1,
       armor: 1,
       haste: true,
+      poisonous: 2,
+      regeneration: 1,
     },
   },
 };

@@ -23,6 +23,7 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
     hasAttacked: false,
     hasMoved: false,
     exhausted: !unit.keywords?.haste,
+    statuses: {},
   };
 }
 
@@ -37,6 +38,13 @@ export function damageUnit(unit: UnitCardDeployed, damage: number): boolean {
     return true;
   }
   return false;
+}
+
+export function healUnit(unit: UnitCardDeployed, amount: number) {
+  unit.health += amount;
+  if (unit.health > unit.maxHealth) {
+    unit.health = unit.maxHealth;
+  }
 }
 
 export function destroyUnit(unit: UnitCardDeployed) {

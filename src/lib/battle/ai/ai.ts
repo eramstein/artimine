@@ -38,8 +38,6 @@ function loopAiActions(persona: AiPersona) {
   //const leader = bs.players[1];
 
   const possibleActions = getPossibleActions(false);
-  console.log('possibleActions', possibleActions);
-
   if (possibleActions.count === 0 || actionsPlayedthisTurn > MAX_ACTIONS_SAFETY_NET) {
     console.log('No actions screenLeft, passing', actionsPlayedthisTurn);
     nextTurn();
@@ -69,12 +67,11 @@ function loopAiActions(persona: AiPersona) {
 function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
   const leader = isLeaderPlayer ? bs.players[0] : bs.players[1];
   const leaderUnits = bs.units.filter((u) => u.ownerPlayerId === leader.id);
-  const deployableUnits = leader.hand.filter(
-    (unit) => isUnitCard(unit) && isPayable(unit)
-  ) as UnitCard[];
-  const unitsWhoCanMove = isBoardSizeFull(leader)
+  const boardFull = isBoardSizeFull(leader);
+  const deployableUnits = boardFull
     ? []
-    : leaderUnits.filter((unit) => canMove(unit));
+    : (leader.hand.filter((unit) => isUnitCard(unit) && isPayable(unit)) as UnitCard[]);
+  const unitsWhoCanMove = boardFull ? [] : leaderUnits.filter((unit) => canMove(unit));
   const unitsWhoCanAttack = leaderUnits.filter((unit) => canAttack(unit));
   return {
     deployableUnits,

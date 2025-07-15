@@ -32,16 +32,19 @@ export const AiPersonaAggro: AiPersona = {
   },
   deploy(state: BattleState, deployableUnits: UnitCard[]) {
     const possiblePositions = getPossibleDeploymentPositions(false);
+    if (possiblePositions.length === 0) return;
     deployUnit(getRandomFromArray(deployableUnits), getRandomFromArray(possiblePositions));
   },
   move(state: BattleState, unitsWhoCanMove: UnitCardDeployed[]) {
     const mover = getRandomFromArray(unitsWhoCanMove);
     const possiblePositions = getPossibleDeploymentPositions(false);
+    if (possiblePositions.length === 0) return;
     moveUnit(mover, getRandomFromArray(possiblePositions));
   },
   attack(state: BattleState, unitsWhoCanAttack: UnitCardDeployed[]) {
     const attacker = getRandomFromArray(unitsWhoCanAttack);
     const targets = validAttackTargets(attacker);
+    if (!targets || (Array.isArray(targets) && targets.length === 0)) return;
     if (Array.isArray(targets)) {
       attackUnit(attacker, getRandomFromArray(targets));
       return;

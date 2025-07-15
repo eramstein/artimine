@@ -1,6 +1,7 @@
 import { config } from '../_config';
 import type { Position, UnitCardDeployed } from '../_model/model-battle';
-import { getPositionKey, isCellFree, isOnPlayersSide } from './boards';
+import { getPositionKey, isCellFree } from './boards';
+import { isHumanPlayer } from './player';
 
 export function canMove(unit: UnitCardDeployed) {
   return !unit.exhausted && !unit.hasMoved;
@@ -10,7 +11,7 @@ export function validMoveTargets(unit: UnitCardDeployed): Record<string, boolean
   const targets: Record<string, boolean> = {};
 
   // Check if unit is on player's side
-  const isOnPlayerSide = isOnPlayersSide(unit.position, unit.ownerPlayerId);
+  const isOnPlayerSide = isHumanPlayer(unit.ownerPlayerId);
 
   // Determine which columns to check based on unit's side
   const startCol = isOnPlayerSide ? 0 : config.boardColumns / 2;
@@ -35,10 +36,8 @@ export function moveUnit(unit: UnitCardDeployed, targetPosition: Position) {
   // check if possible
   if (!canMove(unit)) return;
   if (!validMoveTargets(unit)[getPositionKey(targetPosition)]) return;
-
   // move unit
   unit.position = targetPosition;
-  console.log('moved unit to', targetPosition);
   unit.hasMoved = true;
   if (!unit.keywords?.moveAndAttack || unit.hasAttacked) {
     unit.exhausted = true;
