@@ -6,6 +6,7 @@
   import { attackUnit } from '../battle/combat';
   import { clearSelections } from './_helpers/selections';
   import Keywords from './Keywords.svelte';
+  import Stats from './Stats.svelte';
 
   let { unit }: { unit: UnitCardDeployed } = $props();
 
@@ -43,13 +44,8 @@
   style="background-image: url('{cardImagePath}')"
   onclick={handleUnitClick}
 >
-  <div class="stats">
-    <div class="power">
-      {unit.power}
-    </div>
-    <div class="health">
-      {unit.health}
-    </div>
+  <div class="stats-container">
+    <Stats power={unit.power} health={unit.health} />
   </div>
 
   {#if unit.keywords}
@@ -96,48 +92,18 @@
     box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
   }
 
-  .stats {
+  .stats-container {
     position: absolute;
     bottom: 8px;
-    left: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    left: 4px;
     z-index: 2;
   }
 
   .keywords-container {
     position: absolute;
     bottom: 8px;
-    right: 8px;
+    right: 4px;
     z-index: 2;
     width: 100px;
-  }
-
-  .power,
-  .health {
-    background: #000;
-    color: white;
-    padding: 2px 4px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-shadow: 0 1px 2px #000;
-    min-width: 1rem;
-    height: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border: 1px solid #bfa14a;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  }
-
-  .power {
-    background: #000;
-  }
-
-  .health {
-    background: #8b0000;
   }
 </style>

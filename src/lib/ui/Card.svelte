@@ -4,6 +4,7 @@
   import { CardColor, CardType } from '../_model/enums';
   import { isPayable } from '../battle/cost';
   import Keywords from './Keywords.svelte';
+  import Stats from './Stats.svelte';
 
   let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
 
@@ -80,9 +81,7 @@
           style="background-color: {getColorStyle(colorInfo.color)};"
           title="{colorInfo.color} ({colorInfo.count})"
         >
-          {#if colorInfo.count > 1}
-            <span class="color-count">{colorInfo.count}</span>
-          {/if}
+          {colorInfo.count}
         </div>
       {/each}
     </div>
@@ -91,14 +90,7 @@
     <div class="bottom-row">
       <!-- Stats display - only for Unit cards -->
       {#if isUnitCard(card)}
-        <div class="stats">
-          <div class="power">
-            {card.power}
-          </div>
-          <div class="health">
-            {card.maxHealth}
-          </div>
-        </div>
+        <Stats power={card.power} health={card.maxHealth} />
       {/if}
 
       <!-- Keywords display - only for Unit cards with keywords -->
@@ -198,8 +190,8 @@
   }
 
   .color-indicator {
-    width: 12px;
-    height: 12px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     border: 1px solid var(--color-golden);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -207,65 +199,13 @@
     align-items: center;
     justify-content: center;
     position: relative;
-  }
-
-  .color-count {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background-color: #000;
     color: white;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
     font-size: 0.6rem;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
   .name-text {
     flex: 1;
     padding-left: 8px;
-  }
-
-  .stats {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .power,
-  .health {
-    background: #000;
-    color: white;
-    padding: 2px 4px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-shadow: 0 1px 2px #000;
-    min-width: 1rem;
-    height: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border: 1px solid #bfa14a;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  }
-
-  .power {
-    background: #000;
-  }
-
-  .health {
-    background: #8b0000;
-  }
-
-  .keywords-container {
-    /* Keywords will be positioned by the Keywords component */
   }
 </style>
