@@ -21,9 +21,9 @@ export function isOnPlayersSide(position: Position, playerId: number) {
   return position.column >= config.boardColumns / 2;
 }
 
-export function isBoardSizeFull(leader: Player): boolean {
+export function isBoardSizeFull(player: Player): boolean {
   return (
-    bs.units.filter((u) => u.ownerPlayerId === leader.id).length ===
+    bs.units.filter((u) => u.ownerPlayerId === player.id).length ===
     (config.boardColumns * config.boardRows) / 2
   );
 }
@@ -32,7 +32,7 @@ export function getPossibleDeploymentPositions(isPlayer: boolean): Position[] {
   const positionMap: Record<string, boolean> = {};
   const startColumn = isPlayer ? 1 : config.boardColumns / 2;
   const colCount = Math.floor(config.boardColumns / 2);
-  // fill with all positions on leader's side of the board
+  // fill with all positions on player's side of the board
   for (let row = 0; row < config.boardRows; row++) {
     for (let column = startColumn; column < startColumn + colCount; column++) {
       positionMap[row + '-' + column] = true;

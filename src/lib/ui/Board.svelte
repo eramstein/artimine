@@ -10,6 +10,7 @@
   import { moveUnit } from '../battle/move';
   import { clearSelections, setValidTargets, toggleUnitSelection } from './_helpers/selections';
   import { fly } from 'svelte/transition';
+  import { restoreUnitFunctions } from '@lib/_state/main.svelte';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -87,6 +88,7 @@
       if (!cardData) return;
       const position: Position = { row, column };
       const card: Card = JSON.parse(cardData);
+      restoreUnitFunctions(card);
       if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
         deployUnit(card, position);
         if (card.keywords?.haste) {

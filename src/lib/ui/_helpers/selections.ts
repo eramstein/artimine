@@ -1,9 +1,9 @@
 import { uiState } from '../../_state';
-import { isLand, isPlayer, type UnitCardDeployed } from '../../_model';
+import { isLand, isPlayer, type UnitDeployed } from '../../_model';
 import { canAttack, validAttackTargets } from '@/lib/battle/combat';
 import { canMove, validMoveTargets } from '@/lib/battle/move';
 
-export function toggleUnitSelection(unit: UnitCardDeployed) {
+export function toggleUnitSelection(unit: UnitDeployed) {
   if (uiState.battle.selectedUnit?.instanceId === unit.instanceId) {
     uiState.battle.selectedUnit = null;
     uiState.battle.validTargets = null;
@@ -13,7 +13,7 @@ export function toggleUnitSelection(unit: UnitCardDeployed) {
   setValidTargets(unit);
 }
 
-export function setValidTargets(unit: UnitCardDeployed) {
+export function setValidTargets(unit: UnitDeployed) {
   uiState.battle.validTargets = {
     units: {},
     lands: {},

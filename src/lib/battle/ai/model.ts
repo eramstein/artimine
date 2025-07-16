@@ -1,10 +1,10 @@
-import type { BattleState, UnitCard, UnitCardDeployed } from '@/lib/_model';
+import type { BattleState, UnitCard, UnitDeployed } from '@/lib/_model';
 
 export interface AiPersona {
   selectActionType(state: BattleState, possibleActions: PossibleActions): ActionType | null;
   deploy(state: BattleState, deployableUnits: UnitCard[]): void;
-  move(state: BattleState, unitsWhoCanMove: UnitCardDeployed[]): void;
-  attack(state: BattleState, unitsWhoCanAttack: UnitCardDeployed[]): void;
+  move(state: BattleState, unitsWhoCanMove: UnitDeployed[]): void;
+  attack(state: BattleState, unitsWhoCanAttack: UnitDeployed[]): void;
 }
 
 export enum ActionType {
@@ -20,6 +20,6 @@ export enum PersonaType {
 export interface PossibleActions {
   count: number;
   deployableUnits: UnitCard[];
-  unitsWhoCanAttack: UnitCardDeployed[];
-  unitsWhoCanMove: UnitCardDeployed[];
+  unitsWhoCanAttack: UnitDeployed[];
+  unitsWhoCanMove: UnitDeployed[];
 }

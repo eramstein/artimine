@@ -1,13 +1,14 @@
 import { config } from '../_config';
-import type { Position, UnitCardDeployed } from '../_model/model-battle';
+import type { Position, UnitDeployed } from '../_model/model-battle';
 import { getPositionKey, isCellFree } from './boards';
 import { isHumanPlayer } from './player';
+import { onAfterMoveUnit } from './listeners';
 
-export function canMove(unit: UnitCardDeployed) {
+export function canMove(unit: UnitDeployed) {
   return !unit.exhausted && !unit.hasMoved;
 }
 
-export function validMoveTargets(unit: UnitCardDeployed): Record<string, boolean> {
+export function validMoveTargets(unit: UnitDeployed): Record<string, boolean> {
   const targets: Record<string, boolean> = {};
 
   // Check if unit is on player's side
@@ -32,7 +33,7 @@ export function validMoveTargets(unit: UnitCardDeployed): Record<string, boolean
   return targets;
 }
 
-export function moveUnit(unit: UnitCardDeployed, targetPosition: Position) {
+export function moveUnit(unit: UnitDeployed, targetPosition: Position) {
   // check if possible
   if (!canMove(unit)) return;
   if (!validMoveTargets(unit)[getPositionKey(targetPosition)]) return;
@@ -42,4 +43,6 @@ export function moveUnit(unit: UnitCardDeployed, targetPosition: Position) {
   if (!unit.keywords?.moveAndAttack || unit.hasAttacked) {
     unit.exhausted = true;
   }
+  // triggers
+  onAfterMoveUnit(unit, targetPosition);
 }

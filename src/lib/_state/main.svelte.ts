@@ -1,4 +1,5 @@
-import type { BattleState, GameState } from '../_model';
+import { cards } from '@/data';
+import { isUnitCard, type BattleState, type GameState, type UnitCardTemplate } from '../_model';
 
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
@@ -36,6 +37,7 @@ export const loadGameStateFromLocalStorage = async () => {
     if (!savedBattleState) return {};
 
     const parsedBattleState: BattleState = JSON.parse(savedBattleState);
+    restoreBattleFunctions(parsedBattleState);
     Object.assign(bs, parsedBattleState);
   } catch (error) {
     console.error('Failed to load state from localStorage:', error);
@@ -57,3 +59,28 @@ export const resetBattleState = (): void => {
 export const getCurrentBattleState = () => {
   return { ...bs };
 };
+
+function restoreBattleFunctions(bs: BattleState) {
+  if (!bs) {
+    return;
+  }
+  bs.units.forEach((unit) => {
+    restoreUnitFunctions(unit);
+  });
+  bs.players.forEach((player) => {
+    player.hand.forEach((unit) => {
+      if (isUnitCard(unit)) {
+        restoreUnitFunctions(unit);
+      }
+    });
+    player.deck.forEach((unit) => {
+      if (isUnitCard(unit)) {
+        restoreUnitFunctions(unit);
+      }
+    });
+  });
+}
+
+export function restoreUnitFunctions(unit: UnitCardTemplate) {
+  unit.abilities = (cards[unit.id] as UnitCardTemplate).abilities;
+}

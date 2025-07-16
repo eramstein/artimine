@@ -1,4 +1,4 @@
-import type { Land, Player, UnitCardDeployed } from '../_model';
+import type { Land, Player, UnitDeployed } from '../_model';
 import { bs } from '../_state';
 
 export function incrementColorsFromLands(player: Player) {

@@ -1,4 +1,4 @@
-import type { Player, UnitCardDeployed } from '../_model';
+import type { Player, UnitDeployed } from '../_model';
 import { bs } from '../_state';
 
 export function damagePlayer(player: Player, damage: number) {
@@ -8,7 +8,7 @@ export function damagePlayer(player: Player, damage: number) {
   }
 }
 
-export function getOpposingPlayer(unit: UnitCardDeployed): Player {
+export function getOpposingPlayer(unit: UnitDeployed): Player {
   return unit.ownerPlayerId === 0 ? bs.players[1] : bs.players[0];
 }
 

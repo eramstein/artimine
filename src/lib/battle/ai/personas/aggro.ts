@@ -1,10 +1,4 @@
-import {
-  isLand,
-  isPlayer,
-  type BattleState,
-  type UnitCardDeployed,
-  type UnitCard,
-} from '@/lib/_model';
+import { isLand, isPlayer, type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model';
 import { getPossibleDeploymentPositions } from '../../boards';
 import { attackLand, attackPlayer, attackUnit, validAttackTargets } from '../../combat';
 import { deployUnit } from '../../unit';
@@ -35,13 +29,13 @@ export const AiPersonaAggro: AiPersona = {
     if (possiblePositions.length === 0) return;
     deployUnit(getRandomFromArray(deployableUnits), getRandomFromArray(possiblePositions));
   },
-  move(state: BattleState, unitsWhoCanMove: UnitCardDeployed[]) {
+  move(state: BattleState, unitsWhoCanMove: UnitDeployed[]) {
     const mover = getRandomFromArray(unitsWhoCanMove);
     const possiblePositions = getPossibleDeploymentPositions(false);
     if (possiblePositions.length === 0) return;
     moveUnit(mover, getRandomFromArray(possiblePositions));
   },
-  attack(state: BattleState, unitsWhoCanAttack: UnitCardDeployed[]) {
+  attack(state: BattleState, unitsWhoCanAttack: UnitDeployed[]) {
     const attacker = getRandomFromArray(unitsWhoCanAttack);
     const targets = validAttackTargets(attacker);
     if (!targets || (Array.isArray(targets) && targets.length === 0)) return;

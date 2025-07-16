@@ -5,6 +5,7 @@ import { config } from '../_config';
 import { incrementColorsFromLands } from './land';
 
 export const initBattle = () => {
+  console.log('initBattle');
   bs.turn = 1;
   bs.players = [
     {

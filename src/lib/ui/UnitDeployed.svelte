@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { UnitCardDeployed } from '../_model';
+  import type { UnitDeployed } from '../_model';
   import { isUnitActive } from '../battle/unit';
   import { uiState } from '../_state';
   import { setValidTargets, toggleUnitSelection } from './_helpers/selections';
@@ -9,7 +9,7 @@
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
 
-  let { unit }: { unit: UnitCardDeployed } = $props();
+  let { unit }: { unit: UnitDeployed } = $props();
 
   // Create the background image path using the card id (same as Card.svelte)
   let cardImagePath = $derived(`/src/assets/images/cards/${unit.id}.png`);

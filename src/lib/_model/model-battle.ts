@@ -1,11 +1,11 @@
-import { CardColor, CardType } from './enums';
+import { CardColor, CardType, TargetType, TriggerType } from './enums';
 
 export interface BattleState {
   turn: number;
   isPlayersTurn: boolean;
   playerIdWon: number | null;
   players: Player[];
-  units: UnitCardDeployed[];
+  units: UnitDeployed[];
 }
 
 export interface Player {
@@ -35,6 +35,7 @@ export interface UnitCardTemplate extends BaseCardTemplate {
   power: number;
   maxHealth: number;
   keywords?: UnitKeywords;
+  abilities?: Ability[];
 }
 
 export interface SpellCardTemplate extends BaseCardTemplate {
@@ -61,19 +62,27 @@ export interface Position {
   column: number;
 }
 
-export interface UnitCardDeployed extends UnitCard, BaseCardDeployed {
+export interface UnitDeployed extends UnitCard, BaseCardDeployed {
   health: number;
   hasAttacked: boolean;
   hasMoved: boolean;
   exhausted: boolean;
   statuses: UnitStatuses;
+  untilEndOfTurn: UnitEndOfTurnEffects;
+  staticModifiers: {
+    source: { unitId: string; abilityName: string };
+    permanent: boolean;
+    keyword?: UnitKeywordDefinition;
+    abilityName?: string;
+    attack?: number;
+  }[];
 }
 
 export interface SpellCardDeployed extends SpellCard, BaseCardDeployed {
   remainingDuration?: number;
 }
 
-export type CardDeployed = UnitCardDeployed | SpellCardDeployed;
+export type CardDeployed = UnitDeployed | SpellCardDeployed;
 
 export interface LandTemplate {
   id: string;
@@ -103,9 +112,43 @@ export interface UnitKeywords {
   regeneration?: number;
 }
 
+export type UnitEndOfTurnEffects = UnitKeywords & {
+  power?: number;
+};
+
 export interface UnitStatuses {
   poison?: number;
   mezz?: number;
   root?: number;
   stun?: number;
+}
+
+export interface Ability {
+  name: string;
+  text: string;
+  icons?: string[];
+  effect(p: AbiltyEffectArgs): void;
+  trigger: Trigger;
+  target?: Target;
+  cost?: number;
+  exhausts?: boolean;
+}
+
+export interface AbiltyEffectArgs {
+  unit: UnitDeployed;
+  targets: UnitDeployed[] | Position[];
+  triggerParams: any;
+}
+
+export interface Trigger {
+  type: TriggerType;
+  condition?(unit: UnitDeployed, { ...any }): boolean;
+  staticRecompute?: TriggerType[];
+}
+
+export interface Target {
+  type: TargetType;
+  pos?: Position;
+  count?: number;
+  eligible?(unit: UnitDeployed, ability: Ability): UnitDeployed[] | Position[];
 }

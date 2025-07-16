@@ -1,9 +1,9 @@
-import type { UnitCardDeployed } from './model-battle';
+import type { UnitDeployed } from './model-battle';
 
 export type UiState = {
   currentView: UiView;
   battle: {
-    selectedUnit: UnitCardDeployed | null;
+    selectedUnit: UnitDeployed | null;
     validTargets: {
       units?: Record<string, boolean>;
       lands?: Record<string, boolean>;

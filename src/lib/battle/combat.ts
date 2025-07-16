@@ -1,16 +1,17 @@
 import { config } from '../_config';
-import type { Land, Player, UnitCardDeployed } from '../_model/model-battle';
+import type { Land, Player, UnitDeployed } from '../_model/model-battle';
 import { bs } from '../_state';
 import { damageLand } from './land';
 import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit } from './unit';
+import { onCombatResolution } from './listeners';
 
-export function canAttack(unit: UnitCardDeployed) {
+export function canAttack(unit: UnitDeployed) {
   return !unit.exhausted && !unit.hasAttacked;
 }
 
-export function validAttackTargets(unit: UnitCardDeployed): UnitCardDeployed[] | Land | Player {
-  let blockers: UnitCardDeployed[] = [];
+export function validAttackTargets(unit: UnitDeployed): UnitDeployed[] | Land | Player {
+  let blockers: UnitDeployed[] = [];
   if (unit.keywords?.ranged) {
     const unitsInRow = bs.units.filter(
       (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
@@ -35,7 +36,7 @@ export function validAttackTargets(unit: UnitCardDeployed): UnitCardDeployed[] |
   return opponent;
 }
 
-function getClosestBlocker(unit: UnitCardDeployed): UnitCardDeployed | null {
+function getClosestBlocker(unit: UnitDeployed): UnitDeployed | null {
   const blockers = bs.units.filter(
     (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
   );
@@ -46,15 +47,15 @@ function getClosestBlocker(unit: UnitCardDeployed): UnitCardDeployed | null {
     : blockers.sort((a, b) => b.position.column - a.position.column)[0];
 }
 
-function isValidTarget(unit: UnitCardDeployed, target: UnitCardDeployed | Land | Player): boolean {
+function isValidTarget(unit: UnitDeployed, target: UnitDeployed | Land | Player): boolean {
   const validTargets = validAttackTargets(unit);
   if (Array.isArray(validTargets)) {
-    return validTargets.includes(target as UnitCardDeployed);
+    return validTargets.includes(target as UnitDeployed);
   }
   return validTargets === target;
 }
 
-export function attackUnit(unit: UnitCardDeployed, target: UnitCardDeployed) {
+export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
@@ -64,29 +65,32 @@ export function attackUnit(unit: UnitCardDeployed, target: UnitCardDeployed) {
   }
   const wasDestroyed = damageUnit(target, unit.power - preventedDamage);
   if (!wasDestroyed && target.keywords?.retaliate) {
-    damageUnit(unit, target.keywords.retaliate);
+    damageUnit(unit, target.keywords.retaliate, true);
   }
+  onCombatResolution(unit, target);
   recordUnitHasAttacked(unit);
 }
 
-export function attackLand(unit: UnitCardDeployed, target: Land) {
+export function attackLand(unit: UnitDeployed, target: Land) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
   damageLand(target, unit.power);
+  onCombatResolution(unit, target);
   recordUnitHasAttacked(unit);
 }
 
-export function attackPlayer(unit: UnitCardDeployed, playerId: number) {
+export function attackPlayer(unit: UnitDeployed, playerId: number) {
   const targetPlayer = bs.players[playerId];
   if (!isValidTarget(unit, targetPlayer)) {
     throw new Error('Invalid attack target');
   }
   damagePlayer(targetPlayer, unit.power);
+  onCombatResolution(unit, targetPlayer);
   recordUnitHasAttacked(unit);
 }
 
-function recordUnitHasAttacked(unit: UnitCardDeployed) {
+function recordUnitHasAttacked(unit: UnitDeployed) {
   unit.hasAttacked = true;
   if (!unit.keywords?.moveAndAttack || unit.hasMoved) {
     unit.exhausted = true;

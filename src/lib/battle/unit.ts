@@ -1,7 +1,8 @@
 import { isPayable, payCost } from './cost';
-import type { Position, UnitCard, UnitCardDeployed } from '../_model';
+import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '../_model';
 import { isCellFree, isOnPlayersSide } from './boards';
 import { bs } from '../_state';
+import { onDamageUnit, onDeployUnit, onUnitDeath } from './listeners';
 
 export function deployUnit(unit: UnitCard, position: Position) {
   if (!isPayable(unit) || !isCellFree(position) || !isOnPlayersSide(position, unit.ownerPlayerId)) {
@@ -9,10 +10,23 @@ export function deployUnit(unit: UnitCard, position: Position) {
   }
   payCost(unit);
   bs.units.push(makeDeployedUnit(unit, position));
-  console.log('deployed unit', bs.units[bs.units.length - 1]);
   bs.players[unit.ownerPlayerId].hand = bs.players[unit.ownerPlayerId].hand.filter(
     (card) => card.instanceId !== unit.instanceId
   );
+  onDeployUnit(bs.units[bs.units.length - 1]);
+}
+
+export function makeUnit(leaderIndex: number, core: UnitCardTemplate): UnitCard {
+  return {
+    ...core,
+    ownerPlayerId: leaderIndex,
+    instanceId: Math.floor(Date.now() * Math.random()).toString(),
+  };
+}
+
+export function summonUnit(unit: UnitCard, targetPosition: Position) {
+  const unitDeployed = makeDeployedUnit(unit, targetPosition);
+  bs.units.push(unitDeployed);
 }
 
 function makeDeployedUnit(unit: UnitCard, position: Position) {
@@ -24,14 +38,17 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
     hasMoved: false,
     exhausted: !unit.keywords?.haste,
     statuses: {},
+    untilEndOfTurn: {},
+    staticModifiers: [],
   };
 }
 
-export function isUnitActive(unit: UnitCardDeployed) {
+export function isUnitActive(unit: UnitDeployed) {
   return !unit.exhausted;
 }
 
-export function damageUnit(unit: UnitCardDeployed, damage: number): boolean {
+export function damageUnit(unit: UnitDeployed, damage: number, isCombatDamage = false): boolean {
+  onDamageUnit(unit, damage, isCombatDamage);
   unit.health -= damage;
   if (unit.health <= 0) {
     destroyUnit(unit);
@@ -40,14 +57,44 @@ export function damageUnit(unit: UnitCardDeployed, damage: number): boolean {
   return false;
 }
 
-export function healUnit(unit: UnitCardDeployed, amount: number) {
+export function healUnit(unit: UnitDeployed, amount: number) {
   unit.health += amount;
   if (unit.health > unit.maxHealth) {
     unit.health = unit.maxHealth;
   }
 }
 
-export function destroyUnit(unit: UnitCardDeployed) {
+export function destroyUnit(unit: UnitDeployed) {
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
   bs.players[unit.ownerPlayerId].graveyard.push(unit);
+  onUnitDeath(unit);
+}
+
+export function getAdjacentUnits(position: Position): UnitDeployed[] {
+  return bs.units.filter(
+    (u) =>
+      (u.position.column === position.column - 1 && u.position.row === position.row) ||
+      (u.position.column === position.column + 1 && u.position.row === position.row) ||
+      (u.position.column === position.column && u.position.row === position.row - 1) ||
+      (u.position.column === position.column && u.position.row === position.row + 1)
+  );
+}
+
+export function getAdjacentAllies(unit: UnitDeployed): UnitDeployed[] {
+  return getAdjacentUnits(unit.position).filter((u) => u.ownerPlayerId === unit.ownerPlayerId);
+}
+
+export function getOwnUnits(playerId: number): UnitDeployed[] {
+  return bs.units.filter((u) => u.ownerPlayerId === playerId);
+}
+
+export function getEnnemyUnits(playerId: number): UnitDeployed[] {
+  return bs.units.filter((u) => u.ownerPlayerId !== playerId);
+}
+
+export function applyUnitStatus(unit: UnitDeployed, status: StatusType, duration: number) {
+  if (!unit.statuses[status]) {
+    unit.statuses[status] = 0;
+  }
+  unit.statuses[status] = (unit.statuses[status] || 0) + duration;
 }
