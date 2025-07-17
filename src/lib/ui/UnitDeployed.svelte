@@ -9,6 +9,7 @@
   import Abilities from './Abilities.svelte';
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
+  import { targetUnit } from './_helpers/abilities';
 
   let { unit }: { unit: UnitDeployed } = $props();
 
@@ -26,6 +27,12 @@
 
   function handleUnitClick() {
     const selectedUnit = uiState.battle.selectedUnit;
+    // if target being selected, target this unit
+    if (uiState.battle.targetBeingSelected) {
+      targetUnit(unit);
+      return;
+    }
+    // else, if selected unit and valid target, attack
     if (selectedUnit && isValidTarget) {
       attackUnit(selectedUnit, unit);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
@@ -34,6 +41,7 @@
         clearSelections();
       }
     } else {
+      // else, toggle selection
       toggleUnitSelection(unit);
     }
   }
@@ -64,7 +72,7 @@
 
   {#if unit.abilities && unit.abilities.length > 0}
     <div class="abilities-container">
-      <Abilities abilities={unit.abilities} />
+      <Abilities abilities={unit.abilities} {unit} />
     </div>
   {/if}
 </div>

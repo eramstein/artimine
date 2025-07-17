@@ -1,4 +1,4 @@
-import type { UnitDeployed } from './model-battle';
+import type { Ability, Position, Target, UnitDeployed } from './model-battle';
 
 export type UiState = {
   currentView: UiView;
@@ -10,6 +10,9 @@ export type UiState = {
       players?: Record<number, boolean>;
       moves?: Record<string, boolean>;
     } | null;
+    abilityPending: { unit: UnitDeployed; ability: Ability } | null;
+    selectedTargets: UnitDeployed[] | Position[];
+    targetBeingSelected: Target | null;
   };
 };
 
