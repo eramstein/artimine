@@ -10,7 +10,19 @@
       <Battle />
     {/if}
   </div>
+
+  <!-- Tooltip portal - all tooltips will be rendered here -->
+  <div id="tooltip-portal" class="tooltip-portal"></div>
 </div>
 
 <style>
+  .tooltip-portal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 999999;
+  }
 </style>

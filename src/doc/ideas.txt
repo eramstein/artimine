@@ -1,0 +1,24 @@
+- deckbuilding: find ways to encourage players to use weak but fun cards
+  - have a deck building budget, cards being balanced over time (e.g. Gwent but not tied to rarity, or Warhammer armies)
+  - these cards sneak into the games (e.g. a character make extra cards appear in both players hands, e.g. HS discover)
+
+- land ruins: lands have 2 faces, the second is the destroyed version, doesn't block but has an effect, e.g. to discourage piling up on that row
+
+- card type: buildings, several types:
+  - lands upgrades, "enchant row", destroyed with the land or remains on the ruins
+  - backline buildings, a la planeswalker, can be attacked if a unit can breach
+  - they would use gold as a parallel economy
+  - cell upgrades, very simple effects only identified as borders (fire, regen, armor, buff...)
+
+or mix the above with lands, and pick 4 as your starting lineup ?
+
+store excess mana for next turn but only for non snowbally things? e.g. Runeterra
+if no mana color was upgraded, gain gold, instead of card draws?
+excess mana -> gold
+gold could be used in a "shop" with various NPCs proposing services
+the shop would have varied options, random from a pool, but the same during the whole game (e.g. Snap locations)
+gold can be used for non cards abilities, which are non snowbally in nature / catchup mechanics 
+ - draw / loot / tutor / discover
+ - repair / heal lands and player
+ - meta gains? (collection...)
+ - big splashy catchup mechanics (e.g. wrath)

@@ -6,6 +6,7 @@
   import { attackUnit } from '../battle/combat';
   import { clearSelections } from './_helpers/selections';
   import Keywords from './Keywords.svelte';
+  import Abilities from './Abilities.svelte';
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
 
@@ -58,6 +59,12 @@
   {#if unit.keywords}
     <div class="keywords-container">
       <Keywords keywords={unit.keywords} />
+    </div>
+  {/if}
+
+  {#if unit.abilities && unit.abilities.length > 0}
+    <div class="abilities-container">
+      <Abilities abilities={unit.abilities} />
     </div>
   {/if}
 </div>
@@ -114,11 +121,17 @@
     width: 100px;
   }
 
-  .statuses-container {
+  .abilities-container {
     position: absolute;
     top: 8px;
     right: 4px;
     z-index: 2;
-    width: 100px;
+  }
+
+  .statuses-container {
+    position: absolute;
+    top: 8px;
+    left: 4px;
+    z-index: 2;
   }
 </style>

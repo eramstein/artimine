@@ -1,5 +1,9 @@
 import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
-import { DataEffectTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import {
+  DataAbilityTemplates,
+  DataEffectTemplates,
+  DataTriggerTemplates,
+} from '@/lib/battle/abilities';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -29,6 +33,7 @@ export const cards: Record<string, CardTemplate> = {
         }),
         trigger: DataTriggerTemplates.static,
       },
+      DataAbilityTemplates.mezz({ name: 'Mezz', cost: 1 }, { duration: 3 }),
     ],
   },
 };
