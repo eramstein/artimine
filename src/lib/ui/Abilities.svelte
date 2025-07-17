@@ -102,7 +102,7 @@
     cursor: pointer;
   }
 
-  .ability.activated:hover {
+  .ability.activated:not(.pending):hover {
     background: rgba(0, 0, 0, 0.9);
     transform: scale(1.1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);

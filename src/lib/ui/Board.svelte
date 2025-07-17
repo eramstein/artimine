@@ -4,7 +4,7 @@
   import UnitDeployed from './UnitDeployed.svelte';
   import { bs, uiState } from '@lib/_state';
   import { deployUnit } from '@lib/battle/unit';
-  import { isUnitCard } from '@lib/_model';
+  import { isUnitCard, type UnitCardTemplate } from '@lib/_model';
   import type { Position, Card } from '@lib/_model';
   import { isOnPlayersSide, getPositionKey } from '../battle/boards';
   import { moveUnit } from '../battle/move';
@@ -88,7 +88,7 @@
       if (!cardData) return;
       const position: Position = { row, column };
       const card: Card = JSON.parse(cardData);
-      restoreUnitFunctions(card);
+      restoreUnitFunctions(card as UnitCardTemplate);
       if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
         deployUnit(card, position);
         if (card.keywords?.haste) {
