@@ -13,6 +13,7 @@ export type UiState = {
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     selectedTargets: UnitDeployed[] | Position[];
     targetBeingSelected: Target | null;
+    attackingUnitId: string | null;
   };
 };
 

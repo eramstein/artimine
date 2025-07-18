@@ -30,6 +30,7 @@
         uiState.battle.abilityPending?.unit.instanceId === unit?.instanceId &&
         uiState.battle.abilityPending?.ability.name === ability.name,
       cost: ability.cost,
+      exhausts: ability.exhausts,
     }));
   });
 
@@ -49,11 +50,17 @@
       activateAbility(unit, ability);
     }
   }
+
+  function getTooltipContent(text: string, cost?: number, exhausts?: boolean): string {
+    const costText = cost ? `${cost}: ` : '';
+    const exhaustText = exhausts ? '↻ ' : '';
+    return `${exhaustText}${costText}${text}`;
+  }
 </script>
 
 <div class="abilities">
-  {#each abilityLetters() as { name, letter, text, icons, isActivated, ability, isPending, cost }}
-    <Tooltip content={text} show={hoveredAbility === name}>
+  {#each abilityLetters() as { name, letter, text, icons, isActivated, ability, isPending, cost, exhausts }}
+    <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === name}>
       <div
         class="ability"
         class:activated={isActivated}
@@ -62,9 +69,10 @@
         onmouseleave={handleMouseLeave}
         onclick={(e) => isActivated && onAbilityClick(ability, e)}
       >
-        <span class="ability-letter">{letter}</span>
         {#if icons.length > 0}
           <span class="ability-icon">{icons[0]}</span>
+        {:else}
+          <span class="ability-letter">{letter}</span>
         {/if}
         {#if cost !== undefined && cost > 0}
           <span class="ability-cost">{cost}</span>

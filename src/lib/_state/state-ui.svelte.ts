@@ -8,5 +8,6 @@ export const uiState: UiState = $state({
     abilityPending: null,
     selectedTargets: [],
     targetBeingSelected: null,
+    attackingUnitId: null,
   },
 });

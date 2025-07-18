@@ -25,6 +25,12 @@
   // Check if this unit is a valid attack target
   let isValidTarget = $derived(uiState.battle.validTargets?.units?.[unit.instanceId] === true);
 
+  // Check if this unit is the currently selected unit (potential attacker)
+  let isSelectedUnit = $derived(uiState.battle.selectedUnit?.instanceId === unit.instanceId);
+
+  // Check if this unit is currently attacking
+  let isAttacking = $derived(uiState.battle.attackingUnitId === unit.instanceId);
+
   function handleUnitClick() {
     const selectedUnit = uiState.battle.selectedUnit;
     // if target being selected, target this unit
@@ -34,6 +40,14 @@
     }
     // else, if selected unit and valid target, attack
     if (selectedUnit && isValidTarget) {
+      // Trigger attack animation on the attacker
+      uiState.battle.attackingUnitId = selectedUnit.instanceId;
+
+      // Reset animation after a short delay
+      setTimeout(() => {
+        uiState.battle.attackingUnitId = null;
+      }, 300);
+
       attackUnit(selectedUnit, unit);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
         setValidTargets(selectedUnit);
@@ -45,13 +59,16 @@
       toggleUnitSelection(unit);
     }
   }
+
+  // Attack direction - move towards the target
+  let attackDirection = $derived({ x: 1, y: 0 }); // Move right towards target
 </script>
 
 <div
   class="unit-deployed {isActive ? 'active' : 'inactive'} {isSelected
     ? 'selected'
-    : ''} {isValidTarget ? 'valid-target' : ''}"
-  style="background-image: url('{cardImagePath}')"
+    : ''} {isValidTarget ? 'valid-target' : ''} {isAttacking ? 'attacking' : ''}"
+  style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
   onclick={handleUnitClick}
 >
   {#if unit.statuses}
@@ -112,6 +129,32 @@
   .unit-deployed.valid-target {
     border-color: #ff0000;
     box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+    cursor: pointer;
+  }
+
+  .unit-deployed.valid-target:hover {
+    transform: translateZ(0) translateY(-4px) scale(1.05);
+    box-shadow:
+      0 0 8px rgba(255, 0, 0, 0.5),
+      0 8px 16px rgba(255, 0, 0, 0.3);
+    border-color: #ff4444;
+  }
+
+  .unit-deployed.attacking {
+    animation: attack-move 0.3s ease-in-out;
+  }
+
+  @keyframes attack-move {
+    0% {
+      transform: translateZ(0) translateX(0) translateY(0);
+    }
+    50% {
+      transform: translateZ(0) translateX(calc(var(--attack-x, 0) * 30px))
+        translateY(calc(var(--attack-y, 0) * 30px));
+    }
+    100% {
+      transform: translateZ(0) translateX(0) translateY(0);
+    }
   }
 
   .stats-container {
@@ -127,6 +170,8 @@
     right: 4px;
     z-index: 2;
     width: 100px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
 
   .abilities-container {
@@ -134,6 +179,13 @@
     top: 8px;
     right: 4px;
     z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .unit-deployed:hover .keywords-container,
+  .unit-deployed:hover .abilities-container {
+    opacity: 1;
   }
 
   .statuses-container {

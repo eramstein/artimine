@@ -74,7 +74,7 @@
   }
 
   .status {
-    background: rgba(255, 0, 0, 0.8);
+    background: rgba(139, 0, 0, 0.8);
     color: white;
     padding: 2px 4px;
     border-radius: 4px;
@@ -92,16 +92,20 @@
   }
 
   .status-value {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #ff0000;
     font-weight: bold;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     min-width: 14px;
     height: 14px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.9);
-    color: #ff0000;
     border: 1px solid rgba(0, 0, 0, 0.8);
+    z-index: 0;
   }
 </style>

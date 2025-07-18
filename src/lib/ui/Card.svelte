@@ -5,6 +5,7 @@
   import { isPayable } from '../battle/cost';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
+  import Abilities from './Abilities.svelte';
 
   let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
 
@@ -14,7 +15,7 @@
   // Check if card is a unit card (works with Card type)
   function isUnitCard(
     card: Card
-  ): card is Card & { power: number; maxHealth: number; keywords?: any } {
+  ): card is Card & { power: number; maxHealth: number; keywords?: any; abilities?: any } {
     return card.type === CardType.Unit;
   }
 
@@ -86,19 +87,29 @@
       {/each}
     </div>
 
-    <!-- Bottom row: stats on left, keywords on right -->
-    <div class="bottom-row">
-      <!-- Stats display - only for Unit cards -->
-      {#if isUnitCard(card)}
-        <Stats power={card.power} health={card.maxHealth} />
-      {/if}
-
-      <!-- Keywords display - only for Unit cards with keywords -->
-      {#if isUnitCard(card) && card.keywords && displayKeywords}
-        <div class="keywords-container">
-          <Keywords keywords={card.keywords} />
+    <!-- Bottom section with abilities and bottom row -->
+    <div class="bottom-section">
+      <!-- Abilities display - only for Unit cards with abilities -->
+      {#if isUnitCard(card) && card.abilities && card.abilities.length > 0}
+        <div class="abilities-container">
+          <Abilities abilities={card.abilities} />
         </div>
       {/if}
+
+      <!-- Bottom row: stats on left, keywords on right -->
+      <div class="bottom-row">
+        <!-- Stats display - only for Unit cards -->
+        {#if isUnitCard(card)}
+          <Stats power={card.power} health={card.maxHealth} />
+        {/if}
+
+        <!-- Keywords display - only for Unit cards with keywords -->
+        {#if isUnitCard(card) && card.keywords && displayKeywords}
+          <div class="keywords-container">
+            <Keywords keywords={card.keywords} />
+          </div>
+        {/if}
+      </div>
     </div>
   </div>
 </div>
@@ -183,6 +194,12 @@
     gap: 2px;
   }
 
+  .bottom-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
   .bottom-row {
     display: flex;
     justify-content: space-between;
@@ -207,5 +224,22 @@
   .name-text {
     flex: 1;
     padding-left: 8px;
+  }
+
+  .abilities-container {
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .keywords-container {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card:hover .abilities-container,
+  .card:hover .keywords-container {
+    opacity: 1;
   }
 </style>
