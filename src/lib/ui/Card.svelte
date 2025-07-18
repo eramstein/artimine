@@ -4,6 +4,7 @@
   import { CardColor, CardType } from '../_model/enums';
   import { isPayable } from '../battle/cost';
   import { activateSpell } from './_helpers/abilities';
+  import { uiState } from '../_state';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
@@ -12,6 +13,11 @@
 
   // Create the background image path using the card id
   let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.png`);
+
+  // Check if this card is the currently pending spell
+  let isPendingSpell = $derived(
+    uiState.battle.spellPending && uiState.battle.spellPending.instanceId === card.instanceId
+  );
 
   // Check if card is a unit card (works with Card type)
   function isUnitCard(
@@ -70,7 +76,7 @@
 </script>
 
 <div
-  class="card"
+  class="card {isPendingSpell ? 'pending-spell' : ''}"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
     40}px; border-color: {getBorderColor()};"
   draggable={isUnitCard(card) && isPayable(card)}
@@ -255,5 +261,28 @@
   .card:hover .abilities-container,
   .card:hover .keywords-container {
     opacity: 1;
+  }
+
+  .card.pending-spell {
+    transform: translateY(-20px) scale(1.1);
+    border-color: var(--color-golden);
+    box-shadow:
+      0 0 20px rgba(255, 215, 0, 0.8),
+      0 8px 25px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    animation: spell-pulse 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes spell-pulse {
+    from {
+      box-shadow:
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+    to {
+      box-shadow:
+        0 0 30px rgba(255, 215, 0, 1),
+        0 12px 35px rgba(0, 0, 0, 0.6);
+    }
   }
 </style>

@@ -7,11 +7,15 @@ import {
 } from '@/lib/_model';
 import { uiState } from '@/lib/_state';
 import { isCellFree, isHumanPlayer, playAbility } from '@/lib/battle';
+import { isActivityPayable } from '@/lib/battle/cost';
 import { getPositionKey } from '@/lib/battle/boards';
 import { getEligibleSpellTargets, playSpell } from '@/lib/battle/spell';
 import { getEligibleTargets } from '@/lib/battle/target';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
+  if (isActivityPayable(unit, ability) === false) {
+    return;
+  }
   const ui = uiState.battle;
   if (
     ui.abilityPending &&
