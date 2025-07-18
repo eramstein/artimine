@@ -7,7 +7,7 @@ import {
   type Player,
   type Land,
 } from '@/lib/_model';
-import { getEligibleAbilityTargets } from './ability';
+import { getEligibleTargets } from './target';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
   bs.units.forEach((u) => {
@@ -21,7 +21,7 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
         let targets: UnitDeployed[] = [];
         const triggerParams: any = { ...rest };
         if (a.target) {
-          targets = getEligibleAbilityTargets(u, a) as UnitDeployed[];
+          targets = getEligibleTargets(u, a.target) as UnitDeployed[];
         }
         a.effect({ unit: u, targets, triggerParams });
       });

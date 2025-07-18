@@ -152,5 +152,5 @@ export interface Target {
   type: TargetType;
   pos?: Position;
   count?: number;
-  eligible?(unit: UnitDeployed, ability: Ability): UnitDeployed[] | Position[];
+  eligible?(card: UnitDeployed | SpellCard): UnitDeployed[] | Position[];
 }

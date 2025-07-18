@@ -6,9 +6,10 @@ import {
   type UnitDeployed,
 } from '@/lib/_model';
 import { uiState } from '@/lib/_state';
-import { isCellFree, isHumanPlayer, playAbility, getEligibleAbilityTargets } from '@/lib/battle';
+import { isCellFree, isHumanPlayer, playAbility } from '@/lib/battle';
 import { getPositionKey } from '@/lib/battle/boards';
 import { getEligibleSpellTargets, playSpell } from '@/lib/battle/spell';
+import { getEligibleTargets } from '@/lib/battle/target';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   const ui = uiState.battle;
@@ -28,8 +29,10 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   ui.targetBeingSelected = ability.target || null;
 
   // Set valid targets for ability selection
-  const eligibleTargets = getEligibleAbilityTargets(unit, ability);
-  setValidTargets(eligibleTargets);
+  if (ability.target) {
+    const eligibleTargets = getEligibleTargets(unit, ability.target);
+    setValidTargets(eligibleTargets);
+  }
 
   if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
     playAbility(unit, ability, []);

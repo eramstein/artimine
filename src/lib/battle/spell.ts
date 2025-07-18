@@ -6,10 +6,10 @@ import {
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
-import { getPossibleDeploymentPositions, isCellFree, isOnPlayersSide } from './boards';
+import { getPossibleDeploymentPositions } from './boards';
 import { isHumanPlayer } from './player';
 import { isPayable } from './cost';
-import { areAllTargetsValid, checkAllCellsValid } from './ability';
+import { checkTargets } from './target';
 import { discard } from './hand';
 
 export function getEligibleSpellTargets(spell: SpellCard): UnitDeployed[] | Position[] {
@@ -41,7 +41,7 @@ export function playSpell(spell: SpellCard, targets: UnitDeployed[] | Position[]
 
   // CHECKS + COSTS
   // ----------------------------------------------------------------------
-  if (checkTargets(spell, targets) === false) {
+  if (spell.target && checkTargets(spell, spell.target, targets) === false) {
     return;
   }
   if (!isPayable(spell) || paySpellCost(spell) === false) {
@@ -64,44 +64,6 @@ function paySpellCost(spell: SpellCard): boolean {
       return false;
     }
     player.mana -= spell.cost;
-  }
-  return true;
-}
-
-function checkTargets(spell: SpellCard, targets: UnitDeployed[] | Position[]): boolean {
-  if (spell.target?.count && spell.target?.count !== targets.length) {
-    console.log('WRONG NUMBER OF TARGETS', spell, targets);
-    return false;
-  }
-  // target is units
-  if (
-    spell.target &&
-    spell.target.type !== TargetType.EmptyCell &&
-    spell.target.type !== TargetType.EmptyAllyCell
-  ) {
-    const eligibleTargets = getEligibleSpellTargets(spell) as UnitDeployed[];
-    const targetsValid = areAllTargetsValid(targets as UnitDeployed[], eligibleTargets);
-    if (targetsValid === false) {
-      console.log('INVALID TARGET', spell, targets);
-      return false;
-    }
-    return true;
-  }
-  // target is cells
-  if (
-    spell.target &&
-    [TargetType.EmptyCell, TargetType.EmptyAllyCell].indexOf(spell.target.type) >= 0
-  ) {
-    if (
-      spell.target.type === TargetType.EmptyAllyCell &&
-      !checkAllCellsValid(targets as Position[], (p) => isOnPlayersSide(p, spell.ownerPlayerId))
-    ) {
-      return false;
-    }
-    if (!checkAllCellsValid(targets as Position[], (p) => !isCellFree(p))) {
-      return false;
-    }
-    return true;
   }
   return true;
 }
