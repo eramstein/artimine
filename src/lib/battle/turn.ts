@@ -23,6 +23,7 @@ export function nextTurn() {
 function initPlayerTurn(player: Player) {
   player.maxMana++;
   player.mana = player.maxMana;
+  player.abilityUsed = false;
   updateUnits(player);
   drawCard(player);
 }

@@ -31,6 +31,7 @@ export const initBattle = () => {
         instanceId: crypto.randomUUID(),
         position: index,
       })),
+      abilityUsed: false,
     },
     {
       id: 1,
@@ -55,6 +56,7 @@ export const initBattle = () => {
         instanceId: crypto.randomUUID(),
         position: index,
       })),
+      abilityUsed: false,
     },
   ];
   for (let i = 0; i < config.initialHandSize; i++) {

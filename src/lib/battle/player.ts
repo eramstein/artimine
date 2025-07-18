@@ -1,5 +1,6 @@
-import type { Player, UnitDeployed } from '../_model';
+import type { CardColor, Player, UnitDeployed } from '../_model';
 import { bs } from '../_state';
+import { drawCard } from './deck';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
@@ -14,4 +15,21 @@ export function getOpposingPlayer(unit: UnitDeployed): Player {
 
 export function isHumanPlayer(playerId: number): boolean {
   return playerId === 0;
+}
+
+export function incrementColor(player: Player, color: CardColor, value = 1) {
+  if (!player.colors[color] || player.abilityUsed) {
+    return;
+  }
+  player.colors[color] += value;
+  player.abilityUsed = true;
+}
+
+export function useDrawAbility(player: Player) {
+  if (player.mana < 1 || player.abilityUsed) {
+    return;
+  }
+  player.mana -= 1;
+  drawCard(player);
+  player.abilityUsed = true;
 }

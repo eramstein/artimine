@@ -20,6 +20,7 @@ export interface Player {
   graveyard: Card[];
   lands: Land[];
   colors: Partial<Record<CardColor, number>>;
+  abilityUsed: boolean;
 }
 
 // CARD TEMPLATE INTERFACES (before the game started, the card itself)

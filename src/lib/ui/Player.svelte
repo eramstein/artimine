@@ -1,9 +1,11 @@
 <script lang="ts">
   import type { Player } from '../_model/model-battle';
+  import { CardColor } from '../_model/enums';
   import Deck from './Deck.svelte';
   import Graveyard from './Graveyard.svelte';
   import { uiState } from '../_state';
   import { attackPlayer } from '../battle/combat';
+  import { incrementColor, useDrawAbility, isHumanPlayer } from '../battle/player';
   import { clearSelections, setValidTargets } from './_helpers/selections';
 
   let { player }: { player: Player } = $props();
@@ -22,6 +24,15 @@
   // Check if this player is a valid target
   let isValidTarget = $derived(uiState.battle.validTargets?.players?.[player.id] === true);
 
+  // Check if player has used their ability
+  let hasUsedAbility = $derived(player.abilityUsed === true);
+
+  // Check if player has enough mana for draw ability
+  let hasEnoughMana = $derived(player.mana >= 1);
+
+  // Check if this is a human player
+  let isHuman = $derived(isHumanPlayer(player.id));
+
   function handlePlayerClick() {
     const selectedUnit = uiState.battle.selectedUnit;
     if (selectedUnit && isValidTarget) {
@@ -32,6 +43,17 @@
         clearSelections();
       }
     }
+  }
+
+  function handleColorClick(color: string) {
+    if (!isHuman || hasUsedAbility) return;
+    const cardColor = color as CardColor;
+    incrementColor(player, cardColor);
+  }
+
+  function handleDrawClick() {
+    if (!isHuman || hasUsedAbility || !hasEnoughMana) return;
+    useDrawAbility(player);
   }
 </script>
 
@@ -49,17 +71,30 @@
     </div>
   </div>
 
-  {#if availableColors.length > 0}
-    <div class="color-display">
-      {#each availableColors as [color, count]}
-        <div class="color-item" data-color={color}>
-          <div class="color-symbol">
-            <span class="color-count">{count}</span>
-          </div>
+  <div class="player-actions {isHuman && !hasUsedAbility ? 'abilities-available' : ''}">
+    {#each availableColors as [color, count]}
+      <div
+        class="color-item {!isHuman || hasUsedAbility ? 'disabled' : ''}"
+        data-color={color}
+        onclick={() => handleColorClick(color)}
+      >
+        <div class="color-symbol">
+          <span class="color-count">{count}</span>
         </div>
-      {/each}
-    </div>
-  {/if}
+      </div>
+    {/each}
+    {#if isHuman}
+      <div
+        class="color-item {hasUsedAbility || !hasEnoughMana ? 'disabled' : ''}"
+        data-color="draw"
+        onclick={handleDrawClick}
+      >
+        <div class="color-symbol">
+          <span class="color-count">📄</span>
+        </div>
+      </div>
+    {/if}
+  </div>
 
   <div class="deck-section">
     <Deck {player} />
@@ -173,7 +208,7 @@
     color: white;
   }
 
-  .color-display {
+  .player-actions {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
@@ -183,6 +218,13 @@
     background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
     width: 200px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  .player-actions.abilities-available {
+    border-color: #bfa14a;
+    box-shadow: 0 0 8px rgba(191, 161, 74, 0.3);
   }
 
   .color-item {
@@ -218,6 +260,35 @@
 
   .color-item[data-color='black'] .color-symbol {
     background-color: var(--color-black);
+  }
+
+  .color-item[data-color='draw'] .color-symbol {
+    background-color: #444;
+    cursor: pointer;
+  }
+
+  .color-item[data-color='draw'] .color-symbol:hover {
+    background-color: #666;
+    transform: scale(1.1);
+  }
+
+  .color-item .color-symbol {
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .color-item .color-symbol:hover {
+    transform: scale(1.1);
+  }
+
+  .color-item.disabled .color-symbol {
+    cursor: not-allowed;
+  }
+
+  .color-item.disabled .color-symbol:hover {
+    transform: none;
   }
 
   .color-count {
