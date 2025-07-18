@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { Card } from '../_model/model-battle';
+  import type { Card, SpellCard } from '../_model/model-battle';
   import { CARD_WIDTH, CARD_HEIGHT } from '../_config/ui-config';
   import { CardColor, CardType } from '../_model/enums';
   import { isPayable } from '../battle/cost';
+  import { activateSpell } from './_helpers/abilities';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
@@ -19,6 +20,11 @@
     return card.type === CardType.Unit;
   }
 
+  // Check if card is a spell card
+  function isSpellCard(card: Card): card is SpellCard {
+    return card.type === CardType.Spell;
+  }
+
   // Determine border color based on whether the card is payable
   function getBorderColor() {
     return isPayable(card) ? 'var(--color-golden)' : '#666'; // Gold if affordable, gray if not
@@ -33,6 +39,13 @@
       [CardColor.Black]: 'var(--color-black)',
     };
     return colorMap[color] || 'var(--color-golden)';
+  }
+
+  // Handle card click
+  function handleClick() {
+    if (isSpellCard(card) && isPayable(card)) {
+      activateSpell(card);
+    }
   }
 
   // Drag event handlers
@@ -63,6 +76,7 @@
   draggable={isUnitCard(card) && isPayable(card)}
   ondragstart={handleDragStart}
   ondrag={handleDrag}
+  onclick={handleClick}
 >
   <!-- Card name bar with integrated cost -->
   <div class="name">

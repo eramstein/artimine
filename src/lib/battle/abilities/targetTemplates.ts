@@ -12,6 +12,10 @@ export const DataTargetTemplates: {
     type: TargetType.EmptyCell,
     count: 1,
   }),
+  unit: () => ({
+    type: TargetType.Any,
+    count: 1,
+  }),
   allyCell: () => ({
     type: TargetType.EmptyAllyCell,
     count: 1,

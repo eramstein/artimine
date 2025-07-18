@@ -1,7 +1,14 @@
-import { TargetType, type Ability, type Position, type UnitDeployed } from '@/lib/_model';
+import {
+  TargetType,
+  type Ability,
+  type Position,
+  type SpellCard,
+  type UnitDeployed,
+} from '@/lib/_model';
 import { uiState } from '@/lib/_state';
-import { isCellFree, isHumanPlayer, playAbility, getEligibleTargets } from '@/lib/battle';
+import { isCellFree, isHumanPlayer, playAbility, getEligibleAbilityTargets } from '@/lib/battle';
 import { getPositionKey } from '@/lib/battle/boards';
+import { getEligibleSpellTargets, playSpell } from '@/lib/battle/spell';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   const ui = uiState.battle;
@@ -21,8 +28,38 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   ui.targetBeingSelected = ability.target || null;
 
   // Set valid targets for ability selection
+  const eligibleTargets = getEligibleAbilityTargets(unit, ability);
+  setValidTargets(eligibleTargets);
+
+  if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
+    playAbility(unit, ability, []);
+    clearUiState();
+  }
+}
+
+export function activateSpell(spell: SpellCard) {
+  const ui = uiState.battle;
+  if (ui.spellPending && ui.spellPending.instanceId === spell.instanceId) {
+    ui.spellPending = null;
+    ui.validTargets = null;
+    return;
+  }
+  ui.spellPending = spell;
+  ui.targetBeingSelected = spell.target || null;
+
+  // Set valid targets for spell
+  const eligibleTargets = getEligibleSpellTargets(spell);
+  setValidTargets(eligibleTargets);
+
+  if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
+    playSpell(spell, []);
+    clearUiState();
+  }
+}
+
+function setValidTargets(eligibleTargets: UnitDeployed[] | Position[]) {
+  const ui = uiState.battle;
   if (ui.targetBeingSelected && ui.targetBeingSelected.type !== TargetType.Self) {
-    const eligibleTargets = getEligibleTargets(unit, ability);
     ui.validTargets = {
       units: {},
       lands: {},
@@ -48,24 +85,20 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   } else {
     ui.validTargets = null;
   }
-
-  if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
-    playAbility(unit, ability, []);
-    clearAbilityUiState();
-  }
 }
 
-export function clearAbilityUiState() {
+function clearUiState() {
   const ui = uiState.battle;
   ui.selectedTargets = [];
   ui.targetBeingSelected = null;
   ui.abilityPending = null;
+  ui.spellPending = null;
   ui.validTargets = null;
 }
 
 export function targetUnit(unit: UnitDeployed) {
   const ui = uiState.battle;
-  if (!ui.abilityPending || !ui.targetBeingSelected) return;
+  if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
   if (
     ([TargetType.Ally, TargetType.Any].includes(ui.targetBeingSelected.type) &&
       isHumanPlayer(unit.ownerPlayerId)) ||
@@ -74,8 +107,12 @@ export function targetUnit(unit: UnitDeployed) {
   ) {
     (ui.selectedTargets as UnitDeployed[]).push(unit);
     if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
-      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-      clearAbilityUiState();
+      if (ui.abilityPending) {
+        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+      } else if (ui.spellPending) {
+        playSpell(ui.spellPending, ui.selectedTargets);
+      }
+      clearUiState();
     }
   }
 }
@@ -83,7 +120,7 @@ export function targetUnit(unit: UnitDeployed) {
 export function targetCell(position: Position) {
   const ui = uiState.battle;
   if (
-    !ui.abilityPending ||
+    !(ui.abilityPending && !ui.spellPending) ||
     !ui.targetBeingSelected ||
     ui.targetBeingSelected.type !== TargetType.EmptyCell
   )
@@ -91,8 +128,12 @@ export function targetCell(position: Position) {
   if (isCellFree(position)) {
     (ui.selectedTargets as Position[]).push(position);
     if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
-      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-      clearAbilityUiState();
+      if (ui.abilityPending) {
+        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+      } else if (ui.spellPending) {
+        playSpell(ui.spellPending, ui.selectedTargets);
+      }
+      clearUiState();
     }
   }
 }

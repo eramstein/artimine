@@ -9,3 +9,5 @@ export * from './turn';
 export * from './temporary-effects';
 export * from './abilities';
 export * from './listeners';
+export * from './hand';
+export * from './spell';

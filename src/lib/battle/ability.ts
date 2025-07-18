@@ -1,6 +1,7 @@
 import { TargetType, type Ability, type Position, type UnitDeployed } from '../_model';
 import { bs } from '../_state';
-import { isCellFree, isOnPlayersSide } from './boards';
+import { getPossibleDeploymentPositions, isCellFree, isOnPlayersSide } from './boards';
+import { isHumanPlayer } from './player';
 
 export function playAbility(
   unit: UnitDeployed,
@@ -74,7 +75,7 @@ function checkTargets(
     ability.target.type !== TargetType.EmptyCell &&
     ability.target.type !== TargetType.Self
   ) {
-    const eligibleTargets = getEligibleTargets(unit, ability) as UnitDeployed[];
+    const eligibleTargets = getEligibleAbilityTargets(unit, ability) as UnitDeployed[];
     const targetsValid = areAllTargetsValid(targets as UnitDeployed[], eligibleTargets);
     if (targetsValid === false) {
       console.log('INVALID TARGET', ability, targets);
@@ -101,7 +102,7 @@ function checkTargets(
   return true;
 }
 
-export function getEligibleTargets(
+export function getEligibleAbilityTargets(
   unit: UnitDeployed,
   ability: Ability
 ): UnitDeployed[] | Position[] {
@@ -123,6 +124,13 @@ export function getEligibleTargets(
   }
   if (target.type === TargetType.Any) {
     return bs.units;
+  }
+  if (target.type === TargetType.EmptyCell) {
+    return [...getPossibleDeploymentPositions(true), ...getPossibleDeploymentPositions(false)];
+  }
+  if (target.type === TargetType.EmptyAllyCell) {
+    const isPlayer = isHumanPlayer(unit.ownerPlayerId);
+    return getPossibleDeploymentPositions(isPlayer);
   }
   return [];
 }

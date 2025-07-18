@@ -1,5 +1,12 @@
 import { cards } from '@/data';
-import { isUnitCard, type BattleState, type GameState, type UnitCardTemplate } from '../_model';
+import {
+  isSpellCard,
+  isUnitCard,
+  type BattleState,
+  type GameState,
+  type SpellCardTemplate,
+  type UnitCardTemplate,
+} from '../_model';
 
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
@@ -78,9 +85,23 @@ function restoreBattleFunctions(bs: BattleState) {
         restoreUnitFunctions(unit);
       }
     });
+    player.hand.forEach((spell) => {
+      if (isSpellCard(spell)) {
+        restoreSpellFunctions(spell);
+      }
+    });
+    player.deck.forEach((spell) => {
+      if (isSpellCard(spell)) {
+        restoreSpellFunctions(spell);
+      }
+    });
   });
 }
 
 export function restoreUnitFunctions(unit: UnitCardTemplate) {
   unit.abilities = (cards[unit.id] as UnitCardTemplate).abilities;
+}
+
+export function restoreSpellFunctions(spell: SpellCardTemplate) {
+  spell.effect = (cards[spell.id] as SpellCardTemplate).effect;
 }

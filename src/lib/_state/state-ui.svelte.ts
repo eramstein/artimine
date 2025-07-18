@@ -6,6 +6,7 @@ export const uiState: UiState = $state({
     selectedUnit: null,
     validTargets: null,
     abilityPending: null,
+    spellPending: null,
     selectedTargets: [],
     targetBeingSelected: null,
     attackingUnitId: null,

@@ -2,17 +2,18 @@ import {
   addStaticKeyword,
   applyTemporaryEffect,
   damagePlayer,
+  damageUnit,
   getAdjacentAllies,
   getOpposingPlayer,
   removeStaticKeyword,
 } from '@/lib/battle';
-import type { AbiltyEffectArgs } from '@/lib/_model/model-battle';
+import type { EffectArgs, UnitDeployed } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 
 // return the effect function, it gets these args { unit, targets, triggerParams }
 
 export const DataEffectTemplates: {
-  [key: string]: ({ ...any }) => (p: AbiltyEffectArgs) => void;
+  [key: string]: ({ ...any }) => (p: EffectArgs) => void;
 } = {
   buffAdjAlliesTemp: ({ ...effect }) => {
     return ({ triggerParams }) => {
@@ -24,6 +25,13 @@ export const DataEffectTemplates: {
   damageEnemyLeader: ({ damage }) => {
     return ({ unit }) => {
       damagePlayer(getOpposingPlayer(unit), damage);
+    };
+  },
+  damageUnit: ({ damage }) => {
+    return ({ targets }) => {
+      (targets as UnitDeployed[]).forEach((target) => {
+        damageUnit(target, damage);
+      });
     };
   },
   staticKeywordAdjAllies: ({ name, keyword }) => {

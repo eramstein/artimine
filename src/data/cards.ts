@@ -4,6 +4,7 @@ import {
   DataEffectTemplates,
   DataTriggerTemplates,
 } from '@/lib/battle/abilities';
+import { DataTargetTemplates } from '@/lib/battle/abilities/targetTemplates';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -35,5 +36,14 @@ export const cards: Record<string, CardTemplate> = {
       },
       DataAbilityTemplates.mezz({ name: 'Mezz', cost: 1 }, { duration: 3 }),
     ],
+  },
+  lightningBolt: {
+    id: 'lightningBolt',
+    name: 'Lightning Bolt',
+    type: CardType.Spell,
+    cost: 1,
+    colors: [{ color: CardColor.Red, count: 2 }],
+    effect: DataEffectTemplates.damageUnit({ damage: 3 }),
+    target: DataTargetTemplates.unit(),
   },
 };
