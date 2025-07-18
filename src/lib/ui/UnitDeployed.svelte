@@ -25,9 +25,6 @@
   // Check if this unit is a valid attack target
   let isValidTarget = $derived(uiState.battle.validTargets?.units?.[unit.instanceId] === true);
 
-  // Check if this unit is the currently selected unit (potential attacker)
-  let isSelectedUnit = $derived(uiState.battle.selectedUnit?.instanceId === unit.instanceId);
-
   // Check if this unit is currently attacking
   let isAttacking = $derived(uiState.battle.attackingUnitId === unit.instanceId);
 
@@ -40,14 +37,6 @@
     }
     // else, if selected unit and valid target, attack
     if (selectedUnit && isValidTarget) {
-      // Trigger attack animation on the attacker
-      uiState.battle.attackingUnitId = selectedUnit.instanceId;
-
-      // Reset animation after a short delay
-      setTimeout(() => {
-        uiState.battle.attackingUnitId = null;
-      }, 300);
-
       attackUnit(selectedUnit, unit);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
         setValidTargets(selectedUnit);
@@ -60,8 +49,8 @@
     }
   }
 
-  // Attack direction - move towards the target
-  let attackDirection = $derived({ x: 1, y: 0 }); // Move right towards target
+  // Attack direction - move towards the target based on player
+  let attackDirection = $derived(unit.ownerPlayerId === 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
 </script>
 
 <div

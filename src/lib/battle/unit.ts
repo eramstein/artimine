@@ -3,16 +3,24 @@ import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } f
 import { isCellFree, isOnPlayersSide } from './boards';
 import { bs } from '../_state';
 import { onDamageUnit, onDeployUnit, onUnitDeath } from './listeners';
+import { soundManager } from './sound';
 
 export function deployUnit(unit: UnitCard, position: Position) {
+  // Check and pay costs
   if (!isPayable(unit) || !isCellFree(position) || !isOnPlayersSide(position, unit.ownerPlayerId)) {
     return;
   }
   payCost(unit);
+
+  // Create and deploy unit
   bs.units.push(makeDeployedUnit(unit, position));
   bs.players[unit.ownerPlayerId].hand = bs.players[unit.ownerPlayerId].hand.filter(
     (card) => card.instanceId !== unit.instanceId
   );
+
+  // Play deploy sound
+  soundManager.playDeploySound();
+  // Trigger activated abilities
   onDeployUnit(bs.units[bs.units.length - 1]);
 }
 

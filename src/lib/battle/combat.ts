@@ -1,10 +1,12 @@
 import { config } from '../_config';
 import type { Land, Player, UnitDeployed } from '../_model/model-battle';
 import { bs } from '../_state';
+import { uiState } from '../_state/state-ui.svelte';
 import { damageLand } from './land';
 import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit } from './unit';
 import { onCombatResolution } from './listeners';
+import { soundManager } from './sound';
 
 export function canAttack(unit: UnitDeployed) {
   return !unit.exhausted && !unit.hasAttacked;
@@ -91,8 +93,17 @@ export function attackPlayer(unit: UnitDeployed, playerId: number) {
 }
 
 function recordUnitHasAttacked(unit: UnitDeployed) {
+  // Update unit state
   unit.hasAttacked = true;
   if (!unit.keywords?.moveAndAttack || unit.hasMoved) {
     unit.exhausted = true;
   }
+  // Play attack sound based on unit power
+  soundManager.playAttackSound(unit.power);
+  // Trigger attack animation
+  uiState.battle.attackingUnitId = unit.instanceId;
+  // Reset animation after a short delay
+  setTimeout(() => {
+    uiState.battle.attackingUnitId = null;
+  }, 300);
 }
