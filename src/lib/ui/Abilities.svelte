@@ -52,7 +52,7 @@
   }
 
   function getTooltipContent(text: string, cost?: number, exhausts?: boolean): string {
-    const costText = cost ? `${cost}: ` : '';
+    const costText = cost ? `(${cost}): ` : '';
     const exhaustText = exhausts ? '↻ ' : '';
     return `${exhaustText}${costText}${text}`;
   }

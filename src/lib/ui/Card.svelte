@@ -131,6 +131,11 @@
         {/if}
       </div>
     </div>
+
+    <!-- Spell effect display for SpellCard -->
+    {#if isSpellCard(card)}
+      <div class="spell-effect">{card.text}</div>
+    {/if}
   </div>
 </div>
 
@@ -271,6 +276,28 @@
       0 8px 25px rgba(0, 0, 0, 0.5);
     z-index: 10;
     animation: spell-pulse 1s ease-in-out infinite alternate;
+  }
+
+  .spell-effect {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    text-align: center;
+    border: 1px solid var(--color-golden);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: auto;
+    margin-bottom: 4px;
+    max-width: 100%;
+    word-wrap: break-word;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card:hover .spell-effect {
+    opacity: 1;
   }
 
   @keyframes spell-pulse {

@@ -10,6 +10,27 @@ import { bs } from '../_state';
 import { getPossibleDeploymentPositions, isCellFree, isOnPlayersSide } from './boards';
 import { isHumanPlayer } from './player';
 
+export const DataTargetTemplates: {
+  [key: string]: (...any: any) => Target;
+} = {
+  ennemies: (n: number) => ({
+    type: TargetType.Foe,
+    count: n,
+  }),
+  cell: () => ({
+    type: TargetType.EmptyCell,
+    count: 1,
+  }),
+  unit: () => ({
+    type: TargetType.Any,
+    count: 1,
+  }),
+  allyCell: () => ({
+    type: TargetType.EmptyAllyCell,
+    count: 1,
+  }),
+};
+
 export function areAllTargetsValid(targets: UnitDeployed[], eligible: UnitDeployed[]): boolean {
   if (eligible === null) {
     return true;

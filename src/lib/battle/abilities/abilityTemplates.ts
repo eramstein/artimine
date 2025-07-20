@@ -16,8 +16,8 @@ import {
   type UnitCardTemplate,
 } from '@/lib/_model';
 import { DataTriggerTemplates as TRIG } from './triggerTemplates';
-import { DataTargetTemplates as TAR } from './targetTemplates';
-import { DataEffectTemplates } from './effectTemplates';
+import { DataTargetTemplates as TAR } from '../target';
+import { DataEffectTemplates } from '../effects';
 import { cards } from '@/data';
 
 interface AbilityParams {
@@ -59,7 +59,7 @@ export const DataAbilityTemplates: {
   },
   mezz: (p, { duration, targetCount = 1 }) => {
     return {
-      text: 'Mezz ' + duration,
+      text: 'Mezz ' + targetCount + ' unit for ' + duration + ' turns',
       trigger: TRIG.activated,
       target: TAR.ennemies(targetCount),
       effect: ({ targets }) => {

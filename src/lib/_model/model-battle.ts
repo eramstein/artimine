@@ -40,6 +40,7 @@ export interface UnitCardTemplate extends BaseCardTemplate {
 }
 
 export interface SpellCardTemplate extends BaseCardTemplate {
+  text: string;
   effect(p: EffectArgs): void;
   target?: Target;
 }

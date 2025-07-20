@@ -1,10 +1,7 @@
 import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
-import {
-  DataAbilityTemplates,
-  DataEffectTemplates,
-  DataTriggerTemplates,
-} from '@/lib/battle/abilities';
-import { DataTargetTemplates } from '@/lib/battle/abilities/targetTemplates';
+import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataEffectTemplates } from '@/lib/battle/effects';
+import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -29,7 +26,7 @@ export const cards: Record<string, CardTemplate> = {
         name: 'Protect Adjacent',
         text: 'Adjacent units get +1 armor',
         effect: DataEffectTemplates.staticKeywordAdjAllies({
-          name: 'ProtectAdjacent1',
+          name: 'ProtectAdjacent',
           keyword: { key: 'armor', value: 1 },
         }),
         trigger: DataTriggerTemplates.static,
@@ -40,6 +37,7 @@ export const cards: Record<string, CardTemplate> = {
   lightningBolt: {
     id: 'lightningBolt',
     name: 'Lightning Bolt',
+    text: 'Deal 3 damage to a unit',
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 2 }],
