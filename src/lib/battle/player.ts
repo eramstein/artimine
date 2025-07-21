@@ -18,7 +18,7 @@ export function isHumanPlayer(playerId: number): boolean {
 }
 
 export function incrementColor(player: Player, color: CardColor, value = 1) {
-  if (!player.colors[color] || player.abilityUsed) {
+  if (player.colors[color] === undefined || player.abilityUsed) {
     return;
   }
   player.colors[color] += value;

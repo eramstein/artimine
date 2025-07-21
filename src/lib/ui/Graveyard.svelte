@@ -13,7 +13,7 @@
   );
 
   // Create the background image path using the card id
-  let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.png` : '');
+  let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.jpg` : '');
 </script>
 
 <Tooltip content="{player.graveyard.length} cards in graveyard" show={isHovered} placement="bottom">
@@ -45,7 +45,6 @@
   .graveyard-card {
     width: 120px;
     height: 180px;
-    opacity: 0.7;
     transition: opacity 0.3s ease;
     background-size: cover;
     background-position: center;

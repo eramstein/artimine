@@ -3,16 +3,18 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lion,
-  cards.lightningBolt,
-  cards.lightningBolt,
+  cards.grizzly_bear,
+  cards.grizzly_bear,
+  cards.dryad,
+  cards.dryad,
+  cards.snek,
+  cards.snek,
+  cards.young_ent,
+  cards.young_ent,
+  cards.wall_of_bramble,
+  cards.wall_of_bramble,
+  cards.dwarfBerserker,
+  cards.dwarfBerserker,
   cards.lightningBolt,
   cards.lightningBolt,
   cards.lightningBolt,
@@ -26,8 +28,8 @@ export const PLAYER_DECK: CardTemplate[] = [
 ];
 
 export const PLAYER_LANDS: LandTemplate[] = [
-  lands.mountain,
-  lands.mountain,
+  lands.forest,
+  lands.forest,
   lands.mountain,
   lands.mountain,
 ];

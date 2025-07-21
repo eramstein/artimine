@@ -22,4 +22,5 @@ export interface PossibleActions {
   deployableUnits: UnitCard[];
   unitsWhoCanAttack: UnitDeployed[];
   unitsWhoCanMove: UnitDeployed[];
+  playerAbility: boolean;
 }

@@ -134,7 +134,7 @@
   .gray-card {
     width: var(--card-width, 200px);
     height: var(--card-height, 240px);
-    background-image: url('/src/assets/images/card_back.png');
+    background-image: url('/src/assets/images/card_back.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

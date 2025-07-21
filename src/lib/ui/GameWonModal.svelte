@@ -15,7 +15,7 @@
         class="winner-avatar"
         style="background-image: url('/src/assets/images/characters/{winningPlayer.name
           .toLowerCase()
-          .replace(/\s+/g, '_')}.png')"
+          .replace(/\s+/g, '_')}.jpg')"
       ></div>
       <div class="winner-details">
         <h2>{winningPlayer.name}</h2>

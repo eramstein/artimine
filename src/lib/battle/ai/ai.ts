@@ -3,11 +3,14 @@ import { ActionType, PersonaType, type AiPersona, type PossibleActions } from '.
 import { AiPersonaAggro } from './personas/aggro';
 import { canMove } from '../move';
 import { isBoardSizeFull } from '../boards';
-import { isUnitCard, type UnitCard } from '@/lib/_model';
+import { isUnitCard, type Player, type UnitCard } from '@/lib/_model';
 import { canAttack } from '../combat';
 import { config } from '@/lib/_config';
 import { nextTurn } from '../turn';
 import { isPayable } from '../cost';
+import { incrementColor, useDrawAbility } from '../player';
+import { draw } from 'svelte/transition';
+import { drawCard } from '../deck';
 
 const AI_PERSONA = PersonaType.Aggro;
 const MAX_ACTIONS_SAFETY_NET = 100;
@@ -34,34 +37,61 @@ export function playAiTurn() {
 function loopAiActions(persona: AiPersona) {
   actionsPlayedthisTurn++;
 
-  // TODO: leader actions
-  //const leader = bs.players[1];
-
+  const player = bs.players[1];
   const possibleActions = getPossibleActions(false);
+
   if (possibleActions.count === 0 || actionsPlayedthisTurn > MAX_ACTIONS_SAFETY_NET) {
     console.log('No actions screenLeft, passing', actionsPlayedthisTurn);
     nextTurn();
     return;
   }
 
-  const battleState = bs;
-  const actionType = persona.selectActionType(battleState, possibleActions);
+  if (possibleActions.playerAbility) {
+    usePlayerAbility(persona, player);
+  } else {
+    const actionType = persona.selectActionType(bs, possibleActions);
 
-  switch (actionType) {
-    case ActionType.Deploy:
-      persona.deploy(battleState, possibleActions.deployableUnits);
-      break;
-    case ActionType.Move:
-      persona.move(battleState, possibleActions.unitsWhoCanMove);
-      break;
-    case ActionType.Attack:
-      persona.attack(battleState, possibleActions.unitsWhoCanAttack);
-      break;
+    switch (actionType) {
+      case ActionType.Deploy:
+        persona.deploy(bs, possibleActions.deployableUnits);
+        break;
+      case ActionType.Move:
+        persona.move(bs, possibleActions.unitsWhoCanMove);
+        break;
+      case ActionType.Attack:
+        persona.attack(bs, possibleActions.unitsWhoCanAttack);
+        break;
+    }
   }
 
   setTimeout(() => {
     loopAiActions(persona);
   }, config.aiActionInterval);
+}
+
+function usePlayerAbility(persona: AiPersona, player: Player) {
+  // Get all available colors (keys in player.colors with a defined value)
+  const availableColors = Object.entries(player.colors)
+    .filter(([color, value]) => value !== undefined)
+    .map(([color, value]) => ({ color: color as any, value: value as number }));
+
+  if (availableColors.length === 0) {
+    player.abilityUsed = true;
+    return;
+  }
+
+  // Find the color with the lowest value
+  const minColor = availableColors.reduce((min, curr) => (curr.value < min.value ? curr : min));
+
+  // increment colors until 5 in each ,then draw
+  // TODO: only increment based on AI deck's needs
+  if (minColor.value < 5) {
+    incrementColor(player, minColor.color);
+  } else if (player.mana >= 1) {
+    useDrawAbility(player);
+  } else {
+    player.abilityUsed = true;
+  }
 }
 
 function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
@@ -73,10 +103,16 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
     : (leader.hand.filter((unit) => isUnitCard(unit) && isPayable(unit)) as UnitCard[]);
   const unitsWhoCanMove = boardFull ? [] : leaderUnits.filter((unit) => canMove(unit));
   const unitsWhoCanAttack = leaderUnits.filter((unit) => canAttack(unit));
+  const playerAbility = !leader.abilityUsed;
   return {
     deployableUnits,
     unitsWhoCanMove,
     unitsWhoCanAttack,
-    count: deployableUnits.length + unitsWhoCanMove.length + unitsWhoCanAttack.length,
+    playerAbility,
+    count:
+      deployableUnits.length +
+      unitsWhoCanMove.length +
+      unitsWhoCanAttack.length +
+      (playerAbility ? 1 : 0),
   };
 }

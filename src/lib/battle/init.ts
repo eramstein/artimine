@@ -2,7 +2,7 @@ import { bs } from '../_state';
 import { FOE_DECK, FOE_LANDS, PLAYER_DECK, PLAYER_LANDS } from '@/data';
 import { drawCard, shuffleDeck } from './deck';
 import { config } from '../_config';
-import { incrementColorsFromLands } from './land';
+import { initColorsFromLands } from './land';
 
 export const initBattle = () => {
   console.log('initBattle');
@@ -63,6 +63,6 @@ export const initBattle = () => {
     drawCard(bs.players[0]);
     drawCard(bs.players[1]);
   }
-  incrementColorsFromLands(bs.players[0]);
-  incrementColorsFromLands(bs.players[1]);
+  initColorsFromLands(bs.players[0]);
+  initColorsFromLands(bs.players[1]);
 };

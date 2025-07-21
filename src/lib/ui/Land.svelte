@@ -6,7 +6,7 @@
 
   let { land }: { land: Land } = $props();
 
-  let imagePath = $derived(`/src/assets/images/lands/${land.id}.png`);
+  let imagePath = $derived(`/src/assets/images/lands/${land.id}.jpg`);
   let isValidTarget = $derived(uiState.battle.validTargets?.lands?.[land.instanceId] === true);
 
   function handleLandClick() {

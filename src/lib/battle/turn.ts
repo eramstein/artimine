@@ -7,7 +7,7 @@ import { damageUnit, healUnit } from './unit';
 import { onTurnStart } from './listeners';
 
 export function nextTurn() {
-  console.log('next turn');
+  console.log('next turn', bs.turn, bs.isPlayersTurn);
   clearSelections();
   bs.turn++;
   bs.isPlayersTurn = !bs.isPlayersTurn;

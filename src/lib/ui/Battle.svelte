@@ -43,7 +43,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('/src/assets/images/table.png');
+    background-image: url('/src/assets/images/table.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

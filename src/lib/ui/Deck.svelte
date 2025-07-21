@@ -23,7 +23,7 @@
           class="card-back"
           style="z-index: {stackSize - index}; transform: translateY({index * 3}px);"
         >
-          <img src="/src/assets/images/card_back.png" alt="Card Back" class="card-image" />
+          <img src="/src/assets/images/card_back.jpg" alt="Card Back" class="card-image" />
         </div>
       {/each}
     </div>

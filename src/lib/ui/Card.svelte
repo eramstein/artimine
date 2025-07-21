@@ -12,7 +12,7 @@
   let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
 
   // Create the background image path using the card id
-  let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.png`);
+  let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.jpg`);
 
   // Check if this card is the currently pending spell
   let isPendingSpell = $derived(

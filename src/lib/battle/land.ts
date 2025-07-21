@@ -1,11 +1,11 @@
 import type { Land, Player } from '../_model';
 import { bs } from '../_state';
 
-// lands open a color by setting it to 1, the player then has to increase it otherwise
-export function incrementColorsFromLands(player: Player) {
+// lands open a color by setting it to 0, the player then has to increase it otherwise
+export function initColorsFromLands(player: Player) {
   player.lands.forEach((land) => {
     land.colors.forEach((color) => {
-      player.colors[color.color] = 1;
+      player.colors[color.color] = 0;
     });
   });
 }

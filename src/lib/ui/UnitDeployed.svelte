@@ -14,7 +14,7 @@
   let { unit }: { unit: UnitDeployed } = $props();
 
   // Create the background image path using the card id (same as Card.svelte)
-  let cardImagePath = $derived(`/src/assets/images/cards/${unit.id}.png`);
+  let cardImagePath = $derived(`/src/assets/images/cards/${unit.id}.jpg`);
 
   // Determine if unit is active for border styling
   let isActive = $derived(isUnitActive(unit));

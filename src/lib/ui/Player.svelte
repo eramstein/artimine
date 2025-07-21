@@ -14,12 +14,10 @@
   let characterImageName = $derived(player.name.toLowerCase().replace(/\s+/g, '_'));
 
   // Create the image path
-  let characterImagePath = $derived(`/src/assets/images/characters/${characterImageName}.png`);
+  let characterImagePath = $derived(`/src/assets/images/characters/${characterImageName}.jpg`);
 
   // Get available colors for the player
-  let availableColors = $derived(
-    Object.entries(player.colors || {}).filter(([_, count]) => count > 0)
-  );
+  let availableColors = $derived(Object.entries(player.colors || {}));
 
   // Check if this player is a valid target
   let isValidTarget = $derived(uiState.battle.validTargets?.players?.[player.id] === true);
