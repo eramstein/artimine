@@ -62,4 +62,14 @@ export const cards_G: Record<string, CardTemplate> = {
       armor: 1,
     },
   },
+  shroomy: {
+    id: 'shroomy',
+    name: 'Shroomy',
+    type: CardType.Unit,
+    cost: 1,
+    power: 1,
+    maxHealth: 1,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    abilities: [DataAbilityTemplates.grows({ name: 'Grows' }, { growthValue: 1 })],
+  },
 };

@@ -20,6 +20,6 @@ export const DataTriggerTemplates: {
   },
   myTurnStarts: {
     type: TriggerType.OnTurnStart,
-    condition: (unit, triggerParams) => unit.ownerPlayerId === triggerParams.playerId,
+    condition: (unit, triggerParams) => unit.ownerPlayerId === triggerParams.player.id,
   },
 };

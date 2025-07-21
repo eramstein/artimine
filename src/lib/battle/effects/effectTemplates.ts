@@ -22,6 +22,13 @@ export const DataEffectTemplates: {
       });
     };
   },
+  grow: ({ growthValue }) => {
+    return ({ unit }) => {
+      unit.power += growthValue;
+      unit.health += growthValue;
+      unit.maxHealth += growthValue;
+    };
+  },
   damageEnemyLeader: ({ damage }) => {
     return ({ unit }) => {
       damagePlayer(getOpposingPlayer(unit), damage);

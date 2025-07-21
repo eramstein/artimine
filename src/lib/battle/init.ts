@@ -16,13 +16,18 @@ export const initBattle = () => {
       maxMana: config.initialMana,
       life: config.initialLife,
       hand: [],
-      deck: shuffleDeck(
-        PLAYER_DECK.map((card) => ({
-          ...card,
-          ownerPlayerId: 0,
-          instanceId: crypto.randomUUID(),
-        }))
-      ),
+      // deck: shuffleDeck(
+      //   PLAYER_DECK.map((card) => ({
+      //     ...card,
+      //     ownerPlayerId: 0,
+      //     instanceId: crypto.randomUUID(),
+      //   }))
+      // ),
+      deck: PLAYER_DECK.map((card) => ({
+        ...card,
+        ownerPlayerId: 0,
+        instanceId: crypto.randomUUID(),
+      })),
       graveyard: [],
       colors: {},
       lands: PLAYER_LANDS.map((land, index) => ({

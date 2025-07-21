@@ -12,27 +12,18 @@ export const cards: Record<string, CardTemplate> = {
     type: CardType.Unit,
     cost: 2,
     power: 2,
-    maxHealth: 5,
+    maxHealth: 2,
     colors: [{ color: CardColor.Red, count: 1 }],
-    keywords: {
-      ranged: true,
-      moveAndAttack: true,
-      retaliate: 1,
-      armor: 1,
-      haste: true,
-      poisonous: 2,
-      regeneration: 1,
-    },
     abilities: [
-      {
-        name: 'Protect Adjacent',
-        text: 'Adjacent units get +1 armor',
-        effect: DataEffectTemplates.staticKeywordAdjAllies({
-          name: 'ProtectAdjacent',
-          keyword: { key: 'armor', value: 1 },
-        }),
-        trigger: DataTriggerTemplates.static,
-      },
+      // {
+      //   name: 'Protect Adjacent',
+      //   text: 'Adjacent units get +1 armor',
+      //   effect: DataEffectTemplates.staticKeywordAdjAllies({
+      //     name: 'ProtectAdjacent',
+      //     keyword: { key: 'armor', value: 1 },
+      //   }),
+      //   trigger: DataTriggerTemplates.static,
+      // },
       DataAbilityTemplates.mezz({ name: 'Mezz', cost: 1 }, { duration: 3 }),
     ],
   },

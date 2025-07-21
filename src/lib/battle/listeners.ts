@@ -17,7 +17,7 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
       .forEach((a) => {
         // TODO: if a.target, ask player or AI for targets
         // (store ability in a "pendingTriggeredAbilities" array ?)
-        //console.log(u.name + ' triggers ' + a.name, a, { ...rest });
+        // console.log(u.name + ' triggers ' + a.name, a, { ...rest });
         let targets: UnitDeployed[] = [];
         const triggerParams: any = { ...rest };
         if (a.target) {
