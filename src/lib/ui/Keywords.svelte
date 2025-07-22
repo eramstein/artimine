@@ -17,6 +17,7 @@
     resist: '🌀',
     poisonous: '☠️',
     regeneration: '💚',
+    trample: '🐘',
   };
 
   // Tooltip content for each keyword
@@ -33,6 +34,7 @@
       'Poisonous: When this unit deals damage, the target is poisoned and takes 1 damage at the start of each turn.',
     regeneration: (value: number) =>
       `Regeneration ${value}: This unit heals ${value} health at the start of each turn.`,
+    trample: 'Trample: Excess damage is dealt to the unit, land or player behind.',
   };
 
   function handleMouseEnter(keyword: string) {

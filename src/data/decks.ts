@@ -3,14 +3,14 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.deep_forest_wurm,
+  cards.basic_wurm,
   cards.shroomy_shooty,
   cards.shroomy_protecs,
   cards.shroomy_rooty,
   cards.energyze,
   cards.luxurious_growth,
   cards.shroomy,
-  cards.shroomy,
-  cards.grizzly_bear,
   cards.grizzly_bear,
   cards.dryad,
   cards.dryad,

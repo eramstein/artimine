@@ -62,12 +62,22 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
     throw new Error('Invalid attack target');
   }
   const preventedDamage = target.keywords?.armor || 0;
+  const dealtDamage = unit.power - preventedDamage;
+  const excessDamage = dealtDamage - target.health;
   if (unit.keywords?.poisonous) {
     target.statuses.poison = (target.statuses.poison || 0) + unit.keywords.poisonous;
   }
-  const wasDestroyed = damageUnit(target, unit.power - preventedDamage);
+  const wasDestroyed = damageUnit(target, dealtDamage);
   if (!wasDestroyed && target.keywords?.retaliate) {
     damageUnit(unit, target.keywords.retaliate, true);
+  }
+  if (excessDamage && unit.keywords?.trample) {
+    const nextUnit = getClosestBlocker(unit);
+    if (nextUnit) {
+      damageUnit(nextUnit, excessDamage);
+    } else {
+      damageLand(bs.players[target.ownerPlayerId].lands[unit.position.row], excessDamage);
+    }
   }
   onCombatResolution(unit, target);
   recordUnitHasAttacked(unit);
@@ -78,6 +88,10 @@ export function attackLand(unit: UnitDeployed, target: Land) {
     throw new Error('Invalid attack target');
   }
   damageLand(target, unit.power);
+  const excessDamage = unit.power - target.health;
+  if (excessDamage && unit.keywords?.trample) {
+    damagePlayer(bs.players[target.ownerPlayerId], excessDamage);
+  }
   onCombatResolution(unit, target);
   recordUnitHasAttacked(unit);
 }

@@ -130,4 +130,25 @@ export const cards_G: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Green, count: 2 }],
     ...SpellTemplates.untapPlayer({}),
   },
+  basic_wurm: {
+    id: 'basic_wurm',
+    name: 'Basic Wurm',
+    type: CardType.Unit,
+    cost: 6,
+    power: 6,
+    maxHealth: 6,
+    colors: [{ color: CardColor.Green, count: 1 }],
+  },
+  deep_forest_wurm: {
+    id: 'deep_forest_wurm',
+    name: 'Deep Forest Wurm',
+    type: CardType.Unit,
+    cost: 1,
+    power: 6,
+    maxHealth: 6,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    keywords: {
+      trample: true,
+    },
+  },
 };
