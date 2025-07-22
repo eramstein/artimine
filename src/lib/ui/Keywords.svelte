@@ -14,6 +14,7 @@
     moveAndAttack: '🔄',
     retaliate: '⚔️',
     armor: '🛡️',
+    resist: '🌀',
     poisonous: '☠️',
     regeneration: '💚',
   };
@@ -26,6 +27,8 @@
     retaliate: (value: number) =>
       `Retaliate ${value}: When this unit is attacked, it deals ${value} damage back to the attacker.`,
     armor: (value: number) => `Armor ${value}: This unit takes ${value} less damage from attacks.`,
+    resist: (value: number) =>
+      `Resist ${value}: This unit takes ${value} less damage from spells and abilities.`,
     poisonous:
       'Poisonous: When this unit deals damage, the target is poisoned and takes 1 damage at the start of each turn.',
     regeneration: (value: number) =>

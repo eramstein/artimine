@@ -111,6 +111,7 @@ export interface UnitKeywords {
   moveAndAttack?: boolean;
   retaliate?: number;
   armor?: number;
+  resist?: number;
   poisonous?: number;
   regeneration?: number;
 }

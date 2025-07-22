@@ -17,6 +17,10 @@ export function isHumanPlayer(playerId: number): boolean {
   return playerId === 0;
 }
 
+export function untapPlayer(player: Player) {
+  player.abilityUsed = false;
+}
+
 export function incrementColor(player: Player, color: CardColor, value: number) {
   player.colors[color] = (player.colors[color] || 0) + value;
 }

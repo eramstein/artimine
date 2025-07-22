@@ -1,7 +1,7 @@
 import { CardColor, type EffectArgs, type Player, type Target } from '@/lib/_model';
 import { DataEffectTemplates } from '../effects';
 import { DataTargetTemplates } from '../target';
-import { incrementColor } from '../player';
+import { incrementColor, untapPlayer } from '../player';
 
 export const SpellTemplates: {
   [key: string]: ({ ...any }) => {
@@ -19,6 +19,13 @@ export const SpellTemplates: {
     return {
       effect: (p) => {
         incrementColor(p.player, color, value);
+      },
+    };
+  },
+  untapPlayer: () => {
+    return {
+      effect: (p) => {
+        untapPlayer(p.player);
       },
     };
   },

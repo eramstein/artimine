@@ -1,4 +1,4 @@
-import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
@@ -72,6 +72,46 @@ export const cards_G: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Green, count: 3 }],
     abilities: [DataAbilityTemplates.grows({ name: 'Grows' }, { growthValue: 1 })],
   },
+  shroomy_shooty: {
+    id: 'shroomy_shooty',
+    name: 'Shroomy Shooty',
+    type: CardType.Unit,
+    cost: 1,
+    power: 1,
+    maxHealth: 1,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    keywords: { ranged: true },
+  },
+  shroomy_rooty: {
+    id: 'shroomy_rooty',
+    name: 'Shroomy Rooty',
+    type: CardType.Unit,
+    cost: 1,
+    power: 0,
+    maxHealth: 1,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    abilities: [
+      DataAbilityTemplates.cc(
+        { name: 'Rooted', exhausts: true },
+        { duration: 1, statusType: StatusType.Root }
+      ),
+    ],
+  },
+  shroomy_protecs: {
+    id: 'shroomy_protecs',
+    name: 'Shroomy Protecs',
+    type: CardType.Unit,
+    cost: 1,
+    power: 0,
+    maxHealth: 1,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    abilities: [
+      DataAbilityTemplates.staticKeyword(
+        { name: 'protecs!' },
+        { keyword: { key: 'resist', value: 1 } }
+      ),
+    ],
+  },
   luxurious_growth: {
     id: 'luxurious_growth',
     name: 'Luxurious Growth',
@@ -80,5 +120,14 @@ export const cards_G: Record<string, CardTemplate> = {
     cost: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
     ...SpellTemplates.ramp({ value: 1, color: CardColor.Green }),
+  },
+  energyze: {
+    id: 'energyze',
+    name: 'Energyze',
+    text: 'Re-initializes your hero ability',
+    type: CardType.Spell,
+    cost: 3,
+    colors: [{ color: CardColor.Green, count: 2 }],
+    ...SpellTemplates.untapPlayer({}),
   },
 };

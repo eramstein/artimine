@@ -5,6 +5,7 @@ import {
   applyUnitStatus,
   summonUnit,
   makeUnit,
+  DataTriggerTemplates,
 } from '@/lib/battle';
 import {
   type Trigger,
@@ -55,14 +56,14 @@ export const DataAbilityTemplates: {
       ...p,
     };
   },
-  mezz: (p, { duration, targetCount = 1 }) => {
+  cc: (p, { duration, targetCount = 1, statusType = StatusType.Mezz }) => {
     return {
-      text: 'Mezz ' + targetCount + ' unit for ' + duration + ' turns',
+      text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
       trigger: TRIG.activated,
       target: TAR.ennemies(targetCount),
       effect: ({ targets }) => {
         (targets as UnitDeployed[]).forEach((u) => {
-          applyUnitStatus(u, StatusType.Mezz, duration);
+          applyUnitStatus(u, statusType, duration);
         });
       },
       ...p,
@@ -134,6 +135,16 @@ export const DataAbilityTemplates: {
       text: `Turn start: gains +${growthValue}/+${growthValue}`,
       trigger: TRIG.myTurnStarts,
       effect: DataEffectTemplates.grow({ growthValue }),
+      ...p,
+    };
+  },
+  staticKeyword: (p, { keyword }) => {
+    return {
+      text: `Give ${keyword.key} ${keyword.value} to adjacent allies`,
+      trigger: DataTriggerTemplates.static,
+      effect: DataEffectTemplates.staticKeywordAdjAllies({
+        keyword,
+      }),
       ...p,
     };
   },

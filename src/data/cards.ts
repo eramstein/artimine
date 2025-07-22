@@ -1,4 +1,4 @@
-import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
@@ -24,7 +24,10 @@ export const cards: Record<string, CardTemplate> = {
       //   }),
       //   trigger: DataTriggerTemplates.static,
       // },
-      DataAbilityTemplates.mezz({ name: 'Mezz', cost: 1 }, { duration: 3 }),
+      DataAbilityTemplates.cc(
+        { name: 'Mezz', cost: 1 },
+        { duration: 3, statusType: StatusType.Mezz }
+      ),
     ],
   },
   ...cards_G,

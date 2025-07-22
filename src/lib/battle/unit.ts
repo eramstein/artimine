@@ -56,8 +56,12 @@ export function isUnitActive(unit: UnitDeployed) {
 }
 
 export function damageUnit(unit: UnitDeployed, damage: number, isCombatDamage = false): boolean {
-  onDamageUnit(unit, damage, isCombatDamage);
-  unit.health -= damage;
+  let damageDealt = damage - (unit.keywords?.resist || 0);
+  if (damageDealt < 0) {
+    damageDealt = 0;
+  }
+  onDamageUnit(unit, damageDealt, isCombatDamage);
+  unit.health -= damageDealt;
   if (unit.health <= 0) {
     destroyUnit(unit);
     return true;
