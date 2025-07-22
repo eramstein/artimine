@@ -1,5 +1,5 @@
 import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
@@ -71,5 +71,14 @@ export const cards_G: Record<string, CardTemplate> = {
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 3 }],
     abilities: [DataAbilityTemplates.grows({ name: 'Grows' }, { growthValue: 1 })],
+  },
+  luxurious_growth: {
+    id: 'luxurious_growth',
+    name: 'Luxurious Growth',
+    text: 'Gain 1 green mana',
+    type: CardType.Spell,
+    cost: 1,
+    colors: [{ color: CardColor.Green, count: 1 }],
+    ...SpellTemplates.ramp({ value: 1, color: CardColor.Green }),
   },
 };

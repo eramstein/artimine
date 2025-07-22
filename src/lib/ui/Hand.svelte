@@ -61,7 +61,7 @@
   .hand {
     display: flex;
     gap: 0;
-    padding: 0 1rem;
+    padding: 0 8rem;
     overflow: visible;
     min-height: 220px;
     align-items: center;

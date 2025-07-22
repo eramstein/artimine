@@ -8,9 +8,7 @@ import { canAttack } from '../combat';
 import { config } from '@/lib/_config';
 import { nextTurn } from '../turn';
 import { isPayable } from '../cost';
-import { incrementColor, useDrawAbility } from '../player';
-import { draw } from 'svelte/transition';
-import { drawCard } from '../deck';
+import { usePlayerColorAbility, useDrawAbility } from '../player';
 
 const AI_PERSONA = PersonaType.Aggro;
 const MAX_ACTIONS_SAFETY_NET = 100;
@@ -86,7 +84,7 @@ function usePlayerAbility(persona: AiPersona, player: Player) {
   // increment colors until 5 in each ,then draw
   // TODO: only increment based on AI deck's needs
   if (minColor.value < 5) {
-    incrementColor(player, minColor.color);
+    usePlayerColorAbility(player, minColor.color);
   } else if (player.mana >= 1) {
     useDrawAbility(player);
   } else {

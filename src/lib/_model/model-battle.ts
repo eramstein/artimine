@@ -141,6 +141,7 @@ export interface EffectArgs {
   unit: UnitDeployed;
   targets: UnitDeployed[] | Position[];
   triggerParams: any;
+  player: Player;
 }
 
 export interface Trigger {

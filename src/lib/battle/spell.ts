@@ -50,7 +50,11 @@ export function playSpell(spell: SpellCard, targets: UnitDeployed[] | Position[]
 
   // EFFECT
   // ----------------------------------------------------------------------
-  spell.effect({ targets, triggerParams: {} } as EffectArgs);
+  spell.effect({
+    targets,
+    triggerParams: {},
+    player: bs.players[spell.ownerPlayerId],
+  } as EffectArgs);
 
   // DISCARD
   // ----------------------------------------------------------------------

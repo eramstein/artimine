@@ -5,7 +5,7 @@
   import Graveyard from './Graveyard.svelte';
   import { uiState } from '../_state';
   import { attackPlayer } from '../battle/combat';
-  import { incrementColor, useDrawAbility, isHumanPlayer } from '../battle/player';
+  import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '../battle/player';
   import { clearSelections, setValidTargets } from './_helpers/selections';
 
   let { player }: { player: Player } = $props();
@@ -46,7 +46,7 @@
   function handleColorClick(color: string) {
     if (!isHuman || hasUsedAbility) return;
     const cardColor = color as CardColor;
-    incrementColor(player, cardColor);
+    usePlayerColorAbility(player, cardColor);
   }
 
   function handleDrawClick() {

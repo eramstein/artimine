@@ -4,6 +4,7 @@ import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
   cards.lightningBolt,
+  cards.luxurious_growth,
   cards.shroomy,
   cards.shroomy,
   cards.grizzly_bear,
@@ -18,7 +19,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.wall_of_bramble,
   cards.dwarfBerserker,
   cards.dwarfBerserker,
-  cards.lightningBolt,
   cards.lightningBolt,
   cards.lightningBolt,
   cards.lightningBolt,

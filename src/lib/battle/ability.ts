@@ -35,7 +35,7 @@ export function playAbility(
 
   // EFFECT
   // ----------------------------------------------------------------------
-  ability.effect({ unit, targets, triggerParams: {} });
+  ability.effect({ unit, targets, triggerParams: {}, player: bs.players[unit.ownerPlayerId] });
 }
 
 function checkExhaustion(unit: UnitDeployed, ability: Ability): boolean {
