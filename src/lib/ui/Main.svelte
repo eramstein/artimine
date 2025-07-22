@@ -2,8 +2,10 @@
   import { UiView } from '../_model';
   import { uiState, bs } from '../_state';
   import Battle from './Battle.svelte';
+  import ModalHost from './ModalHost.svelte';
 </script>
 
+<ModalHost />
 <div class="main">
   <div class="scene-container">
     {#if uiState.currentView === UiView.Battle && bs.turn > 0}

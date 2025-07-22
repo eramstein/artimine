@@ -16,6 +16,13 @@ export type UiState = {
     targetBeingSelected: Target | null;
     attackingUnitId: string | null;
   };
+  modal: {
+    visible: boolean;
+    title: string;
+    body: string;
+    onConfirm?: () => void;
+    onCancel?: () => void;
+  };
 };
 
 export enum UiView {

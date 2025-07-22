@@ -11,4 +11,11 @@ export const uiState: UiState = $state({
     targetBeingSelected: null,
     attackingUnitId: null,
   },
+  modal: {
+    visible: false,
+    title: '',
+    body: '',
+    onConfirm: undefined,
+    onCancel: undefined,
+  },
 });

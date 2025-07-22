@@ -8,6 +8,7 @@
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
+  import { onMount } from 'svelte';
 
   let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
 
@@ -50,7 +51,15 @@
   // Handle card click
   function handleClick() {
     if (isSpellCard(card) && isPayable(card)) {
-      activateSpell(card);
+      if (!card.target) {
+        uiState.modal.visible = true;
+        uiState.modal.title = 'Cast Spell?';
+        uiState.modal.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${card.text}</span>`;
+        uiState.modal.onConfirm = () => activateSpell(card);
+        uiState.modal.onCancel = undefined;
+      } else {
+        activateSpell(card);
+      }
     }
   }
 
