@@ -69,7 +69,7 @@ export const cards_G: Record<string, CardTemplate> = {
     cost: 1,
     power: 1,
     maxHealth: 1,
-    colors: [{ color: CardColor.Green, count: 1 }],
+    colors: [{ color: CardColor.Green, count: 3 }],
     abilities: [DataAbilityTemplates.grows({ name: 'Grows' }, { growthValue: 1 })],
   },
 };

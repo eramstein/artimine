@@ -1,5 +1,5 @@
 import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
@@ -11,8 +11,7 @@ export const cards_R: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 2 }],
-    effect: DataEffectTemplates.damageUnit({ damage: 3 }),
-    target: DataTargetTemplates.unit(),
+    ...SpellTemplates.dd({ damage: 3 }),
   },
   dwarfBerserker: {
     id: 'dwarfBerserker',

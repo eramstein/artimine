@@ -7,7 +7,6 @@ import {
   makeUnit,
 } from '@/lib/battle';
 import {
-  type Target,
   type Trigger,
   type Ability,
   StatusType,
@@ -23,7 +22,6 @@ import { cards } from '@/data';
 interface AbilityParams {
   name: string;
   cost?: number;
-  target?: Target;
   trigger?: Trigger;
   exhausts?: boolean;
 }

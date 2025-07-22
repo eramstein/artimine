@@ -1,3 +1,3 @@
 export * from './abilityTemplates';
 export * from './triggerTemplates';
-export * from './abilities';
+export * from './spellTemplates';
