@@ -18,13 +18,15 @@
     poisonous: '☠️',
     regeneration: '💚',
     trample: '🐘',
+    zerk: '💥',
   };
 
   // Tooltip content for each keyword
   const tooltipContent = {
-    ranged: 'Ranged: This unit can attack without being adjacent to the target.',
-    haste: 'Haste: This unit can attack immediately when deployed.',
-    moveAndAttack: 'Move and Attack: This unit can move and then attack in the same turn.',
+    ranged: 'Ranged: Can attack without being adjacent to the target.',
+    haste: 'Haste: Can attack immediately when deployed.',
+    moveAndAttack: 'Move and Attack: Can move and then attack in the same turn.',
+    zerk: 'Zerk: Attacks automatically on turn start.',
     retaliate: (value: number) =>
       `Retaliate ${value}: When this unit is attacked, it deals ${value} damage back to the attacker.`,
     armor: (value: number) => `Armor ${value}: This unit takes ${value} less damage from attacks.`,

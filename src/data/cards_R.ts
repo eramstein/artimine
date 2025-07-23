@@ -4,7 +4,7 @@ import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards_R: Record<string, CardTemplate> = {
-  lightningBolt: {
+  lightning_bolt: {
     id: 'lightningBolt',
     name: 'Lightning Bolt',
     text: 'Deal 3 damage to a unit',
@@ -13,15 +13,31 @@ export const cards_R: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Red, count: 2 }],
     ...SpellTemplates.dd({ damage: 3 }),
   },
-  dwarfBerserker: {
-    id: 'dwarfBerserker',
+  dwarf_berserker: {
+    id: 'dwarf_berserker',
     name: 'Dwarf Berserker',
     type: CardType.Unit,
     cost: 3,
-    power: 3,
+    power: 2,
     maxHealth: 2,
     colors: [{ color: CardColor.Red, count: 3 }],
     keywords: {
+      haste: true,
+    },
+  },
+  modis_chosen: {
+    id: 'modis_chosen',
+    name: 'Chosen of Modi',
+    type: CardType.Unit,
+    cost: 4,
+    power: 4,
+    maxHealth: 2,
+    colors: [
+      { color: CardColor.Red, count: 2 },
+      { color: CardColor.Green, count: 1 },
+    ],
+    keywords: {
+      zerk: true,
       haste: true,
     },
   },

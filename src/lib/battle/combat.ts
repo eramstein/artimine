@@ -7,9 +7,10 @@ import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit } from './unit';
 import { onCombatResolution } from './listeners';
 import { soundManager } from './sound';
+import { isLand, isPlayer } from '../_model/type-lookup-battle';
 
 export function canAttack(unit: UnitDeployed) {
-  return !unit.exhausted && !unit.hasAttacked;
+  return !unit.exhausted && !unit.hasAttacked && !unit.statuses.stun && !unit.statuses.mezz;
 }
 
 export function validAttackTargets(unit: UnitDeployed): UnitDeployed[] | Land | Player {
@@ -120,4 +121,24 @@ function recordUnitHasAttacked(unit: UnitDeployed) {
   setTimeout(() => {
     uiState.battle.attackingUnitId = null;
   }, 300);
+}
+
+export function autoAttack(unit: UnitDeployed) {
+  if (!canAttack(unit)) {
+    return;
+  }
+  const validTargets = validAttackTargets(unit);
+  if (!validTargets || (Array.isArray(validTargets) && validTargets.length === 0)) return;
+  if (Array.isArray(validTargets) && validTargets.length > 0) {
+    attackUnit(unit, validTargets[0]);
+    return;
+  }
+  if (isLand(validTargets)) {
+    attackLand(unit, validTargets);
+    return;
+  }
+  if (isPlayer(validTargets)) {
+    attackPlayer(unit, validTargets.id);
+    return;
+  }
 }

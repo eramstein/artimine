@@ -1,11 +1,11 @@
-import { isLand, isPlayer, type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model';
+import { type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model';
 import { getPossibleDeploymentPositions } from '../../boards';
-import { attackLand, attackPlayer, attackUnit, validAttackTargets } from '../../combat';
 import { deployUnit } from '../../unit';
 import { ActionType, type AiPersona } from '../model';
 import { getRandomFromArray } from '../utils/random';
 import { moveUnit } from '../../move';
 import type { PossibleActions } from '../model';
+import { autoAttack } from '../../combat';
 
 export const AiPersonaAggro: AiPersona = {
   selectActionType(state: BattleState, possibleActions: PossibleActions): ActionType | null {
@@ -37,19 +37,6 @@ export const AiPersonaAggro: AiPersona = {
   },
   attack(state: BattleState, unitsWhoCanAttack: UnitDeployed[]) {
     const attacker = getRandomFromArray(unitsWhoCanAttack);
-    const targets = validAttackTargets(attacker);
-    if (!targets || (Array.isArray(targets) && targets.length === 0)) return;
-    if (Array.isArray(targets)) {
-      attackUnit(attacker, getRandomFromArray(targets));
-      return;
-    }
-    if (isLand(targets)) {
-      attackLand(attacker, targets);
-      return;
-    }
-    if (isPlayer(targets)) {
-      attackPlayer(attacker, targets.id);
-      return;
-    }
+    autoAttack(attacker);
   },
 };

@@ -115,6 +115,7 @@ export interface UnitKeywords {
   poisonous?: number;
   regeneration?: number;
   trample?: boolean;
+  zerk?: boolean;
 }
 
 export type UnitEndOfTurnEffects = UnitKeywords & {

@@ -5,6 +5,7 @@ import { playAiTurn } from './ai/ai';
 import { drawCard } from './deck';
 import { damageUnit, healUnit } from './unit';
 import { onTurnStart } from './listeners';
+import { autoAttack } from './combat';
 
 export function nextTurn() {
   console.log('next turn', bs.turn, bs.isPlayersTurn);
@@ -37,6 +38,7 @@ function updateUnits(player: Player) {
       unit.exhausted = false;
       statuses(unit);
       hotAndDot(unit);
+      forcedActions(unit);
     });
 }
 
@@ -59,5 +61,11 @@ function statuses(unit: UnitDeployed) {
   }
   if (unit.statuses.root && unit.statuses.root > 0) {
     unit.statuses.root--;
+  }
+}
+
+function forcedActions(unit: UnitDeployed) {
+  if (unit.keywords?.zerk) {
+    autoAttack(unit);
   }
 }

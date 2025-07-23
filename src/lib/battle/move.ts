@@ -5,7 +5,13 @@ import { isHumanPlayer } from './player';
 import { onAfterMoveUnit } from './listeners';
 
 export function canMove(unit: UnitDeployed) {
-  return !unit.exhausted && !unit.hasMoved;
+  return (
+    !unit.exhausted &&
+    !unit.hasMoved &&
+    !unit.statuses.stun &&
+    !unit.statuses.mezz &&
+    !unit.statuses.root
+  );
 }
 
 export function validMoveTargets(unit: UnitDeployed): Record<string, boolean> {

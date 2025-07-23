@@ -3,13 +3,12 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
-  cards.deep_forest_wurm,
-  cards.basic_wurm,
   cards.shroomy_shooty,
   cards.shroomy_protecs,
   cards.shroomy_rooty,
   cards.energyze,
   cards.luxurious_growth,
+  cards.modis_chosen,
   cards.shroomy,
   cards.grizzly_bear,
   cards.dryad,
@@ -20,9 +19,11 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.young_ent,
   cards.wall_of_bramble,
   cards.wall_of_bramble,
-  cards.dwarfBerserker,
-  cards.dwarfBerserker,
-  cards.lightningBolt,
+  cards.modis_chosen,
+  cards.dwarf_berserker,
+  cards.lightning_bolt,
+  cards.deep_forest_wurm,
+  cards.basic_wurm,
 ];
 
 export const PLAYER_LANDS: LandTemplate[] = [
