@@ -122,6 +122,7 @@ export const DataAbilityTemplates: {
       trigger: TRIG.activated,
       target: TAR.allyCell(),
       effect: ({ unit, targets }) => {
+        console.log('summon', unit, targets);
         (targets as Position[]).forEach((cell) => {
           const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
           summonUnit(createdUnit, cell);

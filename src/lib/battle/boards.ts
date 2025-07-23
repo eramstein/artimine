@@ -28,25 +28,22 @@ export function isBoardSizeFull(player: Player): boolean {
   );
 }
 
-export function getPossibleDeploymentPositions(isPlayer: boolean): Position[] {
-  const positionMap: Record<string, boolean> = {};
-  const startColumn = isPlayer ? 1 : config.boardColumns / 2;
-  const colCount = Math.floor(config.boardColumns / 2);
-  // fill with all positions on player's side of the board
+export function getEmptyCells(isPlayer: boolean): Position[] {
+  const positions: Position[] = [];
+  // Determine which columns to check based on unit's side
+  const startCol = isPlayer ? 0 : config.boardColumns / 2;
+  const endCol = isPlayer ? config.boardColumns / 2 : config.boardColumns;
+
+  // Iterate through only the relevant columns
   for (let row = 0; row < config.boardRows; row++) {
-    for (let column = startColumn; column < startColumn + colCount; column++) {
-      positionMap[row + '-' + column] = true;
+    for (let col = startCol; col < endCol; col++) {
+      const position = { row, column: col };
+
+      // Check if the cell is free
+      if (isCellFree(position)) {
+        positions.push(position);
+      }
     }
   }
-  // remove occupied positions
-  for (const unit of bs.units) {
-    positionMap[unit.position.row + '-' + unit.position.column] = false;
-  }
-  return (<any>Object)
-    .entries(positionMap)
-    .filter(([_, val]: [string, boolean]) => val)
-    .map(([key, _]: [string, boolean]) => ({
-      row: +key.split('-')[0],
-      column: +key.split('-')[1],
-    }));
+  return positions;
 }

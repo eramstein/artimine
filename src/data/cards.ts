@@ -1,9 +1,8 @@
 import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates } from '@/lib/battle/effects';
-import { DataTargetTemplates } from '@/lib/battle/target';
 import { cards_G } from './cards_G';
 import { cards_R } from './cards_R';
+import { cards_GB } from './cards_GB';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -32,4 +31,5 @@ export const cards: Record<string, CardTemplate> = {
   },
   ...cards_G,
   ...cards_R,
+  ...cards_GB,
 };

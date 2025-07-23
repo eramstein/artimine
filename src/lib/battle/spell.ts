@@ -6,7 +6,7 @@ import {
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
-import { getPossibleDeploymentPositions } from './boards';
+import { getEmptyCells } from './boards';
 import { isHumanPlayer } from './player';
 import { isPayable } from './cost';
 import { checkTargets } from './target';
@@ -27,11 +27,11 @@ export function getEligibleSpellTargets(spell: SpellCard): UnitDeployed[] | Posi
     return bs.units;
   }
   if (target.type === TargetType.EmptyCell) {
-    return [...getPossibleDeploymentPositions(true), ...getPossibleDeploymentPositions(false)];
+    return [...getEmptyCells(true), ...getEmptyCells(false)];
   }
   if (target.type === TargetType.EmptyAllyCell) {
     const isPlayer = isHumanPlayer(spell.ownerPlayerId);
-    return getPossibleDeploymentPositions(isPlayer);
+    return getEmptyCells(isPlayer);
   }
   return [];
 }

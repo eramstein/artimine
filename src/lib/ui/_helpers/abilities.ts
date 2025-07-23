@@ -10,7 +10,7 @@ import { isCellFree, isHumanPlayer, playAbility } from '@/lib/battle';
 import { isActivityPayable } from '@/lib/battle/cost';
 import { getPositionKey } from '@/lib/battle/boards';
 import { getEligibleSpellTargets, playSpell } from '@/lib/battle/spell';
-import { getEligibleTargets } from '@/lib/battle/target';
+import { getEligibleTargets, isTargetCell } from '@/lib/battle/target';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (isActivityPayable(unit, ability) === false) {
@@ -71,7 +71,7 @@ function setValidTargets(eligibleTargets: UnitDeployed[] | Position[]) {
       units: {},
       lands: {},
       players: {},
-      moves: {},
+      cells: {},
     };
 
     if (Array.isArray(eligibleTargets)) {
@@ -85,7 +85,7 @@ function setValidTargets(eligibleTargets: UnitDeployed[] | Position[]) {
       else if (eligibleTargets.length > 0 && 'row' in eligibleTargets[0]) {
         (eligibleTargets as Position[]).forEach((position) => {
           const positionKey = getPositionKey(position);
-          ui.validTargets!.moves![positionKey] = true;
+          ui.validTargets!.cells![positionKey] = true;
         });
       }
     }
@@ -127,9 +127,9 @@ export function targetUnit(unit: UnitDeployed) {
 export function targetCell(position: Position) {
   const ui = uiState.battle;
   if (
-    !(ui.abilityPending && !ui.spellPending) ||
+    (!ui.abilityPending && !ui.spellPending) ||
     !ui.targetBeingSelected ||
-    ui.targetBeingSelected.type !== TargetType.EmptyCell
+    !isTargetCell(ui.targetBeingSelected.type)
   )
     return;
   if (isCellFree(position)) {

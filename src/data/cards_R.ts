@@ -5,7 +5,7 @@ import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
-    id: 'lightningBolt',
+    id: 'lightning_bolt',
     name: 'Lightning Bolt',
     text: 'Deal 3 damage to a unit',
     type: CardType.Spell,

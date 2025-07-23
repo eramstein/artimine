@@ -1,8 +1,6 @@
 import { TargetType, type Ability, type Position, type UnitDeployed } from '../_model';
 import { bs } from '../_state';
-import { getPossibleDeploymentPositions, isCellFree, isOnPlayersSide } from './boards';
-import { isHumanPlayer } from './player';
-import { areAllTargetsValid, checkAllCellsValid, checkTargets } from './target';
+import { checkTargets } from './target';
 
 export function playAbility(
   unit: UnitDeployed,
@@ -20,6 +18,7 @@ export function playAbility(
   // CHECKS + COSTS
   // ----------------------------------------------------------------------
   if (checkExhaustion(unit, ability) === false) {
+    console.log('EXHAUSTED');
     return;
   }
   if (ability.target && checkTargets(unit, ability.target, targets) === false) {
@@ -27,6 +26,7 @@ export function playAbility(
     return;
   }
   if (payAbilityCost(unit, ability) === false) {
+    console.log('NOT ENOUGH MANA');
     return;
   }
   if (ability.target && ability.target.type === TargetType.Self) {

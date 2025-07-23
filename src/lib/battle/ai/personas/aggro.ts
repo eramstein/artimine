@@ -1,5 +1,5 @@
 import { type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model';
-import { getPossibleDeploymentPositions } from '../../boards';
+import { getEmptyCells } from '../../boards';
 import { deployUnit } from '../../unit';
 import { ActionType, type AiPersona } from '../model';
 import { getRandomFromArray } from '../utils/random';
@@ -25,13 +25,13 @@ export const AiPersonaAggro: AiPersona = {
     return null;
   },
   deploy(state: BattleState, deployableUnits: UnitCard[]) {
-    const possiblePositions = getPossibleDeploymentPositions(false);
+    const possiblePositions = getEmptyCells(false);
     if (possiblePositions.length === 0) return;
     deployUnit(getRandomFromArray(deployableUnits), getRandomFromArray(possiblePositions));
   },
   move(state: BattleState, unitsWhoCanMove: UnitDeployed[]) {
     const mover = getRandomFromArray(unitsWhoCanMove);
-    const possiblePositions = getPossibleDeploymentPositions(false);
+    const possiblePositions = getEmptyCells(false);
     if (possiblePositions.length === 0) return;
     moveUnit(mover, getRandomFromArray(possiblePositions));
   },

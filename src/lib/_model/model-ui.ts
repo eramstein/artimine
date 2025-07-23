@@ -8,7 +8,7 @@ export type UiState = {
       units?: Record<string, boolean>;
       lands?: Record<string, boolean>;
       players?: Record<number, boolean>;
-      moves?: Record<string, boolean>;
+      cells?: Record<string, boolean>;
     } | null;
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     spellPending: SpellCard | null;

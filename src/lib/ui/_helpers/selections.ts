@@ -18,7 +18,7 @@ export function setValidTargets(unit: UnitDeployed) {
     units: {},
     lands: {},
     players: {},
-    moves: {},
+    cells: {},
   };
   if (canAttack(unit)) {
     const validTargets = validAttackTargets(unit);
@@ -35,7 +35,7 @@ export function setValidTargets(unit: UnitDeployed) {
     }
   }
   if (canMove(unit)) {
-    uiState.battle.validTargets!.moves = validMoveTargets(unit);
+    uiState.battle.validTargets!.cells = validMoveTargets(unit);
   }
 }
 

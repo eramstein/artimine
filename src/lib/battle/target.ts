@@ -7,7 +7,7 @@ import {
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
-import { getPossibleDeploymentPositions, isCellFree, isOnPlayersSide } from './boards';
+import { getEmptyCells, isCellFree, isOnPlayersSide } from './boards';
 import { isHumanPlayer } from './player';
 
 export const DataTargetTemplates: {
@@ -81,7 +81,7 @@ export function checkTargets(
     return true;
   }
   // target is cells
-  if (target && [TargetType.EmptyCell, TargetType.EmptyAllyCell].indexOf(target.type) >= 0) {
+  if (target && isTargetCell(target.type)) {
     if (
       target.type === TargetType.EmptyAllyCell &&
       !checkAllCellsValid(targets as Position[], (p) => isOnPlayersSide(p, card.ownerPlayerId))
@@ -119,11 +119,15 @@ export function getEligibleTargets(
     return bs.units;
   }
   if (target.type === TargetType.EmptyCell) {
-    return [...getPossibleDeploymentPositions(true), ...getPossibleDeploymentPositions(false)];
+    return [...getEmptyCells(true), ...getEmptyCells(false)];
   }
   if (target.type === TargetType.EmptyAllyCell) {
     const isPlayer = isHumanPlayer(card.ownerPlayerId);
-    return getPossibleDeploymentPositions(isPlayer);
+    return getEmptyCells(isPlayer);
   }
   return [];
+}
+
+export function isTargetCell(targetType: TargetType): boolean {
+  return targetType === TargetType.EmptyCell || targetType === TargetType.EmptyAllyCell;
 }

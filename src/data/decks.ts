@@ -3,6 +3,7 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.ebonheart,
   cards.shroomy_shooty,
   cards.shroomy_protecs,
   cards.shroomy_rooty,
@@ -18,7 +19,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.young_ent,
   cards.young_ent,
   cards.wall_of_bramble,
-  cards.wall_of_bramble,
   cards.modis_chosen,
   cards.dwarf_berserker,
   cards.lightning_bolt,
@@ -29,7 +29,7 @@ export const PLAYER_DECK: CardTemplate[] = [
 export const PLAYER_LANDS: LandTemplate[] = [
   lands.forest,
   lands.forest,
-  lands.mountain,
+  lands.swamp,
   lands.mountain,
 ];
 

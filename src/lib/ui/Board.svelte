@@ -9,6 +9,7 @@
   import { isOnPlayersSide, getPositionKey } from '../battle/boards';
   import { moveUnit } from '../battle/move';
   import { clearSelections, setValidTargets, toggleUnitSelection } from './_helpers/selections';
+  import { targetCell } from './_helpers/abilities';
   import { fly } from 'svelte/transition';
   import { restoreUnitFunctions } from '@lib/_state/main.svelte';
 
@@ -103,7 +104,7 @@
   // Function to check if a position is a valid move target
   function isValidMoveTarget(row: number, column: number) {
     const positionKey = getPositionKey({ row, column });
-    return uiState.battle.validTargets?.moves?.[positionKey] === true;
+    return uiState.battle.validTargets?.cells?.[positionKey] === true;
   }
 
   // Function to calculate unit position in pixels
@@ -121,6 +122,12 @@
   // Click handler for board cells
   function handleCellClick(row: number, column: number) {
     const selectedUnit = uiState.battle.selectedUnit;
+    const positionKey = getPositionKey({ row, column });
+    // If an ability is pending and this cell is a valid target, use targetCell
+    if (uiState.battle.abilityPending && uiState.battle.validTargets?.cells?.[positionKey]) {
+      targetCell({ row, column });
+      return;
+    }
     if (selectedUnit && isValidMoveTarget(row, column)) {
       const targetPosition: Position = { row, column };
       moveUnit(selectedUnit, targetPosition);
