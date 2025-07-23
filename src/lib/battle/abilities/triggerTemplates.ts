@@ -18,6 +18,10 @@ export const DataTriggerTemplates: {
     type: TriggerType.AfterMove,
     condition: (unit, triggerParams) => unit.instanceId === triggerParams.mover.instanceId,
   },
+  meDeployed: {
+    type: TriggerType.OnDeploy,
+    condition: (unit, triggerParams) => unit.instanceId === triggerParams.unit.instanceId,
+  },
   myTurnStarts: {
     type: TriggerType.OnTurnStart,
     condition: (unit, triggerParams) => unit.ownerPlayerId === triggerParams.player.id,

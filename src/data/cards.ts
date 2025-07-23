@@ -3,6 +3,7 @@ import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abiliti
 import { cards_G } from './cards_G';
 import { cards_R } from './cards_R';
 import { cards_GB } from './cards_GB';
+import { DataEffectTemplates } from '@/lib/battle/effects';
 
 export const cards: Record<string, CardTemplate> = {
   lion: {
@@ -14,15 +15,15 @@ export const cards: Record<string, CardTemplate> = {
     maxHealth: 2,
     colors: [{ color: CardColor.Red, count: 1 }],
     abilities: [
-      // {
-      //   name: 'Protect Adjacent',
-      //   text: 'Adjacent units get +1 armor',
-      //   effect: DataEffectTemplates.staticKeywordAdjAllies({
-      //     name: 'ProtectAdjacent',
-      //     keyword: { key: 'armor', value: 1 },
-      //   }),
-      //   trigger: DataTriggerTemplates.static,
-      // },
+      {
+        name: 'Protect Adjacent',
+        text: 'Adjacent units get +1 armor',
+        effect: DataEffectTemplates.staticKeywordAdjAllies({
+          name: 'ProtectAdjacent',
+          keyword: { key: 'armor', value: 1 },
+        }),
+        trigger: DataTriggerTemplates.static,
+      },
       DataAbilityTemplates.cc(
         { name: 'Mezz', cost: 1 },
         { duration: 3, statusType: StatusType.Mezz }

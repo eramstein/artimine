@@ -94,10 +94,6 @@ export function getAdjacentUnits(position: Position): UnitDeployed[] {
   );
 }
 
-export function getAdjacentAllies(unit: UnitDeployed): UnitDeployed[] {
-  return getAdjacentUnits(unit.position).filter((u) => u.ownerPlayerId === unit.ownerPlayerId);
-}
-
 export function getOwnUnits(playerId: number): UnitDeployed[] {
   return bs.units.filter((u) => u.ownerPlayerId === playerId);
 }

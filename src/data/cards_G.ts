@@ -1,6 +1,13 @@
-import { CardColor, CardType, StatusType, UnitType, type CardTemplate } from '@/lib/_model';
+import {
+  CardColor,
+  CardType,
+  CounterType,
+  StatusType,
+  UnitType,
+  type CardTemplate,
+} from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates } from '@/lib/battle/effects';
+import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards_G: Record<string, CardTemplate> = {
@@ -114,6 +121,28 @@ export const cards_G: Record<string, CardTemplate> = {
         { name: 'protecs!' },
         { keyword: { key: 'resist', value: 1 } }
       ),
+    ],
+  },
+  lord_of_shrooms: {
+    id: 'lord_of_shrooms',
+    name: 'Lord of Shrooms',
+    type: CardType.Unit,
+    unitTypes: [UnitType.Mushroom],
+    cost: 3,
+    power: 1,
+    maxHealth: 1,
+    colors: [{ color: CardColor.Green, count: 2 }],
+    abilities: [
+      {
+        name: 'Grow Shrooms',
+        text: 'Adda growth counter on all allied Mushrooms',
+        effect: DataEffectTemplates.addCounters({
+          counterType: CounterType.Growth,
+          counterValue: 1,
+          targets: DataUnitFilters.alliedOfType(UnitType.Mushroom),
+        }),
+        trigger: DataTriggerTemplates.meDeployed,
+      },
     ],
   },
   luxurious_growth: {

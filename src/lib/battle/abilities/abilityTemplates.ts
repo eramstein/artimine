@@ -1,7 +1,6 @@
 import {
   damageUnit,
   healUnit,
-  getAdjacentAllies,
   applyUnitStatus,
   summonUnit,
   makeUnit,
@@ -19,6 +18,7 @@ import { DataTriggerTemplates as TRIG } from './triggerTemplates';
 import { DataTargetTemplates as TAR } from '../target';
 import { DataEffectTemplates } from '../effects';
 import { cards } from '@/data';
+import { DataUnitFilters } from '../effects/unitFilters';
 
 interface AbilityParams {
   name: string;
@@ -36,7 +36,7 @@ export const DataAbilityTemplates: {
       icons: ['⚟'],
       trigger: TRIG.meAttack,
       effect: ({ triggerParams }) => {
-        getAdjacentAllies(triggerParams.defender).forEach((u) => {
+        DataUnitFilters.adjacentAllies(triggerParams.defender).forEach((u) => {
           damageUnit(u, damage);
         });
       },
@@ -101,7 +101,7 @@ export const DataAbilityTemplates: {
       icons: ['♡'],
       trigger: TRIG.meMove,
       effect: ({ triggerParams }) => {
-        getAdjacentAllies(triggerParams.mover).forEach((u) => {
+        DataUnitFilters.adjacentAllies(triggerParams.mover).forEach((u) => {
           healUnit(u, healValue);
         });
       },

@@ -23,7 +23,7 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
         if (a.target) {
           targets = getEligibleTargets(u, a.target) as UnitDeployed[];
         }
-        a.effect({ unit: u, targets, triggerParams });
+        a.effect({ unit: u, targets, triggerParams, player: bs.players[u.ownerPlayerId] });
       });
   });
 }
