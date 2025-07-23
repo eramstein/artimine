@@ -36,6 +36,7 @@ export enum TargetType {
   Self = 'self',
   EmptyCell = 'emptyCell',
   EmptyAllyCell = 'emptyAllyCell',
+  GraveyardCard = 'graveyardCard',
 }
 
 export enum StatusType {

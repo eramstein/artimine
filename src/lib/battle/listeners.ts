@@ -6,6 +6,7 @@ import {
   type Position,
   type Player,
   type Land,
+  type EffectTargets,
 } from '@/lib/_model';
 import { getEligibleTargets } from './target';
 
@@ -18,10 +19,10 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
         // TODO: if a.target, ask player or AI for targets
         // (store ability in a "pendingTriggeredAbilities" array ?)
         // console.log(u.name + ' triggers ' + a.name, a, { ...rest });
-        let targets: UnitDeployed[] = [];
+        let targets: EffectTargets = [];
         const triggerParams: any = { ...rest };
         if (a.target) {
-          targets = getEligibleTargets(u, a.target) as UnitDeployed[];
+          targets = getEligibleTargets(u, a.target) as EffectTargets;
         }
         a.effect({ unit: u, targets, triggerParams, player: bs.players[u.ownerPlayerId] });
       });

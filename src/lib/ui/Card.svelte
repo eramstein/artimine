@@ -9,7 +9,11 @@
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
 
-  let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
+  let {
+    card,
+    displayKeywords = true,
+    inHand = true,
+  }: { card: Card; displayKeywords?: boolean; inHand?: boolean } = $props();
 
   // Create the background image path using the card id
   let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.jpg`);
@@ -61,7 +65,7 @@
 
   // Handle card click
   function handleClick() {
-    if (isSpellCard(card) && isPayable(card)) {
+    if (inHand && isSpellCard(card) && isPayable(card)) {
       if (!card.target) {
         uiState.modal.visible = true;
         uiState.modal.title = 'Cast Spell?';

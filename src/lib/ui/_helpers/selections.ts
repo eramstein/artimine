@@ -10,10 +10,10 @@ export function toggleUnitSelection(unit: UnitDeployed) {
     return;
   }
   uiState.battle.selectedUnit = unit;
-  setValidTargets(unit);
+  setUnitsTargets(unit);
 }
 
-export function setValidTargets(unit: UnitDeployed) {
+export function setUnitsTargets(unit: UnitDeployed) {
   uiState.battle.validTargets = {
     units: {},
     lands: {},

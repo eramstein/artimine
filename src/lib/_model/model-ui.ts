@@ -1,4 +1,4 @@
-import type { Ability, Position, SpellCard, Target, UnitDeployed } from './model-battle';
+import type { Ability, EffectTargets, SpellCard, Target, UnitDeployed } from './model-battle';
 
 export type UiState = {
   currentView: UiView;
@@ -9,10 +9,11 @@ export type UiState = {
       lands?: Record<string, boolean>;
       players?: Record<number, boolean>;
       cells?: Record<string, boolean>;
+      cards?: Record<string, boolean>;
     } | null;
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     spellPending: SpellCard | null;
-    selectedTargets: UnitDeployed[] | Position[];
+    selectedTargets: EffectTargets;
     targetBeingSelected: Target | null;
     attackingUnitId: string | null;
   };

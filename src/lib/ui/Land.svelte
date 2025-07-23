@@ -2,7 +2,7 @@
   import type { Land } from '../_model/model-battle';
   import { uiState } from '../_state';
   import { attackLand } from '../battle/combat';
-  import { clearSelections, setValidTargets } from './_helpers/selections';
+  import { clearSelections, setUnitsTargets } from './_helpers/selections';
 
   let { land }: { land: Land } = $props();
 
@@ -14,7 +14,7 @@
     if (selectedUnit && isValidTarget) {
       attackLand(selectedUnit, land);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
-        setValidTargets(selectedUnit);
+        setUnitsTargets(selectedUnit);
       } else {
         clearSelections();
       }

@@ -1,18 +1,13 @@
-import {
-  TargetType,
-  type EffectArgs,
-  type Position,
-  type SpellCard,
-  type UnitDeployed,
-} from '../_model';
+import { TargetType, type EffectArgs, type EffectTargets, type SpellCard } from '../_model';
 import { bs } from '../_state';
 import { getEmptyCells } from './boards';
 import { isHumanPlayer } from './player';
 import { isPayable } from './cost';
 import { checkTargets } from './target';
 import { discard } from './hand';
+import { getAllGraveyardsCards } from './graveyard';
 
-export function getEligibleSpellTargets(spell: SpellCard): UnitDeployed[] | Position[] {
+export function getEligibleSpellTargets(spell: SpellCard): EffectTargets {
   const target = spell.target;
   if (!target) {
     return [];
@@ -33,10 +28,13 @@ export function getEligibleSpellTargets(spell: SpellCard): UnitDeployed[] | Posi
     const isPlayer = isHumanPlayer(spell.ownerPlayerId);
     return getEmptyCells(isPlayer);
   }
+  if (target.type === TargetType.GraveyardCard) {
+    return getAllGraveyardsCards();
+  }
   return [];
 }
 
-export function playSpell(spell: SpellCard, targets: UnitDeployed[] | Position[]) {
+export function playSpell(spell: SpellCard, targets: EffectTargets) {
   console.log(spell.name + ' on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', ')));
 
   // CHECKS + COSTS

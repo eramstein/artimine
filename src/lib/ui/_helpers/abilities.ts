@@ -1,6 +1,12 @@
 import {
+  isCard,
+  isDeployedUnit,
+  isPosition,
   TargetType,
   type Ability,
+  type Card,
+  type EffectTargets,
+  type Land,
   type Position,
   type SpellCard,
   type UnitDeployed,
@@ -35,7 +41,7 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   // Set valid targets for ability selection
   if (ability.target) {
     const eligibleTargets = getEligibleTargets(unit, ability.target);
-    setValidTargets(eligibleTargets);
+    setEffectTargets(eligibleTargets);
   }
 
   if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
@@ -56,7 +62,7 @@ export function activateSpell(spell: SpellCard) {
 
   // Set valid targets for spell
   const eligibleTargets = getEligibleSpellTargets(spell);
-  setValidTargets(eligibleTargets);
+  setEffectTargets(eligibleTargets);
 
   if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
     playSpell(spell, []);
@@ -64,7 +70,7 @@ export function activateSpell(spell: SpellCard) {
   }
 }
 
-function setValidTargets(eligibleTargets: UnitDeployed[] | Position[]) {
+function setEffectTargets(eligibleTargets: EffectTargets) {
   const ui = uiState.battle;
   if (ui.targetBeingSelected && ui.targetBeingSelected.type !== TargetType.Self) {
     ui.validTargets = {
@@ -76,16 +82,20 @@ function setValidTargets(eligibleTargets: UnitDeployed[] | Position[]) {
 
     if (Array.isArray(eligibleTargets)) {
       // Handle unit targets
-      if (eligibleTargets.length > 0 && 'instanceId' in eligibleTargets[0]) {
+      if (isDeployedUnit(eligibleTargets)) {
         (eligibleTargets as UnitDeployed[]).forEach((target) => {
           ui.validTargets!.units![target.instanceId] = true;
         });
       }
       // Handle position targets (for cell-based abilities)
-      else if (eligibleTargets.length > 0 && 'row' in eligibleTargets[0]) {
+      else if (isPosition(eligibleTargets)) {
         (eligibleTargets as Position[]).forEach((position) => {
           const positionKey = getPositionKey(position);
           ui.validTargets!.cells![positionKey] = true;
+        });
+      } else if (isCard(eligibleTargets)) {
+        (eligibleTargets as Card[]).forEach((card) => {
+          ui.validTargets!.cards![card.instanceId] = true;
         });
       }
     }
@@ -142,5 +152,20 @@ export function targetCell(position: Position) {
       }
       clearUiState();
     }
+  }
+}
+
+export function targetCard(card: Card) {
+  console.log('targetCard', card);
+  const ui = uiState.battle;
+  if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
+  (ui.selectedTargets as Card[]).push(card);
+  if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
+    if (ui.abilityPending) {
+      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+    } else if (ui.spellPending) {
+      playSpell(ui.spellPending, ui.selectedTargets);
+    }
+    clearUiState();
   }
 }

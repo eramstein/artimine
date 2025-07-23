@@ -1,12 +1,8 @@
-import { TargetType, type Ability, type Position, type UnitDeployed } from '../_model';
+import { TargetType, type Ability, type EffectTargets, type UnitDeployed } from '../_model';
 import { bs } from '../_state';
 import { checkTargets } from './target';
 
-export function playAbility(
-  unit: UnitDeployed,
-  ability: Ability,
-  targets: UnitDeployed[] | Position[]
-) {
+export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets) {
   console.log(
     unit.name +
       ' uses ' +

@@ -1,11 +1,15 @@
 <script lang="ts">
   import type { Player } from '../_model';
   import Tooltip from './Tooltip.svelte';
+  import GraveyardModal from './GraveyardModal.svelte';
 
   let { player }: { player: Player } = $props();
 
   // Show tooltip on hover
   let isHovered = $state(false);
+
+  // Show modal state
+  let showModal = $state(false);
 
   // Get the top card from graveyard (last card in the array)
   let topCard = $derived(
@@ -14,6 +18,14 @@
 
   // Create the background image path using the card id
   let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.jpg` : '');
+
+  function handleGraveyardClick() {
+    showModal = true;
+  }
+
+  function handleCloseModal() {
+    showModal = false;
+  }
 </script>
 
 <Tooltip content="{player.graveyard.length} cards in graveyard" show={isHovered} placement="bottom">
@@ -21,6 +33,7 @@
     class="graveyard-container"
     onmouseenter={() => (isHovered = true)}
     onmouseleave={() => (isHovered = false)}
+    onclick={handleGraveyardClick}
   >
     {#if topCard}
       <!-- Show the top card from graveyard -->
@@ -36,10 +49,13 @@
   </div>
 </Tooltip>
 
+<GraveyardModal {player} isVisible={showModal} onClose={handleCloseModal} />
+
 <style>
   .graveyard-container {
     position: relative;
     display: inline-block;
+    cursor: pointer;
   }
 
   .graveyard-card {

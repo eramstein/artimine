@@ -6,7 +6,7 @@
   import { uiState } from '../_state';
   import { attackPlayer } from '../battle/combat';
   import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '../battle/player';
-  import { clearSelections, setValidTargets } from './_helpers/selections';
+  import { clearSelections, setUnitsTargets } from './_helpers/selections';
 
   let { player }: { player: Player } = $props();
 
@@ -36,7 +36,7 @@
     if (selectedUnit && isValidTarget) {
       attackPlayer(selectedUnit, player.id);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
-        setValidTargets(selectedUnit);
+        setUnitsTargets(selectedUnit);
       } else {
         clearSelections();
       }

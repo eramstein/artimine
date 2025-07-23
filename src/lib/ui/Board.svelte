@@ -8,7 +8,7 @@
   import type { Position, Card } from '@lib/_model';
   import { isOnPlayersSide, getPositionKey } from '../battle/boards';
   import { moveUnit } from '../battle/move';
-  import { clearSelections, setValidTargets, toggleUnitSelection } from './_helpers/selections';
+  import { clearSelections, setUnitsTargets, toggleUnitSelection } from './_helpers/selections';
   import { targetCell } from './_helpers/abilities';
   import { fly } from 'svelte/transition';
   import { restoreUnitFunctions } from '@lib/_state/main.svelte';
@@ -132,7 +132,7 @@
       const targetPosition: Position = { row, column };
       moveUnit(selectedUnit, targetPosition);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasAttacked) {
-        setValidTargets(selectedUnit);
+        setUnitsTargets(selectedUnit);
       } else {
         clearSelections();
       }

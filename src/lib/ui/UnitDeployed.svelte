@@ -2,7 +2,7 @@
   import type { UnitDeployed } from '../_model';
   import { isUnitActive } from '../battle/unit';
   import { uiState } from '../_state';
-  import { setValidTargets, toggleUnitSelection } from './_helpers/selections';
+  import { setUnitsTargets, toggleUnitSelection } from './_helpers/selections';
   import { attackUnit } from '../battle/combat';
   import { clearSelections } from './_helpers/selections';
   import Keywords from './Keywords.svelte';
@@ -40,7 +40,7 @@
     if (selectedUnit && isValidTarget) {
       attackUnit(selectedUnit, unit);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
-        setValidTargets(selectedUnit);
+        setUnitsTargets(selectedUnit);
       } else {
         clearSelections();
       }

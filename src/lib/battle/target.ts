@@ -1,6 +1,7 @@
 import {
   isUnitCard,
   TargetType,
+  type EffectTargets,
   type Position,
   type SpellCard,
   type Target,
@@ -9,6 +10,7 @@ import {
 import { bs } from '../_state';
 import { getEmptyCells, isCellFree, isOnPlayersSide } from './boards';
 import { isHumanPlayer } from './player';
+import { getAllGraveyardsCards } from './graveyard';
 
 export const DataTargetTemplates: {
   [key: string]: (...any: any) => Target;
@@ -64,7 +66,7 @@ export function checkAllCellsValid(targets: Position[], fn: (p: Position) => boo
 export function checkTargets(
   card: UnitDeployed | SpellCard,
   target: Target,
-  targets: UnitDeployed[] | Position[]
+  targets: EffectTargets
 ): boolean {
   if (target.count && target.count !== targets.length) {
     console.log('WRONG NUMBER OF TARGETS', target, targets);
@@ -96,10 +98,7 @@ export function checkTargets(
   return true;
 }
 
-export function getEligibleTargets(
-  card: UnitDeployed | SpellCard,
-  target: Target
-): UnitDeployed[] | Position[] {
+export function getEligibleTargets(card: UnitDeployed | SpellCard, target: Target): EffectTargets {
   if (!target) {
     return [];
   }
@@ -124,6 +123,9 @@ export function getEligibleTargets(
   if (target.type === TargetType.EmptyAllyCell) {
     const isPlayer = isHumanPlayer(card.ownerPlayerId);
     return getEmptyCells(isPlayer);
+  }
+  if (target.type === TargetType.GraveyardCard) {
+    return getAllGraveyardsCards();
   }
   return [];
 }

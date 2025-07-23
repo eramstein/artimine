@@ -144,7 +144,7 @@ export interface Ability {
 
 export interface EffectArgs {
   unit: UnitDeployed;
-  targets: UnitDeployed[] | Position[];
+  targets: EffectTargets;
   triggerParams: any;
   player: Player;
 }
@@ -159,5 +159,7 @@ export interface Target {
   type: TargetType;
   pos?: Position;
   count?: number;
-  eligible?(card: UnitDeployed | SpellCard): UnitDeployed[] | Position[];
+  eligible?(card: UnitDeployed | SpellCard): EffectTargets;
 }
+
+export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];
