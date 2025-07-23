@@ -1,4 +1,4 @@
-import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardType, StatusType, UnitType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
@@ -66,6 +66,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy',
     name: 'Shroomy',
     type: CardType.Unit,
+    unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 1,
     maxHealth: 1,
@@ -76,6 +77,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy_shooty',
     name: 'Shroomy Shooty',
     type: CardType.Unit,
+    unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 1,
     maxHealth: 1,
@@ -86,6 +88,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy_rooty',
     name: 'Shroomy Rooty',
     type: CardType.Unit,
+    unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 0,
     maxHealth: 1,
@@ -101,6 +104,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy_protecs',
     name: 'Shroomy Protecs',
     type: CardType.Unit,
+    unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 0,
     maxHealth: 1,

@@ -1,4 +1,4 @@
-import { CardColor, CardType, TargetType, TriggerType } from './enums';
+import { CardColor, CardType, CounterType, TargetType, TriggerType, UnitType } from './enums';
 
 export interface BattleState {
   turn: number;
@@ -37,6 +37,7 @@ export interface UnitCardTemplate extends BaseCardTemplate {
   maxHealth: number;
   keywords?: UnitKeywords;
   abilities?: Ability[];
+  unitTypes?: UnitType[];
 }
 
 export interface SpellCardTemplate extends BaseCardTemplate {
@@ -79,6 +80,7 @@ export interface UnitDeployed extends UnitCard, BaseCardDeployed {
     abilityName?: string;
     attack?: number;
   }[];
+  counters: Partial<Record<CounterType, number>>;
 }
 
 export interface SpellCardDeployed extends SpellCard, BaseCardDeployed {

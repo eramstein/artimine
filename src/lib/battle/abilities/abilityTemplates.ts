@@ -133,7 +133,7 @@ export const DataAbilityTemplates: {
   },
   grows: (p, { growthValue }) => {
     return {
-      text: `Turn start: gains +${growthValue}/+${growthValue}`,
+      text: `Turn start: gains ${growthValue} growth counters`,
       trigger: TRIG.myTurnStarts,
       effect: DataEffectTemplates.grow({ growthValue }),
       ...p,

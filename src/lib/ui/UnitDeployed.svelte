@@ -9,6 +9,7 @@
   import Abilities from './Abilities.svelte';
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
+  import Counters from './Counters.svelte';
   import { targetUnit } from './_helpers/abilities';
 
   let { unit }: { unit: UnitDeployed } = $props();
@@ -73,6 +74,12 @@
   {#if unit.keywords}
     <div class="keywords-container">
       <Keywords keywords={unit.keywords} />
+    </div>
+  {/if}
+
+  {#if unit.counters && Object.keys(unit.counters).length > 0}
+    <div class="counters-container">
+      <Counters {unit} />
     </div>
   {/if}
 
@@ -161,6 +168,13 @@
     width: 100px;
     opacity: 0;
     transition: opacity 0.2s ease;
+  }
+
+  .counters-container {
+    position: absolute;
+    bottom: 70px;
+    left: 4px;
+    z-index: 2;
   }
 
   .abilities-container {

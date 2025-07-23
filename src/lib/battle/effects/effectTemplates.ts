@@ -6,7 +6,9 @@ import {
   getAdjacentAllies,
   getOpposingPlayer,
   removeStaticKeyword,
+  addCounters,
 } from '@/lib/battle';
+import { CounterType } from '@/lib/_model';
 import type { EffectArgs, UnitDeployed } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 
@@ -24,9 +26,12 @@ export const DataEffectTemplates: {
   },
   grow: ({ growthValue }) => {
     return ({ unit }) => {
-      unit.power += growthValue;
-      unit.health += growthValue;
-      unit.maxHealth += growthValue;
+      addCounters(unit, CounterType.Growth, growthValue);
+    };
+  },
+  decay: ({ decayValue }) => {
+    return ({ unit }) => {
+      addCounters(unit, CounterType.Decay, decayValue);
     };
   },
   damageEnemyLeader: ({ damage }) => {

@@ -3,6 +3,7 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.shroomy,
   cards.ebonheart,
   cards.shroomy_shooty,
   cards.shroomy_protecs,
@@ -10,7 +11,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.energyze,
   cards.luxurious_growth,
   cards.modis_chosen,
-  cards.shroomy,
   cards.grizzly_bear,
   cards.dryad,
   cards.dryad,

@@ -6,6 +6,7 @@ import { drawCard } from './deck';
 import { damageUnit, healUnit } from './unit';
 import { onTurnStart } from './listeners';
 import { autoAttack } from './combat';
+import { removeTemporaryEffects } from './temporary-effects';
 
 export function nextTurn() {
   console.log('next turn', bs.turn, bs.isPlayersTurn);
@@ -36,6 +37,7 @@ function updateUnits(player: Player) {
       unit.hasAttacked = false;
       unit.hasMoved = false;
       unit.exhausted = false;
+      removeTemporaryEffects(unit);
       statuses(unit);
       hotAndDot(unit);
       forcedActions(unit);

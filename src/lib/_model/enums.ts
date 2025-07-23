@@ -43,3 +43,14 @@ export enum StatusType {
   Stun = 'stun',
   Root = 'root',
 }
+
+export enum UnitType {
+  Mushroom = 'mushroom',
+}
+
+export enum CounterType {
+  Growth = 'growth',
+  Decay = 'decay',
+  Energy = 'energy',
+  Rage = 'rage',
+}

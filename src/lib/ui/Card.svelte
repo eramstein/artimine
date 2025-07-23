@@ -1,14 +1,13 @@
 <script lang="ts">
   import type { Card, SpellCard } from '../_model/model-battle';
   import { CARD_WIDTH, CARD_HEIGHT } from '../_config/ui-config';
-  import { CardColor, CardType } from '../_model/enums';
+  import { CardColor, CardType, UnitType } from '../_model/enums';
   import { isPayable } from '../battle/cost';
   import { activateSpell } from './_helpers/abilities';
   import { uiState } from '../_state';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
-  import { onMount } from 'svelte';
 
   let { card, displayKeywords = true }: { card: Card; displayKeywords?: boolean } = $props();
 
@@ -21,15 +20,27 @@
   );
 
   // Check if card is a unit card (works with Card type)
-  function isUnitCard(
-    card: Card
-  ): card is Card & { power: number; maxHealth: number; keywords?: any; abilities?: any } {
+  function isUnitCard(card: Card): card is Card & {
+    power: number;
+    maxHealth: number;
+    keywords?: any;
+    abilities?: any;
+    unitTypes?: UnitType[];
+  } {
     return card.type === CardType.Unit;
   }
 
   // Check if card is a spell card
   function isSpellCard(card: Card): card is SpellCard {
     return card.type === CardType.Spell;
+  }
+
+  // Get display name for unit type
+  function getUnitTypeDisplayName(unitType: UnitType): string {
+    const displayNames = {
+      [UnitType.Mushroom]: 'Mushroom',
+    };
+    return displayNames[unitType] || unitType;
   }
 
   // Determine border color based on whether the card is payable
@@ -94,11 +105,25 @@
   onclick={handleClick}
 >
   <!-- Card name bar with integrated cost -->
-  <div class="name">
+  <div
+    class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
+      ? 'has-unit-types'
+      : ''}"
+  >
     <div class="cost">
       {card.cost}
     </div>
-    <span class="name-text">{card.name}</span>
+    <div class="name-content">
+      <span class="name-text">{card.name}</span>
+      <!-- Unit types display - only for Unit cards with unitTypes -->
+      {#if isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0}
+        <div class="unit-types-inline">
+          {#each card.unitTypes as unitType}
+            <span class="unit-type-text">{getUnitTypeDisplayName(unitType)}</span>
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
 
   <!-- Content area with card image background -->
@@ -193,13 +218,44 @@
     color: white;
     padding: 8px 12px;
     font-weight: bold;
-    height: 24px;
     font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
     border-radius: 10px 10px 0 0;
+  }
+
+  .card:hover .name.has-unit-types {
+    padding: 4px 12px;
+  }
+
+  .card:hover .name.has-unit-types .name-text {
+    font-size: 0.85rem;
+  }
+
+  .name-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .unit-types-inline {
+    display: none;
+    flex-wrap: wrap;
+    margin-left: 8px;
+    margin-top: -2px;
+  }
+
+  .card:hover .unit-types-inline {
+    display: flex;
+  }
+
+  .unit-type-text {
+    color: #999;
+    font-size: 0.65rem;
+    font-weight: normal;
+    text-transform: capitalize;
   }
 
   .cost {
@@ -256,7 +312,6 @@
   }
 
   .name-text {
-    flex: 1;
     padding-left: 8px;
   }
 

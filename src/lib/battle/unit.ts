@@ -49,6 +49,7 @@ function makeDeployedUnit(unit: UnitCard, position: Position) {
     statuses: {},
     untilEndOfTurn: {},
     staticModifiers: [],
+    counters: {},
   };
 }
 

@@ -11,3 +11,4 @@ export * from './abilities';
 export * from './listeners';
 export * from './hand';
 export * from './spell';
+export * from './counter';
