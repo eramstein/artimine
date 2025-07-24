@@ -8,9 +8,10 @@ import {
   addCounters,
 } from '@/lib/battle';
 import { CounterType, UnitType } from '@/lib/_model';
-import type { EffectArgs, UnitDeployed } from '@/lib/_model/model-battle';
+import type { Card, EffectArgs, Position, UnitCard, UnitDeployed } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { DataUnitFilters, type UnitFilter } from './unitFilters';
+import { reanimate } from '../graveyard';
 
 // return the effect function, it gets these args { unit, targets, triggerParams }
 
@@ -32,6 +33,18 @@ export const DataEffectTemplates: {
   decay: ({ decayValue }) => {
     return ({ unit }) => {
       addCounters(unit, CounterType.Decay, decayValue);
+    };
+  },
+  reanimate: () => {
+    return ({ targets }) => {
+      if (targets.length < 2) {
+        return;
+      }
+      const unit = targets[0]?.[0] as UnitCard;
+      const position = targets[1]?.[0] as Position;
+      if (unit && position) {
+        reanimate(unit, position);
+      }
     };
   },
   damageEnemyLeader: ({ damage }) => {

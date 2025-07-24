@@ -3,6 +3,7 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.raise_dead,
   cards.lord_of_shrooms,
   cards.shroomy,
   cards.ebonheart,
@@ -17,7 +18,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.dryad,
   cards.dryad,
   cards.snek,
-  cards.young_ent,
   cards.young_ent,
   cards.wall_of_bramble,
   cards.modis_chosen,

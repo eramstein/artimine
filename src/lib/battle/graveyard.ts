@@ -6,7 +6,7 @@ export function getAllGraveyardsCards(): Card[] {
   return bs.players.flatMap((p) => p.graveyard);
 }
 
-export function raiseDead(card: UnitCard, position: Position) {
+export function reanimate(card: UnitCard, position: Position) {
   const player = bs.players[card.ownerPlayerId];
   if (player) {
     player.graveyard.splice(player.graveyard.indexOf(card), 1);

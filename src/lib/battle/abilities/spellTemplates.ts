@@ -15,6 +15,12 @@ export const SpellTemplates: {
       targets: [DataTargetTemplates.units(targets)],
     };
   },
+  reanimate: () => {
+    return {
+      effect: DataEffectTemplates.reanimate({}),
+      targets: [DataTargetTemplates.unit(), DataTargetTemplates.cell()],
+    };
+  },
   ramp: ({ value = 1, color = CardColor }) => {
     return {
       effect: (p) => {

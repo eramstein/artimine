@@ -10,7 +10,7 @@ export const cards_B: Record<string, CardTemplate> = {
     text: 'Put a unit from your graveyard into play',
     type: CardType.Spell,
     cost: 2,
-    colors: [{ color: CardColor.Black, count: 3 }],
-    ...SpellTemplates.dd({ damage: 3 }),
+    colors: [{ color: CardColor.Black, count: 1 }],
+    ...SpellTemplates.reanimate({}),
   },
 };
