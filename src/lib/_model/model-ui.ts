@@ -1,4 +1,10 @@
-import type { Ability, EffectTargets, SpellCard, Target, UnitDeployed } from './model-battle';
+import type {
+  Ability,
+  EffectTargets,
+  SpellCard,
+  TargetDefintion,
+  UnitDeployed,
+} from './model-battle';
 
 export type UiState = {
   currentView: UiView;
@@ -14,7 +20,7 @@ export type UiState = {
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     spellPending: SpellCard | null;
     selectedTargets: EffectTargets;
-    targetBeingSelected: Target | null;
+    targetBeingSelected: TargetDefintion | null;
     attackingUnitId: string | null;
   };
   modal: {

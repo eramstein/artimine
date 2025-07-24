@@ -1,4 +1,4 @@
-import { CardColor, type EffectArgs, type Player, type Target } from '@/lib/_model';
+import { CardColor, type EffectArgs, type Player, type TargetDefintion } from '@/lib/_model';
 import { DataEffectTemplates } from '../effects';
 import { DataTargetTemplates } from '../target';
 import { incrementColor, untapPlayer } from '../player';
@@ -6,7 +6,7 @@ import { incrementColor, untapPlayer } from '../player';
 export const SpellTemplates: {
   [key: string]: ({ ...any }) => {
     effect: (p: EffectArgs) => void;
-    target?: Target;
+    target?: TargetDefintion;
   };
 } = {
   dd: ({ damage, targets = 1 }) => {

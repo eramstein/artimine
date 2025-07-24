@@ -43,7 +43,7 @@ export interface UnitCardTemplate extends BaseCardTemplate {
 export interface SpellCardTemplate extends BaseCardTemplate {
   text: string;
   effect(p: EffectArgs): void;
-  target?: Target;
+  target?: TargetDefintion;
 }
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate;
 
@@ -137,7 +137,7 @@ export interface Ability {
   icons?: string[];
   effect(p: EffectArgs): void;
   trigger: Trigger;
-  target?: Target;
+  target?: TargetDefintion;
   cost?: number;
   exhausts?: boolean;
 }
@@ -155,7 +155,7 @@ export interface Trigger {
   staticRecompute?: TriggerType[];
 }
 
-export interface Target {
+export interface TargetDefintion {
   type: TargetType;
   pos?: Position;
   count?: number;
