@@ -1,6 +1,7 @@
 import {
   isUnitCard,
   TargetType,
+  type Card,
   type EffectTargets,
   type Position,
   type SpellCard,
@@ -11,6 +12,22 @@ import { bs } from '../_state';
 import { getEmptyCells, isCellFree, isOnPlayersSide } from './boards';
 import { isHumanPlayer } from './player';
 import { getAllGraveyardsCards } from './graveyard';
+
+enum TargetTypesGroup {
+  Units = 'units',
+  Cells = 'cells',
+  Cards = 'cards',
+}
+
+const targetTypesGroups: Record<TargetType, TargetTypesGroup> = {
+  [TargetType.Self]: TargetTypesGroup.Units,
+  [TargetType.Foe]: TargetTypesGroup.Units,
+  [TargetType.Ally]: TargetTypesGroup.Units,
+  [TargetType.Any]: TargetTypesGroup.Units,
+  [TargetType.EmptyCell]: TargetTypesGroup.Cells,
+  [TargetType.EmptyAllyCell]: TargetTypesGroup.Cells,
+  [TargetType.GraveyardCard]: TargetTypesGroup.Cards,
+};
 
 export const DataTargetTemplates: {
   [key: string]: (...any: any) => TargetDefinition;
@@ -35,9 +52,16 @@ export const DataTargetTemplates: {
     type: TargetType.EmptyAllyCell,
     count: 1,
   }),
+  graveyardCard: () => ({
+    type: TargetType.GraveyardCard,
+    count: 1,
+  }),
 };
 
-export function areAllTargetsValid(targets: UnitDeployed[], eligible: UnitDeployed[]): boolean {
+export function areAllTargetsValid(
+  targets: UnitDeployed[] | Card[],
+  eligible: UnitDeployed[] | Card[]
+): boolean {
   if (eligible === null) {
     return true;
   }
@@ -68,16 +92,27 @@ export function checkTargets(
   target: TargetDefinition,
   targets: EffectTargets
 ): boolean {
+  console.log('checkTargets', target, JSON.stringify(targets));
   if (target.count && target.count !== targets.length) {
     console.log('WRONG NUMBER OF TARGETS', target, targets);
     return false;
   }
   // target is units
-  if (target && target.type !== TargetType.EmptyCell && target.type !== TargetType.Self) {
+  if (target && targetTypesGroups[target.type] === TargetTypesGroup.Units) {
     const eligibleTargets = getEligibleTargets(card, target) as UnitDeployed[];
     const targetsValid = areAllTargetsValid(targets as UnitDeployed[], eligibleTargets);
     if (targetsValid === false) {
-      console.log('INVALID TARGET', target, targets);
+      console.log('INVALID TARGET UNIT', target, targets);
+      return false;
+    }
+    return true;
+  }
+  // target is cards
+  if (target && targetTypesGroups[target.type] === TargetTypesGroup.Cards) {
+    const eligibleTargets = getEligibleTargets(card, target) as Card[];
+    const targetsValid = areAllTargetsValid(targets as Card[], eligibleTargets);
+    if (targetsValid === false) {
+      console.log('INVALID TARGET CARD', target, targets);
       return false;
     }
     return true;

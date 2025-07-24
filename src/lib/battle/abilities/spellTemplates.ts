@@ -18,7 +18,7 @@ export const SpellTemplates: {
   reanimate: () => {
     return {
       effect: DataEffectTemplates.reanimate({}),
-      targets: [DataTargetTemplates.unit(), DataTargetTemplates.cell()],
+      targets: [DataTargetTemplates.graveyardCard(), DataTargetTemplates.cell()],
     };
   },
   ramp: ({ value = 1, color = CardColor }) => {

@@ -124,7 +124,7 @@
     const selectedUnit = uiState.battle.selectedUnit;
     const positionKey = getPositionKey({ row, column });
     // If an ability is pending and this cell is a valid target, use targetCell
-    if (uiState.battle.abilityPending && uiState.battle.validTargets?.cells?.[positionKey]) {
+    if (uiState.battle.targetBeingSelected) {
       targetCell({ row, column });
       return;
     }
