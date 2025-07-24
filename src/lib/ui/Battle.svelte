@@ -4,6 +4,7 @@
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
   import GameWonModal from './GameWonModal.svelte';
+  import TargetPrompt from './TargetPrompt.svelte';
   import { nextTurn } from '../battle/turn';
 
   // Derived value to check if game is won
@@ -32,6 +33,8 @@
     <Hand player={bs.players[1]} />
   </div>
 </div>
+
+<TargetPrompt />
 
 {#if gameWon && winningPlayer}
   <GameWonModal {winningPlayer} />

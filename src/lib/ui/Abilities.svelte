@@ -59,20 +59,6 @@
 </script>
 
 <div class="abilities">
-  {#if uiState.battle.abilityPending && uiState.battle.targetBeingSelected}
-    <div class="target-prompt">
-      {#if uiState.battle.targetBeingSelected.count}
-        Select {uiState.battle.targetBeingSelected.count}
-      {:else}
-        Select
-      {/if}
-      {uiState.battle.targetBeingSelected.type}
-      {uiState.battle.abilityPending.ability.targets &&
-      uiState.battle.abilityPending.ability.targets.length > 1
-        ? ` (${uiState.battle.currentTargetIndex + 1}/${uiState.battle.abilityPending.ability.targets.length})`
-        : ''}
-    </div>
-  {/if}
   {#each abilityLetters() as { name, letter, text, icons, isActivated, ability, isPending, cost, exhausts }}
     <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === name}>
       <div
@@ -187,17 +173,5 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     z-index: 1;
     text-shadow: 0 1px 2px #000;
-  }
-
-  .target-prompt {
-    width: 100%;
-    text-align: center;
-    background: #222;
-    color: #ffd700;
-    font-weight: bold;
-    padding: 4px 0;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    font-size: 0.9rem;
   }
 </style>
