@@ -18,3 +18,7 @@ export function damageLand(land: Land, damage: number) {
     );
   }
 }
+
+export function getAllLands(): Land[] {
+  return bs.players.flatMap((p) => p.lands);
+}

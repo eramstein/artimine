@@ -1,4 +1,5 @@
 import {
+  CardType,
   isUnitCard,
   TargetType,
   type Card,
@@ -7,68 +8,75 @@ import {
   type SpellCard,
   type TargetDefinition,
   type UnitDeployed,
+  type Land,
 } from '../_model';
 import { bs } from '../_state';
-import { getEmptyCells, isCellFree, isOnPlayersSide } from './boards';
-import { isHumanPlayer } from './player';
+import { getEmptyCells, getPositionKey, isCellFree, isOnPlayersSide } from './boards';
 import { getAllGraveyardsCards } from './graveyard';
-
-enum TargetTypesGroup {
-  Units = 'units',
-  Cells = 'cells',
-  Cards = 'cards',
-}
-
-const targetTypesGroups: Record<TargetType, TargetTypesGroup> = {
-  [TargetType.Self]: TargetTypesGroup.Units,
-  [TargetType.Foe]: TargetTypesGroup.Units,
-  [TargetType.Ally]: TargetTypesGroup.Units,
-  [TargetType.Any]: TargetTypesGroup.Units,
-  [TargetType.EmptyCell]: TargetTypesGroup.Cells,
-  [TargetType.EmptyAllyCell]: TargetTypesGroup.Cells,
-  [TargetType.GraveyardCard]: TargetTypesGroup.Cards,
-};
+import { getAllLands } from './land';
 
 export const DataTargetTemplates: {
   [key: string]: (...any: any) => TargetDefinition;
 } = {
   ennemies: (n: number) => ({
-    type: TargetType.Foe,
+    type: TargetType.Unit,
     count: n,
+    eligible: (card: Card, units: EffectTargets) => {
+      return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId !== card.ownerPlayerId);
+    },
   }),
   cell: () => ({
-    type: TargetType.EmptyCell,
+    type: TargetType.Cell,
     count: 1,
   }),
   unit: () => ({
-    type: TargetType.Any,
+    type: TargetType.Unit,
     count: 1,
   }),
   units: (n: number) => ({
-    type: TargetType.Any,
+    type: TargetType.Unit,
     count: n,
   }),
   allyCell: () => ({
-    type: TargetType.EmptyAllyCell,
+    type: TargetType.Cell,
     count: 1,
+    eligible: (card: Card, positions: EffectTargets) => {
+      return (positions as Position[]).filter(
+        (p) => isOnPlayersSide(p, card.ownerPlayerId) && isCellFree(p)
+      );
+    },
+  }),
+  emptyCell: () => ({
+    type: TargetType.Cell,
+    count: 1,
+    eligible: (card: Card, positions: EffectTargets) => {
+      return (positions as Position[]).filter((p) => isCellFree(p));
+    },
   }),
   graveyardCard: () => ({
     type: TargetType.GraveyardCard,
     count: 1,
   }),
+  graveyardUnit: () => ({
+    type: TargetType.GraveyardCard,
+    count: 1,
+    eligible: (card: Card, graveyardCards: EffectTargets) => {
+      return (graveyardCards as Card[]).filter((c) => c.type === CardType.Unit);
+    },
+  }),
 };
 
 export function areAllTargetsValid(
-  targets: UnitDeployed[] | Card[],
-  eligible: UnitDeployed[] | Card[]
+  tentativeTargets: Card[] | UnitDeployed[] | Land[],
+  validTargets: Card[] | UnitDeployed[] | Land[]
 ): boolean {
-  if (eligible === null) {
+  if (validTargets === null) {
     return true;
   }
-  for (let index = 0; index < targets.length; index++) {
-    const t = targets[index];
+  for (let index = 0; index < tentativeTargets.length; index++) {
+    const t = tentativeTargets[index];
     let found = false;
-    eligible.forEach((e) => {
+    validTargets.forEach((e) => {
       if (e.instanceId === t.instanceId) {
         found = true;
       }
@@ -78,9 +86,13 @@ export function areAllTargetsValid(
   return true;
 }
 
-export function checkAllCellsValid(targets: Position[], fn: (p: Position) => boolean): boolean {
-  for (let index = 0; index < targets.length; index++) {
-    if (fn(targets[index])) {
+export function areAllCellsValid(tentativeTargets: Position[], validTargets: Position[]): boolean {
+  const validPositions: Record<string, Position> = {};
+  validTargets.forEach((p) => {
+    validPositions[getPositionKey(p)] = p;
+  });
+  for (let index = 0; index < tentativeTargets.length; index++) {
+    if (!validPositions[getPositionKey(tentativeTargets[index])]) {
       return false;
     }
   }
@@ -89,43 +101,41 @@ export function checkAllCellsValid(targets: Position[], fn: (p: Position) => boo
 
 export function checkTargets(
   card: UnitDeployed | SpellCard,
-  target: TargetDefinition,
-  targets: EffectTargets
+  targetDefinition: TargetDefinition,
+  tentativeTargets: EffectTargets
 ): boolean {
-  console.log('checkTargets', target, JSON.stringify(targets));
-  if (target.count && target.count !== targets.length) {
-    console.log('WRONG NUMBER OF TARGETS', target, targets);
-    return false;
-  }
-  // target is units
-  if (target && targetTypesGroups[target.type] === TargetTypesGroup.Units) {
-    const eligibleTargets = getEligibleTargets(card, target) as UnitDeployed[];
-    const targetsValid = areAllTargetsValid(targets as UnitDeployed[], eligibleTargets);
-    if (targetsValid === false) {
-      console.log('INVALID TARGET UNIT', target, targets);
-      return false;
-    }
+  if (!targetDefinition) {
     return true;
   }
-  // target is cards
-  if (target && targetTypesGroups[target.type] === TargetTypesGroup.Cards) {
-    const eligibleTargets = getEligibleTargets(card, target) as Card[];
-    const targetsValid = areAllTargetsValid(targets as Card[], eligibleTargets);
+  if (targetDefinition.count && targetDefinition.count !== tentativeTargets.length) {
+    console.log('WRONG NUMBER OF TARGETS', targetDefinition, tentativeTargets);
+    return false;
+  }
+  const eligibleTargets = getEligibleTargets(card, targetDefinition);
+  // target has an instanceId
+  if (
+    targetDefinition.type === TargetType.Unit ||
+    targetDefinition.type === TargetType.Land ||
+    targetDefinition.type === TargetType.GraveyardCard
+  ) {
+    const targetsValid = areAllTargetsValid(
+      tentativeTargets as Card[] | UnitDeployed[] | Land[],
+      eligibleTargets as Card[] | UnitDeployed[] | Land[]
+    );
     if (targetsValid === false) {
-      console.log('INVALID TARGET CARD', target, targets);
+      console.log('INVALID TARGETS', targetDefinition, tentativeTargets);
       return false;
     }
     return true;
   }
   // target is cells
-  if (target && isTargetCell(target.type)) {
-    if (
-      target.type === TargetType.EmptyAllyCell &&
-      !checkAllCellsValid(targets as Position[], (p) => isOnPlayersSide(p, card.ownerPlayerId))
-    ) {
-      return false;
-    }
-    if (!checkAllCellsValid(targets as Position[], (p) => !isCellFree(p))) {
+  if (targetDefinition.type === TargetType.Cell) {
+    const targetsValid = areAllCellsValid(
+      tentativeTargets as Position[],
+      eligibleTargets as Position[]
+    );
+    if (targetsValid === false) {
+      console.log('INVALID CELLS', targetDefinition, tentativeTargets);
       return false;
     }
     return true;
@@ -140,34 +150,27 @@ export function getEligibleTargets(
   if (!target) {
     return [];
   }
-  if (target.eligible) {
-    return target.eligible(card);
-  }
   if (isUnitCard(card) && target.type === TargetType.Self) {
     return [card];
   }
-  if (target.type === TargetType.Foe) {
-    return bs.units.filter((u) => u.ownerPlayerId !== card.ownerPlayerId);
+  let eligibleTargets: EffectTargets = [];
+  if (target.type === TargetType.Unit) {
+    eligibleTargets = bs.units;
   }
-  if (target.type === TargetType.Ally) {
-    return bs.units.filter((u) => u.ownerPlayerId === card.ownerPlayerId);
+  if (target.type === TargetType.Cell) {
+    eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
   }
-  if (target.type === TargetType.Any) {
-    return bs.units;
+  if (target.type === TargetType.Land) {
+    eligibleTargets = getAllLands();
   }
-  if (target.type === TargetType.EmptyCell) {
-    return [...getEmptyCells(true), ...getEmptyCells(false)];
-  }
-  if (target.type === TargetType.EmptyAllyCell) {
-    const isPlayer = isHumanPlayer(card.ownerPlayerId);
-    return getEmptyCells(isPlayer);
+  if (target.type === TargetType.Player) {
+    eligibleTargets = bs.players;
   }
   if (target.type === TargetType.GraveyardCard) {
-    return getAllGraveyardsCards();
+    eligibleTargets = getAllGraveyardsCards();
   }
-  return [];
-}
-
-export function isTargetCell(targetType: TargetType): boolean {
-  return targetType === TargetType.EmptyCell || targetType === TargetType.EmptyAllyCell;
+  if (target.eligible) {
+    return target.eligible(card, eligibleTargets);
+  }
+  return eligibleTargets;
 }

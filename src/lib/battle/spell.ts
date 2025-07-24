@@ -6,36 +6,9 @@ import {
   type TargetDefinition,
 } from '../_model';
 import { bs } from '../_state';
-import { getEmptyCells } from './boards';
-import { isHumanPlayer } from './player';
 import { isPayable } from './cost';
 import { checkTargets } from './target';
 import { discard } from './hand';
-import { getAllGraveyardsCards } from './graveyard';
-
-export function getEligibleSpellTargets(spell: SpellCard): EffectTargets[] {
-  const targets: EffectTargets[] = [];
-  const defs = spell.targets || [];
-  for (const def of defs) {
-    if (def.type === TargetType.Foe) {
-      targets.push(bs.units.filter((u) => u.ownerPlayerId !== spell.ownerPlayerId));
-    } else if (def.type === TargetType.Ally) {
-      targets.push(bs.units.filter((u) => u.ownerPlayerId === spell.ownerPlayerId));
-    } else if (def.type === TargetType.Any) {
-      targets.push(bs.units);
-    } else if (def.type === TargetType.EmptyCell) {
-      targets.push([...getEmptyCells(true), ...getEmptyCells(false)]);
-    } else if (def.type === TargetType.EmptyAllyCell) {
-      const isPlayer = isHumanPlayer(spell.ownerPlayerId);
-      targets.push(getEmptyCells(isPlayer));
-    } else if (def.type === TargetType.GraveyardCard) {
-      targets.push(getAllGraveyardsCards());
-    } else {
-      targets.push([]);
-    }
-  }
-  return targets;
-}
 
 export function playSpell(spell: SpellCard, targets: EffectTargets[]) {
   console.log(spell.name + ' on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', ')));
@@ -73,7 +46,6 @@ function paySpellCost(spell: SpellCard): boolean {
   return true;
 }
 
-// New helper for multiple targets
 function checkMultipleTargets(
   spell: SpellCard,
   defs: TargetDefinition[],

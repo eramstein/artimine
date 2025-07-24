@@ -159,7 +159,7 @@ export interface TargetDefinition {
   type: TargetType;
   pos?: Position;
   count?: number;
-  eligible?(card: UnitDeployed | SpellCard): EffectTargets;
+  eligible?(card: UnitDeployed | SpellCard, potentialTargets: EffectTargets): EffectTargets;
 }
 
 export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];

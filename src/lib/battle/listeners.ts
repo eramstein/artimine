@@ -21,10 +21,15 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
         // console.log(u.name + ' triggers ' + a.name, a, { ...rest });
         let targets: EffectTargets = [];
         const triggerParams: any = { ...rest };
-        if (a.target) {
-          targets = getEligibleTargets(u, a.target) as EffectTargets;
+        if (a.targets) {
+          targets = getEligibleTargets(u, a.targets[0]) as EffectTargets;
         }
-        a.effect({ unit: u, targets, triggerParams, player: bs.players[u.ownerPlayerId] });
+        a.effect({
+          unit: u,
+          targets: [targets],
+          triggerParams,
+          player: bs.players[u.ownerPlayerId],
+        });
       });
   });
 }

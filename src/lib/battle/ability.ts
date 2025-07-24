@@ -77,7 +77,6 @@ export function canUnitPlayAbility(unit: UnitDeployed, ability: Ability): boolea
   );
 }
 
-// New helper for multiple targets
 function checkMultipleTargets(
   unit: UnitDeployed,
   defs: TargetDefinition[],

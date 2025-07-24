@@ -6,17 +6,16 @@ import {
   type Ability,
   type Card,
   type EffectTargets,
-  type Land,
   type Position,
   type SpellCard,
   type UnitDeployed,
 } from '@/lib/_model';
 import { uiState } from '@/lib/_state';
-import { isCellFree, isHumanPlayer, playAbility } from '@/lib/battle';
+import { playAbility } from '@/lib/battle';
 import { isActivityPayable } from '@/lib/battle/cost';
 import { getPositionKey } from '@/lib/battle/boards';
-import { getEligibleSpellTargets, playSpell } from '@/lib/battle/spell';
-import { getEligibleTargets, isTargetCell } from '@/lib/battle/target';
+import { playSpell } from '@/lib/battle/spell';
+import { getEligibleTargets } from '@/lib/battle/target';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (isActivityPayable(unit, ability) === false) {
@@ -99,9 +98,7 @@ function setEffectTargets(eligibleTargets: EffectTargets) {
 function getEligibleSpellTargetsForIndex(spell: SpellCard, index: number): EffectTargets {
   const targets = spell.targets || [];
   if (targets[index]) {
-    // getEligibleSpellTargets returns EffectTargets[] for all, but we want just the one for this index
-    const all = getEligibleSpellTargets(spell);
-    return all[index] || [];
+    return getEligibleTargets(spell, targets[index]);
   }
   return [];
 }
@@ -156,7 +153,7 @@ export function targetCell(position: Position) {
   if (
     (!ui.abilityPending && !ui.spellPending) ||
     !ui.targetBeingSelected ||
-    !isTargetCell(ui.targetBeingSelected.type)
+    ui.targetBeingSelected.type !== TargetType.Cell
   )
     return;
   const currentIdx = ui.currentTargetIndex || 0;
