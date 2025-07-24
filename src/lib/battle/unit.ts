@@ -38,7 +38,7 @@ export function summonUnit(unit: UnitCard, targetPosition: Position) {
   bs.units.push(unitDeployed);
 }
 
-function makeDeployedUnit(unit: UnitCard, position: Position) {
+export function makeDeployedUnit(unit: UnitCard, position: Position) {
   return {
     ...unit,
     position,

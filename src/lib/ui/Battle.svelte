@@ -5,6 +5,7 @@
   import Player from './Player.svelte';
   import GameWonModal from './GameWonModal.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
+  import GraveyardModal from './GraveyardModal.svelte';
   import { nextTurn } from '../battle/turn';
 
   // Derived value to check if game is won
@@ -39,6 +40,8 @@
 {#if gameWon && winningPlayer}
   <GameWonModal {winningPlayer} />
 {/if}
+
+<GraveyardModal />
 
 <style>
   .battle {

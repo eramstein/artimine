@@ -36,14 +36,15 @@ export const DataEffectTemplates: {
     };
   },
   reanimate: () => {
-    return ({ targets }) => {
+    return ({ unit, player, targets }) => {
       if (targets.length < 2) {
         return;
       }
-      const unit = targets[0]?.[0] as UnitCard;
+      const playerId = player?.id ?? unit?.ownerPlayerId;
+      const reanimatedUnit = targets[0]?.[0] as UnitCard;
       const position = targets[1]?.[0] as Position;
-      if (unit && position) {
-        reanimate(unit, position);
+      if (reanimatedUnit && position) {
+        reanimate(reanimatedUnit, position, playerId);
       }
     };
   },

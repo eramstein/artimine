@@ -1,34 +1,35 @@
 <script lang="ts">
   import type { Player } from '../_model/model-battle';
+  import { uiState } from '../_state/state-ui.svelte';
+  import { bs } from '../_state';
   import Card from './Card.svelte';
   import { targetCard } from './_helpers/abilities';
 
-  let {
-    player,
-    isVisible,
-    onClose,
-  }: {
-    player: Player;
-    isVisible: boolean;
-    onClose: () => void;
-  } = $props();
+  // Get the player from the battle state using the playerId from UI state
+  let player = $derived(
+    uiState.battle.graveyardModal.playerId !== null
+      ? bs.players[uiState.battle.graveyardModal.playerId]
+      : null
+  );
 
   // Get all cards in the graveyard
-  let graveyardCards = $derived(player.graveyard || []);
+  let graveyardCards = $derived(player?.graveyard || []);
 
   function handleBackdropClick(event: MouseEvent) {
     // Only close if clicking the backdrop, not the modal content
     if (event.target === event.currentTarget) {
-      onClose();
+      uiState.battle.graveyardModal.visible = false;
+      uiState.battle.graveyardModal.playerId = null;
     }
   }
 
   function handleCloseClick() {
-    onClose();
+    uiState.battle.graveyardModal.visible = false;
+    uiState.battle.graveyardModal.playerId = null;
   }
 </script>
 
-{#if isVisible}
+{#if uiState.battle.graveyardModal.visible && player}
   <div class="modal-backdrop" onclick={handleBackdropClick}>
     <div class="modal-content">
       <div class="modal-header">

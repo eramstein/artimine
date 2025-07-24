@@ -64,7 +64,7 @@ export const resetBattleState = (): void => {
 };
 
 export const getCurrentBattleState = () => {
-  return { ...bs };
+  return JSON.parse(JSON.stringify({ ...bs }));
 };
 
 function restoreBattleFunctions(bs: BattleState) {
@@ -85,12 +85,22 @@ function restoreBattleFunctions(bs: BattleState) {
         restoreUnitFunctions(unit);
       }
     });
+    player.graveyard.forEach((unit) => {
+      if (isUnitCard(unit)) {
+        restoreUnitFunctions(unit);
+      }
+    });
     player.hand.forEach((spell) => {
       if (isSpellCard(spell)) {
         restoreSpellFunctions(spell);
       }
     });
     player.deck.forEach((spell) => {
+      if (isSpellCard(spell)) {
+        restoreSpellFunctions(spell);
+      }
+    });
+    player.graveyard.forEach((spell) => {
       if (isSpellCard(spell)) {
         restoreSpellFunctions(spell);
       }

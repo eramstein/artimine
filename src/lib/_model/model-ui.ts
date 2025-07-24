@@ -23,6 +23,10 @@ export type UiState = {
     currentTargetIndex: number;
     targetBeingSelected: TargetDefinition | null;
     attackingUnitId: string | null;
+    graveyardModal: {
+      visible: boolean;
+      playerId: number | null;
+    };
   };
   modal: {
     visible: boolean;

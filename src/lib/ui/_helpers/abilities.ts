@@ -36,7 +36,7 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   const targets = ability.targets || [];
   if (targets.length > 0) {
     ui.targetBeingSelected = targets[0];
-    setEffectTargets(getEligibleTargets(unit, targets[0]));
+    highlightEligibleTargets(getEligibleTargets(unit, targets[0]));
   } else {
     ui.targetBeingSelected = null;
     playAbility(unit, ability, []);
@@ -56,7 +56,7 @@ export function activateSpell(spell: SpellCard) {
   const targets = spell.targets || [];
   if (targets.length > 0) {
     ui.targetBeingSelected = targets[0];
-    setEffectTargets(getEligibleSpellTargetsForIndex(spell, 0));
+    highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0));
   } else {
     ui.targetBeingSelected = null;
     playSpell(spell, []);
@@ -64,7 +64,7 @@ export function activateSpell(spell: SpellCard) {
   }
 }
 
-function setEffectTargets(eligibleTargets: EffectTargets) {
+function highlightEligibleTargets(eligibleTargets: EffectTargets) {
   const ui = uiState.battle;
   if (ui.targetBeingSelected && ui.targetBeingSelected.type !== TargetType.Self) {
     ui.validTargets = {
@@ -122,9 +122,13 @@ function advanceTargetStep() {
   if (ui.currentTargetIndex < targets.length) {
     ui.targetBeingSelected = targets[ui.currentTargetIndex];
     if (ui.abilityPending) {
-      setEffectTargets(getEligibleTargets(ui.abilityPending.unit, targets[ui.currentTargetIndex]));
+      highlightEligibleTargets(
+        getEligibleTargets(ui.abilityPending.unit, targets[ui.currentTargetIndex])
+      );
     } else if (ui.spellPending) {
-      setEffectTargets(getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentTargetIndex));
+      highlightEligibleTargets(
+        getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentTargetIndex)
+      );
     }
   } else {
     // All targets selected, play
@@ -171,6 +175,10 @@ export function targetCard(card: Card) {
   if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
   (ui.selectedTargets[currentIdx] as Card[]).push(card);
   if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+    if (ui.graveyardModal.visible) {
+      ui.graveyardModal.visible = false;
+      ui.graveyardModal.playerId = null;
+    }
     advanceTargetStep();
   }
 }
