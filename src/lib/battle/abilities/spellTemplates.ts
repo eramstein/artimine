@@ -1,4 +1,4 @@
-import { CardColor, type EffectArgs, type Player, type TargetDefintion } from '@/lib/_model';
+import { CardColor, type EffectArgs, type Player, type TargetDefinition } from '@/lib/_model';
 import { DataEffectTemplates } from '../effects';
 import { DataTargetTemplates } from '../target';
 import { incrementColor, untapPlayer } from '../player';
@@ -6,13 +6,13 @@ import { incrementColor, untapPlayer } from '../player';
 export const SpellTemplates: {
   [key: string]: ({ ...any }) => {
     effect: (p: EffectArgs) => void;
-    target?: TargetDefintion;
+    targets?: TargetDefinition[];
   };
 } = {
   dd: ({ damage, targets = 1 }) => {
     return {
       effect: DataEffectTemplates.damageUnit({ damage }),
-      target: DataTargetTemplates.units(targets),
+      targets: [DataTargetTemplates.units(targets)],
     };
   },
   ramp: ({ value = 1, color = CardColor }) => {

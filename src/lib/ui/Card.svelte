@@ -66,7 +66,7 @@
   // Handle card click
   function handleClick() {
     if (inHand && isSpellCard(card) && isPayable(card)) {
-      if (!card.target) {
+      if (!card.targets || card.targets.length === 0) {
         uiState.modal.visible = true;
         uiState.modal.title = 'Cast Spell?';
         uiState.modal.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${card.text}</span>`;
@@ -108,6 +108,19 @@
   ondrag={handleDrag}
   onclick={handleClick}
 >
+  {#if isPendingSpell && uiState.battle.targetBeingSelected}
+    <div class="spell-target-prompt">
+      {#if uiState.battle.targetBeingSelected.count}
+        Select {uiState.battle.targetBeingSelected.count}
+      {:else}
+        Select
+      {/if}
+      {uiState.battle.targetBeingSelected.type}
+      {uiState.battle.spellPending?.targets && uiState.battle.spellPending.targets.length > 1
+        ? ` (${uiState.battle.currentTargetIndex + 1}/${uiState.battle.spellPending.targets.length})`
+        : ''}
+    </div>
+  {/if}
   <!-- Card name bar with integrated cost -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
@@ -379,5 +392,21 @@
         0 0 30px rgba(255, 215, 0, 1),
         0 12px 35px rgba(0, 0, 0, 0.6);
     }
+  }
+  .spell-target-prompt {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #ffd700;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 20;
+    border: 1px solid #ffd700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 </style>

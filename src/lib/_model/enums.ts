@@ -30,9 +30,9 @@ export enum TriggerType {
 }
 
 export enum TargetType {
-  Foe = 'foe',
-  Ally = 'ally',
-  Any = 'any',
+  Foe = 'ennemy unit',
+  Ally = 'allied unit',
+  Any = 'unit',
   Self = 'self',
   EmptyCell = 'emptyCell',
   EmptyAllyCell = 'emptyAllyCell',

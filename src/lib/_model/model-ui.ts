@@ -2,7 +2,7 @@ import type {
   Ability,
   EffectTargets,
   SpellCard,
-  TargetDefintion,
+  TargetDefinition,
   UnitDeployed,
 } from './model-battle';
 
@@ -19,8 +19,9 @@ export type UiState = {
     } | null;
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     spellPending: SpellCard | null;
-    selectedTargets: EffectTargets;
-    targetBeingSelected: TargetDefintion | null;
+    selectedTargets: EffectTargets[];
+    currentTargetIndex: number;
+    targetBeingSelected: TargetDefinition | null;
     attackingUnitId: string | null;
   };
   modal: {

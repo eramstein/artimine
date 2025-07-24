@@ -1,8 +1,14 @@
-import { TargetType, type Ability, type EffectTargets, type UnitDeployed } from '../_model';
+import {
+  TargetType,
+  type Ability,
+  type EffectTargets,
+  type TargetDefinition,
+  type UnitDeployed,
+} from '../_model';
 import { bs } from '../_state';
 import { checkTargets } from './target';
 
-export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets) {
+export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[]) {
   console.log(
     unit.name +
       ' uses ' +
@@ -17,16 +23,21 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
     console.log('EXHAUSTED');
     return;
   }
-  if (ability.target && checkTargets(unit, ability.target, targets) === false) {
-    console.log('INVALID TARGET', ability.target, targets);
+  if (ability.targets && !checkMultipleTargets(unit, ability.targets, targets)) {
+    console.log('INVALID TARGET', ability.targets, targets);
     return;
   }
   if (payAbilityCost(unit, ability) === false) {
     console.log('NOT ENOUGH MANA');
     return;
   }
-  if (ability.target && ability.target.type === TargetType.Self) {
-    targets = [unit];
+  // If any TargetType is Self, replace the corresponding targets entry with [unit]
+  if (ability.targets) {
+    ability.targets.forEach((def, i) => {
+      if (def.type === TargetType.Self) {
+        targets[i] = [unit];
+      }
+    });
   }
 
   // EFFECT
@@ -64,4 +75,17 @@ export function canUnitPlayAbility(unit: UnitDeployed, ability: Ability): boolea
     ((player.mana || 0) >= (ability.cost || 0) || !ability.cost) &&
     (!unit.exhausted || !ability.exhausts)
   );
+}
+
+// New helper for multiple targets
+function checkMultipleTargets(
+  unit: UnitDeployed,
+  defs: TargetDefinition[],
+  targets: EffectTargets[]
+): boolean {
+  if (!Array.isArray(targets) || targets.length !== defs.length) return false;
+  for (let i = 0; i < defs.length; i++) {
+    if (!checkTargets(unit, defs[i], targets[i])) return false;
+  }
+  return true;
 }

@@ -28,23 +28,18 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
     ui.abilityPending.unit.instanceId === unit.instanceId &&
     ui.abilityPending.ability.name === ability.name
   ) {
-    ui.abilityPending = null;
-    ui.validTargets = null;
+    clearUiState();
     return;
   }
-  ui.abilityPending = {
-    unit,
-    ability,
-  };
-  ui.targetBeingSelected = ability.target || null;
-
-  // Set valid targets for ability selection
-  if (ability.target) {
-    const eligibleTargets = getEligibleTargets(unit, ability.target);
-    setEffectTargets(eligibleTargets);
-  }
-
-  if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
+  ui.abilityPending = { unit, ability };
+  ui.currentTargetIndex = 0;
+  ui.selectedTargets = [];
+  const targets = ability.targets || [];
+  if (targets.length > 0) {
+    ui.targetBeingSelected = targets[0];
+    setEffectTargets(getEligibleTargets(unit, targets[0]));
+  } else {
+    ui.targetBeingSelected = null;
     playAbility(unit, ability, []);
     clearUiState();
   }
@@ -53,18 +48,18 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
 export function activateSpell(spell: SpellCard) {
   const ui = uiState.battle;
   if (ui.spellPending && ui.spellPending.instanceId === spell.instanceId) {
-    ui.spellPending = null;
-    ui.validTargets = null;
+    clearUiState();
     return;
   }
   ui.spellPending = spell;
-  ui.targetBeingSelected = spell.target || null;
-
-  // Set valid targets for spell
-  const eligibleTargets = getEligibleSpellTargets(spell);
-  setEffectTargets(eligibleTargets);
-
-  if (!ui.targetBeingSelected || ui.targetBeingSelected.type === TargetType.Self) {
+  ui.currentTargetIndex = 0;
+  ui.selectedTargets = [];
+  const targets = spell.targets || [];
+  if (targets.length > 0) {
+    ui.targetBeingSelected = targets[0];
+    setEffectTargets(getEligibleSpellTargetsForIndex(spell, 0));
+  } else {
+    ui.targetBeingSelected = null;
     playSpell(spell, []);
     clearUiState();
   }
@@ -78,17 +73,14 @@ function setEffectTargets(eligibleTargets: EffectTargets) {
       lands: {},
       players: {},
       cells: {},
+      cards: {},
     };
-
     if (Array.isArray(eligibleTargets)) {
-      // Handle unit targets
       if (isDeployedUnit(eligibleTargets)) {
         (eligibleTargets as UnitDeployed[]).forEach((target) => {
           ui.validTargets!.units![target.instanceId] = true;
         });
-      }
-      // Handle position targets (for cell-based abilities)
-      else if (isPosition(eligibleTargets)) {
+      } else if (isPosition(eligibleTargets)) {
         (eligibleTargets as Position[]).forEach((position) => {
           const positionKey = getPositionKey(position);
           ui.validTargets!.cells![positionKey] = true;
@@ -104,33 +96,58 @@ function setEffectTargets(eligibleTargets: EffectTargets) {
   }
 }
 
+function getEligibleSpellTargetsForIndex(spell: SpellCard, index: number): EffectTargets {
+  const targets = spell.targets || [];
+  if (targets[index]) {
+    // getEligibleSpellTargets returns EffectTargets[] for all, but we want just the one for this index
+    const all = getEligibleSpellTargets(spell);
+    return all[index] || [];
+  }
+  return [];
+}
+
 function clearUiState() {
   const ui = uiState.battle;
   ui.selectedTargets = [];
+  ui.currentTargetIndex = 0;
   ui.targetBeingSelected = null;
   ui.abilityPending = null;
   ui.spellPending = null;
   ui.validTargets = null;
 }
 
+function advanceTargetStep() {
+  const ui = uiState.battle;
+  const targets = ui.abilityPending
+    ? ui.abilityPending.ability.targets || []
+    : ui.spellPending?.targets || [];
+  ui.currentTargetIndex++;
+  if (ui.currentTargetIndex < targets.length) {
+    ui.targetBeingSelected = targets[ui.currentTargetIndex];
+    if (ui.abilityPending) {
+      setEffectTargets(getEligibleTargets(ui.abilityPending.unit, targets[ui.currentTargetIndex]));
+    } else if (ui.spellPending) {
+      setEffectTargets(getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentTargetIndex));
+    }
+  } else {
+    // All targets selected, play
+    if (ui.abilityPending) {
+      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+    } else if (ui.spellPending) {
+      playSpell(ui.spellPending, ui.selectedTargets);
+    }
+    clearUiState();
+  }
+}
+
 export function targetUnit(unit: UnitDeployed) {
   const ui = uiState.battle;
   if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
-  if (
-    ([TargetType.Ally, TargetType.Any].includes(ui.targetBeingSelected.type) &&
-      isHumanPlayer(unit.ownerPlayerId)) ||
-    ([TargetType.Foe, TargetType.Any].includes(ui.targetBeingSelected.type) &&
-      !isHumanPlayer(unit.ownerPlayerId))
-  ) {
-    (ui.selectedTargets as UnitDeployed[]).push(unit);
-    if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
-      if (ui.abilityPending) {
-        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-      } else if (ui.spellPending) {
-        playSpell(ui.spellPending, ui.selectedTargets);
-      }
-      clearUiState();
-    }
+  const currentIdx = ui.currentTargetIndex || 0;
+  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
+  (ui.selectedTargets[currentIdx] as UnitDeployed[]).push(unit);
+  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+    advanceTargetStep();
   }
 }
 
@@ -142,30 +159,21 @@ export function targetCell(position: Position) {
     !isTargetCell(ui.targetBeingSelected.type)
   )
     return;
-  if (isCellFree(position)) {
-    (ui.selectedTargets as Position[]).push(position);
-    if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
-      if (ui.abilityPending) {
-        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-      } else if (ui.spellPending) {
-        playSpell(ui.spellPending, ui.selectedTargets);
-      }
-      clearUiState();
-    }
+  const currentIdx = ui.currentTargetIndex || 0;
+  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
+  (ui.selectedTargets[currentIdx] as Position[]).push(position);
+  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+    advanceTargetStep();
   }
 }
 
 export function targetCard(card: Card) {
-  console.log('targetCard', card);
   const ui = uiState.battle;
   if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
-  (ui.selectedTargets as Card[]).push(card);
-  if (ui.selectedTargets.length >= (ui.targetBeingSelected.count || 0)) {
-    if (ui.abilityPending) {
-      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-    } else if (ui.spellPending) {
-      playSpell(ui.spellPending, ui.selectedTargets);
-    }
-    clearUiState();
+  const currentIdx = ui.currentTargetIndex || 0;
+  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
+  (ui.selectedTargets[currentIdx] as Card[]).push(card);
+  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+    advanceTargetStep();
   }
 }

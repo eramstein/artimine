@@ -41,7 +41,7 @@ export const DataEffectTemplates: {
   },
   damageUnit: ({ damage }) => {
     return ({ targets }) => {
-      (targets as UnitDeployed[]).forEach((target) => {
+      (targets[0] as UnitDeployed[]).forEach((target) => {
         damageUnit(target, damage);
       });
     };

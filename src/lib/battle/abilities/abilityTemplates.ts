@@ -36,7 +36,7 @@ export const DataAbilityTemplates: {
       icons: ['⚟'],
       trigger: TRIG.meAttack,
       effect: ({ triggerParams }) => {
-        DataUnitFilters.adjacentAllies(triggerParams.defender).forEach((u) => {
+        DataUnitFilters.adjacentAllies()(triggerParams.defender).forEach((u: UnitDeployed) => {
           damageUnit(u, damage);
         });
       },
@@ -47,9 +47,9 @@ export const DataAbilityTemplates: {
     return {
       text: 'Ping ' + damage,
       trigger: TRIG.activated,
-      target: TAR.ennemies(targetCount),
+      targets: [TAR.ennemies(targetCount)],
       effect: ({ targets }) => {
-        (targets as UnitDeployed[]).forEach((u) => {
+        (targets[0] as UnitDeployed[]).forEach((u) => {
           damageUnit(u, damage);
         });
       },
@@ -60,9 +60,9 @@ export const DataAbilityTemplates: {
     return {
       text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
       trigger: TRIG.activated,
-      target: TAR.ennemies(targetCount),
-      effect: ({ targets }) => {
-        (targets as UnitDeployed[]).forEach((u) => {
+      targets: [TAR.ennemies(targetCount)],
+      effect: ({ unit, targets }) => {
+        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
           applyUnitStatus(u, statusType, duration);
         });
       },
@@ -73,9 +73,9 @@ export const DataAbilityTemplates: {
     return {
       text: 'Stun ' + duration,
       trigger: TRIG.activated,
-      target: TAR.ennemies(targetCount),
+      targets: [TAR.ennemies(targetCount)],
       effect: ({ targets }) => {
-        (targets as UnitDeployed[]).forEach((u) => {
+        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
           applyUnitStatus(u, StatusType.Stun, duration);
         });
       },
@@ -86,9 +86,9 @@ export const DataAbilityTemplates: {
     return {
       text: 'Root ' + duration,
       trigger: TRIG.activated,
-      target: TAR.ennemies(targetCount),
+      targets: [TAR.ennemies(targetCount)],
       effect: ({ targets }) => {
-        (targets as UnitDeployed[]).forEach((u) => {
+        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
           applyUnitStatus(u, StatusType.Root, duration);
         });
       },
@@ -101,7 +101,7 @@ export const DataAbilityTemplates: {
       icons: ['♡'],
       trigger: TRIG.meMove,
       effect: ({ triggerParams }) => {
-        DataUnitFilters.adjacentAllies(triggerParams.mover).forEach((u) => {
+        DataUnitFilters.adjacentAllies()(triggerParams.mover).forEach((u: UnitDeployed) => {
           healUnit(u, healValue);
         });
       },
@@ -120,10 +120,10 @@ export const DataAbilityTemplates: {
     return {
       text: 'Summon ' + summonedUnit,
       trigger: TRIG.activated,
-      target: TAR.allyCell(),
+      targets: [TAR.allyCell()],
       effect: ({ unit, targets }) => {
         console.log('summon', unit, targets);
-        (targets as Position[]).forEach((cell) => {
+        (targets[0] as Position[]).forEach((cell: Position) => {
           const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
           summonUnit(createdUnit, cell);
         });

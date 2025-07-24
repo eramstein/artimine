@@ -9,6 +9,7 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.shroomy_shooty,
   cards.shroomy_protecs,
   cards.shroomy_rooty,
+  cards.lightning_bolt,
   cards.energyze,
   cards.luxurious_growth,
   cards.modis_chosen,
@@ -21,7 +22,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.wall_of_bramble,
   cards.modis_chosen,
   cards.dwarf_berserker,
-  cards.lightning_bolt,
   cards.deep_forest_wurm,
   cards.basic_wurm,
 ];

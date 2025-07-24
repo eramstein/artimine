@@ -4,7 +4,7 @@ import {
   type EffectTargets,
   type Position,
   type SpellCard,
-  type TargetDefintion,
+  type TargetDefinition,
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
@@ -13,7 +13,7 @@ import { isHumanPlayer } from './player';
 import { getAllGraveyardsCards } from './graveyard';
 
 export const DataTargetTemplates: {
-  [key: string]: (...any: any) => TargetDefintion;
+  [key: string]: (...any: any) => TargetDefinition;
 } = {
   ennemies: (n: number) => ({
     type: TargetType.Foe,
@@ -65,7 +65,7 @@ export function checkAllCellsValid(targets: Position[], fn: (p: Position) => boo
 
 export function checkTargets(
   card: UnitDeployed | SpellCard,
-  target: TargetDefintion,
+  target: TargetDefinition,
   targets: EffectTargets
 ): boolean {
   if (target.count && target.count !== targets.length) {
@@ -100,7 +100,7 @@ export function checkTargets(
 
 export function getEligibleTargets(
   card: UnitDeployed | SpellCard,
-  target: TargetDefintion
+  target: TargetDefinition
 ): EffectTargets {
   if (!target) {
     return [];
