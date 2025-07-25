@@ -69,7 +69,7 @@ export function onDeployUnit(unit: UnitDeployed) {
 }
 
 export function onUnitDeath(unit: UnitDeployed) {
-  triggerAbilities(TriggerType.AfterDeath, { unit });
+  triggerAbilities(TriggerType.OnDeath, { unit });
 }
 
 export function onTurnStart(player: Player) {

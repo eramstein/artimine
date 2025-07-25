@@ -24,7 +24,7 @@ export enum TriggerType {
   AfterCombat = 'after combat',
   AfterMove = 'after moving',
   BeforeMove = 'before moving',
-  AfterDeath = 'after death',
+  OnDeath = 'on death',
   OnDeploy = 'on deploy',
   OnTurnStart = 'on turn start',
 }

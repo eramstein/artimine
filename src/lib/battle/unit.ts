@@ -79,9 +79,9 @@ export function healUnit(unit: UnitDeployed, amount: number) {
 }
 
 export function destroyUnit(unit: UnitDeployed) {
+  onUnitDeath(unit);
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
   bs.players[unit.ownerPlayerId].graveyard.push(unit);
-  onUnitDeath(unit);
 }
 
 export function getAdjacentUnits(position: Position): UnitDeployed[] {

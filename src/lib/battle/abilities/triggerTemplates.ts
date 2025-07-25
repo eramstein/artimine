@@ -9,6 +9,7 @@ type TriggerTemplateFunctions = {
   meMove: Trigger;
   meDeployed: Trigger;
   myTurnStarts: Trigger;
+  meDies: Trigger;
 };
 
 export const DataTriggerTemplates: TriggerTemplateFunctions = {
@@ -32,6 +33,13 @@ export const DataTriggerTemplates: TriggerTemplateFunctions = {
     type: TriggerType.OnDeploy,
     condition: (unit: UnitDeployed, triggerParams: any) =>
       unit.instanceId === triggerParams.unit.instanceId,
+  },
+  meDies: {
+    type: TriggerType.OnDeath,
+    condition: (unit: UnitDeployed, triggerParams: any) => {
+      console.log('meDies', unit, triggerParams);
+      return unit.instanceId === triggerParams.unit.instanceId;
+    },
   },
   myTurnStarts: {
     type: TriggerType.OnTurnStart,

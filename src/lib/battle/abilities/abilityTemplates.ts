@@ -122,7 +122,7 @@ export const DataAbilityTemplates: {
   },
   summon: ({ summonedUnit, cost }) => {
     return {
-      text: 'Summon ' + summonedUnit,
+      text: 'Summon ' + summonedUnit.name,
       cost: cost,
       trigger: TRIG.activated,
       targets: [TAR.allyCell()],
@@ -133,6 +133,17 @@ export const DataAbilityTemplates: {
           const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
           summonUnit(createdUnit, cell);
         });
+      },
+    };
+  },
+  respawnAs: ({ summonedUnit }) => {
+    return {
+      text: 'When this unit dies, put a ' + summonedUnit.name + ' in its place',
+      trigger: TRIG.meDies,
+      effect: ({ unit }) => {
+        console.log('respawnAs', unit, summonedUnit);
+        const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
+        summonUnit(createdUnit, unit.position);
       },
     };
   },

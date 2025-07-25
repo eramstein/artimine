@@ -85,4 +85,16 @@ export const cards_B: Record<string, CardTemplate> = {
     maxHealth: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
   },
+  grim_guard: {
+    id: 'grim_guard',
+    name: 'Grim Guard',
+    type: CardType.Unit,
+    cost: 3,
+    power: 2,
+    maxHealth: 3,
+    colors: [{ color: CardColor.Black, count: 1 }],
+    keywords: {
+      ranged: true,
+    },
+  },
 };
