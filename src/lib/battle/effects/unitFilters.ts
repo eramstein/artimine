@@ -13,6 +13,8 @@ export type UnitFilter = {
 type UnitFilterFunctions = {
   self: () => UnitFilter;
   adjacentAllies: () => UnitFilter;
+  adjacentUnits: () => UnitFilter;
+  targetAndAdjacentUnits: () => UnitFilter;
   inRow: () => UnitFilter;
   inColumn: () => UnitFilter;
   alliesInRow: () => UnitFilter;
@@ -26,6 +28,14 @@ export const DataUnitFilters: UnitFilterFunctions = {
     fn: (unit) =>
       getAdjacentUnits(unit.position).filter((u) => u.ownerPlayerId === unit.ownerPlayerId),
     name: 'adjacent allies',
+  }),
+  adjacentUnits: () => ({
+    fn: (unit) => getAdjacentUnits(unit.position),
+    name: 'adjacent units',
+  }),
+  targetAndAdjacentUnits: () => ({
+    fn: (unit) => [unit, ...getAdjacentUnits(unit.position)],
+    name: 'target and adjacent units',
   }),
   inRow: () => ({
     fn: (unit) => bs.units.filter((u) => u.position.row === unit.position.row),

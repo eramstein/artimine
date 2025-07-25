@@ -15,7 +15,6 @@ export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
     id: 'raise_dead',
     name: 'Raise Dead',
-    text: 'Put a unit from your graveyard into play',
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
@@ -24,7 +23,6 @@ export const cards_B: Record<string, CardTemplate> = {
   decaying_ray: {
     id: 'decaying_ray',
     name: 'Decaying Ray',
-    text: 'Add 2 decay counters on all units in the row',
     type: CardType.Spell,
     cost: 4,
     colors: [{ color: CardColor.Black, count: 2 }],

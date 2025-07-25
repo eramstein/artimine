@@ -134,7 +134,6 @@ export const cards_G: Record<string, CardTemplate> = {
   luxurious_growth: {
     id: 'luxurious_growth',
     name: 'Luxurious Growth',
-    text: 'Gain 1 green mana',
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
@@ -143,7 +142,6 @@ export const cards_G: Record<string, CardTemplate> = {
   energyze: {
     id: 'energyze',
     name: 'Energyze',
-    text: 'Re-initializes your hero ability',
     type: CardType.Spell,
     cost: 3,
     colors: [{ color: CardColor.Green, count: 2 }],

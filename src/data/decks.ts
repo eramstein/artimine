@@ -3,6 +3,7 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.fireball,
   cards.mycosed_bear,
   cards.grim_guard,
   cards.mosquito,

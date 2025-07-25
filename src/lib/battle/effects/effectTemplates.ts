@@ -27,7 +27,7 @@ type EffectTemplateFunctions = {
   buffAdjAlliesTemp: (effect: Partial<UnitEndOfTurnEffects>) => (p: EffectArgs) => void;
   reanimate: () => (p: EffectArgs) => void;
   damageEnemyLeader: (params: { damage: number }) => (p: EffectArgs) => void;
-  damageUnit: (params: { damage: number }) => (p: EffectArgs) => void;
+  damageUnit: (params: { damage: number; range?: UnitFilter }) => (p: EffectArgs) => void;
   addCounters: (params: {
     counterType: CounterType;
     counterValue: number;
@@ -67,10 +67,13 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
       damagePlayer(getOpposingPlayer(unit), damage);
     };
   },
-  damageUnit: ({ damage }) => {
+  damageUnit: ({ damage, range }) => {
     return ({ targets }) => {
       (targets[0] as UnitDeployed[]).forEach((target) => {
-        damageUnit(target, damage);
+        const unitsInRange = range?.fn(target) ?? [target];
+        unitsInRange.forEach((u) => {
+          damageUnit(u, damage);
+        });
       });
     };
   },

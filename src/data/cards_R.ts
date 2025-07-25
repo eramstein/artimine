@@ -1,17 +1,24 @@
 import { CardColor, CardType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates } from '@/lib/battle/effects';
+import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
     id: 'lightning_bolt',
     name: 'Lightning Bolt',
-    text: 'Deal 3 damage to a unit',
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
     ...SpellTemplates.dd({ damage: 3 }),
+  },
+  fireball: {
+    id: 'fireball',
+    name: 'Fireball',
+    type: CardType.Spell,
+    cost: 1,
+    colors: [{ color: CardColor.Red, count: 1 }],
+    ...SpellTemplates.dd({ damage: 1, range: DataUnitFilters.targetAndAdjacentUnits() }),
   },
   dwarf_berserker: {
     id: 'dwarf_berserker',
