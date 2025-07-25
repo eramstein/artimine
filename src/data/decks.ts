@@ -3,7 +3,11 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
-  cards.fireball,
+  cards.shroomy_shooty,
+  cards.shroomy_shooty,
+  cards.shroomy_shooty,
+  cards.frenzied_shaman,
+  cards.tim,
   cards.mycosed_bear,
   cards.grim_guard,
   cards.mosquito,

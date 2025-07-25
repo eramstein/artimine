@@ -55,6 +55,7 @@ export const DataAbilityTemplates: {
       text: 'Ping ' + damage,
       trigger: TRIG.activated,
       targets: [TAR.ennemies(targetCount)],
+      exhausts: true,
       effect: ({ targets }) => {
         (targets[0] as UnitDeployed[]).forEach((u) => {
           damageUnit(u, damage);
