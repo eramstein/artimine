@@ -20,13 +20,13 @@ export enum CardColor {
 export enum TriggerType {
   Static = 'static',
   Activated = 'activated',
-  BeforeDamage = 'beforeDamage',
-  AfterCombat = 'afterCombat',
-  AfterMove = 'afterMove',
-  BeforeMove = 'beforeMove',
-  AfterDeath = 'afterDeath',
-  OnDeploy = 'onDeploy',
-  OnTurnStart = 'onTurnStart',
+  BeforeDamage = 'before damage',
+  AfterCombat = 'after combat',
+  AfterMove = 'after moving',
+  BeforeMove = 'before moving',
+  AfterDeath = 'after death',
+  OnDeploy = 'on deploy',
+  OnTurnStart = 'on turn start',
 }
 
 export enum TargetType {

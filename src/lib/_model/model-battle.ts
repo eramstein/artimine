@@ -44,6 +44,7 @@ export interface SpellCardTemplate extends BaseCardTemplate {
   text: string;
   effect(p: EffectArgs): void;
   targets?: TargetDefinition[];
+  cantrip?: boolean;
 }
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate;
 
@@ -132,9 +133,8 @@ export interface UnitStatuses {
 }
 
 export interface Ability {
-  name: string;
   text: string;
-  icons?: string[];
+  icon?: string;
   effect(p: EffectArgs): void;
   trigger: Trigger;
   targets?: TargetDefinition[];

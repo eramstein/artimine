@@ -12,7 +12,7 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
   console.log(
     unit.name +
       ' uses ' +
-      ability.name +
+      ability.text +
       ' on ' +
       (targets && targets.map((t) => JSON.stringify(t)).join(', '))
   );

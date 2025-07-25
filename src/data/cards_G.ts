@@ -78,7 +78,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 1,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 3 }],
-    abilities: [DataAbilityTemplates.grows({ name: 'Grows' }, { growthValue: 1 })],
+    abilities: [DataAbilityTemplates.grows({ growthValue: 1 })],
   },
   shroomy_shooty: {
     id: 'shroomy_shooty',
@@ -100,12 +100,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 0,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    abilities: [
-      DataAbilityTemplates.cc(
-        { name: 'Rooted', exhausts: true },
-        { duration: 1, statusType: StatusType.Root }
-      ),
-    ],
+    abilities: [DataAbilityTemplates.cc({ duration: 1, statusType: StatusType.Root })],
   },
   shroomy_protecs: {
     id: 'shroomy_protecs',
@@ -116,12 +111,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 0,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    abilities: [
-      DataAbilityTemplates.staticKeyword(
-        { name: 'protecs!' },
-        { keyword: { key: 'resist', value: 1 } }
-      ),
-    ],
+    abilities: [DataAbilityTemplates.staticKeyword({ keyword: { key: 'resist', value: 1 } })],
   },
   lord_of_shrooms: {
     id: 'lord_of_shrooms',
@@ -133,16 +123,12 @@ export const cards_G: Record<string, CardTemplate> = {
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 2 }],
     abilities: [
-      {
-        name: 'Grow Shrooms',
-        text: 'Add a growth counter on all allied Mushrooms',
-        effect: DataEffectTemplates.addCounters({
-          counterType: CounterType.Growth,
-          counterValue: 1,
-          range: DataUnitFilters.alliedOfType(UnitType.Mushroom),
-        }),
+      DataAbilityTemplates.counters({
+        counterType: CounterType.Growth,
+        counterValue: 1,
+        range: DataUnitFilters.alliedOfType(UnitType.Mushroom),
         trigger: DataTriggerTemplates.meDeployed,
-      },
+      }),
     ],
   },
   luxurious_growth: {

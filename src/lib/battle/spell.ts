@@ -9,6 +9,7 @@ import { bs } from '../_state';
 import { isPayable } from './cost';
 import { checkTargets } from './target';
 import { discard } from './hand';
+import { drawCard } from './deck';
 
 export function playSpell(spell: SpellCard, targets: EffectTargets[]) {
   console.log(spell.name + ' on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', ')));
@@ -24,11 +25,16 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[]) {
 
   // EFFECT
   // ----------------------------------------------------------------------
+  const player = bs.players[spell.ownerPlayerId];
   spell.effect({
     targets,
     triggerParams: {},
-    player: bs.players[spell.ownerPlayerId],
+    player,
   } as EffectArgs);
+
+  if (spell.cantrip) {
+    drawCard(player);
+  }
 
   // DISCARD
   // ----------------------------------------------------------------------

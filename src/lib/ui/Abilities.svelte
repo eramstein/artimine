@@ -20,15 +20,13 @@
   // Get the first letter of each ability name for display
   let abilityLetters = $derived(() => {
     return abilities.map((ability) => ({
-      name: ability.name,
-      letter: ability.name.charAt(0).toUpperCase(),
+      letter: ability.icon || ability.text.charAt(0).toUpperCase(),
       text: ability.text,
-      icons: ability.icons || [],
       isActivated: ability.trigger.type === TriggerType.Activated,
       ability: ability,
       isPending:
         uiState.battle.abilityPending?.unit.instanceId === unit?.instanceId &&
-        uiState.battle.abilityPending?.ability.name === ability.name,
+        uiState.battle.abilityPending?.ability.text === ability.text,
       cost: ability.cost,
       exhausts: ability.exhausts,
     }));
@@ -59,21 +57,17 @@
 </script>
 
 <div class="abilities">
-  {#each abilityLetters() as { name, letter, text, icons, isActivated, ability, isPending, cost, exhausts }}
-    <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === name}>
+  {#each abilityLetters() as { letter, text, isActivated, ability, isPending, cost, exhausts }}
+    <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === text}>
       <div
         class="ability"
         class:activated={isActivated}
         class:pending={isPending}
-        onmouseenter={() => handleMouseEnter(name)}
+        onmouseenter={() => handleMouseEnter(text)}
         onmouseleave={handleMouseLeave}
         onclick={(e) => isActivated && onAbilityClick(ability, e)}
       >
-        {#if icons.length > 0}
-          <span class="ability-icon">{icons[0]}</span>
-        {:else}
-          <span class="ability-letter">{letter}</span>
-        {/if}
+        <span class="ability-letter">{letter}</span>
         {#if cost !== undefined && cost > 0}
           <span class="ability-cost">{cost}</span>
         {/if}
@@ -136,23 +130,6 @@
   .ability-letter {
     font-weight: bold;
     font-size: 0.9rem;
-  }
-
-  .ability-icon {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    font-size: 0.7rem;
-    background: var(--color-golden);
-    color: black;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    z-index: 1;
   }
 
   .ability-cost {

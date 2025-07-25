@@ -3,6 +3,10 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
+  cards.zombie,
+  cards.mosquito,
+  cards.shroomy_rooty,
+  cards.guinea_pig,
   cards.decaying_ray,
   cards.lightning_bolt,
   cards.raise_dead,
@@ -11,10 +15,8 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.ebonheart,
   cards.shroomy_shooty,
   cards.shroomy_protecs,
-  cards.shroomy_rooty,
   cards.energyze,
   cards.luxurious_growth,
-  cards.modis_chosen,
   cards.grizzly_bear,
   cards.dryad,
   cards.snek,
@@ -22,8 +24,6 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.wall_of_bramble,
   cards.modis_chosen,
   cards.dwarf_berserker,
-  cards.deep_forest_wurm,
-  cards.basic_wurm,
 ];
 
 export const PLAYER_LANDS: LandTemplate[] = [

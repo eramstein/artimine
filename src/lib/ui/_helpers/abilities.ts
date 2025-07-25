@@ -25,7 +25,7 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (
     ui.abilityPending &&
     ui.abilityPending.unit.instanceId === unit.instanceId &&
-    ui.abilityPending.ability.name === ability.name
+    ui.abilityPending.ability.text === ability.text
   ) {
     clearUiState();
     return;

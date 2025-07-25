@@ -1,9 +1,17 @@
 import { TriggerType } from '@/lib/_model/enums';
-import type { Trigger } from '@/lib/_model/model-battle';
+import type { Trigger, UnitDeployed } from '@/lib/_model/model-battle';
 
-export const DataTriggerTemplates: {
-  [key: string]: Trigger;
-} = {
+// Define specific trigger definitions for better type safety
+type TriggerTemplateFunctions = {
+  static: Trigger;
+  activated: Trigger;
+  meAttack: Trigger;
+  meMove: Trigger;
+  meDeployed: Trigger;
+  myTurnStarts: Trigger;
+};
+
+export const DataTriggerTemplates: TriggerTemplateFunctions = {
   static: {
     type: TriggerType.Static,
   },
@@ -12,18 +20,22 @@ export const DataTriggerTemplates: {
   },
   meAttack: {
     type: TriggerType.AfterCombat,
-    condition: (unit, triggerParams) => unit.instanceId === triggerParams.attacker.instanceId,
+    condition: (unit: UnitDeployed, triggerParams: any) =>
+      unit.instanceId === triggerParams.attacker.instanceId,
   },
   meMove: {
     type: TriggerType.AfterMove,
-    condition: (unit, triggerParams) => unit.instanceId === triggerParams.mover.instanceId,
+    condition: (unit: UnitDeployed, triggerParams: any) =>
+      unit.instanceId === triggerParams.mover.instanceId,
   },
   meDeployed: {
     type: TriggerType.OnDeploy,
-    condition: (unit, triggerParams) => unit.instanceId === triggerParams.unit.instanceId,
+    condition: (unit: UnitDeployed, triggerParams: any) =>
+      unit.instanceId === triggerParams.unit.instanceId,
   },
   myTurnStarts: {
     type: TriggerType.OnTurnStart,
-    condition: (unit, triggerParams) => unit.ownerPlayerId === triggerParams.player.id,
+    condition: (unit: UnitDeployed, triggerParams: any) =>
+      unit.ownerPlayerId === triggerParams.player.id,
   },
 };

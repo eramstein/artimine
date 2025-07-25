@@ -7,14 +7,12 @@ import {
   removeStaticKeyword,
   addCounters,
 } from '@/lib/battle';
-import { CounterType, UnitType } from '@/lib/_model';
+import { CounterType } from '@/lib/_model';
 import type {
-  Card,
   EffectArgs,
   Position,
   UnitCard,
   UnitDeployed,
-  UnitKeywords,
   UnitKeywordDefinition,
   UnitEndOfTurnEffects,
 } from '@/lib/_model/model-battle';
@@ -27,15 +25,13 @@ import { reanimate } from '../graveyard';
 // Define specific function signatures for each effect template
 type EffectTemplateFunctions = {
   buffAdjAlliesTemp: (effect: Partial<UnitEndOfTurnEffects>) => (p: EffectArgs) => void;
-  grow: (params: { growthValue: number }) => (p: EffectArgs) => void;
-  decay: (params: { decayValue: number }) => (p: EffectArgs) => void;
   reanimate: () => (p: EffectArgs) => void;
   damageEnemyLeader: (params: { damage: number }) => (p: EffectArgs) => void;
   damageUnit: (params: { damage: number }) => (p: EffectArgs) => void;
   addCounters: (params: {
     counterType: CounterType;
     counterValue: number;
-    range: UnitFilter;
+    range?: UnitFilter;
   }) => (p: EffectArgs) => void;
   staticKeywordAdjAllies: (params: {
     name: string;
@@ -46,19 +42,11 @@ type EffectTemplateFunctions = {
 export const DataEffectTemplates: EffectTemplateFunctions = {
   buffAdjAlliesTemp: ({ ...effect }) => {
     return ({ triggerParams }) => {
-      DataUnitFilters.adjacentAllies()(triggerParams.mover).forEach((u) => {
-        applyTemporaryEffect(u, { ...effect });
-      });
-    };
-  },
-  grow: ({ growthValue }) => {
-    return ({ unit }) => {
-      addCounters(unit, CounterType.Growth, growthValue);
-    };
-  },
-  decay: ({ decayValue }) => {
-    return ({ unit }) => {
-      addCounters(unit, CounterType.Decay, decayValue);
+      DataUnitFilters.adjacentAllies()
+        .fn(triggerParams.mover)
+        .forEach((u) => {
+          applyTemporaryEffect(u, { ...effect });
+        });
     };
   },
   reanimate: () => {
@@ -86,11 +74,11 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
       });
     };
   },
-  addCounters: ({ counterType, counterValue, range }) => {
+  addCounters: ({ counterType, counterValue, range = DataUnitFilters.self() }) => {
     return ({ unit, targets }) => {
       const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
       targetUnits.forEach((u) => {
-        const unitsInRange = (range as UnitFilter)(u).map((u) => u.instanceId);
+        const unitsInRange = range.fn(u).map((u) => u.instanceId);
         bs.units.forEach((u) => {
           if (unitsInRange.includes(u.instanceId)) {
             addCounters(u, counterType, counterValue);
@@ -101,7 +89,9 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
   },
   staticKeywordAdjAllies: ({ name, keyword }) => {
     return ({ unit }) => {
-      const unitsInRange = DataUnitFilters.adjacentAllies()(unit).map((u) => u.instanceId);
+      const unitsInRange = DataUnitFilters.adjacentAllies()
+        .fn(unit)
+        .map((u) => u.instanceId);
       bs.units.forEach((u) => {
         if (unitsInRange.includes(u.instanceId)) {
           addStaticKeyword(u, unit, keyword, false, name);
