@@ -8,16 +8,42 @@ import {
   addCounters,
 } from '@/lib/battle';
 import { CounterType, UnitType } from '@/lib/_model';
-import type { Card, EffectArgs, Position, UnitCard, UnitDeployed } from '@/lib/_model/model-battle';
+import type {
+  Card,
+  EffectArgs,
+  Position,
+  UnitCard,
+  UnitDeployed,
+  UnitKeywords,
+  UnitKeywordDefinition,
+  UnitEndOfTurnEffects,
+} from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { DataUnitFilters, type UnitFilter } from './unitFilters';
 import { reanimate } from '../graveyard';
 
 // return the effect function, it gets these args { unit, targets, triggerParams }
 
-export const DataEffectTemplates: {
-  [key: string]: ({ ...any }) => (p: EffectArgs) => void;
-} = {
+// Define specific function signatures for each effect template
+type EffectTemplateFunctions = {
+  buffAdjAlliesTemp: (effect: Partial<UnitEndOfTurnEffects>) => (p: EffectArgs) => void;
+  grow: (params: { growthValue: number }) => (p: EffectArgs) => void;
+  decay: (params: { decayValue: number }) => (p: EffectArgs) => void;
+  reanimate: () => (p: EffectArgs) => void;
+  damageEnemyLeader: (params: { damage: number }) => (p: EffectArgs) => void;
+  damageUnit: (params: { damage: number }) => (p: EffectArgs) => void;
+  addCounters: (params: {
+    counterType: CounterType;
+    counterValue: number;
+    range: UnitFilter;
+  }) => (p: EffectArgs) => void;
+  staticKeywordAdjAllies: (params: {
+    name: string;
+    keyword: UnitKeywordDefinition;
+  }) => (p: EffectArgs) => void;
+};
+
+export const DataEffectTemplates: EffectTemplateFunctions = {
   buffAdjAlliesTemp: ({ ...effect }) => {
     return ({ triggerParams }) => {
       DataUnitFilters.adjacentAllies()(triggerParams.mover).forEach((u) => {
@@ -60,21 +86,24 @@ export const DataEffectTemplates: {
       });
     };
   },
-  addCounters: ({ counterType, counterValue, targets }) => {
-    return ({ unit }) => {
-      const targetIds = (targets as UnitFilter)(unit).map((u) => u.instanceId);
-      bs.units.forEach((u) => {
-        if (targetIds.includes(u.instanceId)) {
-          addCounters(u, counterType, counterValue);
-        }
+  addCounters: ({ counterType, counterValue, range }) => {
+    return ({ unit, targets }) => {
+      const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
+      targetUnits.forEach((u) => {
+        const unitsInRange = (range as UnitFilter)(u).map((u) => u.instanceId);
+        bs.units.forEach((u) => {
+          if (unitsInRange.includes(u.instanceId)) {
+            addCounters(u, counterType, counterValue);
+          }
+        });
       });
     };
   },
   staticKeywordAdjAllies: ({ name, keyword }) => {
     return ({ unit }) => {
-      const targetIds = DataUnitFilters.adjacentAllies()(unit).map((u) => u.instanceId);
+      const unitsInRange = DataUnitFilters.adjacentAllies()(unit).map((u) => u.instanceId);
       bs.units.forEach((u) => {
-        if (targetIds.includes(u.instanceId)) {
+        if (unitsInRange.includes(u.instanceId)) {
           addStaticKeyword(u, unit, keyword, false, name);
         } else if (
           u.staticModifiers.filter(

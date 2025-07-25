@@ -135,11 +135,11 @@ export const cards_G: Record<string, CardTemplate> = {
     abilities: [
       {
         name: 'Grow Shrooms',
-        text: 'Adda growth counter on all allied Mushrooms',
+        text: 'Add a growth counter on all allied Mushrooms',
         effect: DataEffectTemplates.addCounters({
           counterType: CounterType.Growth,
           counterValue: 1,
-          targets: DataUnitFilters.alliedOfType(UnitType.Mushroom),
+          range: DataUnitFilters.alliedOfType(UnitType.Mushroom),
         }),
         trigger: DataTriggerTemplates.meDeployed,
       },

@@ -9,8 +9,11 @@ export type UnitFilter = (unit: UnitDeployed) => UnitDeployed[];
 export const DataUnitFilters: {
   [key: string]: UnitFilterBuilder;
 } = {
+  self: () => (unit) => [unit],
   adjacentAllies: () => (unit) =>
     getAdjacentUnits(unit.position).filter((u) => u.ownerPlayerId === unit.ownerPlayerId),
+  inRow: () => (unit) => bs.units.filter((u) => u.position.row === unit.position.row),
+  inColumn: () => (unit) => bs.units.filter((u) => u.position.column === unit.position.column),
   alliedOfType: (type) => (unit) =>
     bs.units
       .filter((u) => u.ownerPlayerId === unit.ownerPlayerId)

@@ -112,7 +112,7 @@ export const DataAbilityTemplates: {
     return {
       text: 'Buff adjacent allies on move by ' + attackValue,
       trigger: TRIG.meMove,
-      effect: DataEffectTemplates.buffAdjAlliesTemp({ attack: attackValue }),
+      effect: DataEffectTemplates.buffAdjAlliesTemp({ power: attackValue }),
       ...p,
     };
   },
@@ -144,6 +144,7 @@ export const DataAbilityTemplates: {
       text: `Give ${keyword.key} ${keyword.value} to adjacent allies`,
       trigger: DataTriggerTemplates.static,
       effect: DataEffectTemplates.staticKeywordAdjAllies({
+        name: keyword.key,
         keyword,
       }),
       ...p,

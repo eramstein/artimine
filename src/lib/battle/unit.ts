@@ -108,3 +108,14 @@ export function applyUnitStatus(unit: UnitDeployed, status: StatusType, duration
   }
   unit.statuses[status] = (unit.statuses[status] || 0) + duration;
 }
+
+export const modifyUnitHealth = (unit: UnitDeployed, amount: number) => {
+  unit.health += amount;
+  unit.maxHealth += amount;
+  if (unit.health > unit.maxHealth) {
+    unit.health = unit.maxHealth;
+  }
+  if (unit.health <= 0) {
+    destroyUnit(unit);
+  }
+};

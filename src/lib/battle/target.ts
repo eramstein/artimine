@@ -15,9 +15,22 @@ import { getEmptyCells, getPositionKey, isCellFree, isOnPlayersSide } from './bo
 import { getAllGraveyardsCards } from './graveyard';
 import { getAllLands } from './land';
 
-export const DataTargetTemplates: {
-  [key: string]: (...any: any) => TargetDefinition;
-} = {
+type TargetTemplateFunctions = {
+  self: () => TargetDefinition;
+  ennemies: (n: number) => TargetDefinition;
+  cell: () => TargetDefinition;
+  unit: () => TargetDefinition;
+  units: (n: number) => TargetDefinition;
+  allyCell: () => TargetDefinition;
+  emptyCell: () => TargetDefinition;
+  graveyardCard: () => TargetDefinition;
+  graveyardUnit: () => TargetDefinition;
+};
+
+export const DataTargetTemplates: TargetTemplateFunctions = {
+  self: () => ({
+    type: TargetType.Self,
+  }),
   ennemies: (n: number) => ({
     type: TargetType.Unit,
     count: n,

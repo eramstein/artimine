@@ -10,7 +10,7 @@ export const cards_R: Record<string, CardTemplate> = {
     text: 'Deal 3 damage to a unit',
     type: CardType.Spell,
     cost: 1,
-    colors: [{ color: CardColor.Red, count: 2 }],
+    colors: [{ color: CardColor.Red, count: 1 }],
     ...SpellTemplates.dd({ damage: 3 }),
   },
   dwarf_berserker: {

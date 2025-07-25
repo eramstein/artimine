@@ -1,5 +1,6 @@
 import { CounterType } from '../_model';
 import type { UnitDeployed } from '../_model/model-battle';
+import { modifyUnitHealth } from './unit';
 
 export function addCounters(unit: UnitDeployed, counterType: CounterType, value: number) {
   unit.counters[counterType] = (unit.counters[counterType] || 0) + value;
@@ -7,13 +8,11 @@ export function addCounters(unit: UnitDeployed, counterType: CounterType, value:
   switch (counterType) {
     case CounterType.Growth:
       unit.power += value;
-      unit.health += value;
-      unit.maxHealth += value;
+      modifyUnitHealth(unit, value);
       break;
     case CounterType.Decay:
       unit.power -= value;
-      unit.health -= value;
-      unit.maxHealth -= value;
+      modifyUnitHealth(unit, -value);
       break;
   }
 }
@@ -24,13 +23,11 @@ export function removeCounters(unit: UnitDeployed, counterType: CounterType, val
   switch (counterType) {
     case CounterType.Growth:
       unit.power -= value;
-      unit.health -= value;
-      unit.maxHealth -= value;
+      modifyUnitHealth(unit, -value);
       break;
     case CounterType.Decay:
       unit.power += value;
-      unit.health += value;
-      unit.maxHealth += value;
+      modifyUnitHealth(unit, value);
       break;
   }
 }

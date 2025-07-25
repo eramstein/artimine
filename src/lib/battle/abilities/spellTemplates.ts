@@ -1,5 +1,5 @@
 import { CardColor, type EffectArgs, type Player, type TargetDefinition } from '@/lib/_model';
-import { DataEffectTemplates } from '../effects';
+import { DataEffectTemplates, DataUnitFilters } from '../effects';
 import { DataTargetTemplates } from '../target';
 import { incrementColor, untapPlayer } from '../player';
 
@@ -15,9 +15,15 @@ export const SpellTemplates: {
       targets: [DataTargetTemplates.units(targets)],
     };
   },
+  addCounters: ({ counterType, counterValue, range = DataUnitFilters.self(), targets = 1 }) => {
+    return {
+      effect: DataEffectTemplates.addCounters({ counterType, counterValue, range }),
+      targets: [DataTargetTemplates.units(targets)],
+    };
+  },
   reanimate: () => {
     return {
-      effect: DataEffectTemplates.reanimate({}),
+      effect: DataEffectTemplates.reanimate(),
       targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
     };
   },
