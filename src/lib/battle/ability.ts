@@ -11,11 +11,7 @@ import { checkTargets } from './target';
 
 export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[][]) {
   console.log(
-    unit.name +
-      ' uses ability with ' +
-      ability.effects.length +
-      ' effects on ' +
-      (targets && targets.map((t) => JSON.stringify(t)).join(', '))
+    unit.name + ' uses ability on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', '))
   );
 
   // CHECKS + COSTS

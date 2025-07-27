@@ -35,10 +35,6 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
     } as EffectArgs);
   });
 
-  if (spell.cantrip) {
-    drawCard(player);
-  }
-
   // DISCARD
   // ----------------------------------------------------------------------
   discard(spell.instanceId, spell.ownerPlayerId);

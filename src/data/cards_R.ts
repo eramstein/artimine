@@ -1,5 +1,5 @@
 import { CardColor, CardType, CounterType, type CardTemplate } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
@@ -10,7 +10,18 @@ export const cards_R: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
-    ...SpellTemplates.dd({ damage: 3 }),
+    effects: [
+      {
+        effect: DataEffectTemplates.damageUnit({ damage: 3 }),
+        targets: [DataTargetTemplates.units(1)],
+        text: `Deal 3 damage to a unit`,
+      },
+      {
+        effect: DataEffectTemplates.damageUnit({ damage: 1 }),
+        targets: [DataTargetTemplates.units(2)],
+        text: `Deal 1 damage to 2 units`,
+      },
+    ],
   },
   fireball: {
     id: 'fireball',
@@ -18,7 +29,16 @@ export const cards_R: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 5,
     colors: [{ color: CardColor.Red, count: 2 }],
-    ...SpellTemplates.dd({ damage: 1, range: DataUnitFilters.targetAndAdjacentUnits() }),
+    effects: [
+      {
+        effect: DataEffectTemplates.damageUnit({
+          damage: 1,
+          range: DataUnitFilters.targetAndAdjacentUnits(),
+        }),
+        targets: [DataTargetTemplates.units(1)],
+        text: `Deal 1 damage to a unit and adjacent units`,
+      },
+    ],
   },
   dwarf_berserker: {
     id: 'dwarf_berserker',

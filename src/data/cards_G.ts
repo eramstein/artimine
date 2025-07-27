@@ -6,9 +6,10 @@ import {
   UnitType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
+import { incrementColor, untapPlayer } from '@/lib/battle/player';
 
 export const cards_G: Record<string, CardTemplate> = {
   wall_of_bramble: {
@@ -137,7 +138,14 @@ export const cards_G: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    ...SpellTemplates.ramp({ value: 1, color: CardColor.Green }),
+    effects: [
+      {
+        effect: (p) => {
+          incrementColor(p.player, CardColor.Green, 1);
+        },
+        text: `Gain 1 Green mana`,
+      },
+    ],
   },
   energyze: {
     id: 'energyze',
@@ -145,7 +153,14 @@ export const cards_G: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 3,
     colors: [{ color: CardColor.Green, count: 2 }],
-    ...SpellTemplates.untapPlayer({}),
+    effects: [
+      {
+        effect: (p) => {
+          untapPlayer(p.player);
+        },
+        text: 'Untap your hero ability',
+      },
+    ],
   },
   basic_wurm: {
     id: 'basic_wurm',

@@ -42,7 +42,6 @@ export interface UnitCardTemplate extends BaseCardTemplate {
 
 export interface SpellCardTemplate extends BaseCardTemplate {
   effects: EffectDefinition[];
-  cantrip?: boolean;
 }
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate;
 

@@ -7,11 +7,12 @@ import {
 } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { destroyUnit } from '@/lib/battle';
-import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { addCounters, removeCounters } from '@/lib/battle/counter';
 import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { damageUnit } from '@/lib/battle/unit';
 import { DataTargetTemplates } from '@/lib/battle/target';
+import { incrementColor } from '@/lib/battle/player';
 
 export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
@@ -20,7 +21,13 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
-    ...SpellTemplates.reanimate({}),
+    effects: [
+      {
+        effect: DataEffectTemplates.reanimate(),
+        targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
+        text: 'Reanimate a unit from a graveyard',
+      },
+    ],
   },
   decaying_ray: {
     id: 'decaying_ray',
@@ -28,11 +35,17 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 4,
     colors: [{ color: CardColor.Black, count: 2 }],
-    ...SpellTemplates.addCounters({
-      counterType: CounterType.Decay,
-      counterValue: 2,
-      range: DataUnitFilters.inRow(),
-    }),
+    effects: [
+      {
+        effect: DataEffectTemplates.addCounters({
+          counterType: CounterType.Decay,
+          counterValue: 2,
+          range: DataUnitFilters.inRow(),
+        }),
+        targets: [DataTargetTemplates.units(1)],
+        text: `Add 2 Decay counters to a unit in the same row`,
+      },
+    ],
   },
   guinea_pig: {
     id: 'guinea_pig',
@@ -40,7 +53,6 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Black, count: 1 }],
-    cantrip: true,
     effects: [
       {
         text: 'Move all decay counters to target creature',
