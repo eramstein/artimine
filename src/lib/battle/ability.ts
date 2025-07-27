@@ -1,6 +1,7 @@
 import {
   TargetType,
   type Ability,
+  type EffectDefinition,
   type EffectTargets,
   type TargetDefinition,
   type UnitDeployed,
@@ -8,12 +9,12 @@ import {
 import { bs } from '../_state';
 import { checkTargets } from './target';
 
-export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[]) {
+export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[][]) {
   console.log(
     unit.name +
-      ' uses ' +
-      ability.text +
-      ' on ' +
+      ' uses ability with ' +
+      ability.effects.length +
+      ' effects on ' +
       (targets && targets.map((t) => JSON.stringify(t)).join(', '))
   );
 
@@ -23,26 +24,34 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
     console.log('EXHAUSTED');
     return;
   }
-  if (ability.targets && !checkMultipleTargets(unit, ability.targets, targets)) {
-    console.log('INVALID TARGET', ability.targets, targets);
+  if (!checkMultipleEffectsTargets(unit, ability.effects, targets)) {
+    console.log('INVALID TARGETS', ability.effects, targets);
     return;
   }
   if (payAbilityCost(unit, ability) === false) {
     console.log('NOT ENOUGH MANA');
     return;
   }
-  // If any TargetType is Self, replace the corresponding targets entry with [unit]
-  if (ability.targets) {
-    ability.targets.forEach((def, i) => {
-      if (def.type === TargetType.Self) {
-        targets[i] = [unit];
-      }
-    });
-  }
 
-  // EFFECT
+  // EFFECTS
   // ----------------------------------------------------------------------
-  ability.effect({ unit, targets, triggerParams: {}, player: bs.players[unit.ownerPlayerId] });
+  ability.effects.forEach((effectDef, effectIndex) => {
+    const effectTargets = [...targets[effectIndex]];
+    // If any TargetType is Self, replace the corresponding targets entry with [unit]
+    if (effectDef.targets) {
+      effectDef.targets.forEach((def, i) => {
+        if (def.type === TargetType.Self) {
+          effectTargets[i] = [unit];
+        }
+      });
+    }
+    effectDef.effect({
+      unit,
+      targets: effectTargets,
+      triggerParams: {},
+      player: bs.players[unit.ownerPlayerId],
+    });
+  });
 }
 
 function checkExhaustion(unit: UnitDeployed, ability: Ability): boolean {
@@ -85,6 +94,18 @@ function checkMultipleTargets(
   if (!Array.isArray(targets) || targets.length !== defs.length) return false;
   for (let i = 0; i < defs.length; i++) {
     if (!checkTargets(unit, defs[i], targets[i])) return false;
+  }
+  return true;
+}
+
+function checkMultipleEffectsTargets(
+  unit: UnitDeployed,
+  effectDefs: EffectDefinition[],
+  targets: EffectTargets[][]
+): boolean {
+  if (!Array.isArray(targets) || targets.length !== effectDefs.length) return false;
+  for (let i = 0; i < effectDefs.length; i++) {
+    if (!checkMultipleTargets(unit, effectDefs[i].targets || [], targets[i])) return false;
   }
   return true;
 }

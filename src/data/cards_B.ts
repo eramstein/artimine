@@ -37,27 +37,31 @@ export const cards_B: Record<string, CardTemplate> = {
   guinea_pig: {
     id: 'guinea_pig',
     name: 'Guinea Pig',
-    text: 'Move all decay counters to target creature',
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Black, count: 1 }],
     cantrip: true,
-    targets: [DataTargetTemplates.units(1)],
-    effect: (p) => {
-      const unit = p.targets[0][0] as UnitDeployed;
-      let movedCounters = 0;
-      bs.units.forEach((u) => {
-        if (u.instanceId === unit.instanceId) {
-          return;
-        }
-        const decayCounters = u.counters[CounterType.Decay] || 0;
-        removeCounters(u, CounterType.Decay, decayCounters);
-        movedCounters += decayCounters;
-      });
-      if (movedCounters > 0) {
-        addCounters(unit, CounterType.Decay, movedCounters);
-      }
-    },
+    effects: [
+      {
+        text: 'Move all decay counters to target creature',
+        targets: [DataTargetTemplates.units(1)],
+        effect: (p) => {
+          const unit = p.targets[0][0] as UnitDeployed;
+          let movedCounters = 0;
+          bs.units.forEach((u) => {
+            if (u.instanceId === unit.instanceId) {
+              return;
+            }
+            const decayCounters = u.counters[CounterType.Decay] || 0;
+            removeCounters(u, CounterType.Decay, decayCounters);
+            movedCounters += decayCounters;
+          });
+          if (movedCounters > 0) {
+            addCounters(unit, CounterType.Decay, movedCounters);
+          }
+        },
+      },
+    ],
   },
   mosquito: {
     id: 'mosquito',
@@ -103,13 +107,18 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
-    effect: ({ targets }) => {
-      const sacrificedUnit = targets[0][0] as UnitDeployed;
-      const targetUnit = targets[1][0] as UnitDeployed;
-      damageUnit(targetUnit, sacrificedUnit.health);
-      destroyUnit(sacrificedUnit);
-    },
-    targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],
-    text: `Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.`,
+    effects: [
+      {
+        text: "Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.",
+        targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],
+        effect: ({ targets }) => {
+          const sacrificedUnit = targets[0][0] as UnitDeployed;
+          const targetUnit = targets[1][0] as UnitDeployed;
+          const sacrificedHealth = sacrificedUnit.health;
+          damageUnit(targetUnit, sacrificedHealth);
+          destroyUnit(sacrificedUnit);
+        },
+      },
+    ],
   },
 };

@@ -25,18 +25,27 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (
     ui.abilityPending &&
     ui.abilityPending.unit.instanceId === unit.instanceId &&
-    ui.abilityPending.ability.text === ability.text
+    ui.abilityPending.ability === ability
   ) {
     clearUiState();
     return;
   }
   ui.abilityPending = { unit, ability };
+  ui.currentEffectIndex = 0;
   ui.currentTargetIndex = 0;
   ui.selectedTargets = [];
-  const targets = ability.targets || [];
-  if (targets.length > 0) {
-    ui.targetBeingSelected = targets[0];
-    highlightEligibleTargets(getEligibleTargets(unit, targets[0]));
+
+  const effects = ability.effects || [];
+  if (effects.length > 0) {
+    const firstEffect = effects[0];
+    if (firstEffect.targets && firstEffect.targets.length > 0) {
+      ui.targetBeingSelected = firstEffect.targets[0];
+      highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]));
+    } else {
+      ui.targetBeingSelected = null;
+      playAbility(unit, ability, []);
+      clearUiState();
+    }
   } else {
     ui.targetBeingSelected = null;
     playAbility(unit, ability, []);
@@ -51,12 +60,21 @@ export function activateSpell(spell: SpellCard) {
     return;
   }
   ui.spellPending = spell;
+  ui.currentEffectIndex = 0;
   ui.currentTargetIndex = 0;
   ui.selectedTargets = [];
-  const targets = spell.targets || [];
-  if (targets.length > 0) {
-    ui.targetBeingSelected = targets[0];
-    highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0));
+
+  const effects = spell.effects || [];
+  if (effects.length > 0) {
+    const firstEffect = effects[0];
+    if (firstEffect.targets && firstEffect.targets.length > 0) {
+      ui.targetBeingSelected = firstEffect.targets[0];
+      highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0, 0));
+    } else {
+      ui.targetBeingSelected = null;
+      playSpell(spell, []);
+      clearUiState();
+    }
   } else {
     ui.targetBeingSelected = null;
     playSpell(spell, []);
@@ -95,10 +113,18 @@ function highlightEligibleTargets(eligibleTargets: EffectTargets) {
   }
 }
 
-function getEligibleSpellTargetsForIndex(spell: SpellCard, index: number): EffectTargets {
-  const targets = spell.targets || [];
-  if (targets[index]) {
-    return getEligibleTargets(spell, targets[index]);
+function getEligibleSpellTargetsForIndex(
+  spell: SpellCard,
+  effectIndex: number,
+  targetIndex: number
+): EffectTargets {
+  const effects = spell.effects || [];
+  if (effects[effectIndex]) {
+    const effect = effects[effectIndex];
+    const targets = effect.targets || [];
+    if (targets[targetIndex]) {
+      return getEligibleTargets(spell, targets[targetIndex]);
+    }
   }
   return [];
 }
@@ -106,6 +132,7 @@ function getEligibleSpellTargetsForIndex(spell: SpellCard, index: number): Effec
 function clearUiState() {
   const ui = uiState.battle;
   ui.selectedTargets = [];
+  ui.currentEffectIndex = 0;
   ui.currentTargetIndex = 0;
   ui.targetBeingSelected = null;
   ui.abilityPending = null;
@@ -115,9 +142,24 @@ function clearUiState() {
 
 function advanceTargetStep() {
   const ui = uiState.battle;
-  const targets = ui.abilityPending
-    ? ui.abilityPending.ability.targets || []
-    : ui.spellPending?.targets || [];
+  const effects = ui.abilityPending
+    ? ui.abilityPending.ability.effects || []
+    : ui.spellPending?.effects || [];
+
+  if (effects.length === 0) {
+    // No effects, play immediately
+    if (ui.abilityPending) {
+      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, []);
+    } else if (ui.spellPending) {
+      playSpell(ui.spellPending, []);
+    }
+    clearUiState();
+    return;
+  }
+
+  const currentEffect = effects[ui.currentEffectIndex];
+  const targets = currentEffect?.targets || [];
+
   ui.currentTargetIndex++;
   if (ui.currentTargetIndex < targets.length) {
     ui.targetBeingSelected = targets[ui.currentTargetIndex];
@@ -127,27 +169,62 @@ function advanceTargetStep() {
       );
     } else if (ui.spellPending) {
       highlightEligibleTargets(
-        getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentTargetIndex)
+        getEligibleSpellTargetsForIndex(
+          ui.spellPending,
+          ui.currentEffectIndex,
+          ui.currentTargetIndex
+        )
       );
     }
   } else {
-    // All targets selected, play
-    if (ui.abilityPending) {
-      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
-    } else if (ui.spellPending) {
-      playSpell(ui.spellPending, ui.selectedTargets);
+    // All targets for current effect selected, move to next effect
+    ui.currentEffectIndex++;
+    ui.currentTargetIndex = 0;
+
+    if (ui.currentEffectIndex < effects.length) {
+      const nextEffect = effects[ui.currentEffectIndex];
+      if (nextEffect.targets && nextEffect.targets.length > 0) {
+        ui.targetBeingSelected = nextEffect.targets[0];
+        if (ui.abilityPending) {
+          highlightEligibleTargets(
+            getEligibleTargets(ui.abilityPending.unit, nextEffect.targets[0])
+          );
+        } else if (ui.spellPending) {
+          highlightEligibleTargets(
+            getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentEffectIndex, 0)
+          );
+        }
+      } else {
+        // Next effect has no targets, advance again
+        advanceTargetStep();
+      }
+    } else {
+      // All effects completed, play
+      if (ui.abilityPending) {
+        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+      } else if (ui.spellPending) {
+        playSpell(ui.spellPending, ui.selectedTargets);
+      }
+      clearUiState();
     }
-    clearUiState();
   }
 }
 
 export function targetUnit(unit: UnitDeployed) {
   const ui = uiState.battle;
   if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
-  const currentIdx = ui.currentTargetIndex || 0;
-  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
-  (ui.selectedTargets[currentIdx] as UnitDeployed[]).push(unit);
-  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+  const currentEffectIdx = ui.currentEffectIndex || 0;
+  const currentTargetIdx = ui.currentTargetIndex || 0;
+
+  if (!ui.selectedTargets[currentEffectIdx]) ui.selectedTargets[currentEffectIdx] = [];
+  if (!ui.selectedTargets[currentEffectIdx][currentTargetIdx])
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx] = [];
+
+  (ui.selectedTargets[currentEffectIdx][currentTargetIdx] as UnitDeployed[]).push(unit);
+  if (
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx].length >=
+    (ui.targetBeingSelected.count || 1)
+  ) {
     advanceTargetStep();
   }
 }
@@ -160,10 +237,18 @@ export function targetCell(position: Position) {
     ui.targetBeingSelected.type !== TargetType.Cell
   )
     return;
-  const currentIdx = ui.currentTargetIndex || 0;
-  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
-  (ui.selectedTargets[currentIdx] as Position[]).push(position);
-  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+  const currentEffectIdx = ui.currentEffectIndex || 0;
+  const currentTargetIdx = ui.currentTargetIndex || 0;
+
+  if (!ui.selectedTargets[currentEffectIdx]) ui.selectedTargets[currentEffectIdx] = [];
+  if (!ui.selectedTargets[currentEffectIdx][currentTargetIdx])
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx] = [];
+
+  (ui.selectedTargets[currentEffectIdx][currentTargetIdx] as Position[]).push(position);
+  if (
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx].length >=
+    (ui.targetBeingSelected.count || 1)
+  ) {
     advanceTargetStep();
   }
 }
@@ -171,10 +256,18 @@ export function targetCell(position: Position) {
 export function targetCard(card: Card) {
   const ui = uiState.battle;
   if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
-  const currentIdx = ui.currentTargetIndex || 0;
-  if (!ui.selectedTargets[currentIdx]) ui.selectedTargets[currentIdx] = [];
-  (ui.selectedTargets[currentIdx] as Card[]).push(card);
-  if (ui.selectedTargets[currentIdx].length >= (ui.targetBeingSelected.count || 1)) {
+  const currentEffectIdx = ui.currentEffectIndex || 0;
+  const currentTargetIdx = ui.currentTargetIndex || 0;
+
+  if (!ui.selectedTargets[currentEffectIdx]) ui.selectedTargets[currentEffectIdx] = [];
+  if (!ui.selectedTargets[currentEffectIdx][currentTargetIdx])
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx] = [];
+
+  (ui.selectedTargets[currentEffectIdx][currentTargetIdx] as Card[]).push(card);
+  if (
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx].length >=
+    (ui.targetBeingSelected.count || 1)
+  ) {
     if (ui.graveyardModal.visible) {
       ui.graveyardModal.visible = false;
       ui.graveyardModal.playerId = null;

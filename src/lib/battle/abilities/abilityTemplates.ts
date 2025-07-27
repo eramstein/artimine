@@ -26,146 +26,200 @@ export const DataAbilityTemplates: {
 } = {
   counters: ({ counterType, counterValue, range = DataUnitFilters.self(), trigger }) => {
     return {
-      text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range.name && range.name !== 'self' ? 'Affects ' + range.name + '.' : ''}`,
+      effects: [
+        {
+          text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range.name && range.name !== 'self' ? 'Affects ' + range.name + '.' : ''}`,
+          effect: DataEffectTemplates.addCounters({
+            counterType,
+            counterValue,
+            range,
+          }),
+        },
+      ],
       icon: '○',
       trigger: trigger,
-      effect: DataEffectTemplates.addCounters({
-        counterType,
-        counterValue,
-        range,
-      }),
     };
   },
   cleave: ({ damage }) => {
     return {
-      text: 'Cleave ' + damage,
+      effects: [
+        {
+          text: 'Cleave ' + damage,
+          effect: ({ triggerParams }) => {
+            DataUnitFilters.adjacentAllies()
+              .fn(triggerParams.defender)
+              .forEach((u: UnitDeployed) => {
+                damageUnit(u, damage);
+              });
+          },
+        },
+      ],
       icon: '⚟',
       trigger: TRIG.meAttack,
-      effect: ({ triggerParams }) => {
-        DataUnitFilters.adjacentAllies()
-          .fn(triggerParams.defender)
-          .forEach((u: UnitDeployed) => {
-            damageUnit(u, damage);
-          });
-      },
     };
   },
   ping: ({ damage, targetCount = 1 }) => {
     return {
-      text: 'Ping ' + damage,
+      effects: [
+        {
+          text: 'Ping ' + damage,
+          targets: [TAR.ennemies(targetCount)],
+          effect: ({ targets }) => {
+            (targets[0] as UnitDeployed[]).forEach((u) => {
+              damageUnit(u, damage);
+            });
+          },
+        },
+      ],
       trigger: TRIG.activated,
-      targets: [TAR.ennemies(targetCount)],
       exhausts: true,
-      effect: ({ targets }) => {
-        (targets[0] as UnitDeployed[]).forEach((u) => {
-          damageUnit(u, damage);
-        });
-      },
     };
   },
   cc: ({ duration, targetCount = 1, statusType = StatusType.Mezz }) => {
     return {
-      text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
+      effects: [
+        {
+          text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
+          targets: [TAR.ennemies(targetCount)],
+          effect: ({ unit, targets }) => {
+            (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
+              applyUnitStatus(u, statusType, duration);
+            });
+          },
+        },
+      ],
       trigger: TRIG.activated,
       exhausts: true,
-      targets: [TAR.ennemies(targetCount)],
-      effect: ({ unit, targets }) => {
-        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
-          applyUnitStatus(u, statusType, duration);
-        });
-      },
     };
   },
   stun: ({ duration, targetCount = 1 }) => {
     return {
-      text: 'Stun ' + duration,
+      effects: [
+        {
+          text: 'Stun ' + duration,
+          targets: [TAR.ennemies(targetCount)],
+          effect: ({ targets }) => {
+            (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
+              applyUnitStatus(u, StatusType.Stun, duration);
+            });
+          },
+        },
+      ],
       trigger: TRIG.activated,
-      targets: [TAR.ennemies(targetCount)],
-      effect: ({ targets }) => {
-        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
-          applyUnitStatus(u, StatusType.Stun, duration);
-        });
-      },
     };
   },
   root: ({ duration, targetCount = 1 }) => {
     return {
-      text: 'Root ' + duration,
+      effects: [
+        {
+          text: 'Root ' + duration,
+          targets: [TAR.ennemies(targetCount)],
+          effect: ({ targets }) => {
+            (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
+              applyUnitStatus(u, StatusType.Root, duration);
+            });
+          },
+        },
+      ],
       trigger: TRIG.activated,
-      targets: [TAR.ennemies(targetCount)],
-      effect: ({ targets }) => {
-        (targets[0] as UnitDeployed[]).forEach((u: UnitDeployed) => {
-          applyUnitStatus(u, StatusType.Root, duration);
-        });
-      },
     };
   },
   healAdjacentOnMove: ({ healValue }) => {
     return {
-      text: 'Heal adjacent allies on move by ' + healValue,
+      effects: [
+        {
+          text: 'Heal adjacent allies on move by ' + healValue,
+          effect: ({ triggerParams }) => {
+            DataUnitFilters.adjacentAllies()
+              .fn(triggerParams.mover)
+              .forEach((u: UnitDeployed) => {
+                healUnit(u, healValue);
+              });
+          },
+        },
+      ],
       icon: '♡',
       trigger: TRIG.meMove,
-      effect: ({ triggerParams }) => {
-        DataUnitFilters.adjacentAllies()
-          .fn(triggerParams.mover)
-          .forEach((u: UnitDeployed) => {
-            healUnit(u, healValue);
-          });
-      },
     };
   },
   buffAdjacentOnMove: ({ attackValue }) => {
     return {
-      text: 'Buff adjacent allies on move by ' + attackValue,
+      effects: [
+        {
+          text: 'Buff adjacent allies on move by ' + attackValue,
+          effect: DataEffectTemplates.buffAdjAlliesTemp({ power: attackValue }),
+        },
+      ],
       trigger: TRIG.meMove,
-      effect: DataEffectTemplates.buffAdjAlliesTemp({ power: attackValue }),
     };
   },
   summon: ({ summonedUnit, cost }) => {
     return {
-      text: 'Summon ' + summonedUnit.name,
+      effects: [
+        {
+          text: 'Summon ' + summonedUnit.name,
+          targets: [TAR.allyCell()],
+          effect: ({ unit, targets }) => {
+            console.log('summon', unit, targets);
+            (targets[0] as Position[]).forEach((cell: Position) => {
+              const createdUnit = makeUnit(
+                unit.ownerPlayerId,
+                cards[summonedUnit] as UnitCardTemplate
+              );
+              summonUnit(createdUnit, cell);
+            });
+          },
+        },
+      ],
       cost: cost,
       trigger: TRIG.activated,
-      targets: [TAR.allyCell()],
       exhausts: true,
-      effect: ({ unit, targets }) => {
-        console.log('summon', unit, targets);
-        (targets[0] as Position[]).forEach((cell: Position) => {
-          const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
-          summonUnit(createdUnit, cell);
-        });
-      },
     };
   },
   respawnAs: ({ summonedUnit }) => {
     return {
-      text: 'When this unit dies, put a ' + summonedUnit.name + ' in its place',
+      effects: [
+        {
+          text: 'When this unit dies, put a ' + summonedUnit.name + ' in its place',
+          effect: ({ unit }) => {
+            console.log('respawnAs', unit, summonedUnit);
+            const createdUnit = makeUnit(
+              unit.ownerPlayerId,
+              cards[summonedUnit] as UnitCardTemplate
+            );
+            summonUnit(createdUnit, unit.position);
+          },
+        },
+      ],
       trigger: TRIG.meDies,
-      effect: ({ unit }) => {
-        console.log('respawnAs', unit, summonedUnit);
-        const createdUnit = makeUnit(unit.ownerPlayerId, cards[summonedUnit] as UnitCardTemplate);
-        summonUnit(createdUnit, unit.position);
-      },
     };
   },
   grows: ({ growthValue }) => {
     return {
-      text: `Turn start: gains ${growthValue} growth counters`,
+      effects: [
+        {
+          text: `Turn start: gains ${growthValue} growth counters`,
+          effect: DataEffectTemplates.addCounters({
+            counterType: CounterType.Growth,
+            counterValue: growthValue,
+          }),
+        },
+      ],
       trigger: TRIG.myTurnStarts,
-      effect: DataEffectTemplates.addCounters({
-        counterType: CounterType.Growth,
-        counterValue: growthValue,
-      }),
     };
   },
   staticKeyword: ({ keyword }) => {
     return {
-      text: `Give ${keyword.key} ${keyword.value} to adjacent allies`,
+      effects: [
+        {
+          text: `Give ${keyword.key} ${keyword.value} to adjacent allies`,
+          effect: DataEffectTemplates.staticKeywordAdjAllies({
+            name: keyword.key,
+            keyword,
+          }),
+        },
+      ],
       trigger: DataTriggerTemplates.static,
-      effect: DataEffectTemplates.staticKeywordAdjAllies({
-        name: keyword.key,
-        keyword,
-      }),
     };
   },
 };

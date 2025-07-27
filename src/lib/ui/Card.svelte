@@ -66,16 +66,27 @@
   // Handle card click
   function handleClick() {
     if (inHand && isSpellCard(card) && isPayable(card)) {
-      if (!card.targets || card.targets.length === 0) {
+      // Check if any effect in the spell has targets
+      const hasTargets = card.effects.some((effect) => effect.targets && effect.targets.length > 0);
+
+      if (!hasTargets) {
         uiState.modal.visible = true;
         uiState.modal.title = 'Cast Spell?';
-        uiState.modal.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${card.text}</span>`;
+        uiState.modal.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${getSpellText()}</span>`;
         uiState.modal.onConfirm = () => activateSpell(card);
         uiState.modal.onCancel = undefined;
       } else {
         activateSpell(card);
       }
     }
+  }
+
+  // Get concatenated text from all effects
+  function getSpellText(): string {
+    if (isSpellCard(card)) {
+      return card.effects ? card.effects.map((effect) => effect.text).join('.\n') : '';
+    }
+    return '';
   }
 
   // Drag event handlers
@@ -172,7 +183,7 @@
 
     <!-- Spell effect display for SpellCard -->
     {#if isSpellCard(card)}
-      <div class="spell-effect">{card.text}</div>
+      <div class="spell-effect">{getSpellText()}</div>
     {/if}
   </div>
 </div>
