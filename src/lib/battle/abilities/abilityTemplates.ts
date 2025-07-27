@@ -26,7 +26,7 @@ export const DataAbilityTemplates: {
 } = {
   counters: ({ counterType, counterValue, range = DataUnitFilters.self(), trigger }) => {
     return {
-      text: `Add ${counterValue} ${counterType} counters ${trigger.type}. ${range.name ? 'Affects ' + range.name + '.' : ''}`,
+      text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range.name && range.name !== 'self' ? 'Affects ' + range.name + '.' : ''}`,
       icon: '○',
       trigger: trigger,
       effect: DataEffectTemplates.addCounters({

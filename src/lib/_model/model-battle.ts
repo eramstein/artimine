@@ -153,6 +153,7 @@ export interface Trigger {
   type: TriggerType;
   condition?(unit: UnitDeployed, { ...any }): boolean;
   staticRecompute?: TriggerType[];
+  text?: string;
 }
 
 export interface TargetDefinition {

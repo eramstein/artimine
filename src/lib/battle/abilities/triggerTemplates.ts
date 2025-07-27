@@ -46,6 +46,7 @@ export const DataTriggerTemplates: TriggerTemplateFunctions = {
     condition: (unit: UnitDeployed, triggerParams: any) => {
       return unit.ownerPlayerId === triggerParams.unit.ownerPlayerId;
     },
+    text: 'when an ally dies',
   },
   myTurnStarts: {
     type: TriggerType.OnTurnStart,
