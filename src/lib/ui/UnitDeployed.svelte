@@ -11,6 +11,7 @@
   import Statuses from './Statuses.svelte';
   import Counters from './Counters.svelte';
   import { targetUnit } from './_helpers/abilities';
+  import { TargetType } from '../_model/enums';
 
   let { unit }: { unit: UnitDeployed } = $props();
 
@@ -28,6 +29,13 @@
 
   // Check if this unit is currently attacking
   let isAttacking = $derived(uiState.battle.attackingUnitId === unit.instanceId);
+
+  // Check if unit should be dimmed when targetBeingSelected is a unit and this unit is not a valid target
+  let isDimmed = $derived(
+    uiState.battle.targetBeingSelected?.type === TargetType.Unit &&
+      !isValidTarget &&
+      uiState.battle.targetBeingSelected !== null
+  );
 
   function handleUnitClick() {
     const selectedUnit = uiState.battle.selectedUnit;
@@ -57,7 +65,9 @@
 <div
   class="unit-deployed {isActive ? 'active' : 'inactive'} {isSelected
     ? 'selected'
-    : ''} {isValidTarget ? 'valid-target' : ''} {isAttacking ? 'attacking' : ''}"
+    : ''} {isValidTarget ? 'valid-target' : ''} {isAttacking ? 'attacking' : ''} {isDimmed
+    ? 'dimmed'
+    : ''}"
   style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
   onclick={handleUnitClick}
 >
@@ -138,6 +148,14 @@
 
   .unit-deployed.attacking {
     animation: attack-move 0.3s ease-in-out;
+  }
+
+  .unit-deployed.dimmed {
+    opacity: 0.4;
+    filter: grayscale(0.3);
+    transition:
+      opacity 0.2s ease,
+      filter 0.2s ease;
   }
 
   @keyframes attack-move {

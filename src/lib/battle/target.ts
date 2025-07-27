@@ -38,6 +38,7 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
     eligible: (card: Card, units: EffectTargets) => {
       return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId !== card.ownerPlayerId);
     },
+    text: `${n} ennemy units`,
   }),
   allies: (n: number) => ({
     type: TargetType.Unit,
@@ -45,18 +46,22 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
     eligible: (card: Card, units: EffectTargets) => {
       return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId === card.ownerPlayerId);
     },
+    text: `${n} allied units`,
   }),
   cell: () => ({
     type: TargetType.Cell,
     count: 1,
+    text: `1 cell`,
   }),
   unit: () => ({
     type: TargetType.Unit,
     count: 1,
+    text: `1 unit`,
   }),
   units: (n: number) => ({
     type: TargetType.Unit,
     count: n,
+    text: `${n} units`,
   }),
   allyCell: () => ({
     type: TargetType.Cell,
@@ -66,6 +71,7 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
         (p) => isOnPlayersSide(p, card.ownerPlayerId) && isCellFree(p)
       );
     },
+    text: `1 empty allied cell`,
   }),
   emptyCell: () => ({
     type: TargetType.Cell,
@@ -73,10 +79,12 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
     eligible: (card: Card, positions: EffectTargets) => {
       return (positions as Position[]).filter((p) => isCellFree(p));
     },
+    text: `1 empty cell`,
   }),
   graveyardCard: () => ({
     type: TargetType.GraveyardCard,
     count: 1,
+    text: `1 card from graveyard`,
   }),
   graveyardUnit: () => ({
     type: TargetType.GraveyardCard,
@@ -84,6 +92,7 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
     eligible: (card: Card, graveyardCards: EffectTargets) => {
       return (graveyardCards as Card[]).filter((c) => c.type === CardType.Unit);
     },
+    text: `1 unit from graveyard`,
   }),
 };
 

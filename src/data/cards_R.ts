@@ -17,9 +17,9 @@ export const cards_R: Record<string, CardTemplate> = {
         text: `Deal 3 damage to a unit`,
       },
       {
-        effect: DataEffectTemplates.damageUnit({ damage: 1 }),
+        effect: DataEffectTemplates.damageUnit({ damage: 2 }),
         targets: [DataTargetTemplates.units(2)],
-        text: `Deal 1 damage to 2 units`,
+        text: `Deal 2 damage to 2 units`,
       },
     ],
   },

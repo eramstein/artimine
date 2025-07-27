@@ -15,6 +15,7 @@ export const uiState: UiState = $state({
       visible: false,
       playerId: null,
     },
+    currentEffectIndex: 0,
   },
   modal: {
     visible: false,

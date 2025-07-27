@@ -5,21 +5,22 @@
     const battle = uiState.battle;
     if (!battle.targetBeingSelected) return null;
 
-    const count = battle.targetBeingSelected.count || 1;
-    const type = battle.targetBeingSelected.type;
-    const currentIndex = battle.currentTargetIndex || 0;
+    const targetText =
+      battle.targetBeingSelected.text ||
+      `${battle.targetBeingSelected.count} ${battle.targetBeingSelected.type}`;
 
-    let totalSteps = 1;
-    if (battle.abilityPending) {
-      totalSteps = battle.abilityPending.ability.targets?.length || 1;
-    } else if (battle.spellPending) {
-      totalSteps = battle.spellPending.targets?.length || 1;
-    }
+    // Get count of currently selected targets for the current effect and target index
+    const currentEffectIndex = battle.currentEffectIndex || 0;
+    const currentTargetIndex = battle.currentTargetIndex || 0;
+    const selectedCount =
+      battle.selectedTargets[currentEffectIndex]?.[currentTargetIndex]?.length || 0;
+    const requiredCount = battle.targetBeingSelected.count || 1;
 
-    const stepIndicator = totalSteps > 1 ? ` (${currentIndex + 1}/${totalSteps})` : '';
+    // Only show count if more than 1 target is required
+    const countText = requiredCount > 1 ? ` (${selectedCount}/${requiredCount})` : '';
 
     return {
-      text: `Select ${count} ${type}${stepIndicator}`,
+      text: `Select ${targetText}${countText}`,
       isVisible: true,
     };
   });

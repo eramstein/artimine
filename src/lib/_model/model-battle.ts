@@ -153,9 +153,9 @@ export interface Trigger {
 
 export interface TargetDefinition {
   type: TargetType;
-  pos?: Position;
   count?: number;
   eligible?(card: UnitDeployed | SpellCard, potentialTargets: EffectTargets): EffectTargets;
+  text?: string;
 }
 
 export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];

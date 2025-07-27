@@ -25,7 +25,7 @@ export const cards_B: Record<string, CardTemplate> = {
       {
         effect: DataEffectTemplates.reanimate(),
         targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
-        text: 'Reanimate a unit from a graveyard',
+        text: 'Re-animate a unit from a graveyard',
       },
     ],
   },
@@ -43,7 +43,7 @@ export const cards_B: Record<string, CardTemplate> = {
           range: DataUnitFilters.inRow(),
         }),
         targets: [DataTargetTemplates.units(1)],
-        text: `Add 2 Decay counters to a unit in the same row`,
+        text: `Add 2 Decay counters to all units in a row`,
       },
     ],
   },
