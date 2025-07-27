@@ -18,6 +18,7 @@ import { getAllLands } from './land';
 type TargetTemplateFunctions = {
   self: () => TargetDefinition;
   ennemies: (n: number) => TargetDefinition;
+  allies: (n: number) => TargetDefinition;
   cell: () => TargetDefinition;
   unit: () => TargetDefinition;
   units: (n: number) => TargetDefinition;
@@ -36,6 +37,13 @@ export const DataTargetTemplates: TargetTemplateFunctions = {
     count: n,
     eligible: (card: Card, units: EffectTargets) => {
       return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId !== card.ownerPlayerId);
+    },
+  }),
+  allies: (n: number) => ({
+    type: TargetType.Unit,
+    count: n,
+    eligible: (card: Card, units: EffectTargets) => {
+      return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId === card.ownerPlayerId);
     },
   }),
   cell: () => ({

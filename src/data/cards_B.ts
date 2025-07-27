@@ -6,9 +6,11 @@ import {
   type UnitDeployed,
 } from '@/lib/_model';
 import { bs } from '@/lib/_state';
+import { destroyUnit } from '@/lib/battle';
 import { DataAbilityTemplates, DataTriggerTemplates, SpellTemplates } from '@/lib/battle/abilities';
 import { addCounters, removeCounters } from '@/lib/battle/counter';
 import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
+import { damageUnit } from '@/lib/battle/unit';
 import { DataTargetTemplates } from '@/lib/battle/target';
 
 export const cards_B: Record<string, CardTemplate> = {
@@ -94,5 +96,20 @@ export const cards_B: Record<string, CardTemplate> = {
     keywords: {
       ranged: true,
     },
+  },
+  dark_ritual: {
+    id: 'dark_ritual',
+    name: 'Dark Ritual',
+    type: CardType.Spell,
+    cost: 2,
+    colors: [{ color: CardColor.Black, count: 1 }],
+    effect: ({ targets }) => {
+      const sacrificedUnit = targets[0][0] as UnitDeployed;
+      const targetUnit = targets[1][0] as UnitDeployed;
+      damageUnit(targetUnit, sacrificedUnit.health);
+      destroyUnit(sacrificedUnit);
+    },
+    targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],
+    text: `Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.`,
   },
 };

@@ -3,9 +3,8 @@ import { cards } from './cards';
 import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
-  cards.shroomy_shooty,
-  cards.shroomy_shooty,
-  cards.shroomy_shooty,
+  cards.dark_ritual,
+  cards.shroomy_rooty,
   cards.frenzied_shaman,
   cards.tim,
   cards.mycosed_bear,
