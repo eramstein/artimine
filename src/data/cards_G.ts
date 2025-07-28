@@ -138,7 +138,7 @@ export const cards_G: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    effects: [
+    actions: [
       {
         effect: (p) => {
           incrementColor(p.player, CardColor.Green, 1);
@@ -153,7 +153,7 @@ export const cards_G: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 3,
     colors: [{ color: CardColor.Green, count: 2 }],
-    effects: [
+    actions: [
       {
         effect: (p) => {
           untapPlayer(p.player);

@@ -1,7 +1,7 @@
 import {
   TargetType,
   type Ability,
-  type EffectDefinition,
+  type ActionDefinition,
   type EffectTargets,
   type TargetDefinition,
   type UnitDeployed,
@@ -20,8 +20,8 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
     console.log('EXHAUSTED');
     return;
   }
-  if (!checkMultipleEffectsTargets(unit, ability.effects, targets)) {
-    console.log('INVALID TARGETS', ability.effects, targets);
+  if (!checkMultipleEffectsTargets(unit, ability.actions, targets)) {
+    console.log('INVALID TARGETS', ability.actions, targets);
     return;
   }
   if (payAbilityCost(unit, ability) === false) {
@@ -31,17 +31,17 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
 
   // EFFECTS
   // ----------------------------------------------------------------------
-  ability.effects.forEach((effectDef, effectIndex) => {
-    const effectTargets = [...targets[effectIndex]];
+  ability.actions.forEach((actionDef, actionIndex) => {
+    const effectTargets = [...targets[actionIndex]];
     // If any TargetType is Self, replace the corresponding targets entry with [unit]
-    if (effectDef.targets) {
-      effectDef.targets.forEach((def, i) => {
+    if (actionDef.targets) {
+      actionDef.targets.forEach((def, i) => {
         if (def.type === TargetType.Self) {
           effectTargets[i] = [unit];
         }
       });
     }
-    effectDef.effect({
+    actionDef.effect({
       unit,
       targets: effectTargets,
       triggerParams: {},
@@ -96,12 +96,12 @@ function checkMultipleTargets(
 
 function checkMultipleEffectsTargets(
   unit: UnitDeployed,
-  effectDefs: EffectDefinition[],
+  actionDefs: ActionDefinition[],
   targets: EffectTargets[][]
 ): boolean {
-  if (!Array.isArray(targets) || targets.length !== effectDefs.length) return false;
-  for (let i = 0; i < effectDefs.length; i++) {
-    if (!checkMultipleTargets(unit, effectDefs[i].targets || [], targets[i])) return false;
+  if (!Array.isArray(targets) || targets.length !== actionDefs.length) return false;
+  for (let i = 0; i < actionDefs.length; i++) {
+    if (!checkMultipleTargets(unit, actionDefs[i].targets || [], targets[i])) return false;
   }
   return true;
 }

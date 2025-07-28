@@ -26,7 +26,7 @@ export const DataAbilityTemplates: {
 } = {
   counters: ({ counterType, counterValue, range = DataUnitFilters.self(), trigger }) => {
     return {
-      effects: [
+      actions: [
         {
           text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range.name && range.name !== 'self' ? 'Affects ' + range.name + '.' : ''}`,
           effect: DataEffectTemplates.addCounters({
@@ -42,7 +42,7 @@ export const DataAbilityTemplates: {
   },
   cleave: ({ damage }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Cleave ' + damage,
           effect: ({ triggerParams }) => {
@@ -60,7 +60,7 @@ export const DataAbilityTemplates: {
   },
   ping: ({ damage, targetCount = 1 }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Ping ' + damage,
           targets: [TAR.ennemies(targetCount)],
@@ -77,7 +77,7 @@ export const DataAbilityTemplates: {
   },
   cc: ({ duration, targetCount = 1, statusType = StatusType.Mezz }) => {
     return {
-      effects: [
+      actions: [
         {
           text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
           targets: [TAR.ennemies(targetCount)],
@@ -94,7 +94,7 @@ export const DataAbilityTemplates: {
   },
   stun: ({ duration, targetCount = 1 }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Stun ' + duration,
           targets: [TAR.ennemies(targetCount)],
@@ -110,7 +110,7 @@ export const DataAbilityTemplates: {
   },
   root: ({ duration, targetCount = 1 }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Root ' + duration,
           targets: [TAR.ennemies(targetCount)],
@@ -126,7 +126,7 @@ export const DataAbilityTemplates: {
   },
   healAdjacentOnMove: ({ healValue }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Heal adjacent allies on move by ' + healValue,
           effect: ({ triggerParams }) => {
@@ -144,7 +144,7 @@ export const DataAbilityTemplates: {
   },
   buffAdjacentOnMove: ({ attackValue }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Buff adjacent allies on move by ' + attackValue,
           effect: DataEffectTemplates.buffAdjAlliesTemp({ power: attackValue }),
@@ -155,7 +155,7 @@ export const DataAbilityTemplates: {
   },
   summon: ({ summonedUnit, cost }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'Summon ' + summonedUnit.name,
           targets: [TAR.allyCell()],
@@ -178,7 +178,7 @@ export const DataAbilityTemplates: {
   },
   respawnAs: ({ summonedUnit }) => {
     return {
-      effects: [
+      actions: [
         {
           text: 'When this unit dies, put a ' + summonedUnit.name + ' in its place',
           effect: ({ unit }) => {
@@ -196,7 +196,7 @@ export const DataAbilityTemplates: {
   },
   grows: ({ growthValue }) => {
     return {
-      effects: [
+      actions: [
         {
           text: `Turn start: gains ${growthValue} growth counters`,
           effect: DataEffectTemplates.addCounters({
@@ -210,7 +210,7 @@ export const DataAbilityTemplates: {
   },
   staticKeyword: ({ keyword }) => {
     return {
-      effects: [
+      actions: [
         {
           text: `Give ${keyword.key} ${keyword.value} to adjacent allies`,
           effect: DataEffectTemplates.staticKeywordAdjAllies({

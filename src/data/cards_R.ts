@@ -10,7 +10,7 @@ export const cards_R: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
-    effects: [
+    actions: [
       {
         effect: DataEffectTemplates.damageUnit({ damage: 3 }),
         targets: [DataTargetTemplates.units(1)],
@@ -29,7 +29,7 @@ export const cards_R: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 5,
     colors: [{ color: CardColor.Red, count: 2 }],
-    effects: [
+    actions: [
       {
         effect: DataEffectTemplates.damageUnit({
           damage: 1,

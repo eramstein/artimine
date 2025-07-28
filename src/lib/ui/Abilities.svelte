@@ -20,8 +20,8 @@
   // Get the first letter of each ability name for display
   let abilityLetters = $derived(() => {
     return abilities.map((ability) => ({
-      letter: ability.icon || (ability.effects[0]?.text || '?').charAt(0).toUpperCase(),
-      text: ability.effects[0]?.text || 'Unknown',
+      letter: ability.icon || (ability.actions[0]?.text || '?').charAt(0).toUpperCase(),
+      text: ability.actions[0]?.text || 'Unknown',
       isActivated: ability.trigger.type === TriggerType.Activated,
       ability: ability,
       isPending:

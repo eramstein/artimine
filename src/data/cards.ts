@@ -17,7 +17,7 @@ export const cards: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Red, count: 1 }],
     abilities: [
       {
-        effects: [
+        actions: [
           {
             text: 'Adjacent units get +1 armor',
             effect: DataEffectTemplates.staticKeywordAdjAllies({

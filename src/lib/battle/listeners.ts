@@ -16,18 +16,18 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
       ?.filter((a) => checkTriggerType(a, type))
       .filter((a) => checkTriggerCondition(a, u, { ...rest }))
       .forEach((a) => {
-        // TODO: if a.effects[0].targets, ask player or AI for targets
+        // TODO: if a.actions[0].targets, ask player or AI for targets
         // (store ability in a "pendingTriggeredAbilities" array ?)
-        // console.log(u.name + ' triggers ' + a.effects[0].text, a, { ...rest });
+        // console.log(u.name + ' triggers ' + a.actions[0].text, a, { ...rest });
         const triggerParams: any = { ...rest };
 
         // Execute each effect in the ability
-        a.effects.forEach((effectDef) => {
+        a.actions.forEach((actionDef) => {
           let targets: EffectTargets = [];
-          if (effectDef.targets && effectDef.targets.length > 0) {
-            targets = getEligibleTargets(u, effectDef.targets[0]) as EffectTargets;
+          if (actionDef.targets && actionDef.targets.length > 0) {
+            targets = getEligibleTargets(u, actionDef.targets[0]) as EffectTargets;
           }
-          effectDef.effect({
+          actionDef.effect({
             unit: u,
             targets: [targets],
             triggerParams,

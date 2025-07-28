@@ -67,7 +67,7 @@
   function handleClick() {
     if (inHand && isSpellCard(card) && isPayable(card)) {
       // Check if any effect in the spell has targets
-      const hasTargets = card.effects.some((effect) => effect.targets && effect.targets.length > 0);
+      const hasTargets = card.actions.some((action) => action.targets && action.targets.length > 0);
 
       if (!hasTargets) {
         uiState.modal.visible = true;
@@ -81,10 +81,10 @@
     }
   }
 
-  // Get concatenated text from all effects
+  // Get concatenated text from all actions
   function getSpellText(): string {
     if (isSpellCard(card)) {
-      return card.effects ? card.effects.map((effect) => effect.text).join('.\n') : '';
+      return card.actions ? card.actions.map((action) => action.text).join('.\n') : '';
     }
     return '';
   }

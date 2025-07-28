@@ -113,5 +113,5 @@ export function restoreUnitFunctions(unit: UnitCardTemplate) {
 }
 
 export function restoreSpellFunctions(spell: SpellCardTemplate) {
-  spell.effects = (cards[spell.id] as SpellCardTemplate).effects;
+  spell.actions = (cards[spell.id] as SpellCardTemplate).actions;
 }

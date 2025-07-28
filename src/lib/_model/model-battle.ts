@@ -41,7 +41,7 @@ export interface UnitCardTemplate extends BaseCardTemplate {
 }
 
 export interface SpellCardTemplate extends BaseCardTemplate {
-  effects: EffectDefinition[];
+  actions: ActionDefinition[];
 }
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate;
 
@@ -130,7 +130,7 @@ export interface UnitStatuses {
 }
 
 export interface Ability {
-  effects: EffectDefinition[];
+  actions: ActionDefinition[];
   icon?: string;
   trigger: Trigger;
   cost?: number;
@@ -160,7 +160,7 @@ export interface TargetDefinition {
 
 export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];
 
-export type EffectDefinition = {
+export type ActionDefinition = {
   effect: (p: EffectArgs) => void;
   targets?: TargetDefinition[];
   text: string;

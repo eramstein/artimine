@@ -21,7 +21,7 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
-    effects: [
+    actions: [
       {
         effect: DataEffectTemplates.reanimate(),
         targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
@@ -35,7 +35,7 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 4,
     colors: [{ color: CardColor.Black, count: 2 }],
-    effects: [
+    actions: [
       {
         effect: DataEffectTemplates.addCounters({
           counterType: CounterType.Decay,
@@ -53,7 +53,7 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Black, count: 1 }],
-    effects: [
+    actions: [
       {
         text: 'Move all decay counters to target creature',
         targets: [DataTargetTemplates.units(1)],
@@ -119,7 +119,7 @@ export const cards_B: Record<string, CardTemplate> = {
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
-    effects: [
+    actions: [
       {
         text: "Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.",
         targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],

@@ -35,9 +35,9 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
   ui.currentTargetIndex = 0;
   ui.selectedTargets = [];
 
-  const effects = ability.effects || [];
-  if (effects.length > 0) {
-    const firstEffect = effects[0];
+  const actions = ability.actions || [];
+  if (actions.length > 0) {
+    const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
       highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]));
@@ -64,9 +64,9 @@ export function activateSpell(spell: SpellCard) {
   ui.currentTargetIndex = 0;
   ui.selectedTargets = [];
 
-  const effects = spell.effects || [];
-  if (effects.length > 0) {
-    const firstEffect = effects[0];
+  const actions = spell.actions || [];
+  if (actions.length > 0) {
+    const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
       highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0, 0));
@@ -118,9 +118,9 @@ function getEligibleSpellTargetsForIndex(
   effectIndex: number,
   targetIndex: number
 ): EffectTargets {
-  const effects = spell.effects || [];
-  if (effects[effectIndex]) {
-    const effect = effects[effectIndex];
+  const actions = spell.actions || [];
+  if (actions[effectIndex]) {
+    const effect = actions[effectIndex];
     const targets = effect.targets || [];
     if (targets[targetIndex]) {
       return getEligibleTargets(spell, targets[targetIndex]);
@@ -142,12 +142,12 @@ function clearUiState() {
 
 function advanceTargetStep() {
   const ui = uiState.battle;
-  const effects = ui.abilityPending
-    ? ui.abilityPending.ability.effects || []
-    : ui.spellPending?.effects || [];
+  const actions = ui.abilityPending
+    ? ui.abilityPending.ability.actions || []
+    : ui.spellPending?.actions || [];
 
-  if (effects.length === 0) {
-    // No effects, play immediately
+  if (actions.length === 0) {
+    // No actions, play immediately
     if (ui.abilityPending) {
       playAbility(ui.abilityPending.unit, ui.abilityPending.ability, []);
     } else if (ui.spellPending) {
@@ -157,7 +157,7 @@ function advanceTargetStep() {
     return;
   }
 
-  const currentEffect = effects[ui.currentEffectIndex];
+  const currentEffect = actions[ui.currentEffectIndex];
   const targets = currentEffect?.targets || [];
 
   ui.currentTargetIndex++;
@@ -181,8 +181,8 @@ function advanceTargetStep() {
     ui.currentEffectIndex++;
     ui.currentTargetIndex = 0;
 
-    if (ui.currentEffectIndex < effects.length) {
-      const nextEffect = effects[ui.currentEffectIndex];
+    if (ui.currentEffectIndex < actions.length) {
+      const nextEffect = actions[ui.currentEffectIndex];
       if (nextEffect.targets && nextEffect.targets.length > 0) {
         ui.targetBeingSelected = nextEffect.targets[0];
         if (ui.abilityPending) {
@@ -199,7 +199,7 @@ function advanceTargetStep() {
         advanceTargetStep();
       }
     } else {
-      // All effects completed, play
+      // All actions completed, play
       if (ui.abilityPending) {
         playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
       } else if (ui.spellPending) {
