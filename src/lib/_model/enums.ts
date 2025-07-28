@@ -7,7 +7,6 @@ export enum CardRarity {
   Common = 'common',
   Uncommon = 'uncommon',
   Rare = 'rare',
-  Epic = 'epic',
   Legendary = 'legendary',
 }
 export enum CardColor {
@@ -46,6 +45,15 @@ export enum StatusType {
 
 export enum UnitType {
   Mushroom = 'mushroom',
+  Beast = 'beast',
+  Human = 'human',
+  Dwarf = 'dwarf',
+  Monster = 'monster',
+  Elemental = 'elemental',
+  Spirit = 'spirit',
+  Dragon = 'dragon',
+  Angel = 'angel',
+  Demon = 'demon',
 }
 
 export enum CounterType {

@@ -1,4 +1,4 @@
-import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardRarity, CardType, StatusType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
@@ -7,6 +7,7 @@ export const cards_GB: Record<string, CardTemplate> = {
   ebonheart: {
     id: 'ebonheart',
     name: 'Ebonheart',
+    rarity: CardRarity.Rare,
     type: CardType.Unit,
     cost: 5,
     power: 0,
@@ -24,6 +25,7 @@ export const cards_GB: Record<string, CardTemplate> = {
   mycosed_bear: {
     id: 'mycosed_bear',
     name: 'Mycosed Bear',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 3,
     power: 2,

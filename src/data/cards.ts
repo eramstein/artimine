@@ -1,4 +1,4 @@
-import { CardColor, CardType, StatusType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardRarity, CardType, StatusType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates } from '@/lib/battle/effects';
 import { cards_G } from './cards_G';
@@ -11,6 +11,7 @@ export const cards: Record<string, CardTemplate> = {
     id: 'lion',
     name: 'Savannah Lion',
     type: CardType.Unit,
+    rarity: CardRarity.Common,
     cost: 2,
     power: 2,
     maxHealth: 3,

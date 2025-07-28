@@ -1,4 +1,12 @@
-import { CardColor, CardType, CounterType, TargetType, TriggerType, UnitType } from './enums';
+import {
+  CardColor,
+  CardRarity,
+  CardType,
+  CounterType,
+  TargetType,
+  TriggerType,
+  UnitType,
+} from './enums';
 
 export interface BattleState {
   turn: number;
@@ -27,6 +35,7 @@ export interface Player {
 export interface BaseCardTemplate {
   id: string;
   name: string;
+  rarity: CardRarity;
   type: CardType;
   cost: number;
   colors: { color: CardColor; count: number }[];

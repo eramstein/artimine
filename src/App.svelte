@@ -5,6 +5,9 @@
   import { loadGameStateFromLocalStorage, bs, uiState } from './lib/_state';
   import { UiView } from './lib/_model';
   import { initBattle } from './lib/battle/init';
+  import { generateCard } from './lib/generator/card-designer';
+
+  generateCard();
 
   onMount(() => {
     window.addEventListener('keydown', handleKeybinds);

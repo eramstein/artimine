@@ -1,5 +1,6 @@
 import {
   CardColor,
+  CardRarity,
   CardType,
   CounterType,
   type CardTemplate,
@@ -18,6 +19,7 @@ export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
     id: 'raise_dead',
     name: 'Raise Dead',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],
@@ -32,6 +34,7 @@ export const cards_B: Record<string, CardTemplate> = {
   decaying_ray: {
     id: 'decaying_ray',
     name: 'Decaying Ray',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 4,
     colors: [{ color: CardColor.Black, count: 2 }],
@@ -50,6 +53,7 @@ export const cards_B: Record<string, CardTemplate> = {
   guinea_pig: {
     id: 'guinea_pig',
     name: 'Guinea Pig',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Black, count: 1 }],
@@ -78,6 +82,7 @@ export const cards_B: Record<string, CardTemplate> = {
   mosquito: {
     id: 'mosquito',
     name: 'Mosquito',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 3,
     power: 0,
@@ -95,6 +100,7 @@ export const cards_B: Record<string, CardTemplate> = {
   zombie: {
     id: 'zombie',
     name: 'Zombie',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 2,
     power: 2,
@@ -104,6 +110,7 @@ export const cards_B: Record<string, CardTemplate> = {
   grim_guard: {
     id: 'grim_guard',
     name: 'Grim Guard',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 3,
     power: 2,
@@ -116,6 +123,7 @@ export const cards_B: Record<string, CardTemplate> = {
   dark_ritual: {
     id: 'dark_ritual',
     name: 'Dark Ritual',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 2,
     colors: [{ color: CardColor.Black, count: 1 }],

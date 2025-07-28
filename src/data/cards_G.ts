@@ -1,5 +1,6 @@
 import {
   CardColor,
+  CardRarity,
   CardType,
   CounterType,
   StatusType,
@@ -20,6 +21,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 1,
     maxHealth: 3,
     colors: [{ color: CardColor.Green, count: 1 }],
+    rarity: CardRarity.Common,
     keywords: {
       retaliate: 1,
     },
@@ -32,6 +34,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 2,
     maxHealth: 3,
     colors: [{ color: CardColor.Green, count: 2 }],
+    rarity: CardRarity.Common,
   },
   dryad: {
     id: 'dryad',
@@ -41,6 +44,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 2,
     maxHealth: 4,
     colors: [{ color: CardColor.Green, count: 2 }],
+    rarity: CardRarity.Common,
     keywords: {
       regeneration: 1,
     },
@@ -53,6 +57,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 3,
     maxHealth: 4,
     colors: [{ color: CardColor.Green, count: 3 }],
+    rarity: CardRarity.Common,
     keywords: {
       poisonous: 1,
     },
@@ -65,6 +70,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 2,
     maxHealth: 4,
     colors: [{ color: CardColor.Green, count: 3 }],
+    rarity: CardRarity.Common,
     keywords: {
       retaliate: 1,
       armor: 1,
@@ -79,12 +85,14 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 1,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 3 }],
+    rarity: CardRarity.Common,
     abilities: [DataAbilityTemplates.grows({ growthValue: 1 })],
   },
   shroomy_shooty: {
     id: 'shroomy_shooty',
     name: 'Shroomy Shooty',
     type: CardType.Unit,
+    rarity: CardRarity.Common,
     unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 1,
@@ -96,6 +104,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy_rooty',
     name: 'Shroomy Rooty',
     type: CardType.Unit,
+    rarity: CardRarity.Common,
     unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 0,
@@ -107,6 +116,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'shroomy_protecs',
     name: 'Shroomy Protecs',
     type: CardType.Unit,
+    rarity: CardRarity.Common,
     unitTypes: [UnitType.Mushroom],
     cost: 1,
     power: 0,
@@ -118,6 +128,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'lord_of_shrooms',
     name: 'Lord of Shrooms',
     type: CardType.Unit,
+    rarity: CardRarity.Common,
     unitTypes: [UnitType.Mushroom],
     cost: 3,
     power: 1,
@@ -136,6 +147,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'luxurious_growth',
     name: 'Luxurious Growth',
     type: CardType.Spell,
+    rarity: CardRarity.Common,
     cost: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
     actions: [
@@ -151,6 +163,7 @@ export const cards_G: Record<string, CardTemplate> = {
     id: 'energyze',
     name: 'Energyze',
     type: CardType.Spell,
+    rarity: CardRarity.Common,
     cost: 3,
     colors: [{ color: CardColor.Green, count: 2 }],
     actions: [
@@ -170,6 +183,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 6,
     maxHealth: 6,
     colors: [{ color: CardColor.Green, count: 1 }],
+    rarity: CardRarity.Common,
   },
   deep_forest_wurm: {
     id: 'deep_forest_wurm',
@@ -179,6 +193,7 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 6,
     maxHealth: 6,
     colors: [{ color: CardColor.Green, count: 1 }],
+    rarity: CardRarity.Common,
     keywords: {
       trample: true,
     },

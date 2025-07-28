@@ -1,4 +1,4 @@
-import { CardColor, CardType, CounterType, type CardTemplate } from '@/lib/_model';
+import { CardColor, CardRarity, CardType, CounterType, type CardTemplate } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
 import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
 import { DataTargetTemplates } from '@/lib/battle/target';
@@ -7,6 +7,7 @@ export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
     id: 'lightning_bolt',
     name: 'Lightning Bolt',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
@@ -26,6 +27,7 @@ export const cards_R: Record<string, CardTemplate> = {
   fireball: {
     id: 'fireball',
     name: 'Fireball',
+    rarity: CardRarity.Common,
     type: CardType.Spell,
     cost: 5,
     colors: [{ color: CardColor.Red, count: 2 }],
@@ -43,6 +45,7 @@ export const cards_R: Record<string, CardTemplate> = {
   dwarf_berserker: {
     id: 'dwarf_berserker',
     name: 'Dwarf Berserker',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 3,
     power: 2,
@@ -55,6 +58,7 @@ export const cards_R: Record<string, CardTemplate> = {
   tim: {
     id: 'tim',
     name: 'Tim',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 4,
     power: 1,
@@ -65,6 +69,7 @@ export const cards_R: Record<string, CardTemplate> = {
   frenzied_shaman: {
     id: 'frenzied_shaman',
     name: 'Frenzied Shaman',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 5,
     power: 2,
@@ -81,6 +86,7 @@ export const cards_R: Record<string, CardTemplate> = {
   modis_chosen: {
     id: 'modis_chosen',
     name: 'Chosen of Modi',
+    rarity: CardRarity.Common,
     type: CardType.Unit,
     cost: 4,
     power: 4,
