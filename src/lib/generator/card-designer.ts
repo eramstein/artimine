@@ -1,64 +1,47 @@
-import { CardRarity, CardType } from '../_model';
-import { type BaseTemplate, type ColorCombo, ColorComboName } from './card-batches';
-import { generateCardExtensions } from './llm-card-extension';
+import type { CardColor, UnitCard, UnitKeywords } from '../_model';
+import { MOCK_BASE_CARDS } from './_mocks';
+import { baseStatsCost, getBudgetForUnit } from './budgets';
+import { type BaseTemplate } from './card-batches';
+import { getDominantColor } from './_utils';
+import { powerAndHealthPreferences } from './color-pie';
+import { clamp, getRandomIntegerWithVariance } from '../_utils/random';
+import { getKeywords } from './keywords';
 
-const MOCK_BASE_CARDS = [
-  {
-    type: CardType.Unit,
-    cost: 1,
-    rarity: CardRarity.Common,
-    llmData: {
-      name: 'Thistle Hare',
-      imageDescription:
-        'A lean, moss-colored hare with thorny antlers bounding through a misty glade under the watchful gaze of gnarled oaks',
-      suggestedSize: 'small',
-      suggestedKeywords: ['haste'],
-      suggestedUnitType: 'beast',
-    },
-  },
-  {
-    type: CardType.Unit,
-    cost: 5,
-    rarity: CardRarity.Uncommon,
-    llmData: {
-      name: 'Wyrmbark Ancestor',
-      imageDescription:
-        'A towering treeman with bark scorched by dark runes, holding a staff of twisted vinewood, eyes glowing with old sorrow',
-      suggestedSize: 'large',
-      suggestedKeywords: ['armor', 'regeneration'],
-      suggestedUnitType: 'elemental',
-    },
-  },
-  {
-    type: CardType.Unit,
-    cost: 2,
-    rarity: CardRarity.Common,
-    llmData: {
-      name: 'Rotglade Vermin',
-      imageDescription:
-        'A bloated rodent-like creature crawling from a moss-covered stump, dripping dark sap from its fangs',
-      suggestedSize: 'small',
-      suggestedKeywords: ['poisonous'],
-      suggestedUnitType: 'monster',
-    },
-  },
-  {
-    type: CardType.Unit,
-    cost: 8,
-    rarity: CardRarity.Rare,
-    llmData: {
-      name: 'Ashen Wildwyrm',
-      imageDescription:
-        'A serpentine forest dragon with scorched wings and bark-like scales, wreathed in green fire and wrapped around a ruined stone circle',
-      suggestedSize: 'huge',
-      suggestedKeywords: ['trample', 'zerk'],
-      suggestedUnitType: 'dragon',
-    },
-  },
-];
-
-// TODO:
-export function generateCard(baseCard: BaseTemplate = MOCK_BASE_CARDS[0]) {
-  // MOCKED for now
+export function generateUnitCard(baseCard: BaseTemplate = MOCK_BASE_CARDS[0]): UnitCard {
   console.log('TODO: generateCard', baseCard);
+  const createdUnit: Partial<UnitCard> = { ...baseCard };
+
+  // get total budget for unit
+  let budget = getBudgetForUnit(baseCard.cost ?? 1, baseCard.colors ?? []);
+
+  // spend points for power and health
+  const { power, health } = getPowerAndHealth(budget, baseCard.colors ?? []);
+  createdUnit.power = power;
+  createdUnit.maxHealth = health;
+  budget -= power * baseStatsCost.power + health * baseStatsCost.health;
+
+  // spend points for keywords
+  const keywords = getKeywords(budget, baseCard.colors ?? []);
+  createdUnit.keywords = keywords;
+  console.log('createdUnit', createdUnit);
+}
+
+function getPowerAndHealth(
+  budget: number,
+  colors: { color: CardColor; count: number }[]
+): { power: number; health: number } {
+  const variance = 0.2;
+  const dominantColor = getDominantColor(colors);
+  const preferences = powerAndHealthPreferences[dominantColor];
+  const standardBudget = budget * (preferences.power + preferences.health);
+  const allocatedBudget = clamp(getRandomIntegerWithVariance(standardBudget, variance), 0, budget);
+  const powerBudget = clamp(
+    getRandomIntegerWithVariance(allocatedBudget * preferences.power, variance),
+    0,
+    allocatedBudget
+  );
+  const healthBudget = clamp(allocatedBudget - powerBudget, 0, allocatedBudget);
+  const power = Math.floor(powerBudget / baseStatsCost.power);
+  const health = Math.floor(healthBudget / baseStatsCost.health);
+  return { power, health };
 }

@@ -2,7 +2,7 @@ import { type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model
 import { getEmptyCells } from '../../boards';
 import { deployUnit } from '../../unit';
 import { ActionType, type AiPersona } from '../model';
-import { getRandomFromArray } from '../utils/random';
+import { getRandomFromArray } from '../../../_utils/random';
 import { moveUnit } from '../../move';
 import type { PossibleActions } from '../model';
 import { autoAttack } from '../../combat';

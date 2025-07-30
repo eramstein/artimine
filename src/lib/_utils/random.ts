@@ -1,0 +1,32 @@
+export function getRandomFromArray(items: any[]) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+export function getRandomWeighted(items: { item: any; weight: number }[]) {
+  const totalWeight = items.reduce((acc, item) => acc + item.weight, 0);
+  const random = Math.random() * totalWeight;
+  let cumulativeWeight = 0;
+  for (const item of items) {
+    cumulativeWeight += item.weight;
+    if (random <= cumulativeWeight) return item.item;
+  }
+}
+
+export function getRandomIntegerWithVariance(mean: number, variance: number) {
+  // Box-Muller transform to generate normally distributed random numbers
+  const u1 = Math.random();
+  const u2 = Math.random();
+
+  // Generate a random number from standard normal distribution (mean=0, std=1)
+  const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+
+  // Scale by variance (standard deviation) and shift by mean
+  const result = mean + z0 * Math.sqrt(variance);
+
+  // Round to nearest integer
+  return Math.round(result);
+}
+
+export function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}

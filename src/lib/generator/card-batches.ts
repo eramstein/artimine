@@ -1,4 +1,5 @@
 import { CardColor, CardRarity, CardType } from '../_model';
+import { getRandomWeighted } from '../_utils/random';
 import { generatePrompt } from './llm-card-extension';
 
 export interface BaseTemplate {
@@ -94,6 +95,7 @@ export function makeTemplatesBatch() {
   }
   // TODO:
   // LOOP AND PASS to LLM - generateCardExtensions
+  console.log(templates);
   return templates;
 }
 
@@ -130,7 +132,10 @@ function addCost({
   let templates: BaseTemplate[] = [];
   for (const cost of [1, 8]) {
     templates.push({
-      colors: colors.combo.map((color) => ({ color, count: 1 })),
+      colors: colors.combo.map((color) => ({
+        color,
+        count: getRandomColorCost(colors.combo.length),
+      })),
       rarity,
       type,
       cost,
@@ -139,7 +144,10 @@ function addCost({
   for (const cost of [6, 7]) {
     for (let i = 0; i < 2; i++) {
       templates.push({
-        colors: colors.combo.map((color) => ({ color, count: 1 })),
+        colors: colors.combo.map((color) => ({
+          color,
+          count: getRandomColorCost(colors.combo.length),
+        })),
         rarity,
         type,
         cost,
@@ -149,7 +157,10 @@ function addCost({
   for (const cost of [2, 3, 4, 5]) {
     for (let i = 0; i < 3; i++) {
       templates.push({
-        colors: colors.combo.map((color) => ({ color, count: 1 })),
+        colors: colors.combo.map((color) => ({
+          color,
+          count: getRandomColorCost(colors.combo.length),
+        })),
         rarity,
         type,
         cost,
@@ -157,4 +168,32 @@ function addCost({
     }
   }
   return templates;
+}
+
+function getRandomColorCost(colorCount: number) {
+  if (colorCount === 1) {
+    return getRandomWeighted([
+      { item: 1, weight: 3 },
+      { item: 2, weight: 3 },
+      { item: 3, weight: 2 },
+      { item: 4, weight: 1 },
+    ]);
+  }
+  if (colorCount === 2) {
+    return getRandomWeighted([
+      { item: 1, weight: 3 },
+      { item: 2, weight: 3 },
+      { item: 3, weight: 1 },
+    ]);
+  }
+  if (colorCount === 3) {
+    return getRandomWeighted([
+      { item: 1, weight: 3 },
+      { item: 2, weight: 2 },
+    ]);
+  }
+  return getRandomWeighted([
+    { item: 1, weight: 3 },
+    { item: 2, weight: 1 },
+  ]);
 }
