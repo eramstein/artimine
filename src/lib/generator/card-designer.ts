@@ -8,7 +8,9 @@ import { clamp, getRandomIntegerWithVariance } from '../_utils/random';
 import { getKeywords } from './keywords';
 import type { LllmExtendedCard } from './llm-card-extension';
 
-export function generateUnitCard(baseCard: LllmExtendedCard = MOCK_BASE_CARDS[0]): UnitCard {
+export function generateUnitCard(
+  baseCard: LllmExtendedCard = MOCK_BASE_CARDS[0]
+): Partial<UnitCard> {
   console.log('TODO: generateCard', baseCard);
   const createdUnit: Partial<UnitCard> = { ...baseCard };
 
@@ -34,6 +36,7 @@ export function generateUnitCard(baseCard: LllmExtendedCard = MOCK_BASE_CARDS[0]
   // TODO:
 
   console.log('createdUnit', createdUnit);
+  return createdUnit;
 }
 
 function getPowerAndHealth(

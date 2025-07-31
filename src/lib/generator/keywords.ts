@@ -125,11 +125,11 @@ export function getKeywords(
   if (keywordConfig[selectedKeyword].type === 'number') {
     const value = Math.floor(budget / selectedKeywordCost);
     if (value > 0) {
-      keywords[selectedKeyword] = value;
+      (keywords as any)[selectedKeyword] = value;
       budget -= selectedKeywordCost * value;
     }
   } else {
-    keywords[selectedKeyword] = true;
+    (keywords as any)[selectedKeyword] = true;
     budget -= selectedKeywordCost;
   }
 
