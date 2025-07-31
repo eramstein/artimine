@@ -51,14 +51,14 @@ export function getBudgetForUnit(
   let budget = budgetPerCost[manaCost];
 
   const colorCount = colors.reduce((acc, color) => acc + color.count, 0);
-  const playerBaseMana = config.initialMana;
+  const minTurnAvailable = Math.max(config.initialMana, manaCost);
 
   // if a card has a equal or higher color than mana, get more budget to compensate tempo loss
-  if (colorCount === playerBaseMana) {
+  if (colorCount === minTurnAvailable) {
     budget += extraBudget.morecolorThanMana.equal;
-  } else if (colorCount === playerBaseMana + 1) {
+  } else if (colorCount === minTurnAvailable + 1) {
     budget += extraBudget.morecolorThanMana.oneMore;
-  } else if (colorCount >= playerBaseMana + 2) {
+  } else if (colorCount >= minTurnAvailable + 2) {
     budget += extraBudget.morecolorThanMana.twoMore;
   }
 

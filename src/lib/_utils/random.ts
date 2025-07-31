@@ -2,7 +2,10 @@ export function getRandomFromArray(items: any[]) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-export function getRandomWeighted(items: { item: any; weight: number }[]) {
+export function getRandomWeighted<T>(items: { item: T; weight: number }[]): T {
+  if (items.length === 0) {
+    throw new Error('No items provided');
+  }
   const totalWeight = items.reduce((acc, item) => acc + item.weight, 0);
   const random = Math.random() * totalWeight;
   let cumulativeWeight = 0;
@@ -10,6 +13,7 @@ export function getRandomWeighted(items: { item: any; weight: number }[]) {
     cumulativeWeight += item.weight;
     if (random <= cumulativeWeight) return item.item;
   }
+  throw new Error('No item found in getRandomWeighted');
 }
 
 export function getRandomIntegerWithVariance(mean: number, variance: number) {

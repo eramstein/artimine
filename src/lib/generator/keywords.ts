@@ -13,6 +13,15 @@ interface KeywordDefinition {
   requiresSomeHealth?: boolean;
 }
 
+interface KeywordPrevalence {
+  key: keyof UnitKeywords;
+  prevalence: number;
+}
+
+interface KeywordMetadata extends KeywordPrevalence {
+  cost: number;
+}
+
 const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   ranged: { baseCost: 3, prevalence: 8 },
   haste: { baseCost: 2, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },
@@ -62,12 +71,14 @@ function costPerKeywordForUnit(unit: Partial<UnitCard>): Record<keyof UnitKeywor
 
 function prevalencesForUnit(
   dominantcolor: CardColor,
-  unit: Partial<UnitCard>
+  unit: Partial<UnitCard>,
+  suggestedKeywords: string[]
 ): {
   key: keyof UnitKeywords;
-  value: number;
+  prevalence: number;
 }[] {
-  const prevalences: { key: keyof UnitKeywords; value: number }[] = Object.entries(
+  const suggestedKeywordsSet = new Set(suggestedKeywords);
+  const prevalences: { key: keyof UnitKeywords; prevalence: number }[] = Object.entries(
     keywordPrevalence
   ).map(([key, value]) => {
     // add color preferences to prevalences
@@ -80,12 +91,53 @@ function prevalencesForUnit(
     if (keywordConfig[key as keyof UnitKeywords].requiresSomeHealth && (unit.maxHealth ?? 0) < 3) {
       baseVal = Math.min(baseVal, 1);
     }
+    // adjust for LLM suggested keywords
+    if (suggestedKeywordsSet.has(key)) {
+      baseVal += 10;
+    }
     return {
       key: key as keyof UnitKeywords,
-      value: baseVal,
+      prevalence: baseVal,
     };
-  }) as { key: keyof UnitKeywords; value: number }[];
+  }) as { key: keyof UnitKeywords; prevalence: number }[];
   return prevalences;
+}
+
+function selectKeyword(
+  budget: number,
+  options: KeywordPrevalence[],
+  costs: Record<keyof UnitKeywords, number>,
+  alreadySelectedKeywords: UnitKeywords = {}
+): { keyword: keyof UnitKeywords | null; value: number | boolean; usedBudget: number } {
+  let keyword: keyof UnitKeywords | null = null;
+  let usedBudget: number = 0;
+  let value: number | boolean = true;
+
+  const affordableKeywords: KeywordMetadata[] = options
+    .filter(({ key }) => costs[key] <= budget && !alreadySelectedKeywords[key])
+    .map(({ key, prevalence }) => ({ key, prevalence, cost: Math.max(1, costs[key]) }));
+  if (affordableKeywords.length === 0) {
+    return { keyword: null, usedBudget: 0, value: true };
+  }
+
+  const selectedKeyword = getRandomWeighted(
+    affordableKeywords.map(({ key, prevalence, cost }) => ({
+      item: { key, prevalence, cost },
+      weight: prevalence,
+    }))
+  );
+  if (keywordConfig[selectedKeyword.key].type === 'number') {
+    const kwValue = Math.floor(budget / selectedKeyword.cost);
+    if (kwValue > 0) {
+      keyword = selectedKeyword.key;
+      usedBudget = selectedKeyword.cost * kwValue;
+      value = kwValue;
+    }
+  } else {
+    keyword = selectedKeyword.key;
+    usedBudget = selectedKeyword.cost;
+  }
+  return { keyword, usedBudget, value };
 }
 
 export function getKeywords(
@@ -99,38 +151,28 @@ export function getKeywords(
   const dominantColor = getDominantColor(colors);
 
   // probabilities for each keyword
-  const prevalences = prevalencesForUnit(dominantColor, unit);
-  const suggestedKeywordsSet = new Set(suggestedKeywords);
-  prevalences.forEach(({ key }, index) => {
-    if (suggestedKeywordsSet.has(key)) {
-      prevalences[index].value += 10;
-    }
-  });
+  const prevalences = prevalencesForUnit(dominantColor, unit, suggestedKeywords);
 
   // budget costs
   const costs = costPerKeywordForUnit(unit);
-  const affordableKeywords = prevalences.filter(({ key }) => costs[key] <= budget);
-  if (affordableKeywords.length === 0) {
-    return { keywords: {}, unusedBudget: budget };
+
+  // select keyword count
+  let keywordscount = 1;
+  if (budget >= 10 && Math.random() < 0.5) {
+    keywordscount++;
+  }
+  if (budget >= 20 && Math.random() < 0.5) {
+    keywordscount++;
   }
 
-  // select keyword
-  const selectedKeyword = getRandomWeighted(
-    affordableKeywords.map(({ key, value }) => ({
-      item: key,
-      weight: value,
-    }))
-  ) as keyof UnitKeywords;
-  const selectedKeywordCost = Math.max(1, costs[selectedKeyword]);
-  if (keywordConfig[selectedKeyword].type === 'number') {
-    const value = Math.floor(budget / selectedKeywordCost);
-    if (value > 0) {
-      (keywords as any)[selectedKeyword] = value;
-      budget -= selectedKeywordCost * value;
+  // select keywords
+  for (let i = 0; i < keywordscount; i++) {
+    const allocatedBudget = i === keywordscount - 1 ? budget : Math.floor(budget / keywordscount);
+    const selectedKeyword = selectKeyword(allocatedBudget, prevalences, costs, keywords);
+    if (allocatedBudget > 0 && selectedKeyword.keyword) {
+      (keywords as any)[selectedKeyword.keyword] = selectedKeyword.value;
+      budget -= selectedKeyword.usedBudget;
     }
-  } else {
-    (keywords as any)[selectedKeyword] = true;
-    budget -= selectedKeywordCost;
   }
 
   return { keywords, unusedBudget: budget };

@@ -41,11 +41,13 @@ export const keywordColorPreferences: Record<
     regeneration: 6,
     trample: 6,
     poisonous: 5,
+    moveAndAttack: -3,
   },
   [CardColor.Black]: {
     ranged: 3,
     retaliate: 9,
     armor: 6,
     poisonous: 3,
+    moveAndAttack: -3,
   },
 };

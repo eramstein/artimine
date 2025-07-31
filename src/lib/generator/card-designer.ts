@@ -1,4 +1,4 @@
-import type { CardColor, UnitCard, UnitKeywords } from '../_model';
+import { CardRarity, type CardColor, type UnitCard, type UnitKeywords } from '../_model';
 import { MOCK_BASE_CARDS } from './_mocks';
 import { baseStatsCost, getBudgetForUnit } from './budgets';
 import { type BaseTemplate } from './card-batches';
@@ -9,19 +9,32 @@ import { getKeywords } from './keywords';
 import type { LllmExtendedCard } from './llm-card-extension';
 
 export function generateUnitCard(
-  baseCard: LllmExtendedCard = MOCK_BASE_CARDS[0]
+  baseCard: LllmExtendedCard = MOCK_BASE_CARDS[3]
 ): Partial<UnitCard> {
   console.log('TODO: generateCard', baseCard);
   const createdUnit: Partial<UnitCard> = { ...baseCard };
 
   // get total budget for unit
   let budget = getBudgetForUnit(baseCard.cost ?? 1, baseCard.colors ?? []);
+  console.log('budget', budget);
 
   // spend points for power and health
-  const { power, health } = getPowerAndHealth(budget, baseCard.colors ?? []);
+  const { power, health } = getPowerAndHealth(
+    budget,
+    baseCard.rarity ?? CardRarity.Common,
+    baseCard.colors ?? []
+  );
+  for (let i = 0; i < 10; i++) {
+    const { power, health } = getPowerAndHealth(
+      budget,
+      baseCard.rarity ?? CardRarity.Common,
+      baseCard.colors ?? []
+    );
+  }
   createdUnit.power = power;
   createdUnit.maxHealth = health;
   budget -= power * baseStatsCost.power + health * baseStatsCost.health;
+  console.log('budget after power and health', budget);
 
   // spend points for keywords
   const { keywords, unusedBudget } = getKeywords(
@@ -30,7 +43,8 @@ export function generateUnitCard(
     baseCard.llmData?.suggestedKeywords ?? []
   );
   createdUnit.keywords = keywords;
-  budget += unusedBudget;
+  budget = unusedBudget;
+  console.log('budget after keywords', budget);
 
   // spend points for abilities
   // TODO:
@@ -41,12 +55,25 @@ export function generateUnitCard(
 
 function getPowerAndHealth(
   budget: number,
+  rarity: CardRarity,
   colors: { color: CardColor; count: number }[]
 ): { power: number; health: number } {
-  const variance = 0.2;
+  const variance = budget;
   const dominantColor = getDominantColor(colors);
   const preferences = powerAndHealthPreferences[dominantColor];
-  const standardBudget = budget * (preferences.power + preferences.health);
+  let standardBudget = budget * (preferences.power + preferences.health);
+  if (budget > 30) {
+    standardBudget -= 5;
+  }
+  if (rarity === CardRarity.Uncommon) {
+    standardBudget -= 2;
+  }
+  if (rarity === CardRarity.Rare) {
+    standardBudget -= 5;
+  }
+  if (rarity === CardRarity.Legendary) {
+    standardBudget -= 5;
+  }
   const allocatedBudget = clamp(getRandomIntegerWithVariance(standardBudget, variance), 0, budget);
   const powerBudget = clamp(
     getRandomIntegerWithVariance(allocatedBudget * preferences.power, variance),
