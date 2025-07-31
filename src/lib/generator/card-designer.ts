@@ -6,8 +6,9 @@ import { getDominantColor } from './_utils';
 import { powerAndHealthPreferences } from './color-pie';
 import { clamp, getRandomIntegerWithVariance } from '../_utils/random';
 import { getKeywords } from './keywords';
+import type { LllmExtendedCard } from './llm-card-extension';
 
-export function generateUnitCard(baseCard: BaseTemplate = MOCK_BASE_CARDS[0]): UnitCard {
+export function generateUnitCard(baseCard: LllmExtendedCard = MOCK_BASE_CARDS[0]): UnitCard {
   console.log('TODO: generateCard', baseCard);
   const createdUnit: Partial<UnitCard> = { ...baseCard };
 
@@ -21,8 +22,17 @@ export function generateUnitCard(baseCard: BaseTemplate = MOCK_BASE_CARDS[0]): U
   budget -= power * baseStatsCost.power + health * baseStatsCost.health;
 
   // spend points for keywords
-  const keywords = getKeywords(budget, baseCard.colors ?? []);
+  const { keywords, unusedBudget } = getKeywords(
+    budget,
+    createdUnit,
+    baseCard.llmData?.suggestedKeywords ?? []
+  );
   createdUnit.keywords = keywords;
+  budget += unusedBudget;
+
+  // spend points for abilities
+  // TODO:
+
   console.log('createdUnit', createdUnit);
 }
 
