@@ -17,18 +17,7 @@ export const cards: Record<string, CardTemplate> = {
     maxHealth: 3,
     colors: [{ color: CardColor.Red, count: 1 }],
     abilities: [
-      {
-        actions: [
-          {
-            text: 'Adjacent units get +1 armor',
-            effect: DataEffectTemplates.staticKeywordAdjAllies({
-              name: 'ProtectAdjacent',
-              keyword: { key: 'armor', value: 1 },
-            }),
-          },
-        ],
-        trigger: DataTriggerTemplates.static,
-      },
+      DataAbilityTemplates.staticKeyword({ keyword: { key: 'armor', value: 1 } }),
       DataAbilityTemplates.cc({ duration: 3, statusType: StatusType.Mezz }),
     ],
   },

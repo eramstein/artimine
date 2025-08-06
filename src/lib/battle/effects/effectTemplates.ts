@@ -6,8 +6,10 @@ import {
   getOpposingPlayer,
   removeStaticKeyword,
   addCounters,
+  untapPlayer,
+  incrementColor,
 } from '@/lib/battle';
-import { CounterType } from '@/lib/_model';
+import { CardColor, CounterType } from '@/lib/_model';
 import type {
   EffectArgs,
   Position,
@@ -37,6 +39,8 @@ type EffectTemplateFunctions = {
     name: string;
     keyword: UnitKeywordDefinition;
   }) => (p: EffectArgs) => void;
+  untapPlayer: () => (p: EffectArgs) => void;
+  incrementColor: (color: CardColor) => (p: EffectArgs) => void;
 };
 
 export const DataEffectTemplates: EffectTemplateFunctions = {
@@ -106,6 +110,16 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
           removeStaticKeyword(u, unit, name);
         }
       });
+    };
+  },
+  untapPlayer: () => {
+    return ({ player }) => {
+      untapPlayer(player);
+    };
+  },
+  incrementColor: (color) => {
+    return ({ player }) => {
+      incrementColor(player, color, 1);
     };
   },
 };

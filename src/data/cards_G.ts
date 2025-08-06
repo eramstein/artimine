@@ -152,9 +152,7 @@ export const cards_G: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Green, count: 1 }],
     actions: [
       {
-        effect: (p) => {
-          incrementColor(p.player, CardColor.Green, 1);
-        },
+        effect: DataEffectTemplates.incrementColor(CardColor.Green),
         text: `Gain 1 Green mana`,
       },
     ],
@@ -168,9 +166,7 @@ export const cards_G: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Green, count: 2 }],
     actions: [
       {
-        effect: (p) => {
-          untapPlayer(p.player);
-        },
+        effect: DataEffectTemplates.untapPlayer(),
         text: 'Untap your hero ability',
       },
     ],
