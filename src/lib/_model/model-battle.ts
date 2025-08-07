@@ -170,7 +170,10 @@ export interface TargetDefinition {
 export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];
 
 export type ActionDefinition = {
-  effect: (p: EffectArgs) => void;
+  effect: {
+    name: string;
+    args: Record<string, any>;
+  };
   targets?: TargetDefinition[];
   text: string;
 };

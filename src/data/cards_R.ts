@@ -13,12 +13,18 @@ export const cards_R: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Red, count: 1 }],
     actions: [
       {
-        effect: DataEffectTemplates.damageUnit({ damage: 3 }),
+        effect: {
+          name: 'damageUnit',
+          args: { damage: 3 },
+        },
         targets: [DataTargetTemplates.units(1)],
         text: `Deal 3 damage to a unit`,
       },
       {
-        effect: DataEffectTemplates.damageUnit({ damage: 2 }),
+        effect: {
+          name: 'damageUnit',
+          args: { damage: 2 },
+        },
         targets: [DataTargetTemplates.units(2)],
         text: `Deal 2 damage to 2 units`,
       },
@@ -33,10 +39,13 @@ export const cards_R: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Red, count: 2 }],
     actions: [
       {
-        effect: DataEffectTemplates.damageUnit({
-          damage: 1,
-          range: DataUnitFilters.targetAndAdjacentUnits(),
-        }),
+        effect: {
+          name: 'damageUnit',
+          args: {
+            damage: 1,
+            range: DataUnitFilters.targetAndAdjacentUnits(),
+          },
+        },
         targets: [DataTargetTemplates.units(1)],
         text: `Deal 1 damage to a unit and adjacent units`,
       },

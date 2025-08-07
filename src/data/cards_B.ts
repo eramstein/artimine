@@ -25,7 +25,10 @@ export const cards_B: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Black, count: 1 }],
     actions: [
       {
-        effect: DataEffectTemplates.reanimate(),
+        effect: {
+          name: 'reanimate',
+          args: {},
+        },
         targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
         text: 'Re-animate a unit from a graveyard',
       },
@@ -40,45 +43,48 @@ export const cards_B: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Black, count: 2 }],
     actions: [
       {
-        effect: DataEffectTemplates.addCounters({
-          counterType: CounterType.Decay,
-          counterValue: 2,
-          range: DataUnitFilters.inRow(),
-        }),
+        effect: {
+          name: 'addCounters',
+          args: {
+            counterType: CounterType.Decay,
+            counterValue: 2,
+            range: DataUnitFilters.inRow(),
+          },
+        },
         targets: [DataTargetTemplates.units(1)],
         text: `Add 2 Decay counters to all units in a row`,
       },
     ],
   },
-  guinea_pig: {
-    id: 'guinea_pig',
-    name: 'Guinea Pig',
-    rarity: CardRarity.Common,
-    type: CardType.Spell,
-    cost: 1,
-    colors: [{ color: CardColor.Black, count: 1 }],
-    actions: [
-      {
-        text: 'Move all decay counters to target creature',
-        targets: [DataTargetTemplates.units(1)],
-        effect: (p) => {
-          const unit = p.targets[0][0] as UnitDeployed;
-          let movedCounters = 0;
-          bs.units.forEach((u) => {
-            if (u.instanceId === unit.instanceId) {
-              return;
-            }
-            const decayCounters = u.counters[CounterType.Decay] || 0;
-            removeCounters(u, CounterType.Decay, decayCounters);
-            movedCounters += decayCounters;
-          });
-          if (movedCounters > 0) {
-            addCounters(unit, CounterType.Decay, movedCounters);
-          }
-        },
-      },
-    ],
-  },
+  // guinea_pig: {
+  //   id: 'guinea_pig',
+  //   name: 'Guinea Pig',
+  //   rarity: CardRarity.Common,
+  //   type: CardType.Spell,
+  //   cost: 1,
+  //   colors: [{ color: CardColor.Black, count: 1 }],
+  //   actions: [
+  //     {
+  //       text: 'Move all decay counters to target creature',
+  //       targets: [DataTargetTemplates.units(1)],
+  //       effect: (p) => {
+  //         const unit = p.targets[0][0] as UnitDeployed;
+  //         let movedCounters = 0;
+  //         bs.units.forEach((u) => {
+  //           if (u.instanceId === unit.instanceId) {
+  //             return;
+  //           }
+  //           const decayCounters = u.counters[CounterType.Decay] || 0;
+  //           removeCounters(u, CounterType.Decay, decayCounters);
+  //           movedCounters += decayCounters;
+  //         });
+  //         if (movedCounters > 0) {
+  //           addCounters(unit, CounterType.Decay, movedCounters);
+  //         }
+  //       },
+  //     },
+  //   ],
+  // },
   mosquito: {
     id: 'mosquito',
     name: 'Mosquito',
@@ -120,25 +126,25 @@ export const cards_B: Record<string, CardTemplate> = {
       ranged: true,
     },
   },
-  dark_ritual: {
-    id: 'dark_ritual',
-    name: 'Dark Ritual',
-    rarity: CardRarity.Common,
-    type: CardType.Spell,
-    cost: 2,
-    colors: [{ color: CardColor.Black, count: 1 }],
-    actions: [
-      {
-        text: "Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.",
-        targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],
-        effect: ({ targets }) => {
-          const sacrificedUnit = targets[0][0] as UnitDeployed;
-          const targetUnit = targets[1][0] as UnitDeployed;
-          const sacrificedHealth = sacrificedUnit.health;
-          damageUnit(targetUnit, sacrificedHealth);
-          destroyUnit(sacrificedUnit);
-        },
-      },
-    ],
-  },
+  // dark_ritual: {
+  //   id: 'dark_ritual',
+  //   name: 'Dark Ritual',
+  //   rarity: CardRarity.Common,
+  //   type: CardType.Spell,
+  //   cost: 2,
+  //   colors: [{ color: CardColor.Black, count: 1 }],
+  //   actions: [
+  //     {
+  //       text: "Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.",
+  //       targets: [DataTargetTemplates.allies(1), DataTargetTemplates.unit()],
+  //       effect: ({ targets }) => {
+  //         const sacrificedUnit = targets[0][0] as UnitDeployed;
+  //         const targetUnit = targets[1][0] as UnitDeployed;
+  //         const sacrificedHealth = sacrificedUnit.health;
+  //         damageUnit(targetUnit, sacrificedHealth);
+  //         destroyUnit(sacrificedUnit);
+  //       },
+  //     },
+  //   ],
+  // },
 };

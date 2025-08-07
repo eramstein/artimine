@@ -7,6 +7,7 @@ import {
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
+import { DataEffectTemplates } from './effects/effectTemplates';
 import { checkTargets } from './target';
 
 export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[][]) {
@@ -41,7 +42,8 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
         }
       });
     }
-    actionDef.effect({
+    console.log(actionDef.effect.name, actionDef.effect.args);
+    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args)({
       unit,
       targets: effectTargets,
       triggerParams: {},

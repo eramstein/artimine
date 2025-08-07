@@ -9,6 +9,7 @@ import {
   type EffectTargets,
 } from '@/lib/_model';
 import { getEligibleTargets } from './target';
+import { DataEffectTemplates } from './effects';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
   bs.units.forEach((u) => {
@@ -27,7 +28,7 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
           if (actionDef.targets && actionDef.targets.length > 0) {
             targets = getEligibleTargets(u, actionDef.targets[0]) as EffectTargets;
           }
-          actionDef.effect({
+          DataEffectTemplates[actionDef.effect.name](actionDef.effect.args)({
             unit: u,
             targets: [targets],
             triggerParams,

@@ -8,6 +8,9 @@ import {
   addCounters,
   untapPlayer,
   incrementColor,
+  applyUnitStatus,
+  summonUnit,
+  makeUnit,
 } from '@/lib/battle';
 import { CardColor, CounterType } from '@/lib/_model';
 import type {
@@ -17,33 +20,13 @@ import type {
   UnitDeployed,
   UnitKeywordDefinition,
   UnitEndOfTurnEffects,
+  UnitCardTemplate,
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { DataUnitFilters, type UnitFilter } from './unitFilters';
 import { reanimate } from '../graveyard';
 
-// return the effect function, it gets these args { unit, targets, triggerParams }
-
-// Define specific function signatures for each effect template
-type EffectTemplateFunctions = {
-  buffAdjAlliesTemp: (effect: Partial<UnitEndOfTurnEffects>) => (p: EffectArgs) => void;
-  reanimate: () => (p: EffectArgs) => void;
-  damageEnemyLeader: (params: { damage: number }) => (p: EffectArgs) => void;
-  damageUnit: (params: { damage: number; range?: UnitFilter }) => (p: EffectArgs) => void;
-  addCounters: (params: {
-    counterType: CounterType;
-    counterValue: number;
-    range?: UnitFilter;
-  }) => (p: EffectArgs) => void;
-  staticKeywordAdjAllies: (params: {
-    name: string;
-    keyword: UnitKeywordDefinition;
-  }) => (p: EffectArgs) => void;
-  untapPlayer: () => (p: EffectArgs) => void;
-  incrementColor: (color: CardColor) => (p: EffectArgs) => void;
-};
-
-export const DataEffectTemplates: EffectTemplateFunctions = {
+export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) => void> = {
   buffAdjAlliesTemp: ({ ...effect }) => {
     return ({ triggerParams }) => {
       DataUnitFilters.adjacentAllies()
@@ -71,7 +54,7 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
       damagePlayer(getOpposingPlayer(unit), damage);
     };
   },
-  damageUnit: ({ damage, range }) => {
+  damageUnit: ({ damage, range }: { damage: number; range?: UnitFilter }) => {
     return ({ targets }) => {
       (targets[0] as UnitDeployed[]).forEach((target) => {
         const unitsInRange = range?.fn(target) ?? [target];
@@ -81,7 +64,15 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
       });
     };
   },
-  addCounters: ({ counterType, counterValue, range = DataUnitFilters.self() }) => {
+  addCounters: ({
+    counterType,
+    counterValue,
+    range = DataUnitFilters.self(),
+  }: {
+    counterType: CounterType;
+    counterValue: number;
+    range?: UnitFilter;
+  }) => {
     return ({ unit, targets }) => {
       const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
       targetUnits.forEach((u) => {
@@ -120,6 +111,32 @@ export const DataEffectTemplates: EffectTemplateFunctions = {
   incrementColor: (color) => {
     return ({ player }) => {
       incrementColor(player, color, 1);
+    };
+  },
+  applyUnitStatus: ({ statusType, duration }) => {
+    return ({ targets }) => {
+      (targets[0] as UnitDeployed[]).forEach((u) => {
+        applyUnitStatus(u, statusType, duration);
+      });
+    };
+  },
+  summon: ({
+    summonedUnit,
+    isRespawn,
+  }: {
+    summonedUnit: UnitCardTemplate;
+    isRespawn?: boolean;
+  }) => {
+    return ({ targets, player, unit }) => {
+      if (isRespawn) {
+        const createdUnit = makeUnit(player.id, summonedUnit);
+        summonUnit(createdUnit, unit.position);
+      } else {
+        (targets[0] as Position[]).forEach((cell: Position) => {
+          const createdUnit = makeUnit(player.id, summonedUnit);
+          summonUnit(createdUnit, cell);
+        });
+      }
     };
   },
 };
