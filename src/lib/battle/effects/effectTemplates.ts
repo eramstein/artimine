@@ -23,19 +23,10 @@ import type {
   UnitCardTemplate,
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
-import { DataUnitFilters, type UnitFilter } from './unitFilters';
 import { reanimate } from '../graveyard';
+import { filterUnits, type UnitFilterArgs } from './unitFilters';
 
 export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) => void> = {
-  buffAdjAlliesTemp: ({ ...effect }) => {
-    return ({ triggerParams }) => {
-      DataUnitFilters.adjacentAllies()
-        .fn(triggerParams.mover)
-        .forEach((u) => {
-          applyTemporaryEffect(u, { ...effect });
-        });
-    };
-  },
   reanimate: () => {
     return ({ unit, player, targets }) => {
       if (targets.length < 2) {
@@ -54,10 +45,10 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
       damagePlayer(getOpposingPlayer(unit), damage);
     };
   },
-  damageUnit: ({ damage, range }: { damage: number; range?: UnitFilter }) => {
+  damageUnit: ({ damage, range }: { damage: number; range?: UnitFilterArgs }) => {
     return ({ targets }) => {
       (targets[0] as UnitDeployed[]).forEach((target) => {
-        const unitsInRange = range?.fn(target) ?? [target];
+        const unitsInRange = range ? filterUnits({ unit: target, ...range }) : [target];
         unitsInRange.forEach((u) => {
           damageUnit(u, damage);
         });
@@ -67,33 +58,30 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
   addCounters: ({
     counterType,
     counterValue,
-    range = DataUnitFilters.self(),
+    range,
   }: {
     counterType: CounterType;
     counterValue: number;
-    range?: UnitFilter;
+    range?: UnitFilterArgs;
   }) => {
     return ({ unit, targets }) => {
       const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
       targetUnits.forEach((u) => {
-        const unitsInRange = range.fn(u).map((u) => u.instanceId);
-        bs.units.forEach((u) => {
-          if (unitsInRange.includes(u.instanceId)) {
-            addCounters(u, counterType, counterValue);
-          }
+        const unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
+        unitsInRange.forEach((u) => {
+          addCounters(u, counterType, counterValue);
         });
       });
     };
   },
   staticKeywordAdjAllies: ({ name, keyword }) => {
     return ({ unit }) => {
-      const unitsInRange = DataUnitFilters.adjacentAllies()
-        .fn(unit)
-        .map((u) => u.instanceId);
+      const unitsInRange = filterUnits({ unit, adjacent: true, allies: true });
+      unitsInRange.forEach((u) => {
+        addStaticKeyword(u, unit, keyword, false, name);
+      });
       bs.units.forEach((u) => {
-        if (unitsInRange.includes(u.instanceId)) {
-          addStaticKeyword(u, unit, keyword, false, name);
-        } else if (
+        if (
           u.staticModifiers.filter(
             (sm) => sm.source.unitId === unit.instanceId && sm.source.abilityName === name
           ).length > 0

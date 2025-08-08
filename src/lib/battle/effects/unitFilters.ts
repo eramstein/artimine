@@ -1,69 +1,76 @@
-import type { UnitDeployed } from '@/lib/_model';
+import type { Position, UnitDeployed } from '@/lib/_model';
 import { UnitType } from '@/lib/_model/enums';
 import { getAdjacentUnits } from '../unit';
 import { bs } from '@/lib/_state';
 
-export type UnitFilter = {
-  fn: (unit: UnitDeployed) => UnitDeployed[];
-  name: string;
-};
+export interface UnitFilterArgs {
+  // references
+  self?: boolean;
+  unit?: UnitDeployed;
+  position?: Position;
+  // relative to the references
+  sameRow?: boolean;
+  sameColumn?: boolean;
+  allies?: boolean;
+  ennemies?: boolean;
+  adjacent?: boolean;
+  // absolute
+  unitType?: UnitType;
+}
 
-// use currying to build custom filters
-// Define specific function signatures for each unit filter
-type UnitFilterFunctions = {
-  self: () => UnitFilter;
-  adjacentAllies: () => UnitFilter;
-  adjacentUnits: () => UnitFilter;
-  targetAndAdjacentUnits: () => UnitFilter;
-  inRow: () => UnitFilter;
-  inColumn: () => UnitFilter;
-  alliesInRow: () => UnitFilter;
-  ennemiesInRow: () => UnitFilter;
-  alliedOfType: (type: UnitType) => UnitFilter;
-};
+export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
+  const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
+  const validUnits = bs.units.filter((u) => {
+    let valid = true;
+    if (filterArgs.sameRow && u.position.row !== relativeToPosition?.row) {
+      valid = false;
+    }
+    if (filterArgs.sameColumn && u.position.column !== relativeToPosition?.column) {
+      valid = false;
+    }
+    if (filterArgs.allies && u.ownerPlayerId !== filterArgs.unit?.ownerPlayerId) {
+      valid = false;
+    }
+    if (filterArgs.ennemies && u.ownerPlayerId === filterArgs.unit?.ownerPlayerId) {
+      valid = false;
+    }
+    if (
+      filterArgs.adjacent &&
+      filterArgs.unit &&
+      !getAdjacentUnits(u.position).includes(filterArgs.unit)
+    ) {
+      valid = false;
+    }
+    if (filterArgs.unitType && !u.unitTypes?.includes(filterArgs.unitType)) {
+      valid = false;
+    }
+    return valid;
+  });
+  if (filterArgs.self && filterArgs.unit) {
+    validUnits.push(filterArgs.unit);
+  }
+  return validUnits;
+}
 
-export const DataUnitFilters: UnitFilterFunctions = {
-  self: () => ({ fn: (unit) => [unit], name: 'self' }),
-  adjacentAllies: () => ({
-    fn: (unit) =>
-      getAdjacentUnits(unit.position).filter((u) => u.ownerPlayerId === unit.ownerPlayerId),
-    name: 'adjacent allies',
-  }),
-  adjacentUnits: () => ({
-    fn: (unit) => getAdjacentUnits(unit.position),
-    name: 'adjacent units',
-  }),
-  targetAndAdjacentUnits: () => ({
-    fn: (unit) => [unit, ...getAdjacentUnits(unit.position)],
-    name: 'target and adjacent units',
-  }),
-  inRow: () => ({
-    fn: (unit) => bs.units.filter((u) => u.position.row === unit.position.row),
-    name: 'units in row',
-  }),
-  inColumn: () => ({
-    fn: (unit) => bs.units.filter((u) => u.position.column === unit.position.column),
-    name: 'units in column',
-  }),
-  alliesInRow: () => ({
-    fn: (unit) =>
-      bs.units.filter(
-        (u) => u.ownerPlayerId === unit.ownerPlayerId && u.position.row === unit.position.row
-      ),
-    name: 'allies in row',
-  }),
-  ennemiesInRow: () => ({
-    fn: (unit) =>
-      bs.units.filter(
-        (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
-      ),
-    name: 'ennemies in row',
-  }),
-  alliedOfType: (type: UnitType) => ({
-    fn: (unit) =>
-      bs.units
-        .filter((u) => u.ownerPlayerId === unit.ownerPlayerId)
-        .filter((u) => u.unitTypes?.includes(type)),
-    name: 'allied ' + type + ' units',
-  }),
-};
+export function getRangeLabel(filterArgs: UnitFilterArgs) {
+  let labels = [];
+  if (filterArgs.sameRow) {
+    labels.push('same row');
+  }
+  if (filterArgs.sameColumn) {
+    labels.push('same column');
+  }
+  if (filterArgs.allies) {
+    labels.push('allies');
+  }
+  if (filterArgs.ennemies) {
+    labels.push('ennemies');
+  }
+  if (filterArgs.adjacent) {
+    labels.push('adjacent');
+  }
+  if (filterArgs.unitType) {
+    labels.push(filterArgs.unitType);
+  }
+  return labels.join(' ');
+}

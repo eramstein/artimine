@@ -9,7 +9,6 @@ import {
   type CardTemplate,
 } from '@/lib/_model';
 import { DataAbilityTemplates } from '@/lib/battle/abilities';
-import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
@@ -51,7 +50,7 @@ export const cards_R: Record<string, CardTemplate> = {
           name: 'damageUnit',
           args: {
             damage: 1,
-            range: DataUnitFilters.targetAndAdjacentUnits(),
+            range: { adjacent: true, self: true },
           },
         },
         targets: [{ type: TargetType.Units, count: 1 }],

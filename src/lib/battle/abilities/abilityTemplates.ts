@@ -6,15 +6,15 @@ import {
   TriggerType,
   TriggerRange,
 } from '@/lib/_model';
-import { DataUnitFilters } from '../effects/unitFilters';
+import { getRangeLabel } from '../effects/unitFilters';
 
 export const DataAbilityTemplates: {
   [key: string]: ({ ...any }) => Ability;
 } = {
-  counters: ({ counterType, counterValue, range = DataUnitFilters.self(), trigger }) => ({
+  counters: ({ counterType, counterValue, range, trigger }) => ({
     actions: [
       {
-        text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range.name && range.name !== 'self' ? 'Affects ' + range.name + '.' : ''}`,
+        text: `Add ${counterValue} ${counterType} counters ${trigger.text || trigger.type}. ${range ? 'Affects ' + getRangeLabel(range) : ''}`,
         effect: {
           name: 'addCounters',
           args: {

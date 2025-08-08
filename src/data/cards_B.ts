@@ -9,7 +9,6 @@ import {
   type CardTemplate,
 } from '@/lib/_model';
 import { DataAbilityTemplates } from '@/lib/battle/abilities';
-import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
@@ -44,7 +43,7 @@ export const cards_B: Record<string, CardTemplate> = {
           args: {
             counterType: CounterType.Decay,
             counterValue: 2,
-            range: DataUnitFilters.inRow(),
+            range: { sameRow: true },
           },
         },
         targets: [{ type: TargetType.Units, count: 1 }],
@@ -94,7 +93,7 @@ export const cards_B: Record<string, CardTemplate> = {
       DataAbilityTemplates.counters({
         counterType: CounterType.Decay,
         counterValue: 1,
-        range: DataUnitFilters.ennemiesInRow(),
+        range: { sameRow: true, ennemies: true },
         trigger: { type: TriggerType.AfterMove, range: TriggerRange.Ennemies },
       }),
     ],

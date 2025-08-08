@@ -10,7 +10,6 @@ import {
   type CardTemplate,
 } from '@/lib/_model';
 import { DataAbilityTemplates } from '@/lib/battle/abilities';
-import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_G: Record<string, CardTemplate> = {
   wall_of_bramble: {
@@ -138,7 +137,7 @@ export const cards_G: Record<string, CardTemplate> = {
       DataAbilityTemplates.counters({
         counterType: CounterType.Growth,
         counterValue: 1,
-        range: DataUnitFilters.alliedOfType(UnitType.Mushroom),
+        range: { unitType: UnitType.Mushroom, allies: true },
         trigger: { type: TriggerType.OnDeploy, range: TriggerRange.Self },
       }),
     ],
