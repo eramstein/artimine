@@ -14,11 +14,9 @@ import {
   type Position,
   type UnitCardTemplate,
   CounterType,
+  TargetType,
 } from '@/lib/_model';
 import { DataTriggerTemplates as TRIG } from './triggerTemplates';
-import { DataTargetTemplates as TAR } from '../target';
-import { DataEffectTemplates } from '../effects';
-import { cards } from '@/data';
 import { DataUnitFilters } from '../effects/unitFilters';
 
 export const DataAbilityTemplates: {
@@ -45,7 +43,7 @@ export const DataAbilityTemplates: {
     actions: [
       {
         text: 'Ping ' + damage,
-        targets: [TAR.ennemies(targetCount)],
+        targets: [{ type: TargetType.Ennemies, count: targetCount }],
         effect: {
           name: 'damageUnit',
           args: {
@@ -61,7 +59,7 @@ export const DataAbilityTemplates: {
     actions: [
       {
         text: statusType + ' ' + targetCount + ' unit for ' + duration + ' turns',
-        targets: [TAR.ennemies(targetCount)],
+        targets: [{ type: TargetType.Ennemies, count: targetCount }],
         effect: {
           name: 'applyUnitStatus',
           args: {
@@ -78,7 +76,7 @@ export const DataAbilityTemplates: {
     actions: [
       {
         text: 'Summon ' + summonedUnit.name,
-        targets: [TAR.allyCell()],
+        targets: [{ type: TargetType.AllyCell }],
         effect: {
           name: 'summon',
           args: {

@@ -8,9 +8,7 @@ import {
   type CardTemplate,
 } from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
-import { DataTargetTemplates } from '@/lib/battle/target';
-import { incrementColor, untapPlayer } from '@/lib/battle/player';
+import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_G: Record<string, CardTemplate> = {
   wall_of_bramble: {

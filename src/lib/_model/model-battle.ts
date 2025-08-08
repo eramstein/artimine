@@ -163,7 +163,6 @@ export interface Trigger {
 export interface TargetDefinition {
   type: TargetType;
   count?: number;
-  eligible?(card: UnitDeployed | SpellCard, potentialTargets: EffectTargets): EffectTargets;
   text?: string;
 }
 

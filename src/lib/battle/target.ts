@@ -15,87 +15,6 @@ import { getEmptyCells, getPositionKey, isCellFree, isOnPlayersSide } from './bo
 import { getAllGraveyardsCards } from './graveyard';
 import { getAllLands } from './land';
 
-type TargetTemplateFunctions = {
-  self: () => TargetDefinition;
-  ennemies: (n: number) => TargetDefinition;
-  allies: (n: number) => TargetDefinition;
-  cell: () => TargetDefinition;
-  unit: () => TargetDefinition;
-  units: (n: number) => TargetDefinition;
-  allyCell: () => TargetDefinition;
-  emptyCell: () => TargetDefinition;
-  graveyardCard: () => TargetDefinition;
-  graveyardUnit: () => TargetDefinition;
-};
-
-export const DataTargetTemplates: TargetTemplateFunctions = {
-  self: () => ({
-    type: TargetType.Self,
-  }),
-  ennemies: (n: number) => ({
-    type: TargetType.Unit,
-    count: n,
-    eligible: (card: Card, units: EffectTargets) => {
-      return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId !== card.ownerPlayerId);
-    },
-    text: `${n} ennemy units`,
-  }),
-  allies: (n: number) => ({
-    type: TargetType.Unit,
-    count: n,
-    eligible: (card: Card, units: EffectTargets) => {
-      return (units as UnitDeployed[]).filter((t) => t.ownerPlayerId === card.ownerPlayerId);
-    },
-    text: `${n} allied units`,
-  }),
-  cell: () => ({
-    type: TargetType.Cell,
-    count: 1,
-    text: `1 cell`,
-  }),
-  unit: () => ({
-    type: TargetType.Unit,
-    count: 1,
-    text: `1 unit`,
-  }),
-  units: (n: number) => ({
-    type: TargetType.Unit,
-    count: n,
-    text: `${n} units`,
-  }),
-  allyCell: () => ({
-    type: TargetType.Cell,
-    count: 1,
-    eligible: (card: Card, positions: EffectTargets) => {
-      return (positions as Position[]).filter(
-        (p) => isOnPlayersSide(p, card.ownerPlayerId) && isCellFree(p)
-      );
-    },
-    text: `1 empty allied cell`,
-  }),
-  emptyCell: () => ({
-    type: TargetType.Cell,
-    count: 1,
-    eligible: (card: Card, positions: EffectTargets) => {
-      return (positions as Position[]).filter((p) => isCellFree(p));
-    },
-    text: `1 empty cell`,
-  }),
-  graveyardCard: () => ({
-    type: TargetType.GraveyardCard,
-    count: 1,
-    text: `1 card from graveyard`,
-  }),
-  graveyardUnit: () => ({
-    type: TargetType.GraveyardCard,
-    count: 1,
-    eligible: (card: Card, graveyardCards: EffectTargets) => {
-      return (graveyardCards as Card[]).filter((c) => c.type === CardType.Unit);
-    },
-    text: `1 unit from graveyard`,
-  }),
-};
-
 export function areAllTargetsValid(
   tentativeTargets: Card[] | UnitDeployed[] | Land[],
   validTargets: Card[] | UnitDeployed[] | Land[]
@@ -144,7 +63,7 @@ export function checkTargets(
   const eligibleTargets = getEligibleTargets(card, targetDefinition);
   // target has an instanceId
   if (
-    targetDefinition.type === TargetType.Unit ||
+    targetDefinition.type.includes('unit') ||
     targetDefinition.type === TargetType.Land ||
     targetDefinition.type === TargetType.GraveyardCard
   ) {
@@ -159,7 +78,7 @@ export function checkTargets(
     return true;
   }
   // target is cells
-  if (targetDefinition.type === TargetType.Cell) {
+  if (targetDefinition.type.includes('cell')) {
     const targetsValid = areAllCellsValid(
       tentativeTargets as Position[],
       eligibleTargets as Position[]
@@ -184,10 +103,22 @@ export function getEligibleTargets(
     return [card];
   }
   let eligibleTargets: EffectTargets = [];
-  if (target.type === TargetType.Unit) {
+  if (target.type === TargetType.Units) {
     eligibleTargets = bs.units;
   }
+  if (target.type === TargetType.Ennemies) {
+    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId !== card.ownerPlayerId);
+  }
+  if (target.type === TargetType.Allies) {
+    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId === card.ownerPlayerId);
+  }
   if (target.type === TargetType.Cell) {
+    eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
+  }
+  if (target.type === TargetType.AllyCell) {
+    eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
+  }
+  if (target.type === TargetType.EmptyCell) {
     eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
   }
   if (target.type === TargetType.Land) {
@@ -198,9 +129,6 @@ export function getEligibleTargets(
   }
   if (target.type === TargetType.GraveyardCard) {
     eligibleTargets = getAllGraveyardsCards();
-  }
-  if (target.eligible) {
-    return target.eligible(card, eligibleTargets);
   }
   return eligibleTargets;
 }

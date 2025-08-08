@@ -3,17 +3,11 @@ import {
   CardRarity,
   CardType,
   CounterType,
+  TargetType,
   type CardTemplate,
-  type UnitDeployed,
 } from '@/lib/_model';
-import { bs } from '@/lib/_state';
-import { destroyUnit } from '@/lib/battle';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { addCounters, removeCounters } from '@/lib/battle/counter';
-import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
-import { damageUnit } from '@/lib/battle/unit';
-import { DataTargetTemplates } from '@/lib/battle/target';
-import { incrementColor } from '@/lib/battle/player';
+import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
@@ -29,7 +23,7 @@ export const cards_B: Record<string, CardTemplate> = {
           name: 'reanimate',
           args: {},
         },
-        targets: [DataTargetTemplates.graveyardUnit(), DataTargetTemplates.cell()],
+        targets: [{ type: TargetType.GraveyardCard }, { type: TargetType.Cell }],
         text: 'Re-animate a unit from a graveyard',
       },
     ],
@@ -51,7 +45,7 @@ export const cards_B: Record<string, CardTemplate> = {
             range: DataUnitFilters.inRow(),
           },
         },
-        targets: [DataTargetTemplates.units(1)],
+        targets: [{ type: TargetType.Units, count: 1 }],
         text: `Add 2 Decay counters to all units in a row`,
       },
     ],

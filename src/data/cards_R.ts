@@ -1,7 +1,13 @@
-import { CardColor, CardRarity, CardType, CounterType, type CardTemplate } from '@/lib/_model';
+import {
+  CardColor,
+  CardRarity,
+  CardType,
+  CounterType,
+  TargetType,
+  type CardTemplate,
+} from '@/lib/_model';
 import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates, DataUnitFilters } from '@/lib/battle/effects';
-import { DataTargetTemplates } from '@/lib/battle/target';
+import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
@@ -17,7 +23,7 @@ export const cards_R: Record<string, CardTemplate> = {
           name: 'damageUnit',
           args: { damage: 3 },
         },
-        targets: [DataTargetTemplates.units(1)],
+        targets: [{ type: TargetType.Units, count: 1 }],
         text: `Deal 3 damage to a unit`,
       },
       {
@@ -25,7 +31,7 @@ export const cards_R: Record<string, CardTemplate> = {
           name: 'damageUnit',
           args: { damage: 2 },
         },
-        targets: [DataTargetTemplates.units(2)],
+        targets: [{ type: TargetType.Units, count: 2 }],
         text: `Deal 2 damage to 2 units`,
       },
     ],
@@ -46,7 +52,7 @@ export const cards_R: Record<string, CardTemplate> = {
             range: DataUnitFilters.targetAndAdjacentUnits(),
           },
         },
-        targets: [DataTargetTemplates.units(1)],
+        targets: [{ type: TargetType.Units, count: 1 }],
         text: `Deal 1 damage to a unit and adjacent units`,
       },
     ],

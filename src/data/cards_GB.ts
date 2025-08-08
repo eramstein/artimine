@@ -2,13 +2,10 @@ import {
   CardColor,
   CardRarity,
   CardType,
-  StatusType,
   type CardTemplate,
   type UnitCardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates } from '@/lib/battle/effects';
-import { DataTargetTemplates } from '@/lib/battle/target';
+import { DataAbilityTemplates } from '@/lib/battle/abilities';
 
 const shroomy_shooty: UnitCardTemplate = {
   id: 'shroomy_shooty',
