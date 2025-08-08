@@ -4,9 +4,11 @@ import {
   CardType,
   CounterType,
   TargetType,
+  TriggerRange,
+  TriggerType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates } from '@/lib/battle/abilities';
 import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_B: Record<string, CardTemplate> = {
@@ -93,7 +95,7 @@ export const cards_B: Record<string, CardTemplate> = {
         counterType: CounterType.Decay,
         counterValue: 1,
         range: DataUnitFilters.ennemiesInRow(),
-        trigger: DataTriggerTemplates.meMove,
+        trigger: { type: TriggerType.AfterMove, range: TriggerRange.Ennemies },
       }),
     ],
   },

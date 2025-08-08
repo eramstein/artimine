@@ -7,6 +7,7 @@ import {
   type Player,
   type Land,
   type EffectTargets,
+  TriggerRange,
 } from '@/lib/_model';
 import { getEligibleTargets } from './target';
 import { DataEffectTemplates } from './effects';
@@ -50,8 +51,51 @@ function checkTriggerType(ability: Ability, triggerType: TriggerType): boolean {
   );
 }
 
-function checkTriggerCondition(ability: Ability, unit: UnitDeployed, triggerArgs: any): boolean {
-  return !ability.trigger.condition || ability.trigger.condition(unit, triggerArgs);
+function checkTriggerCondition(
+  ability: Ability,
+  unitWithAbility: UnitDeployed,
+  triggerArgs: any
+): boolean {
+  // if no range is specified, the trigger is always triggered
+  if (!ability.trigger.range) {
+    return true;
+  }
+
+  // special case for turn start, here Self means the player
+  if (
+    ability.trigger.type === TriggerType.OnTurnStart &&
+    ability.trigger.range === TriggerRange.Self
+  ) {
+    return triggerArgs.player.id === unitWithAbility.ownerPlayerId;
+  }
+
+  // all others check if the unit causing the trigger is in the range
+  let unitCausingTrigger = null;
+  if (
+    [TriggerType.OnDeath, TriggerType.OnDeploy, TriggerType.BeforeDamage].includes(
+      ability.trigger.type
+    )
+  ) {
+    unitCausingTrigger = triggerArgs.unit;
+  }
+  if (ability.trigger.type === TriggerType.AfterMove) {
+    unitCausingTrigger = triggerArgs.attacker;
+  }
+  if (ability.trigger.type === TriggerType.AfterCombat) {
+    unitCausingTrigger = triggerArgs.attacker;
+  }
+
+  if (ability.trigger.range === TriggerRange.Self) {
+    return unitWithAbility.instanceId === unitCausingTrigger.instanceId;
+  }
+  if (ability.trigger.range === TriggerRange.Allies) {
+    return unitWithAbility.ownerPlayerId === unitCausingTrigger.ownerPlayerId;
+  }
+  if (ability.trigger.range === TriggerRange.Ennemies) {
+    return unitWithAbility.ownerPlayerId !== unitCausingTrigger.ownerPlayerId;
+  }
+
+  return false;
 }
 
 /* 

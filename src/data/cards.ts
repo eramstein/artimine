@@ -1,6 +1,5 @@
 import { CardColor, CardRarity, CardType, StatusType, type CardTemplate } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
-import { DataEffectTemplates } from '@/lib/battle/effects';
+import { DataAbilityTemplates } from '@/lib/battle/abilities';
 import { cards_G } from './cards_G';
 import { cards_R } from './cards_R';
 import { cards_GB } from './cards_GB';

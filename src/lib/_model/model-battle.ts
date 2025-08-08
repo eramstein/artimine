@@ -4,6 +4,7 @@ import {
   CardType,
   CounterType,
   TargetType,
+  TriggerRange,
   TriggerType,
   UnitType,
 } from './enums';
@@ -155,7 +156,7 @@ export interface EffectArgs {
 
 export interface Trigger {
   type: TriggerType;
-  condition?(unit: UnitDeployed, { ...any }): boolean;
+  range?: TriggerRange;
   staticRecompute?: TriggerType[];
   text?: string;
 }

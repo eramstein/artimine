@@ -1,22 +1,11 @@
 import {
-  damageUnit,
-  healUnit,
-  applyUnitStatus,
-  summonUnit,
-  makeUnit,
-  DataTriggerTemplates,
-} from '@/lib/battle';
-import {
-  type Trigger,
   type Ability,
   StatusType,
-  type UnitDeployed,
-  type Position,
-  type UnitCardTemplate,
   CounterType,
   TargetType,
+  TriggerType,
+  TriggerRange,
 } from '@/lib/_model';
-import { DataTriggerTemplates as TRIG } from './triggerTemplates';
 import { DataUnitFilters } from '../effects/unitFilters';
 
 export const DataAbilityTemplates: {
@@ -52,7 +41,7 @@ export const DataAbilityTemplates: {
         },
       },
     ],
-    trigger: TRIG.activated,
+    trigger: { type: TriggerType.Activated },
     exhausts: true,
   }),
   cc: ({ duration, targetCount = 1, statusType = StatusType.Mezz }) => ({
@@ -69,7 +58,7 @@ export const DataAbilityTemplates: {
         },
       },
     ],
-    trigger: TRIG.activated,
+    trigger: { type: TriggerType.Activated },
     exhausts: true,
   }),
   summon: ({ summonedUnit, cost }) => ({
@@ -86,7 +75,7 @@ export const DataAbilityTemplates: {
       },
     ],
     cost: cost,
-    trigger: TRIG.activated,
+    trigger: { type: TriggerType.Activated },
     exhausts: true,
   }),
   respawnAs: ({ summonedUnit }) => ({
@@ -102,7 +91,7 @@ export const DataAbilityTemplates: {
         },
       },
     ],
-    trigger: TRIG.meDies,
+    trigger: { type: TriggerType.OnDeath, range: TriggerRange.Self },
   }),
   grows: ({ growthValue }) => ({
     actions: [
@@ -117,7 +106,7 @@ export const DataAbilityTemplates: {
         },
       },
     ],
-    trigger: TRIG.myTurnStarts,
+    trigger: { type: TriggerType.OnTurnStart, range: TriggerRange.Self },
   }),
   staticKeyword: ({ keyword }) => ({
     actions: [
@@ -132,6 +121,6 @@ export const DataAbilityTemplates: {
         },
       },
     ],
-    trigger: DataTriggerTemplates.static,
+    trigger: { type: TriggerType.Static },
   }),
 };

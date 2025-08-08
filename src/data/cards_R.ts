@@ -4,9 +4,11 @@ import {
   CardType,
   CounterType,
   TargetType,
+  TriggerRange,
+  TriggerType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates } from '@/lib/battle/abilities';
 import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_R: Record<string, CardTemplate> = {
@@ -94,7 +96,7 @@ export const cards_R: Record<string, CardTemplate> = {
       DataAbilityTemplates.counters({
         counterType: CounterType.Rage,
         counterValue: 1,
-        trigger: DataTriggerTemplates.allyDies,
+        trigger: { type: TriggerType.OnDeath, range: TriggerRange.Allies },
       }),
     ],
   },

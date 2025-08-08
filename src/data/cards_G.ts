@@ -4,10 +4,12 @@ import {
   CardType,
   CounterType,
   StatusType,
+  TriggerRange,
+  TriggerType,
   UnitType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates, DataTriggerTemplates } from '@/lib/battle/abilities';
+import { DataAbilityTemplates } from '@/lib/battle/abilities';
 import { DataUnitFilters } from '@/lib/battle/effects';
 
 export const cards_G: Record<string, CardTemplate> = {
@@ -137,7 +139,7 @@ export const cards_G: Record<string, CardTemplate> = {
         counterType: CounterType.Growth,
         counterValue: 1,
         range: DataUnitFilters.alliedOfType(UnitType.Mushroom),
-        trigger: DataTriggerTemplates.meDeployed,
+        trigger: { type: TriggerType.OnDeploy, range: TriggerRange.Self },
       }),
     ],
   },
