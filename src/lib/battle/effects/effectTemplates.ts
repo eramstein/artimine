@@ -11,6 +11,8 @@ import {
   applyUnitStatus,
   summonUnit,
   makeUnit,
+  destroyUnit,
+  removeCounters,
 } from '@/lib/battle';
 import { CardColor, CounterType } from '@/lib/_model';
 import type {
@@ -27,8 +29,9 @@ import { reanimate } from '../graveyard';
 import { filterUnits, type UnitFilterArgs } from './unitFilters';
 
 export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) => void> = {
-  reanimate: () => {
-    return ({ unit, player, targets }) => {
+  reanimate:
+    () =>
+    ({ unit, player, targets }) => {
       if (targets.length < 2) {
         return;
       }
@@ -38,33 +41,33 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
       if (reanimatedUnit && position) {
         reanimate(reanimatedUnit, position, playerId);
       }
-    };
-  },
-  damageEnemyLeader: ({ damage }) => {
-    return ({ unit }) => {
+    },
+  damageEnemyLeader:
+    ({ damage }) =>
+    ({ unit }) => {
       damagePlayer(getOpposingPlayer(unit), damage);
-    };
-  },
-  damageUnit: ({ damage, range }: { damage: number; range?: UnitFilterArgs }) => {
-    return ({ targets }) => {
+    },
+  damageUnit:
+    ({ damage, range }: { damage: number; range?: UnitFilterArgs }) =>
+    ({ targets }) => {
       (targets[0] as UnitDeployed[]).forEach((target) => {
         const unitsInRange = range ? filterUnits({ unit: target, ...range }) : [target];
         unitsInRange.forEach((u) => {
           damageUnit(u, damage);
         });
       });
-    };
-  },
-  addCounters: ({
-    counterType = CounterType.Growth,
-    counterValue = 1,
-    range,
-  }: {
-    counterType: CounterType;
-    counterValue: number;
-    range?: UnitFilterArgs;
-  }) => {
-    return ({ unit, targets }) => {
+    },
+  addCounters:
+    ({
+      counterType = CounterType.Growth,
+      counterValue = 1,
+      range,
+    }: {
+      counterType: CounterType;
+      counterValue: number;
+      range?: UnitFilterArgs;
+    }) =>
+    ({ unit, targets }) => {
       const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
       targetUnits.forEach((u) => {
         const unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
@@ -72,10 +75,10 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
           addCounters(u, counterType, counterValue);
         });
       });
-    };
-  },
-  staticKeywordAdjAllies: ({ name, keyword }) => {
-    return ({ unit }) => {
+    },
+  staticKeywordAdjAllies:
+    ({ name, keyword }) =>
+    ({ unit }) => {
       const unitsInRange = filterUnits({ unit, adjacent: true, allies: true });
       unitsInRange.forEach((u) => {
         addStaticKeyword(u, unit, keyword, false, name);
@@ -89,33 +92,27 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
           removeStaticKeyword(u, unit, name);
         }
       });
-    };
-  },
-  untapPlayer: () => {
-    return ({ player }) => {
+    },
+  untapPlayer:
+    () =>
+    ({ player }) => {
       untapPlayer(player);
-    };
-  },
-  incrementColor: (color) => {
-    return ({ player }) => {
+    },
+  incrementColor:
+    (color) =>
+    ({ player }) => {
       incrementColor(player, color, 1);
-    };
-  },
-  applyUnitStatus: ({ statusType, duration }) => {
-    return ({ targets }) => {
+    },
+  applyUnitStatus:
+    ({ statusType, duration }) =>
+    ({ targets }) => {
       (targets[0] as UnitDeployed[]).forEach((u) => {
         applyUnitStatus(u, statusType, duration);
       });
-    };
-  },
-  summon: ({
-    summonedUnit,
-    isRespawn,
-  }: {
-    summonedUnit: UnitCardTemplate;
-    isRespawn?: boolean;
-  }) => {
-    return ({ targets, player, unit }) => {
+    },
+  summon:
+    ({ summonedUnit, isRespawn }: { summonedUnit: UnitCardTemplate; isRespawn?: boolean }) =>
+    ({ targets, player, unit }) => {
       if (isRespawn) {
         const createdUnit = makeUnit(player.id, summonedUnit);
         summonUnit(createdUnit, unit.position);
@@ -125,6 +122,31 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
           summonUnit(createdUnit, cell);
         });
       }
-    };
-  },
+    },
+  darkRitual:
+    () =>
+    ({ targets }) => {
+      const sacrificedUnit = targets[0][0] as UnitDeployed;
+      const targetUnit = targets[1][0] as UnitDeployed;
+      const sacrificedHealth = sacrificedUnit.health;
+      damageUnit(targetUnit, sacrificedHealth);
+      destroyUnit(sacrificedUnit);
+    },
+  transferCounters:
+    ({ counterType = CounterType.Growth }: { counterType: CounterType }) =>
+    ({ targets }) => {
+      const unit = targets[0][0] as UnitDeployed;
+      let movedCounters = 0;
+      bs.units.forEach((u) => {
+        if (u.instanceId === unit.instanceId) {
+          return;
+        }
+        const decayCounters = u.counters[counterType] || 0;
+        removeCounters(u, counterType, decayCounters);
+        movedCounters += decayCounters;
+      });
+      if (movedCounters > 0) {
+        addCounters(unit, counterType, movedCounters);
+      }
+    },
 };
