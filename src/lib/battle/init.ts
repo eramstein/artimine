@@ -1,5 +1,5 @@
 import { bs } from '../_state';
-import { FOE_DECK, FOE_LANDS, PLAYER_DECK, PLAYER_LANDS } from '@/data';
+import { FOE_DECK, FOE_LANDS, PLAYER_DECK, PLAYER_LANDS, PLAYER_NAME, FOE_NAME } from '@/data';
 import { drawCard, shuffleDeck } from './deck';
 import { config } from '../_config';
 import { initColorsFromLands } from './land';
@@ -10,7 +10,7 @@ export const initBattle = () => {
   bs.players = [
     {
       id: 0,
-      name: 'Henry',
+      name: PLAYER_NAME,
       isPlayer: true,
       mana: config.initialMana,
       maxMana: config.initialMana,
@@ -40,7 +40,7 @@ export const initBattle = () => {
     },
     {
       id: 1,
-      name: 'The Dude',
+      name: FOE_NAME,
       isPlayer: false,
       mana: config.initialMana,
       maxMana: config.initialMana,
