@@ -8,7 +8,6 @@ import {
   TriggerType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates } from '@/lib/battle/abilities';
 
 export const cards_B: Record<string, CardTemplate> = {
   raise_dead: {
@@ -90,12 +89,22 @@ export const cards_B: Record<string, CardTemplate> = {
     maxHealth: 1,
     colors: [{ color: CardColor.Black, count: 2 }],
     abilities: [
-      DataAbilityTemplates.counters({
-        counterType: CounterType.Decay,
-        counterValue: 1,
-        range: { sameRow: true, ennemies: true },
-        trigger: { type: TriggerType.AfterMove, range: TriggerRange.Ennemies },
-      }),
+      {
+        actions: [
+          {
+            text: `After move: add 1 Decay counters to all ennemies in the same row.`,
+            effect: {
+              name: 'addCounters',
+              args: {
+                counterType: CounterType.Decay,
+                counterValue: 1,
+                range: { sameRow: true, ennemies: true },
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.AfterMove, range: TriggerRange.Self },
+      },
     ],
   },
   zombie: {

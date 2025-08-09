@@ -79,7 +79,7 @@ function checkTriggerCondition(
     unitCausingTrigger = triggerArgs.unit;
   }
   if (ability.trigger.type === TriggerType.AfterMove) {
-    unitCausingTrigger = triggerArgs.attacker;
+    unitCausingTrigger = triggerArgs.mover;
   }
   if (ability.trigger.type === TriggerType.AfterCombat) {
     unitCausingTrigger = triggerArgs.attacker;

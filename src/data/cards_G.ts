@@ -4,12 +4,12 @@ import {
   CardType,
   CounterType,
   StatusType,
+  TargetType,
   TriggerRange,
   TriggerType,
   UnitType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates } from '@/lib/battle/abilities';
 
 export const cards_G: Record<string, CardTemplate> = {
   wall_of_bramble: {
@@ -85,7 +85,23 @@ export const cards_G: Record<string, CardTemplate> = {
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 3 }],
     rarity: CardRarity.Common,
-    abilities: [DataAbilityTemplates.grows({ growthValue: 1 })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: `On turn start: get 1 growth counter.`,
+            effect: {
+              name: 'addCounters',
+              args: {
+                counterType: CounterType.Growth,
+                counterValue: 1,
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.OnTurnStart, range: TriggerRange.Self },
+      },
+    ],
   },
   shroomy_shooty: {
     id: 'shroomy_shooty',
@@ -109,7 +125,25 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 0,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    abilities: [DataAbilityTemplates.cc({ duration: 1, statusType: StatusType.Root })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: 'Root 1 turn',
+            targets: [{ type: TargetType.Ennemies, count: 1 }],
+            effect: {
+              name: 'applyUnitStatus',
+              args: {
+                statusType: StatusType.Root,
+                duration: 1,
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.Activated },
+        exhausts: true,
+      },
+    ],
   },
   shroomy_protecs: {
     id: 'shroomy_protecs',
@@ -121,7 +155,23 @@ export const cards_G: Record<string, CardTemplate> = {
     power: 0,
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 1 }],
-    abilities: [DataAbilityTemplates.staticKeyword({ keyword: { key: 'resist', value: 1 } })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: `Give resist 1 to adjacent allies`,
+            effect: {
+              name: 'staticKeywordAdjAllies',
+              args: {
+                name: 'shroomy_protecs resist',
+                keyword: { key: 'resist', value: 1 },
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.Static },
+      },
+    ],
   },
   lord_of_shrooms: {
     id: 'lord_of_shrooms',
@@ -134,12 +184,22 @@ export const cards_G: Record<string, CardTemplate> = {
     maxHealth: 1,
     colors: [{ color: CardColor.Green, count: 2 }],
     abilities: [
-      DataAbilityTemplates.counters({
-        counterType: CounterType.Growth,
-        counterValue: 1,
-        range: { unitType: UnitType.Mushroom, allies: true },
+      {
+        actions: [
+          {
+            text: `On deploy: add 1 growth counter to all allied mushrooms.`,
+            effect: {
+              name: 'addCounters',
+              args: {
+                counterType: CounterType.Growth,
+                counterValue: 1,
+                range: { unitType: UnitType.Mushroom, allies: true },
+              },
+            },
+          },
+        ],
         trigger: { type: TriggerType.OnDeploy, range: TriggerRange.Self },
-      }),
+      },
     ],
   },
   luxurious_growth: {

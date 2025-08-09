@@ -1,5 +1,4 @@
 import { CardColor, CardRarity, CardType, StatusType, type CardTemplate } from '@/lib/_model';
-import { DataAbilityTemplates } from '@/lib/battle/abilities';
 import { cards_G } from './cards_G';
 import { cards_R } from './cards_R';
 import { cards_GB } from './cards_GB';
@@ -15,10 +14,6 @@ export const cards: Record<string, CardTemplate> = {
     power: 2,
     maxHealth: 3,
     colors: [{ color: CardColor.Red, count: 1 }],
-    abilities: [
-      DataAbilityTemplates.staticKeyword({ keyword: { key: 'armor', value: 1 } }),
-      DataAbilityTemplates.cc({ duration: 3, statusType: StatusType.Mezz }),
-    ],
   },
   ...cards_G,
   ...cards_R,

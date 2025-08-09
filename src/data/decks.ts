@@ -4,6 +4,8 @@ import { lands } from './lands';
 
 export const PLAYER_DECK: CardTemplate[] = [
   cards.lightning_bolt,
+  cards.mosquito,
+  cards.shroomy,
   cards.fireball,
   cards.decaying_ray,
   cards.raise_dead,
@@ -14,10 +16,8 @@ export const PLAYER_DECK: CardTemplate[] = [
   cards.tim,
   cards.mycosed_bear,
   cards.grim_guard,
-  cards.mosquito,
   cards.shroomy_rooty,
   // cards.guinea_pig,
-  cards.shroomy,
   cards.ebonheart,
   cards.shroomy_shooty,
   cards.shroomy_protecs,

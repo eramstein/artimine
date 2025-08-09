@@ -141,7 +141,6 @@ export interface UnitStatuses {
 
 export interface Ability {
   actions: ActionDefinition[];
-  icon?: string;
   trigger: Trigger;
   cost?: number;
   exhausts?: boolean;
@@ -175,5 +174,5 @@ export type ActionDefinition = {
     args: Record<string, any>;
   };
   targets?: TargetDefinition[];
-  text: string;
+  text?: string;
 };

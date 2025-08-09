@@ -56,8 +56,8 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
     };
   },
   addCounters: ({
-    counterType,
-    counterValue,
+    counterType = CounterType.Growth,
+    counterValue = 1,
     range,
   }: {
     counterType: CounterType;

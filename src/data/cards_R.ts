@@ -8,7 +8,6 @@ import {
   TriggerType,
   type CardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates } from '@/lib/battle/abilities';
 
 export const cards_R: Record<string, CardTemplate> = {
   lightning_bolt: {
@@ -80,7 +79,24 @@ export const cards_R: Record<string, CardTemplate> = {
     power: 1,
     maxHealth: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
-    abilities: [DataAbilityTemplates.ping({ damage: 1 })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: 'Ping 1',
+            targets: [{ type: TargetType.Ennemies, count: 1 }],
+            effect: {
+              name: 'damageUnit',
+              args: {
+                damage: 1,
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.Activated },
+        exhausts: true,
+      },
+    ],
   },
   frenzied_shaman: {
     id: 'frenzied_shaman',
@@ -92,11 +108,21 @@ export const cards_R: Record<string, CardTemplate> = {
     maxHealth: 4,
     colors: [{ color: CardColor.Red, count: 2 }],
     abilities: [
-      DataAbilityTemplates.counters({
-        counterType: CounterType.Rage,
-        counterValue: 1,
+      {
+        actions: [
+          {
+            text: `On allies death: add 1 rage counter to self.`,
+            effect: {
+              name: 'addCounters',
+              args: {
+                counterType: CounterType.Rage,
+                counterValue: 1,
+              },
+            },
+          },
+        ],
         trigger: { type: TriggerType.OnDeath, range: TriggerRange.Allies },
-      }),
+      },
     ],
   },
   modis_chosen: {

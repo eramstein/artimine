@@ -2,10 +2,12 @@ import {
   CardColor,
   CardRarity,
   CardType,
+  TargetType,
+  TriggerRange,
+  TriggerType,
   type CardTemplate,
   type UnitCardTemplate,
 } from '@/lib/_model';
-import { DataAbilityTemplates } from '@/lib/battle/abilities';
 
 const shroomy_shooty: UnitCardTemplate = {
   id: 'shroomy_shooty',
@@ -34,7 +36,25 @@ export const cards_GB: Record<string, CardTemplate> = {
       { color: CardColor.Green, count: 2 },
       { color: CardColor.Black, count: 1 },
     ],
-    abilities: [DataAbilityTemplates.summon({ summonedUnit: shroomy_shooty, cost: 1 })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: 'Summon a shrromy shooty',
+            targets: [{ type: TargetType.AllyCell }],
+            effect: {
+              name: 'summon',
+              args: {
+                summonedUnit: shroomy_shooty,
+              },
+            },
+          },
+        ],
+        cost: 1,
+        trigger: { type: TriggerType.Activated },
+        exhausts: true,
+      },
+    ],
   },
   mycosed_bear: {
     id: 'mycosed_bear',
@@ -48,6 +68,22 @@ export const cards_GB: Record<string, CardTemplate> = {
       { color: CardColor.Green, count: 1 },
       { color: CardColor.Black, count: 1 },
     ],
-    abilities: [DataAbilityTemplates.respawnAs({ summonedUnit: shroomy_shooty })],
+    abilities: [
+      {
+        actions: [
+          {
+            text: 'When this unit dies, put a shroomy shooty in its place',
+            effect: {
+              name: 'summon',
+              args: {
+                summonedUnit: shroomy_shooty,
+                isRespawn: true,
+              },
+            },
+          },
+        ],
+        trigger: { type: TriggerType.OnDeath, range: TriggerRange.Self },
+      },
+    ],
   },
 };
