@@ -1,0 +1,30 @@
+{
+  "id": "shroomy",
+  "name": "Shroomy",
+  "type": "unit",
+  "unitTypes": ["mushroom"],
+  "cost": 1,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [{ "color": "green", "count": 1 }],
+  "rarity": "common",
+  "abilities": [
+    {
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1
+            }
+          }
+        }
+      ],
+      "trigger": {
+        "type": "On Turn Start",
+        "range": "self"
+      }
+    }
+  ]
+}

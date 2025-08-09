@@ -1,0 +1,6 @@
+{
+  "id": "mountain",
+  "name": "Mountain",
+  "colors": [{ "color": "red", "count": 1 }],
+  "health": 10
+}

@@ -1,11 +1,25 @@
 import { bs } from '../_state';
-import { FOE_DECK, FOE_LANDS, PLAYER_DECK, PLAYER_LANDS, PLAYER_NAME, FOE_NAME } from '@/data';
+import {
+  FOE_DECK,
+  FOE_LANDS,
+  PLAYER_DECK,
+  PLAYER_LANDS,
+  PLAYER_NAME,
+  FOE_NAME,
+  loadGameData,
+} from '@/data';
 import { drawCard, shuffleDeck } from './deck';
 import { config } from '../_config';
 import { initColorsFromLands } from './land';
 
-export const initBattle = () => {
-  console.log('initBattle');
+export const initBattle = async () => {
+  console.log('initBattle - loading game data...');
+
+  // Wait for game data to load before proceeding
+  await loadGameData();
+
+  console.log('initBattle - game data loaded, initializing battle...');
+
   bs.turn = 1;
   bs.players = [
     {
@@ -16,21 +30,14 @@ export const initBattle = () => {
       maxMana: config.initialMana,
       life: config.initialLife,
       hand: [],
-      // deck: shuffleDeck(
-      //   PLAYER_DECK.map((card) => ({
-      //     ...card,
-      //     ownerPlayerId: 0,
-      //     instanceId: crypto.randomUUID(),
-      //   }))
-      // ),
-      deck: PLAYER_DECK.map((card) => ({
+      deck: PLAYER_DECK().map((card) => ({
         ...card,
         ownerPlayerId: 0,
         instanceId: crypto.randomUUID(),
       })),
       graveyard: [],
       colors: {},
-      lands: PLAYER_LANDS.map((land, index) => ({
+      lands: PLAYER_LANDS().map((land, index) => ({
         ...land,
         ownerPlayerId: 0,
         instanceId: crypto.randomUUID(),
@@ -47,7 +54,7 @@ export const initBattle = () => {
       life: config.initialLife,
       hand: [],
       deck: shuffleDeck(
-        FOE_DECK.map((card) => ({
+        FOE_DECK().map((card) => ({
           ...card,
           ownerPlayerId: 1,
           instanceId: crypto.randomUUID(),
@@ -55,7 +62,7 @@ export const initBattle = () => {
       ),
       graveyard: [],
       colors: {},
-      lands: FOE_LANDS.map((land, index) => ({
+      lands: FOE_LANDS().map((land, index) => ({
         ...land,
         ownerPlayerId: 1,
         instanceId: crypto.randomUUID(),
@@ -70,4 +77,6 @@ export const initBattle = () => {
   }
   initColorsFromLands(bs.players[0]);
   initColorsFromLands(bs.players[1]);
+
+  console.log('initBattle - battle initialized successfully');
 };

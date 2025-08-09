@@ -1,0 +1,23 @@
+{
+  "id": "lightning_bolt",
+  "name": "Lightning Bolt",
+  "type": "spell",
+  "rarity": "common",
+  "cost": 1,
+  "colors": [{ "color": "red", "count": 1 }],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 3
+        }
+      },
+      "targets": [
+        {
+          "type": "unit"
+        }
+      ]
+    }
+  ]
+}

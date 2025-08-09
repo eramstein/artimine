@@ -1,0 +1,6 @@
+{
+  "id": "island",
+  "name": "Island",
+  "colors": [{ "color": "blue", "count": 1 }],
+  "health": 10
+}

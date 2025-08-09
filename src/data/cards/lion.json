@@ -1,0 +1,10 @@
+{
+  "id": "lion",
+  "name": "Savannah Lion",
+  "type": "unit",
+  "rarity": "common",
+  "cost": 2,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [{ "color": "red", "count": 1 }]
+}
