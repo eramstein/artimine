@@ -141,9 +141,9 @@ export const DataEffectTemplates: Record<string, (args: any) => (p: EffectArgs) 
         if (u.instanceId === unit.instanceId) {
           return;
         }
-        const decayCounters = u.counters[counterType] || 0;
-        removeCounters(u, counterType, decayCounters);
-        movedCounters += decayCounters;
+        const counters = u.counters[counterType] || 0;
+        removeCounters(u, counterType, counters);
+        movedCounters += counters;
       });
       if (movedCounters > 0) {
         addCounters(unit, counterType, movedCounters);
