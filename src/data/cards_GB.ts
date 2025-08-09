@@ -40,7 +40,6 @@ export const cards_GB: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: 'Summon a shrromy shooty',
             targets: [{ type: TargetType.AllyCell }],
             effect: {
               name: 'summon',
@@ -72,7 +71,6 @@ export const cards_GB: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: 'When this unit dies, put a shroomy shooty in its place',
             effect: {
               name: 'summon',
               args: {

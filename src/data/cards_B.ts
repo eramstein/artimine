@@ -24,7 +24,6 @@ export const cards_B: Record<string, CardTemplate> = {
           args: {},
         },
         targets: [{ type: TargetType.GraveyardCard }, { type: TargetType.Cell }],
-        text: 'Re-animate a unit from a graveyard',
       },
     ],
   },
@@ -46,7 +45,6 @@ export const cards_B: Record<string, CardTemplate> = {
           },
         },
         targets: [{ type: TargetType.Units, count: 1 }],
-        text: `Add 2 Decay counters to all units in a row`,
       },
     ],
   },
@@ -59,7 +57,6 @@ export const cards_B: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Black, count: 1 }],
     actions: [
       {
-        text: 'Move all decay counters to target creature',
         targets: [{ type: TargetType.Units, count: 1 }],
         effect: {
           name: 'transferCounters',
@@ -83,7 +80,6 @@ export const cards_B: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: `After move: add 1 Decay counters to all ennemies in the same row.`,
             effect: {
               name: 'addCounters',
               args: {
@@ -130,7 +126,6 @@ export const cards_B: Record<string, CardTemplate> = {
     colors: [{ color: CardColor.Black, count: 1 }],
     actions: [
       {
-        text: "Sacrifice a unit. Deal X damage to a target unit, where X is the sacrificed unit's health.",
         targets: [
           { type: TargetType.Allies, count: 1 },
           { type: TargetType.Units, count: 1 },

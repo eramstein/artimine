@@ -17,15 +17,15 @@ export enum CardColor {
 }
 
 export enum TriggerType {
-  Static = 'static',
-  Activated = 'activated',
-  BeforeDamage = 'before damage',
-  AfterCombat = 'after combat',
-  AfterMove = 'after moving',
-  BeforeMove = 'before moving',
-  OnDeath = 'on death',
-  OnDeploy = 'on deploy',
-  OnTurnStart = 'on turn start',
+  Static = 'Static',
+  Activated = 'Activated',
+  BeforeDamage = 'Before Damage',
+  AfterCombat = 'After Combat',
+  AfterMove = 'After Moving',
+  BeforeMove = 'Before Moving',
+  OnDeath = 'On Death',
+  OnDeploy = 'On Deploy',
+  OnTurnStart = 'On Turn Start',
 }
 
 export enum TriggerRange {

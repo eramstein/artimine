@@ -89,7 +89,6 @@ export const cards_G: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: `On turn start: get 1 growth counter.`,
             effect: {
               name: 'addCounters',
               args: {
@@ -129,7 +128,6 @@ export const cards_G: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: 'Root 1 turn',
             targets: [{ type: TargetType.Ennemies, count: 1 }],
             effect: {
               name: 'applyUnitStatus',
@@ -159,7 +157,6 @@ export const cards_G: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: `Give resist 1 to adjacent allies`,
             effect: {
               name: 'staticKeywordAdjAllies',
               args: {
@@ -187,7 +184,6 @@ export const cards_G: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: `On deploy: add 1 growth counter to all allied mushrooms.`,
             effect: {
               name: 'addCounters',
               args: {
@@ -217,7 +213,6 @@ export const cards_G: Record<string, CardTemplate> = {
             color: CardColor.Green,
           },
         },
-        text: `Gain 1 Green mana`,
       },
     ],
   },
@@ -234,7 +229,6 @@ export const cards_G: Record<string, CardTemplate> = {
           name: 'untapPlayer',
           args: {},
         },
-        text: 'Untap your hero ability',
       },
     ],
   },

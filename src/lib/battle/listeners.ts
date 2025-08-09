@@ -29,7 +29,7 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
           if (actionDef.targets && actionDef.targets.length > 0) {
             targets = getEligibleTargets(u, actionDef.targets[0]) as EffectTargets;
           }
-          DataEffectTemplates[actionDef.effect.name](actionDef.effect.args)({
+          DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
             unit: u,
             targets: [targets],
             triggerParams,

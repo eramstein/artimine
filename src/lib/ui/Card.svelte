@@ -8,6 +8,7 @@
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
+  import { DataEffectTemplates } from '../battle/effects/effectTemplates';
 
   let {
     card,
@@ -37,14 +38,6 @@
   // Check if card is a spell card
   function isSpellCard(card: Card): card is SpellCard {
     return card.type === CardType.Spell;
-  }
-
-  // Get display name for unit type
-  function getUnitTypeDisplayName(unitType: UnitType): string {
-    const displayNames = {
-      [UnitType.Mushroom]: 'Mushroom',
-    };
-    return displayNames[unitType] || unitType;
   }
 
   // Determine border color based on whether the card is payable
@@ -84,7 +77,13 @@
   // Get concatenated text from all actions
   function getSpellText(): string {
     if (isSpellCard(card)) {
-      return card.actions ? card.actions.map((action) => action.text).join('.\n') : '';
+      let label = '';
+      card.actions.forEach((action) => {
+        label +=
+          DataEffectTemplates[action.effect.name](action.effect.args).label(action.targets || []) +
+          '\n';
+      });
+      return label;
     }
     return '';
   }
@@ -134,7 +133,7 @@
       {#if isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0}
         <div class="unit-types-inline">
           {#each card.unitTypes as unitType}
-            <span class="unit-type-text">{getUnitTypeDisplayName(unitType)}</span>
+            <span class="unit-type-text">{unitType}</span>
           {/each}
         </div>
       {/if}

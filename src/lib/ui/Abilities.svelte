@@ -4,7 +4,8 @@
   import Tooltip from './Tooltip.svelte';
   import { activateAbility } from './_helpers/abilities';
   import { uiState } from '../_state';
-
+  import { TRIGGER_ICONS } from './_helpers/triggerIcons';
+  import { DataEffectTemplates } from '../battle/effects/effectTemplates';
   let { abilities, unit }: { abilities: Ability[]; unit?: UnitDeployed } = $props();
 
   // Tooltip state
@@ -17,11 +18,21 @@
     }
   });
 
-  // Get the first letter of each ability name for display
-  let abilityLetters = $derived(() => {
+  function getAbilityText(ability: Ability) {
+    let label = ability.trigger.type + ': ';
+    ability.actions.forEach((action) => {
+      label +=
+        DataEffectTemplates[action.effect.name](action.effect.args).label(action.targets || []) +
+        '\n';
+    });
+    return label;
+  }
+
+  // Get the icon for each ability based on trigger type
+  let abilityIcons = $derived(() => {
     return abilities.map((ability) => ({
-      letter: ability.icon || (ability.actions[0]?.text || '?').charAt(0).toUpperCase(),
-      text: ability.actions[0]?.text || 'Unknown',
+      icon: TRIGGER_ICONS[ability.trigger.type],
+      text: getAbilityText(ability),
       isActivated: ability.trigger.type === TriggerType.Activated,
       ability: ability,
       isPending:
@@ -57,7 +68,7 @@
 </script>
 
 <div class="abilities">
-  {#each abilityLetters() as { letter, text, isActivated, ability, isPending, cost, exhausts }}
+  {#each abilityIcons() as { icon, text, isActivated, ability, isPending, cost, exhausts }}
     <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === text}>
       <div
         class="ability"
@@ -67,7 +78,7 @@
         onmouseleave={handleMouseLeave}
         onclick={(e) => isActivated && onAbilityClick(ability, e)}
       >
-        <span class="ability-letter">{letter}</span>
+        <span class="ability-icon">{icon}</span>
         {#if cost !== undefined && cost > 0}
           <span class="ability-cost">{cost}</span>
         {/if}
@@ -127,7 +138,7 @@
     }
   }
 
-  .ability-letter {
+  .ability-icon {
     font-weight: bold;
     font-size: 0.9rem;
   }

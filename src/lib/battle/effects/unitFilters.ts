@@ -72,5 +72,5 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
   if (filterArgs.unitType) {
     labels.push(filterArgs.unitType);
   }
-  return labels.join(' ');
+  return `Range: ${labels.join(' ')}`;
 }

@@ -132,3 +132,22 @@ export function getEligibleTargets(
   }
   return eligibleTargets;
 }
+
+export function getTargetLabel(target: TargetDefinition): string {
+  if (target.type === TargetType.Units) {
+    return `target unit${target.count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.Cell) {
+    return `target cell${target.count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.Land) {
+    return `target land${target.count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.GraveyardCard) {
+    return `target graveyard card${target.count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.Player) {
+    return `target player${target.count !== 1 ? 's' : ''}`;
+  }
+  return '';
+}

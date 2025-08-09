@@ -24,7 +24,6 @@ export const cards_R: Record<string, CardTemplate> = {
           args: { damage: 3 },
         },
         targets: [{ type: TargetType.Units, count: 1 }],
-        text: `Deal 3 damage to a unit`,
       },
       {
         effect: {
@@ -32,7 +31,6 @@ export const cards_R: Record<string, CardTemplate> = {
           args: { damage: 2 },
         },
         targets: [{ type: TargetType.Units, count: 2 }],
-        text: `Deal 2 damage to 2 units`,
       },
     ],
   },
@@ -53,7 +51,6 @@ export const cards_R: Record<string, CardTemplate> = {
           },
         },
         targets: [{ type: TargetType.Units, count: 1 }],
-        text: `Deal 1 damage to a unit and adjacent units`,
       },
     ],
   },
@@ -83,7 +80,6 @@ export const cards_R: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: 'Ping 1',
             targets: [{ type: TargetType.Ennemies, count: 1 }],
             effect: {
               name: 'damageUnit',
@@ -111,7 +107,6 @@ export const cards_R: Record<string, CardTemplate> = {
       {
         actions: [
           {
-            text: `On allies death: add 1 rage counter to self.`,
             effect: {
               name: 'addCounters',
               args: {

@@ -42,8 +42,7 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
         }
       });
     }
-    console.log(actionDef.effect.name, actionDef.effect.args);
-    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args)({
+    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
       unit,
       targets: effectTargets,
       triggerParams: {},

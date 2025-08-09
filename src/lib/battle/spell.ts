@@ -27,7 +27,7 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
   // ----------------------------------------------------------------------
   const player = bs.players[spell.ownerPlayerId];
   spell.actions.forEach((actionDef, actionIndex) => {
-    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args)({
+    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
       targets: targets[actionIndex],
       triggerParams: {},
       player,

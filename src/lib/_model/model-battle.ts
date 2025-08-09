@@ -163,7 +163,6 @@ export interface Trigger {
 export interface TargetDefinition {
   type: TargetType;
   count?: number;
-  text?: string;
 }
 
 export type EffectTargets = UnitDeployed[] | Position[] | Land[] | Player[] | Card[];
@@ -174,5 +173,4 @@ export type ActionDefinition = {
     args: Record<string, any>;
   };
   targets?: TargetDefinition[];
-  text?: string;
 };
