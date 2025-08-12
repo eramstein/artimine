@@ -42,7 +42,7 @@ const keywordPrevalence: Record<keyof UnitKeywords, number> = Object.fromEntries
 
 // keywords costs depend on the unit sometimes (e.g. haste is more expensive for a 5/1 unit than a 1/1 unit)
 // for keywords with numeric values this is the cost of 1 point
-function costPerKeywordForUnit(unit: Partial<UnitCard>): Record<keyof UnitKeywords, number> {
+export function costPerKeywordForUnit(unit: Partial<UnitCard>): Record<keyof UnitKeywords, number> {
   const colorPieTax = 2;
   const dominantColor = getDominantColor(unit.colors ?? []);
   const colorPrefs = keywordColorPreferences[dominantColor];

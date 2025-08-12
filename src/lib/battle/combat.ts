@@ -69,7 +69,7 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
     target.statuses.poison = (target.statuses.poison || 0) + unit.keywords.poisonous;
   }
   const wasDestroyed = damageUnit(target, dealtDamage);
-  if (!wasDestroyed && target.keywords?.retaliate) {
+  if (!wasDestroyed && target.keywords?.retaliate && !unit.keywords?.ranged) {
     damageUnit(unit, target.keywords.retaliate, true);
   }
   if (excessDamage && unit.keywords?.trample) {

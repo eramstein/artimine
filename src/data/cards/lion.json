@@ -5,6 +5,9 @@
   "rarity": "common",
   "cost": 2,
   "power": 2,
-  "maxHealth": 3,
+  "maxHealth": 2,
+  "keywords": {
+    "retaliate": 1
+  },
   "colors": [{ "color": "red", "count": 1 }]
 }

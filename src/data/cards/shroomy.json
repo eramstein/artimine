@@ -6,7 +6,7 @@
   "cost": 1,
   "power": 1,
   "maxHealth": 1,
-  "colors": [{ "color": "green", "count": 1 }],
+  "colors": [{ "color": "green", "count": 3 }],
   "rarity": "common",
   "abilities": [
     {

@@ -1,17 +1,13 @@
 <script lang="ts">
   import Main from './lib/ui/Main.svelte';
+  import CardBuilder from './lib/generator/CardBuilder.svelte';
   import { onMount, onDestroy } from 'svelte';
   import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
   import { loadGameStateFromLocalStorage, bs, uiState } from './lib/_state';
   import { UiView } from './lib/_model';
   import { initBattle } from './lib/battle/init';
-  import { generateUnitCard } from './lib/generator/card-designer';
-  import { makeTemplatesBatch } from './lib/generator/card-batches';
 
   let isLoading = $state(true);
-
-  makeTemplatesBatch();
-  //generateUnitCard();
 
   onMount(async () => {
     window.addEventListener('keydown', handleKeybinds);
@@ -46,7 +42,8 @@
     <p>Loading game data...</p>
   </div>
 {:else}
-  <Main />
+  <CardBuilder />
+  <!-- <Main /> -->
 {/if}
 
 <style>
