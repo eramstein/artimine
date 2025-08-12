@@ -6,10 +6,12 @@
   import { UiView } from './lib/_model';
   import { initBattle } from './lib/battle/init';
   import { generateUnitCard } from './lib/generator/card-designer';
+  import { makeTemplatesBatch } from './lib/generator/card-batches';
 
   let isLoading = $state(true);
 
-  generateUnitCard();
+  makeTemplatesBatch();
+  //generateUnitCard();
 
   onMount(async () => {
     window.addEventListener('keydown', handleKeybinds);

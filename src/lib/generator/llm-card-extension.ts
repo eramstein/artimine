@@ -6,6 +6,7 @@ export interface LllmInput {
   rarity?: CardRarity;
   type?: CardType;
   cost?: number;
+  keywords?: string[];
 }
 
 export enum SuggestedSize {
@@ -36,9 +37,9 @@ const MOCK_INPUT = [
 
 export function generateCardExtensions(
   templates: BaseTemplate[],
-  colorCombo: ColorCombo
+  flavor: string
 ): LllmExtendedCard[] {
-  const prompt = generatePrompt(templates, colorCombo);
+  const prompt = generatePrompt(templates, flavor);
   return MOCK_LLM_OUTPUT.map((output, i) => {
     return {
       ...MOCK_INPUT[i],
@@ -47,28 +48,12 @@ export function generateCardExtensions(
   });
 }
 
-export const UNIT_KEYWORDS_KEYS = {
-  ranged: true,
-  haste: true,
-  moveAndAttack: true,
-  retaliate: true,
-  armor: true,
-  resist: true,
-  poisonous: true,
-  regeneration: true,
-  trample: true,
-  zerk: true,
-} as const;
-
-export const getUnitKeywordKeys = (): (keyof UnitKeywords)[] =>
-  Object.keys(UNIT_KEYWORDS_KEYS) as (keyof UnitKeywords)[];
-
-export function generatePrompt(templates: LllmInput[], colorCombo: ColorCombo) {
+export function generatePrompt(templates: LllmInput[], flavor: string) {
   return `
-  You are a card designer for a medievam-fantsay trading card game. You are creating card names and descriptions of their images, as well as some gameplay recommandations. 
+  You are a card designer for a medieval fantasy trading card game. You are creating card names and descriptions of their images, as well as some gameplay recommandations. 
 
   All cards in this batch share the following theme:  
-  **Theme:** ${colorCombo.flavor}  
+  **Theme:** ${flavor}
 
   All names should be unique (avoid repetition within this batch).  
 
@@ -76,11 +61,9 @@ export function generatePrompt(templates: LllmInput[], colorCombo: ColorCombo) {
   - **Type**: either "unit" (e.g. animals, humans, monsters, magical beings) or "spell" (e.g. effects like sandstorms or illusions)  
   - **Cost**: from 1 to 8; low-cost cards are simple and weak, high-cost ones are powerful and dramatic  
   - **Rarity**: "common", "uncommon", or "rare"; rare cards should feel more legendary and have more exotic names
+  - **Keywords**: a list of keywords that describe the card's abilities
 
   ---
-
-  Use only these values for suggested keywords (pick 1 or 2 max per card):  
-  ${getUnitKeywordKeys().join(', ')}
 
   Use only these values for suggested unit type:  
   ${Object.values(UnitType).join(', ')}
@@ -99,7 +82,6 @@ export function generatePrompt(templates: LllmInput[], colorCombo: ColorCombo) {
     "name": "Desert Fox",
     "imageDescription": "A fennec darting across golden dunes under a starry sky, ears perked and agile mid-jump",
     "suggestedSize": "small",
-    "suggestedKeywords": ["elusive"],
     "suggestedUnitType": "beast"
   }
 

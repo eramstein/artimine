@@ -1,5 +1,7 @@
 import { CardColor, CardRarity, CardType } from '../_model';
-import { getRandomWeighted } from '../_utils/random';
+import { getRandomFromArray, getRandomWeighted } from '../_utils/random';
+import { MOCK_BATCH } from './_sample-batch';
+import { getKeywordSuggestion } from './keywords';
 import { generatePrompt } from './llm-card-extension';
 
 export interface BaseTemplate {
@@ -95,7 +97,25 @@ export function makeTemplatesBatch() {
   }
   // TODO:
   // LOOP AND PASS to LLM - generateCardExtensions
-  console.log(templates);
+  console.log(templates.Life?.filter((t) => t.rarity === CardRarity.Common));
+  const sample = [];
+  for (let i = 0; i < 40; i++) {
+    sample.push(
+      getRandomFromArray(templates.Life?.filter((t) => t.rarity === CardRarity.Common) || [])
+    );
+  }
+  console.log(sample.sort((a, b) => a.cost - b.cost));
+  const llmInput = MOCK_BATCH.map((v) => ({
+    rarity: v.rarity as CardRarity,
+    cost: v.cost,
+    type: v.type as CardType,
+    keywords: [getKeywordSuggestion(v.colors[0].color as CardColor, v.rarity as CardRarity)].join(
+      ', '
+    ),
+  }));
+  console.log(llmInput);
+  const prompt = generatePrompt(llmInput, colorCombosMap[ColorComboName.Life].flavor);
+  console.log(prompt);
   return templates;
 }
 
@@ -111,7 +131,7 @@ function addRarity({ colors }: { colors: ColorCombo }) {
 
 function addType({ colors, rarity }: { colors: ColorCombo; rarity: CardRarity }) {
   let templates: BaseTemplate[] = [];
-  // 2 units for 1 spell
+  // 3 units for 1 spell
   let newTemplates: BaseTemplate[] = [];
   newTemplates = [...newTemplates, ...addCost({ colors, rarity, type: CardType.Unit })];
   newTemplates = [...newTemplates, ...addCost({ colors, rarity, type: CardType.Unit })];
