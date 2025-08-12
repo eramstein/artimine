@@ -59,7 +59,8 @@ export function costPerKeywordForUnit(unit: Partial<UnitCard>): Record<keyof Uni
     }
 
     // Add color tax if not in color preferences
-    const hasColorPreference = colorPrefs?.[keywordKey] !== undefined;
+    const hasColorPreference =
+      colorPrefs?.[keywordKey] !== undefined && colorPrefs?.[keywordKey] > 0;
     const isScalingKeyword = def.type === 'number';
     const colorTax = hasColorPreference ? 0 : isScalingKeyword ? 1 : colorPieTax;
 

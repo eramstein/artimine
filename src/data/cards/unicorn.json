@@ -1,0 +1,23 @@
+{
+  "id": "unicorn",
+  "name": "Unicorn",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 4,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "green",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "trample": true,
+    "retaliate": 3,
+    "resist": 2
+  }
+}

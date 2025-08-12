@@ -1,0 +1,16 @@
+{
+  "id": "deer",
+  "name": "Deer",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 4,
+  "maxHealth": 5,
+  "unitTypes": ["beast"],
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ]
+}

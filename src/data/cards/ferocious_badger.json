@@ -1,0 +1,19 @@
+{
+  "id": "ferocious_badger",
+  "name": "Ferocious Badger",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 4,
+  "maxHealth": 5,
+  "unitTypes": ["beast"],
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "retaliate": 5
+  }
+}

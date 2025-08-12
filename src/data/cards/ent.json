@@ -1,0 +1,22 @@
+{
+  "id": "ent",
+  "name": "Ent",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 8,
+  "power": 7,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "green",
+      "count": 4
+    }
+  ],
+  "unitTypes": [
+    "spirit"
+  ],
+  "keywords": {
+    "retaliate": 3,
+    "armor": 4
+  }
+}

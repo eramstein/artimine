@@ -1,0 +1,21 @@
+{
+  "id": "dryad",
+  "name": "Dryad",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "green",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "spirit"
+  ],
+  "keywords": {
+    "regeneration": 4
+  }
+}

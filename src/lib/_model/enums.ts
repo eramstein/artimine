@@ -64,6 +64,7 @@ export enum UnitType {
   Dragon = 'dragon',
   Angel = 'angel',
   Demon = 'demon',
+  Halfing = 'halfing',
 }
 
 export enum CounterType {

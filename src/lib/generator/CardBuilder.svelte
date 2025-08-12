@@ -150,6 +150,29 @@
 
   let jsonOutput = $derived(generateJSON());
 
+  // Reset form function
+  function resetForm() {
+    state.name = '';
+    state.rarity = CardRarity.Common;
+    state.type = CardType.Unit;
+    state.cost = 1;
+    state.power = 1;
+    state.maxHealth = 1;
+    state.unitTypes = [];
+
+    // Reset keywords state
+    state_keywords.ranged = false;
+    state_keywords.haste = false;
+    state_keywords.moveAndAttack = false;
+    state_keywords.trample = false;
+    state_keywords.zerk = false;
+    state_keywords.retaliate = 0;
+    state_keywords.armor = 0;
+    state_keywords.resist = 0;
+    state_keywords.poisonous = 0;
+    state_keywords.regeneration = 0;
+  }
+
   // Download JSON function
   function downloadJSON() {
     if (!derivedId.trim()) {
@@ -192,6 +215,7 @@
         >
       </div>
     </div>
+    <button type="button" onclick={resetForm} class="reset-btn"> Reset Form (Keep Colors) </button>
   </div>
 
   <div class="form-section">
@@ -420,6 +444,23 @@
 
   .budget-value.negative {
     color: #dc3545;
+  }
+
+  .reset-btn {
+    margin-top: 15px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .reset-btn:hover {
+    background-color: #5a6268;
   }
 
   .form-group {

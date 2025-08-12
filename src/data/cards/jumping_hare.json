@@ -1,0 +1,19 @@
+{
+  "id": "jumping_hare",
+  "name": "Jumping Hare",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 3
+    }
+  ],
+  "keywords": {
+    "haste": true,
+    "moveAndAttack": true
+  }
+}

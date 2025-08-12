@@ -28,6 +28,7 @@ export const extraBudget: Record<string, Record<string, number>> = {
   },
   // large commitment in one color gets more budget
   inOneColor: {
+    two: 1,
     three: 2,
     four: 3,
   },
@@ -65,7 +66,9 @@ export function getBudgetForUnit(
   // large commitment in one color gets more budget
   const colorCounts = colors.map((color) => color.count);
   const maxColorCount = Math.max(...colorCounts);
-  if (maxColorCount === 3) {
+  if (maxColorCount === 2) {
+    budget += extraBudget.inOneColor.two;
+  } else if (maxColorCount === 3) {
     budget += extraBudget.inOneColor.three;
   } else if (maxColorCount >= 4) {
     budget += extraBudget.inOneColor.four;

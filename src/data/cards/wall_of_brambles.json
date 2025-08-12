@@ -1,0 +1,18 @@
+{
+  "id": "wall_of_brambles",
+  "name": "Wall of brambles",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 0,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "keywords": {
+    "retaliate": 2
+  }
+}

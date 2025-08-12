@@ -1,0 +1,18 @@
+{
+  "id": "wolf",
+  "name": "Wolf",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "keywords": {
+    "retaliate": 1
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "giant_spider",
+  "name": "Giant Spider",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "keywords": {
+    "retaliate": 1,
+    "poisonous": 2
+  }
+}

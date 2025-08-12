@@ -1,0 +1,21 @@
+{
+  "id": "bear_minimum",
+  "name": "Bear Minimum",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 5,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "retaliate": 2
+  }
+}

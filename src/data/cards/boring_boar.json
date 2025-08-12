@@ -1,0 +1,16 @@
+{
+  "id": "boring_boar",
+  "name": "Boring Boar",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 3,
+  "maxHealth": 3,
+  "unitTypes": ["beast"],
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ]
+}
