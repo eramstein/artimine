@@ -17,9 +17,11 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
   // CHECKS + COSTS
   // ----------------------------------------------------------------------
   if (!checkMultipleEffectsTargets(spell, spell.actions, targets)) {
+    console.log('failed to check multiple effects targets');
     return;
   }
   if (!isPayable(spell) || paySpellCost(spell) === false) {
+    console.log('failed to pay spell cost');
     return;
   }
 

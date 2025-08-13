@@ -53,6 +53,7 @@ export function checkTargets(
   targetDefinition: TargetDefinition,
   tentativeTargets: EffectTargets
 ): boolean {
+  console.log('checking targets', card, targetDefinition, tentativeTargets);
   if (!targetDefinition) {
     return true;
   }

@@ -1,0 +1,21 @@
+{
+  "id": "energyze",
+  "name": "Energyze",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "untapPlayer",
+        "args": {}
+      }
+    }
+  ]
+}
