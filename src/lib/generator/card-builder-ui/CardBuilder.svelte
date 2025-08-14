@@ -52,7 +52,7 @@
   let editingActionIndex = $state(-1);
   let newAction = $state({
     effectName: '',
-    effectArgs: '',
+    effectArgs: {} as Record<string, any>,
     hasTargets: false,
     targetType: 'unit',
     targetCount: 1,
@@ -104,11 +104,10 @@
   // Action management
   function addAction() {
     try {
-      const effectArgs = newAction.effectArgs ? JSON.parse(newAction.effectArgs) : {};
       const action: ActionDefinition = {
         effect: {
           name: newAction.effectName,
-          args: effectArgs,
+          args: newAction.effectArgs,
         },
         ...(newAction.hasTargets && {
           targets: [
@@ -124,12 +123,12 @@
 
       // Reset form
       newAction.effectName = '';
-      newAction.effectArgs = '';
+      newAction.effectArgs = {};
       newAction.hasTargets = false;
       newAction.targetType = 'unit';
       newAction.targetCount = 1;
     } catch (error) {
-      alert('Invalid JSON in effect args: ' + error);
+      alert('Error adding action: ' + error);
     }
   }
 
@@ -140,7 +139,7 @@
   function editAction(index: number) {
     const action = state.actions[index];
     newAction.effectName = action.effect.name;
-    newAction.effectArgs = JSON.stringify(action.effect.args, null, 2);
+    newAction.effectArgs = { ...action.effect.args };
     newAction.hasTargets = !!(action.targets && action.targets.length > 0);
     newAction.targetType = action.targets?.[0]?.type || 'unit';
     newAction.targetCount = action.targets?.[0]?.count || 1;
@@ -149,11 +148,10 @@
 
   function updateAction() {
     try {
-      const effectArgs = newAction.effectArgs ? JSON.parse(newAction.effectArgs) : {};
       const action: ActionDefinition = {
         effect: {
           name: newAction.effectName,
-          args: effectArgs,
+          args: newAction.effectArgs,
         },
         ...(newAction.hasTargets && {
           targets: [
@@ -171,19 +169,19 @@
 
       // Reset form
       newAction.effectName = '';
-      newAction.effectArgs = '';
+      newAction.effectArgs = {};
       newAction.hasTargets = false;
       newAction.targetType = 'unit';
       newAction.targetCount = 1;
       editingActionIndex = -1;
     } catch (error) {
-      alert('Invalid JSON in effect args: ' + error);
+      alert('Error updating action: ' + error);
     }
   }
 
   function cancelEdit() {
     newAction.effectName = '';
-    newAction.effectArgs = '';
+    newAction.effectArgs = {};
     newAction.hasTargets = false;
     newAction.targetType = 'unit';
     newAction.targetCount = 1;

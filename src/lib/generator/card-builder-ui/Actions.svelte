@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { CardType } from '../../_model/enums';
+  import { CardType, UnitType, TargetType } from '../../_model/enums';
   import type { ActionDefinition } from '../../_model/model-battle';
   import { baseEffects, getBaseEffect } from '../base-effects';
-  import { UnitType } from '../../_model/enums';
 
   const props = $props<{
     state: {
@@ -38,16 +37,8 @@
       const args: Record<string, any> = {};
       currentBaseEffect.argNames.forEach((argName) => {
         if (argName === 'range') {
-          // Initialize range as an object with boolean properties
-          args[argName] = {
-            self: false,
-            sameRow: false,
-            sameColumn: false,
-            allies: false,
-            ennemies: false,
-            adjacent: false,
-            unitType: undefined,
-          };
+          // Initialize range as an empty object - properties will be added as needed
+          args[argName] = {};
         } else if (
           argName.includes('damage') ||
           argName.includes('Value') ||
@@ -120,64 +111,130 @@
 
             {#if argName === 'range'}
               <!-- Special handling for range argument -->
-              <div class="range-options">
-                <div class="range-section">
-                  <h6>Range Options:</h6>
-                  <div class="checkbox-grid">
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].self}
-                      />
-                      Self
-                    </label>
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].sameRow}
-                      />
-                      Same Row
-                    </label>
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].sameColumn}
-                      />
-                      Same Column
-                    </label>
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].allies}
-                      />
-                      Allies
-                    </label>
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].ennemies}
-                      />
-                      Enemies
-                    </label>
-                    <label class="checkbox-label">
-                      <input
-                        type="checkbox"
-                        bind:checked={props.newAction.effectArgs[argName].adjacent}
-                      />
-                      Adjacent
-                    </label>
+              {#if props.newAction.effectArgs[argName]}
+                <div class="range-options">
+                  <div class="range-section">
+                    <h6>Range Options:</h6>
+                    <div class="checkbox-grid">
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].self}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].self = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].self;
+                            }
+                          }}
+                        />
+                        Self
+                      </label>
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].sameRow}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].sameRow = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].sameRow;
+                            }
+                          }}
+                        />
+                        Same Row
+                      </label>
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].sameColumn}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].sameColumn = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].sameColumn;
+                            }
+                          }}
+                        />
+                        Same Column
+                      </label>
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].allies}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].allies = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].allies;
+                            }
+                          }}
+                        />
+                        Allies
+                      </label>
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].ennemies}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].ennemies = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].ennemies;
+                            }
+                          }}
+                        />
+                        Enemies
+                      </label>
+                      <label class="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={!!props.newAction.effectArgs[argName].adjacent}
+                          onchange={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.checked) {
+                              props.newAction.effectArgs[argName].adjacent = true;
+                            } else {
+                              delete props.newAction.effectArgs[argName].adjacent;
+                            }
+                          }}
+                        />
+                        Adjacent
+                      </label>
+                    </div>
+                  </div>
+                  <div class="range-section">
+                    <label for="unitType">Unit Type (optional):</label>
+                    <select
+                      id="unitType"
+                      value={props.newAction.effectArgs[argName].unitType || ''}
+                      onchange={(e) => {
+                        const target = e.target as HTMLSelectElement;
+                        const value = target.value;
+                        if (value && value !== '') {
+                          props.newAction.effectArgs[argName].unitType = value;
+                        } else {
+                          delete props.newAction.effectArgs[argName].unitType;
+                        }
+                      }}
+                    >
+                      <option value="">None</option>
+                      {#each Object.values(UnitType) as unitType}
+                        <option value={unitType}>{unitType}</option>
+                      {/each}
+                    </select>
                   </div>
                 </div>
-                <div class="range-section">
-                  <label for="unitType">Unit Type (optional):</label>
-                  <select id="unitType" bind:value={props.newAction.effectArgs[argName].unitType}>
-                    <option value={undefined}>None</option>
-                    {#each Object.values(UnitType) as unitType}
-                      <option value={unitType}>{unitType}</option>
-                    {/each}
-                  </select>
+              {:else}
+                <div class="range-placeholder">
+                  <em>Select an effect to configure range options</em>
                 </div>
-              </div>
+              {/if}
             {:else if argName.includes('damage') || argName.includes('Value') || argName.includes('duration')}
               <input
                 id={argName}
@@ -219,11 +276,10 @@
         <div class="form-group">
           <label for="targetType">Target Type:</label>
           <select id="targetType" bind:value={props.newAction.targetType}>
-            <option value="unit">Unit</option>
-            <option value="position">Position</option>
-            <option value="land">Land</option>
-            <option value="player">Player</option>
-            <option value="card">Card</option>
+            <option value="">Select target type...</option>
+            {#each Object.values(TargetType) as targetType}
+              <option value={targetType}>{targetType}</option>
+            {/each}
           </select>
         </div>
 
@@ -286,8 +342,7 @@
   }
 
   .form-group input,
-  .form-group select,
-  .form-group textarea {
+  .form-group select {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -296,14 +351,8 @@
     box-sizing: border-box;
   }
 
-  .form-group textarea {
-    resize: vertical;
-    min-height: 60px;
-  }
-
   .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
+  .form-group select:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
@@ -376,6 +425,16 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 8px;
+  }
+
+  .range-placeholder {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 4px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
   }
 
   /* Action styles */
