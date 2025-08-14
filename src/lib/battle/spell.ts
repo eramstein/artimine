@@ -69,6 +69,10 @@ function checkMultipleEffectsTargets(
   actionDefs: ActionDefinition[],
   targets: EffectTargets[][]
 ): boolean {
+  const actionDefsWithTargets = actionDefs.filter((a) => a.targets);
+  if (actionDefsWithTargets.length === 0) {
+    return true;
+  }
   if (!Array.isArray(targets) || targets.length !== actionDefs.length) return false;
   for (let i = 0; i < actionDefs.length; i++) {
     if (!checkMultipleTargets(spell, actionDefs[i].targets || [], targets[i])) return false;
