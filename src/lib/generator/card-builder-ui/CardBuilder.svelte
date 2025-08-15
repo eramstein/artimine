@@ -21,6 +21,25 @@
   import Actions from './Actions.svelte';
   import JsonOutput from './JsonOutput.svelte';
 
+  // Filter out empty arguments for clean JSON output
+  function getCleanArgs(args: Record<string, any>): Record<string, any> {
+    const cleanArgs: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(args)) {
+      if (value !== undefined && value !== null && value !== '' && value !== 0) {
+        if (typeof value === 'object' && Object.keys(value).length > 0) {
+          // For objects (like range), only include if they have properties
+          cleanArgs[key] = value;
+        } else if (typeof value !== 'object') {
+          // For non-objects, include if they have a meaningful value
+          cleanArgs[key] = value;
+        }
+      }
+    }
+
+    return cleanArgs;
+  }
+
   // Form state
   let state = $state({
     name: '',
@@ -107,7 +126,7 @@
       const action: ActionDefinition = {
         effect: {
           name: newAction.effectName,
-          args: newAction.effectArgs,
+          args: getCleanArgs(newAction.effectArgs),
         },
         ...(newAction.hasTargets && {
           targets: newAction.targets,
@@ -144,7 +163,7 @@
       const action: ActionDefinition = {
         effect: {
           name: newAction.effectName,
-          args: newAction.effectArgs,
+          args: getCleanArgs(newAction.effectArgs),
         },
         ...(newAction.hasTargets && {
           targets: newAction.targets,

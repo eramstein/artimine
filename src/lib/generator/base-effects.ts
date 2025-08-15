@@ -49,6 +49,17 @@ export const baseEffects: BaseEffect[] = [
     defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
+    effectName: 'healUnit',
+    argNames: ['health', 'range'],
+    budget: (args, targets) => {
+      const baseCost = args.health * 2 || 1;
+      const targetMultiplier = getTargetCount(targets);
+      const rangeMultiplier = getRangeMultiplier(args.range);
+      return baseCost * targetMultiplier * rangeMultiplier;
+    },
+    defaultTargets: [{ type: TargetType.Units, count: 1 }],
+  },
+  {
     effectName: 'addCounters',
     argNames: ['counterType', 'counterValue', 'range'],
     budget: (args, targets) => {
@@ -81,11 +92,12 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'applyUnitStatus',
-    argNames: ['statusType', 'duration'],
+    argNames: ['statusType', 'duration', 'range'],
     budget: (args, targets) => {
       const baseCost = statusCost[args.statusType as keyof UnitStatuses];
       const targetMultiplier = getTargetCount(targets);
-      return baseCost * targetMultiplier;
+      const rangeMultiplier = getRangeMultiplier(args.range);
+      return baseCost * targetMultiplier * rangeMultiplier;
     },
     defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
@@ -103,6 +115,13 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'transferCounters',
     argNames: ['counterType'],
     budget: (args, targets) => 12, // TBD
+  },
+  {
+    effectName: 'drawCard',
+    argNames: ['cardCount'],
+    budget: (args, targets) => {
+      return args.cardCount * 16;
+    },
   },
 ];
 

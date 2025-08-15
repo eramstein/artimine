@@ -1,0 +1,35 @@
+{
+  "id": "mass_root",
+  "name": "Mass Root",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "applyUnitStatus",
+        "args": {
+          "statusType": "root",
+          "duration": 1,
+          "range": {
+            "ennemies": true
+          }
+        }
+      }
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": "1"
+        }
+      }
+    }
+  ]
+}

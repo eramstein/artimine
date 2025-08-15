@@ -44,7 +44,6 @@ export const loadGameStateFromLocalStorage = async () => {
     if (!savedBattleState) return {};
 
     const parsedBattleState: BattleState = JSON.parse(savedBattleState);
-    restoreBattleFunctions(parsedBattleState);
     Object.assign(bs, parsedBattleState);
   } catch (error) {
     console.error('Failed to load state from localStorage:', error);
@@ -66,52 +65,3 @@ export const resetBattleState = (): void => {
 export const getCurrentBattleState = () => {
   return JSON.parse(JSON.stringify({ ...bs }));
 };
-
-function restoreBattleFunctions(bs: BattleState) {
-  if (!bs) {
-    return;
-  }
-  bs.units.forEach((unit) => {
-    restoreUnitFunctions(unit);
-  });
-  bs.players.forEach((player) => {
-    player.hand.forEach((unit) => {
-      if (isUnitCard(unit)) {
-        restoreUnitFunctions(unit);
-      }
-    });
-    player.deck.forEach((unit) => {
-      if (isUnitCard(unit)) {
-        restoreUnitFunctions(unit);
-      }
-    });
-    player.graveyard.forEach((unit) => {
-      if (isUnitCard(unit)) {
-        restoreUnitFunctions(unit);
-      }
-    });
-    player.hand.forEach((spell) => {
-      if (isSpellCard(spell)) {
-        restoreSpellFunctions(spell);
-      }
-    });
-    player.deck.forEach((spell) => {
-      if (isSpellCard(spell)) {
-        restoreSpellFunctions(spell);
-      }
-    });
-    player.graveyard.forEach((spell) => {
-      if (isSpellCard(spell)) {
-        restoreSpellFunctions(spell);
-      }
-    });
-  });
-}
-
-export function restoreUnitFunctions(unit: UnitCardTemplate) {
-  unit.abilities = (cards[unit.id] as UnitCardTemplate).abilities;
-}
-
-export function restoreSpellFunctions(spell: SpellCardTemplate) {
-  spell.actions = (cards[spell.id] as SpellCardTemplate).actions;
-}

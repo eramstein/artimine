@@ -1,0 +1,29 @@
+{
+  "id": "healing_salve",
+  "name": "Healing Salve",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "healUnit",
+        "args": {
+          "health": "8"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -13,8 +13,10 @@ import {
   makeUnit,
   destroyUnit,
   removeCounters,
+  healUnit,
+  drawCard,
 } from '@/lib/battle';
-import { CardColor, CounterType } from '@/lib/_model';
+import { CardColor, CounterType, StatusType } from '@/lib/_model';
 import type {
   EffectArgs,
   Position,
@@ -27,7 +29,7 @@ import type {
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { reanimate } from '../graveyard';
-import { filterUnits, getRangeLabel, type UnitFilterArgs } from './unitFilters';
+import { filterUnits, getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unitFilters';
 import { getTargetLabel } from '../target';
 
 export const DataEffectTemplates: Record<
@@ -55,17 +57,27 @@ export const DataEffectTemplates: Record<
     label: () => `Deal ${damage} damage to the enemy player`,
   }),
   damageUnit: ({ damage, range }: { damage: number; range?: UnitFilterArgs }) => ({
-    fn: ({ targets }) => {
-      (targets[0] as UnitDeployed[]).forEach((target) => {
-        const unitsInRange = range ? filterUnits({ unit: target, ...range }) : [target];
-        unitsInRange.forEach((u) => {
-          damageUnit(u, damage);
-        });
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        damageUnit(u, damage);
       });
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
       return `Deal ${damage} damage to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+    },
+  }),
+  healUnit: ({ health, range }: { health: number; range?: UnitFilterArgs }) => ({
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        healUnit(u, health);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Heal ${health} to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   addCounters: ({
@@ -77,13 +89,10 @@ export const DataEffectTemplates: Record<
     counterValue: number;
     range?: UnitFilterArgs;
   }) => ({
-    fn: ({ unit, targets }) => {
-      const targetUnits = targets[0]?.length ? (targets[0] as UnitDeployed[]) : [unit];
-      targetUnits.forEach((u) => {
-        const unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
-        unitsInRange.forEach((u) => {
-          addCounters(u, counterType, counterValue);
-        });
+    fn: ({ unit, targets, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        addCounters(u, counterType, counterValue);
       });
     },
     label: (targets: TargetDefinition[]) => {
@@ -121,9 +130,18 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Add 1 ${color} mana`,
   }),
-  applyUnitStatus: ({ statusType, duration }) => ({
-    fn: ({ targets }) => {
-      (targets[0] as UnitDeployed[]).forEach((u) => {
+  applyUnitStatus: ({
+    statusType,
+    duration,
+    range,
+  }: {
+    statusType: StatusType;
+    duration: number;
+    range?: UnitFilterArgs;
+  }) => ({
+    fn: ({ targets, player, unit }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
         applyUnitStatus(u, statusType, duration);
       });
     },
@@ -182,5 +200,13 @@ export const DataEffectTemplates: Record<
       }
     },
     label: () => `Transfer all ${counterType} counters from other units to this unit`,
+  }),
+  drawCard: ({ cardCount = 1 }) => ({
+    fn: ({ player }) => {
+      for (let i = 0; i < cardCount; i++) {
+        drawCard(player);
+      }
+    },
+    label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}`,
   }),
 };

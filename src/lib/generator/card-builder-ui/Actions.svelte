@@ -103,6 +103,25 @@
       i === index ? { ...target, [field]: value } : target
     );
   }
+
+  // Filter out empty arguments for display
+  function getCleanArgs(args: Record<string, any>): Record<string, any> {
+    const cleanArgs: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(args)) {
+      if (value !== undefined && value !== null && value !== '' && value !== 0) {
+        if (typeof value === 'object' && Object.keys(value).length > 0) {
+          // For objects (like range), only include if they have properties
+          cleanArgs[key] = value;
+        } else if (typeof value !== 'object') {
+          // For non-objects, include if they have a meaningful value
+          cleanArgs[key] = value;
+        }
+      }
+    }
+
+    return cleanArgs;
+  }
 </script>
 
 <div class="form-section" class:hidden={props.state.type !== CardType.Spell}>
@@ -122,7 +141,7 @@
         </div>
       </div>
       <div class="action-details">
-        <div><strong>Args:</strong> {JSON.stringify(action.effect.args || {})}</div>
+        <div><strong>Args:</strong> {JSON.stringify(getCleanArgs(action.effect.args || {}))}</div>
         <div>
           <strong>Targets:</strong>
           {action.targets

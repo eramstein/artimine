@@ -1,4 +1,4 @@
-import type { Position, UnitDeployed } from '@/lib/_model';
+import type { EffectTargets, Player, Position, UnitDeployed } from '@/lib/_model';
 import { UnitType } from '@/lib/_model/enums';
 import { getAdjacentUnits } from '../unit';
 import { bs } from '@/lib/_state';
@@ -8,6 +8,8 @@ export interface UnitFilterArgs {
   self?: boolean;
   unit?: UnitDeployed;
   position?: Position;
+  player?: Player;
+  all?: boolean;
   // relative to the references
   sameRow?: boolean;
   sameColumn?: boolean;
@@ -19,6 +21,10 @@ export interface UnitFilterArgs {
 }
 
 export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
+  if (filterArgs.all) {
+    return bs.units;
+  }
+  const relativeToPlayerId = filterArgs.player?.id ?? filterArgs.unit?.ownerPlayerId;
   const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
   const validUnits = bs.units.filter((u) => {
     let valid = true;
@@ -28,10 +34,10 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
     if (filterArgs.sameColumn && u.position.column !== relativeToPosition?.column) {
       valid = false;
     }
-    if (filterArgs.allies && u.ownerPlayerId !== filterArgs.unit?.ownerPlayerId) {
+    if (filterArgs.allies && u.ownerPlayerId !== relativeToPlayerId) {
       valid = false;
     }
-    if (filterArgs.ennemies && u.ownerPlayerId === filterArgs.unit?.ownerPlayerId) {
+    if (filterArgs.ennemies && u.ownerPlayerId === relativeToPlayerId) {
       valid = false;
     }
     if (
@@ -54,6 +60,9 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
 
 export function getRangeLabel(filterArgs: UnitFilterArgs) {
   let labels = [];
+  if (filterArgs.all) {
+    labels.push('all units');
+  }
   if (filterArgs.sameRow) {
     labels.push('same row');
   }
@@ -73,4 +82,25 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
     labels.push(filterArgs.unitType);
   }
   return `Range: ${labels.join(' ')}`;
+}
+
+// helper function to loop units.
+// if there are targets, we assume the first one is the units to loop on
+// else, only use the range (e.g. all ennemies)
+export function getUnitsInRange(
+  targets: UnitDeployed[][] | undefined, // assumption: 1st one is units
+  range: UnitFilterArgs | undefined,
+  unit: UnitDeployed,
+  player: Player
+): UnitDeployed[] {
+  let unitsInRange: UnitDeployed[] = [];
+  if (targets && targets[0]?.length) {
+    const targetUnits = targets[0];
+    targetUnits.forEach((u) => {
+      unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
+    });
+  } else if (range) {
+    unitsInRange = filterUnits({ unit, player, ...range });
+  }
+  return unitsInRange;
 }

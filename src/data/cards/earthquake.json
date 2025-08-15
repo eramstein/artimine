@@ -1,0 +1,26 @@
+{
+  "id": "earthquake",
+  "name": "Earthquake",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 3,
+          "range": {
+            "all": true
+          }
+        }
+      }
+    }
+  ]
+}

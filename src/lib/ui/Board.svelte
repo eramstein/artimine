@@ -11,7 +11,6 @@
   import { clearSelections, setUnitsTargets, toggleUnitSelection } from './_helpers/selections';
   import { targetCell } from './_helpers/abilities';
   import { fly } from 'svelte/transition';
-  import { restoreUnitFunctions } from '@lib/_state/main.svelte';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -89,7 +88,6 @@
       if (!cardData) return;
       const position: Position = { row, column };
       const card: Card = JSON.parse(cardData);
-      restoreUnitFunctions(card as UnitCardTemplate);
       if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
         deployUnit(card, position);
         if (card.keywords?.haste) {

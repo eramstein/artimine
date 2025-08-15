@@ -1,0 +1,30 @@
+{
+  "id": "giant_growth",
+  "name": "Giant Growth",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "growth",
+          "counterValue": 3
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "artificial_plague",
+  "name": "Artificial Plague",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "decay",
+          "counterValue": 1,
+          "range": {
+            "ennemies": true
+          }
+        }
+      }
+    }
+  ]
+}

@@ -2,12 +2,11 @@
   "player": {
     "name": "Henry",
     "cards": [
-      "dark_ritual",
-      "raise_dead",
-      "guinea_pig",
-      "decaying_ray",
-      "fireball",
-      "energyze",
+      "artificial_plague",
+      "earthquake",
+      "mass_root",
+      "healing_salve",
+      "giant_growth",
       "bear_minimum",
       "boring_boar",
       "deer",
@@ -22,7 +21,13 @@
       "unicorn",
       "wall_of_brambles",
       "wolf",
-      "young_hobbit"
+      "young_hobbit",
+      "dark_ritual",
+      "raise_dead",
+      "guinea_pig",
+      "decaying_ray",
+      "fireball",
+      "energyze"
     ],
     "lands": ["forest", "mountain", "island", "swamp"]
   },
