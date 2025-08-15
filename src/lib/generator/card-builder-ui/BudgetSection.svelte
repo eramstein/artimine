@@ -13,33 +13,34 @@
   export let totalBudget: number;
   export let statsBudget: number;
   export let keywordsBudget: number;
+  export let actionsBudget: number;
   export let remainingBudget: number;
   export let resetForm: () => void;
 </script>
 
-<div class="form-section budget-section" class:hidden={state.type !== CardType.Unit}>
-  <h3>Budget</h3>
-  <div class="budget-breakdown">
-    <div class="budget-item">
-      <span class="budget-label">Total Budget:</span>
-      <span class="budget-value">{totalBudget} points</span>
+<div class="form-section budget-section">
+  <div class="budget-header">
+    <h3>Budget</h3>
+    <div class="budget-display">
+      <span class="remaining-value {remainingBudget < 0 ? 'negative' : ''}">{remainingBudget}</span>
+      <span class="separator">:</span>
+      <span class="total-value">{totalBudget}</span>
+      {#if state.type === CardType.Unit}
+        {#if statsBudget > 0}
+          <span class="cost-separator">-</span>
+          <span class="cost-value">{statsBudget} stats</span>
+        {/if}
+        {#if keywordsBudget > 0}
+          <span class="cost-separator">-</span>
+          <span class="cost-value">{keywordsBudget} keywords</span>
+        {/if}
+      {:else if actionsBudget > 0}
+        <span class="cost-separator">-</span>
+        <span class="cost-value">{actionsBudget} actions</span>
+      {/if}
     </div>
-    <div class="budget-item">
-      <span class="budget-label">Stats Cost:</span>
-      <span class="budget-value">-{statsBudget} points</span>
-    </div>
-    <div class="budget-item">
-      <span class="budget-label">Keywords Cost:</span>
-      <span class="budget-value">-{keywordsBudget} points</span>
-    </div>
-    <div class="budget-item total">
-      <span class="budget-label">Remaining:</span>
-      <span class="budget-value {remainingBudget < 0 ? 'negative' : ''}"
-        >{remainingBudget} points</span
-      >
-    </div>
+    <button type="button" onclick={resetForm} class="reset-btn">Reset Form</button>
   </div>
-  <button type="button" onclick={resetForm} class="reset-btn"> Reset Form (Keep Colors) </button>
 </div>
 
 <style>
@@ -53,13 +54,22 @@
     box-sizing: border-box;
   }
 
-  .form-section.hidden {
-    display: none !important;
-  }
-
   .budget-section {
     background-color: #e8f4fd;
     border-color: #007bff;
+  }
+
+  .budget-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .budget-header h3 {
+    margin: 0;
+    color: #333;
+    white-space: nowrap;
+    min-width: 60px;
   }
 
   .form-section h3 {
@@ -69,55 +79,66 @@
     padding-bottom: 10px;
   }
 
-  .budget-breakdown {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .budget-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    background-color: white;
-    border-radius: 4px;
-    border: 1px solid #dee2e6;
-  }
-
-  .budget-item.total {
-    font-weight: bold;
-    background-color: #f8f9fa;
-    border-color: #007bff;
-  }
-
-  .budget-label {
-    color: #555;
-  }
-
-  .budget-value {
-    font-weight: bold;
-    color: #333;
-  }
-
-  .budget-value.negative {
-    color: #dc3545;
-  }
-
   .reset-btn {
-    margin-top: 15px;
     background-color: #6c757d;
     color: white;
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    width: 100%;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .reset-btn:hover {
     background-color: #5a6268;
+  }
+
+  .budget-display {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+  }
+
+  .remaining-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .remaining-value.negative {
+    color: #dc3545;
+  }
+
+  .separator {
+    font-size: 18px;
+    color: #666;
+    margin: 0 2px;
+  }
+
+  .total-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 8px;
+  }
+
+  .cost-separator {
+    font-size: 14px;
+    color: #999;
+    margin: 0 4px;
+  }
+
+  .cost-value {
+    font-size: 14px;
+    color: #999;
+    font-weight: normal;
   }
 </style>

@@ -5,6 +5,8 @@
 
 import { config } from '../_config';
 import type { CardColor, UnitKeywords } from '../_model';
+import { getBaseEffect } from './base-effects';
+import type { ActionDefinition } from '../_model/model-battle';
 
 export const budgetPerCost: Record<number, number> = {
   1: 5,
@@ -86,4 +88,60 @@ export function getBudgetForUnit(
   }
 
   return budget;
+}
+
+export function getBudgetForSpell(
+  manaCost: number,
+  colors: { color: CardColor; count: number }[]
+): number {
+  let budget = budgetPerCost[manaCost];
+
+  const colorCount = colors.reduce((acc, color) => acc + color.count, 0);
+  const minTurnAvailable = Math.max(config.initialMana, manaCost);
+
+  // if a card has a equal or higher color than mana, get more budget to compensate tempo loss
+  if (colorCount === minTurnAvailable) {
+    budget += extraBudget.morecolorThanMana.equal;
+  } else if (colorCount === minTurnAvailable + 1) {
+    budget += extraBudget.morecolorThanMana.oneMore;
+  } else if (colorCount >= minTurnAvailable + 2) {
+    budget += extraBudget.morecolorThanMana.twoMore;
+  }
+
+  // large commitment in one color gets more budget
+  const colorCounts = colors.map((color) => color.count);
+  const maxColorCount = Math.max(...colorCounts);
+  if (maxColorCount === 2) {
+    budget += extraBudget.inOneColor.two;
+  } else if (maxColorCount === 3) {
+    budget += extraBudget.inOneColor.three;
+  } else if (maxColorCount >= 4) {
+    budget += extraBudget.inOneColor.four;
+  }
+
+  // multi-colored cards get more budget
+  if (colors.length === 2) {
+    budget += extraBudget.multiColor.two;
+  }
+  if (colors.length === 3) {
+    budget += extraBudget.multiColor.three;
+  }
+  if (colors.length >= 4) {
+    budget += extraBudget.multiColor.four;
+  }
+
+  return budget;
+}
+
+export function getActionsBudget(actions: ActionDefinition[]): number {
+  let totalBudget = 0;
+
+  for (const action of actions) {
+    const baseEffect = getBaseEffect(action.effect.name);
+    if (baseEffect) {
+      totalBudget += baseEffect.budget(action.effect.args, action.targets || []);
+    }
+  }
+
+  return totalBudget;
 }

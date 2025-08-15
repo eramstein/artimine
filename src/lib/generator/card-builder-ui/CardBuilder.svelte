@@ -8,8 +8,9 @@
     SpellCardTemplate,
     UnitKeywords,
     ActionDefinition,
+    TargetDefinition,
   } from '../../_model/model-battle';
-  import { baseStatsCost, getBudgetForUnit } from '../budgets';
+  import { baseStatsCost, getBudgetForUnit, getBudgetForSpell, getActionsBudget } from '../budgets';
   import { costPerKeywordForUnit } from '../keywords';
 
   // Import components
@@ -24,13 +25,13 @@
   let state = $state({
     name: '',
     rarity: CardRarity.Common,
-    type: CardType.Unit,
+    type: CardType.Spell,
     cost: 1,
     power: 1,
     maxHealth: 1,
     colors: [{ color: CardColor.Red, count: 1 }],
     unitTypes: [] as UnitType[],
-    keywords: {} as UnitKeywords,
+    keywords: undefined as UnitKeywords | undefined,
     actions: [] as ActionDefinition[],
   });
 
@@ -54,8 +55,7 @@
     effectName: '',
     effectArgs: {} as Record<string, any>,
     hasTargets: false,
-    targetType: 'unit',
-    targetCount: 1,
+    targets: [] as TargetDefinition[],
   });
 
   // Color management
@@ -110,12 +110,7 @@
           args: newAction.effectArgs,
         },
         ...(newAction.hasTargets && {
-          targets: [
-            {
-              type: newAction.targetType as any,
-              count: newAction.targetCount,
-            },
-          ],
+          targets: newAction.targets,
         }),
       };
 
@@ -125,8 +120,7 @@
       newAction.effectName = '';
       newAction.effectArgs = {};
       newAction.hasTargets = false;
-      newAction.targetType = 'unit';
-      newAction.targetCount = 1;
+      newAction.targets = [];
     } catch (error) {
       alert('Error adding action: ' + error);
     }
@@ -141,8 +135,7 @@
     newAction.effectName = action.effect.name;
     newAction.effectArgs = { ...action.effect.args };
     newAction.hasTargets = !!(action.targets && action.targets.length > 0);
-    newAction.targetType = action.targets?.[0]?.type || 'unit';
-    newAction.targetCount = action.targets?.[0]?.count || 1;
+    newAction.targets = action.targets || [];
     editingActionIndex = index;
   }
 
@@ -154,12 +147,7 @@
           args: newAction.effectArgs,
         },
         ...(newAction.hasTargets && {
-          targets: [
-            {
-              type: newAction.targetType as any,
-              count: newAction.targetCount,
-            },
-          ],
+          targets: newAction.targets,
         }),
       };
 
@@ -171,8 +159,7 @@
       newAction.effectName = '';
       newAction.effectArgs = {};
       newAction.hasTargets = false;
-      newAction.targetType = 'unit';
-      newAction.targetCount = 1;
+      newAction.targets = [];
       editingActionIndex = -1;
     } catch (error) {
       alert('Error updating action: ' + error);
@@ -183,8 +170,7 @@
     newAction.effectName = '';
     newAction.effectArgs = {};
     newAction.hasTargets = false;
-    newAction.targetType = 'unit';
-    newAction.targetCount = 1;
+    newAction.targets = [];
     editingActionIndex = -1;
   }
 
@@ -231,9 +217,11 @@
     })()
   );
 
-  // Budget calculations (only for units)
+  // Budget calculations (for both units and spells)
   let totalBudget = $derived(
-    state.type === CardType.Unit ? getBudgetForUnit(state.cost, state.colors) : 0
+    state.type === CardType.Unit
+      ? getBudgetForUnit(state.cost, state.colors)
+      : getBudgetForSpell(state.cost, state.colors)
   );
 
   let statsBudget = $derived(
@@ -266,16 +254,22 @@
       Object.entries(state.keywords).forEach(([key, value]) => {
         const keywordKey = key as keyof UnitKeywords;
         if (typeof value === 'number' && value > 0) {
-          total += keywordCosts[keywordKey] * value;
+          total += (keywordCosts as any)[keywordKey] * value;
         } else if (value === true) {
-          total += keywordCosts[keywordKey];
+          total += (keywordCosts as any)[keywordKey];
         }
       });
       return total;
     })()
   );
 
-  let remainingBudget = $derived(totalBudget - statsBudget - keywordsBudget);
+  let actionsBudget = $derived(state.type === CardType.Spell ? getActionsBudget(state.actions) : 0);
+
+  let remainingBudget = $derived(
+    state.type === CardType.Unit
+      ? totalBudget - statsBudget - keywordsBudget
+      : totalBudget - actionsBudget
+  );
 
   let jsonOutput = $derived(generateJSON());
 
@@ -331,28 +325,31 @@
     {totalBudget}
     {statsBudget}
     {keywordsBudget}
+    {actionsBudget}
     {remainingBudget}
     {resetForm}
   />
 
-  <BasicInfo {state} {addColor} {removeColor} {updateColor} />
+  <div class="form-sections">
+    <BasicInfo {state} {addColor} {removeColor} {updateColor} />
 
-  <UnitTypes {state} {toggleUnitType} />
+    <UnitTypes {state} {toggleUnitType} />
 
-  <Keywords {state} {state_keywords} {keywordCosts} />
+    <Keywords {state} {state_keywords} {keywordCosts} />
 
-  <Actions
-    {state}
-    {editingActionIndex}
-    {newAction}
-    {addAction}
-    {removeAction}
-    {editAction}
-    {updateAction}
-    {cancelEdit}
-  />
+    <Actions
+      {state}
+      {editingActionIndex}
+      {newAction}
+      {addAction}
+      {removeAction}
+      {editAction}
+      {updateAction}
+      {cancelEdit}
+    />
 
-  <JsonOutput {jsonOutput} {downloadJSON} />
+    <JsonOutput {jsonOutput} {downloadJSON} />
+  </div>
 </div>
 
 <style>
@@ -360,6 +357,12 @@
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-sections {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;

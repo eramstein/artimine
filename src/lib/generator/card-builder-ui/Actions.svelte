@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CardType, UnitType, TargetType } from '../../_model/enums';
-  import type { ActionDefinition } from '../../_model/model-battle';
+  import type { ActionDefinition, TargetDefinition } from '../../_model/model-battle';
   import { baseEffects, getBaseEffect } from '../base-effects';
 
   const props = $props<{
@@ -13,8 +13,7 @@
       effectName: string;
       effectArgs: Record<string, any>;
       hasTargets: boolean;
-      targetType: string;
-      targetCount: number;
+      targets: TargetDefinition[];
     };
     addAction: () => void;
     removeAction: (index: number) => void;
@@ -56,6 +55,43 @@
       props.newAction.effectArgs = {};
     }
   });
+
+  // Initialize targets when hasTargets is checked
+  $effect(() => {
+    if (!props.newAction.hasTargets) {
+      props.newAction.targets = [];
+    }
+  });
+
+  // Auto-add target when user selects values
+  let autoTargetType = $state(TargetType.Units);
+  let autoTargetCount = $state(1);
+
+  $effect(() => {
+    if (props.newAction.hasTargets && props.newAction.targets.length === 0) {
+      // Auto-add target when user has selected values
+      if (autoTargetType && autoTargetCount > 0) {
+        props.newAction.targets = [{ type: autoTargetType, count: autoTargetCount }];
+      }
+    }
+  });
+
+  // Target management functions
+  function addTarget() {
+    props.newAction.targets = [...props.newAction.targets, { type: TargetType.Units, count: 1 }];
+  }
+
+  function removeTarget(index: number) {
+    props.newAction.targets = props.newAction.targets.filter(
+      (_: TargetDefinition, i: number) => i !== index
+    );
+  }
+
+  function updateTarget(index: number, field: 'type' | 'count', value: TargetType | number) {
+    props.newAction.targets = props.newAction.targets.map((target: TargetDefinition, i: number) =>
+      i === index ? { ...target, [field]: value } : target
+    );
+  }
 </script>
 
 <div class="form-section" class:hidden={props.state.type !== CardType.Spell}>
@@ -87,7 +123,18 @@
   {/each}
 
   <div class="action-form">
-    <h4>{props.editingActionIndex >= 0 ? 'Edit Action' : 'Add New Action'}</h4>
+    <div class="action-form-header">
+      <div class="action-buttons">
+        {#if props.editingActionIndex >= 0}
+          <button type="button" onclick={props.updateAction} class="update-btn"
+            >Update Action</button
+          >
+          <button type="button" onclick={props.cancelEdit} class="cancel-btn">Cancel</button>
+        {:else}
+          <button type="button" onclick={props.addAction} class="add-btn">Add Action</button>
+        {/if}
+      </div>
+    </div>
 
     <div class="form-group">
       <label for="effectName">Effect Name:</label>
@@ -99,210 +146,260 @@
       </select>
     </div>
 
-    {#if currentBaseEffect && currentBaseEffect.argNames.length > 0}
-      <div class="effect-args">
-        <h5>Effect Arguments:</h5>
-        {#each currentBaseEffect.argNames as argName}
-          <div class="form-group">
-            <label for={argName}>
-              {argName}
-              <span class="required">*</span>
-            </label>
+    <div class="action-form-content">
+      {#if currentBaseEffect && currentBaseEffect.argNames.length > 0}
+        <div class="effect-args">
+          <h5>Effect Arguments:</h5>
+          {#each currentBaseEffect.argNames as argName}
+            <div class="form-group">
+              <label for={argName}>
+                {argName}
+                <span class="required">*</span>
+              </label>
 
-            {#if argName === 'range'}
-              <!-- Special handling for range argument -->
-              {#if props.newAction.effectArgs[argName]}
-                <div class="range-options">
-                  <div class="range-section">
-                    <h6>Range Options:</h6>
-                    <div class="checkbox-grid">
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].self}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].self = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].self;
-                            }
-                          }}
-                        />
-                        Self
-                      </label>
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].sameRow}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].sameRow = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].sameRow;
-                            }
-                          }}
-                        />
-                        Same Row
-                      </label>
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].sameColumn}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].sameColumn = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].sameColumn;
-                            }
-                          }}
-                        />
-                        Same Column
-                      </label>
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].allies}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].allies = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].allies;
-                            }
-                          }}
-                        />
-                        Allies
-                      </label>
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].ennemies}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].ennemies = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].ennemies;
-                            }
-                          }}
-                        />
-                        Enemies
-                      </label>
-                      <label class="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={!!props.newAction.effectArgs[argName].adjacent}
-                          onchange={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.checked) {
-                              props.newAction.effectArgs[argName].adjacent = true;
-                            } else {
-                              delete props.newAction.effectArgs[argName].adjacent;
-                            }
-                          }}
-                        />
-                        Adjacent
-                      </label>
+              {#if argName === 'range'}
+                <!-- Special handling for range argument -->
+                {#if props.newAction.effectArgs[argName]}
+                  <div class="range-options">
+                    <div class="range-section">
+                      <h6>Range Options:</h6>
+                      <div class="checkbox-grid">
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].self}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].self = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].self;
+                              }
+                            }}
+                          />
+                          Self
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].sameRow}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].sameRow = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].sameRow;
+                              }
+                            }}
+                          />
+                          Same Row
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].sameColumn}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].sameColumn = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].sameColumn;
+                              }
+                            }}
+                          />
+                          Same Column
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].allies}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].allies = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].allies;
+                              }
+                            }}
+                          />
+                          Allies
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].ennemies}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].ennemies = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].ennemies;
+                              }
+                            }}
+                          />
+                          Enemies
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].adjacent}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].adjacent = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].adjacent;
+                              }
+                            }}
+                          />
+                          Adjacent
+                        </label>
+                      </div>
+                    </div>
+                    <div class="range-section">
+                      <label for="unitType">Unit Type (optional):</label>
+                      <select
+                        id="unitType"
+                        value={props.newAction.effectArgs[argName].unitType || ''}
+                        onchange={(e) => {
+                          const target = e.target as HTMLSelectElement;
+                          const value = target.value;
+                          if (value && value !== '') {
+                            props.newAction.effectArgs[argName].unitType = value;
+                          } else {
+                            delete props.newAction.effectArgs[argName].unitType;
+                          }
+                        }}
+                      >
+                        <option value="">None</option>
+                        {#each Object.values(UnitType) as unitType}
+                          <option value={unitType}>{unitType}</option>
+                        {/each}
+                      </select>
                     </div>
                   </div>
-                  <div class="range-section">
-                    <label for="unitType">Unit Type (optional):</label>
+                {:else}
+                  <div class="range-placeholder">
+                    <em>Select an effect to configure range options</em>
+                  </div>
+                {/if}
+              {:else if argName.includes('damage') || argName.includes('Value') || argName.includes('duration')}
+                <input
+                  id={argName}
+                  type="number"
+                  bind:value={props.newAction.effectArgs[argName]}
+                  placeholder={`Enter ${argName}`}
+                />
+              {:else if argName.includes('is') || argName.includes('has')}
+                <label class="checkbox-label">
+                  <input type="checkbox" bind:checked={props.newAction.effectArgs[argName]} />
+                  {argName}
+                </label>
+              {:else}
+                <input
+                  id={argName}
+                  type="text"
+                  bind:value={props.newAction.effectArgs[argName]}
+                  placeholder={`Enter ${argName}`}
+                />
+              {/if}
+
+              <div class="arg-description">
+                {argName === 'range' ? 'Unit filter options' : `Parameter: ${argName}`}
+              </div>
+            </div>
+          {/each}
+        </div>
+      {/if}
+
+      <div class="targets-section">
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" bind:checked={props.newAction.hasTargets} />
+            Requires targets
+          </label>
+        </div>
+
+        {#if props.newAction.hasTargets}
+          <div class="action-targets">
+            <h5>Targets:</h5>
+            {#each props.newAction.targets as target, targetIndex}
+              <div class="target-item">
+                <div class="target-controls">
+                  <div class="form-group">
+                    <label for="targetType{targetIndex}">Target Type:</label>
                     <select
-                      id="unitType"
-                      value={props.newAction.effectArgs[argName].unitType || ''}
+                      id="targetType{targetIndex}"
+                      value={target.type}
                       onchange={(e) => {
-                        const target = e.target as HTMLSelectElement;
-                        const value = target.value;
-                        if (value && value !== '') {
-                          props.newAction.effectArgs[argName].unitType = value;
-                        } else {
-                          delete props.newAction.effectArgs[argName].unitType;
-                        }
+                        const select = e.target as HTMLSelectElement;
+                        updateTarget(targetIndex, 'type', select.value as TargetType);
                       }}
                     >
-                      <option value="">None</option>
-                      {#each Object.values(UnitType) as unitType}
-                        <option value={unitType}>{unitType}</option>
+                      {#each Object.values(TargetType) as targetType}
+                        <option value={targetType}>{targetType}</option>
                       {/each}
                     </select>
                   </div>
+
+                  <div class="form-group">
+                    <label for="targetCount{targetIndex}">Count:</label>
+                    <input
+                      id="targetCount{targetIndex}"
+                      type="number"
+                      value={target.count}
+                      onchange={(e) => {
+                        const input = e.target as HTMLInputElement;
+                        updateTarget(targetIndex, 'count', parseInt(input.value) || 1);
+                      }}
+                      min="1"
+                      max="10"
+                    />
+                  </div>
+
+                  {#if props.newAction.targets.length > 1}
+                    <button
+                      type="button"
+                      onclick={() => removeTarget(targetIndex)}
+                      class="remove-target-btn"
+                    >
+                      Remove
+                    </button>
+                  {/if}
                 </div>
-              {:else}
-                <div class="range-placeholder">
-                  <em>Select an effect to configure range options</em>
-                </div>
-              {/if}
-            {:else if argName.includes('damage') || argName.includes('Value') || argName.includes('duration')}
-              <input
-                id={argName}
-                type="number"
-                bind:value={props.newAction.effectArgs[argName]}
-                placeholder={`Enter ${argName}`}
-              />
-            {:else if argName.includes('is') || argName.includes('has')}
-              <label class="checkbox-label">
-                <input type="checkbox" bind:checked={props.newAction.effectArgs[argName]} />
-                {argName}
-              </label>
-            {:else}
-              <input
-                id={argName}
-                type="text"
-                bind:value={props.newAction.effectArgs[argName]}
-                placeholder={`Enter ${argName}`}
-              />
-            {/if}
-
-            <div class="arg-description">
-              {argName === 'range' ? 'Unit filter options' : `Parameter: ${argName}`}
-            </div>
-          </div>
-        {/each}
-      </div>
-    {/if}
-
-    <div class="form-group">
-      <label class="checkbox-label">
-        <input type="checkbox" bind:checked={props.newAction.hasTargets} />
-        Requires targets
-      </label>
-    </div>
-
-    {#if props.newAction.hasTargets}
-      <div class="action-targets">
-        <div class="form-group">
-          <label for="targetType">Target Type:</label>
-          <select id="targetType" bind:value={props.newAction.targetType}>
-            <option value="">Select target type...</option>
-            {#each Object.values(TargetType) as targetType}
-              <option value={targetType}>{targetType}</option>
+              </div>
             {/each}
-          </select>
-        </div>
 
-        <div class="form-group">
-          <label for="targetCount">Count:</label>
-          <input
-            id="targetCount"
-            type="number"
-            bind:value={props.newAction.targetCount}
-            min="1"
-            max="10"
-          />
-        </div>
+            {#if props.newAction.targets.length === 0}
+              <div class="auto-target-controls">
+                <div class="form-group">
+                  <label for="autoTargetType">Target Type:</label>
+                  <select id="autoTargetType" bind:value={autoTargetType}>
+                    {#each Object.values(TargetType) as targetType}
+                      <option value={targetType}>{targetType}</option>
+                    {/each}
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="autoTargetCount">Count:</label>
+                  <input
+                    id="autoTargetCount"
+                    type="number"
+                    bind:value={autoTargetCount}
+                    min="1"
+                    max="10"
+                  />
+                </div>
+              </div>
+            {:else}
+              <button type="button" onclick={addTarget} class="add-target-btn"
+                >Add Another Target</button
+              >
+            {/if}
+          </div>
+        {/if}
       </div>
-    {/if}
-
-    <div class="action-buttons">
-      {#if props.editingActionIndex >= 0}
-        <button type="button" onclick={props.updateAction} class="update-btn">Update Action</button>
-        <button type="button" onclick={props.cancelEdit} class="cancel-btn">Cancel</button>
-      {:else}
-        <button type="button" onclick={props.addAction} class="add-btn">Add Action</button>
-      {/if}
     </div>
   </div>
 </div>
@@ -516,14 +613,107 @@
     padding-bottom: 10px;
   }
 
+  .action-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .action-form-header h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #333;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .action-form-content {
+    display: flex;
+    gap: 20px;
+  }
+
+  .effect-args,
+  .targets-section {
+    flex: 1;
+  }
+
   .action-targets {
     display: flex;
+    flex-direction: column;
     gap: 15px;
     margin-bottom: 15px;
   }
 
-  .action-targets .form-group {
+  .action-targets h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+  }
+
+  .target-item {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+  }
+
+  .target-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+  }
+
+  .target-controls .form-group {
     flex: 1;
+    margin-bottom: 0;
+  }
+
+  .auto-target-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    background-color: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+  }
+
+  .auto-target-controls .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .remove-target-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .remove-target-btn:hover {
+    background-color: #c82333;
+  }
+
+  .add-target-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    align-self: flex-start;
+  }
+
+  .add-target-btn:hover {
+    background-color: #218838;
   }
 
   .action-buttons {
