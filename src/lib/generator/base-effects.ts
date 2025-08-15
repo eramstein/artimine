@@ -4,89 +4,105 @@ They refer to functions in DataEffectTemplates.
 'range' is a special case of arg, it's of UnitFilterArgs type
 */
 
-import type { TargetDefinition } from '../_model';
+import {
+  CounterType,
+  TargetType,
+  type TargetDefinition,
+  type UnitKeywords,
+  type UnitStatuses,
+} from '../_model';
+import { counterCost, getTargetCount, statusCost } from './budgets';
+import { getRangeMultiplier } from './budgets';
+import { keywordConfig } from './keywords';
 
 export interface BaseEffect {
   effectName: string;
   argNames: string[];
   budget: (args: Record<string, any>, targets: TargetDefinition[]) => number;
+  defaultTargets?: TargetDefinition[];
 }
 
 export const baseEffects: BaseEffect[] = [
   {
     effectName: 'reanimate',
     argNames: [],
-    budget: (args, targets) => 8, // High cost for powerful effect
+    budget: (args, targets) => 12, // TBD
+    defaultTargets: [
+      { type: TargetType.GraveyardCard, count: 1 },
+      { type: TargetType.EmptyCell, count: 1 },
+    ],
   },
   {
     effectName: 'damageEnemyPlayer',
     argNames: ['damage'],
-    budget: (args, targets) => (args.damage || 1) * 2, // 2 points per damage
+    budget: (args, targets) => (args.damage || 1) * 10, // reach is expensive
   },
   {
     effectName: 'damageUnit',
     argNames: ['damage', 'range'],
     budget: (args, targets) => {
-      const baseCost = (args.damage || 1) * 1.5; // 1.5 points per damage to units
-      const targetMultiplier = targets.length > 0 ? targets.length : 1;
-      return baseCost * targetMultiplier;
+      const baseCost = args.damage * 3 || 1;
+      const targetMultiplier = getTargetCount(targets);
+      const rangeMultiplier = getRangeMultiplier(args.range);
+      return baseCost * targetMultiplier * rangeMultiplier;
     },
+    defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
     effectName: 'addCounters',
     argNames: ['counterType', 'counterValue', 'range'],
     budget: (args, targets) => {
-      const baseCost = (args.counterValue || 1) * 1; // 1 point per counter
-      const targetMultiplier = targets.length > 0 ? targets.length : 1;
-      return baseCost * targetMultiplier;
+      const baseCost =
+        (args.counterValue || 1) * (counterCost[args.counterType as CounterType] || 1);
+      const targetMultiplier = getTargetCount(targets);
+      const rangeMultiplier = getRangeMultiplier(args.range);
+      return baseCost * targetMultiplier * rangeMultiplier;
     },
+    defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
     effectName: 'staticKeywordAdjAllies',
     argNames: ['name', 'keyword'],
     budget: (args, targets) => {
-      const baseCost = 3; // Moderate cost for keyword granting
-      const targetMultiplier = targets.length > 0 ? targets.length : 1;
+      const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost;
+      const targetMultiplier = getTargetCount(targets);
       return baseCost * targetMultiplier;
     },
   },
   {
     effectName: 'untapPlayer',
     argNames: [],
-    budget: (args, targets) => 4, // Moderate cost for mana acceleration
+    budget: (args, targets) => 10,
   },
   {
     effectName: 'incrementColor',
     argNames: ['color'],
-    budget: (args, targets) => 2, // Low cost for color fixing
+    budget: (args, targets) => 8,
   },
   {
     effectName: 'applyUnitStatus',
     argNames: ['statusType', 'duration'],
     budget: (args, targets) => {
-      const baseCost = 3; // Moderate cost for status effects
-      const targetMultiplier = targets.length > 0 ? targets.length : 1;
+      const baseCost = statusCost[args.statusType as keyof UnitStatuses];
+      const targetMultiplier = getTargetCount(targets);
       return baseCost * targetMultiplier;
     },
+    defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
     effectName: 'summon',
     argNames: ['summonedUnit', 'isRespawn'],
-    budget: (args, targets) => 6, // High cost for summoning
+    budget: (args, targets) => 20, // TBD based on summonedUnit
   },
   {
     effectName: 'darkRitual',
     argNames: [],
-    budget: (args, targets) => 5, // High cost for mana acceleration
+    budget: (args, targets) => 12, // TBD
   },
   {
     effectName: 'transferCounters',
     argNames: ['counterType'],
-    budget: (args, targets) => {
-      const baseCost = 2; // Low cost for counter manipulation
-      const targetMultiplier = targets.length > 0 ? targets.length : 1;
-      return baseCost * targetMultiplier;
-    },
+    budget: (args, targets) => 12, // TBD
   },
 ];
 

@@ -51,8 +51,19 @@
         }
       });
       props.newAction.effectArgs = args;
+
+      // Set default targets if they exist
+      if (currentBaseEffect.defaultTargets) {
+        props.newAction.hasTargets = true;
+        props.newAction.targets = [...currentBaseEffect.defaultTargets];
+      } else {
+        props.newAction.hasTargets = false;
+        props.newAction.targets = [];
+      }
     } else {
       props.newAction.effectArgs = {};
+      props.newAction.hasTargets = false;
+      props.newAction.targets = [];
     }
   });
 
@@ -606,26 +617,11 @@
     margin-top: 20px;
   }
 
-  .action-form h4 {
-    margin-top: 0;
-    color: #333;
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 10px;
-  }
-
   .action-form-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-  }
-
-  .action-form-header h4 {
-    margin-top: 0;
-    margin-bottom: 0;
-    color: #333;
-    border-bottom: none;
-    padding-bottom: 0;
   }
 
   .action-form-content {

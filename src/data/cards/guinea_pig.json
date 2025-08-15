@@ -1,0 +1,29 @@
+{
+  "id": "guinea_pig",
+  "name": "Guinea Pig",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "transferCounters",
+        "args": {
+          "counterType": "decay"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

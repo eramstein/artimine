@@ -2,6 +2,11 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "dark_ritual",
+      "raise_dead",
+      "guinea_pig",
+      "decaying_ray",
+      "fireball",
       "energyze",
       "bear_minimum",
       "boring_boar",
@@ -19,7 +24,7 @@
       "wolf",
       "young_hobbit"
     ],
-    "lands": ["forest", "forest", "forest", "forest"]
+    "lands": ["forest", "mountain", "island", "swamp"]
   },
   "foe": {
     "name": "The Dude",

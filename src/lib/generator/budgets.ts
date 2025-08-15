@@ -4,9 +4,11 @@
 */
 
 import { config } from '../_config';
-import type { CardColor, UnitKeywords } from '../_model';
+import { CardColor, CounterType } from '../_model';
+import type { UnitStatuses } from '../_model/model-battle';
 import { getBaseEffect } from './base-effects';
-import type { ActionDefinition } from '../_model/model-battle';
+import type { ActionDefinition, TargetDefinition } from '../_model/model-battle';
+import type { UnitFilterArgs } from '../battle/effects/unitFilters';
 
 export const budgetPerCost: Record<number, number> = {
   1: 5,
@@ -145,3 +147,30 @@ export function getActionsBudget(actions: ActionDefinition[]): number {
 
   return totalBudget;
 }
+
+export function getTargetCount(targets: TargetDefinition[]): number {
+  return targets.reduce((acc, target) => acc + (target.count || 1), 0);
+}
+
+export const getRangeMultiplier = (range: UnitFilterArgs) => {
+  if (!range) return 1;
+  let mulitplier = 1;
+  if (range.adjacent) mulitplier += 1.5;
+  if (range.sameRow) mulitplier += 1;
+  if (range.sameColumn) mulitplier += 1;
+  return mulitplier;
+};
+
+export const counterCost: Record<CounterType, number> = {
+  [CounterType.Growth]: 3,
+  [CounterType.Decay]: 3,
+  [CounterType.Energy]: 2,
+  [CounterType.Rage]: 2,
+};
+
+export const statusCost: Record<keyof UnitStatuses, number> = {
+  poison: 6,
+  mezz: 8,
+  root: 4,
+  stun: 12,
+};

@@ -22,7 +22,7 @@ interface KeywordMetadata extends KeywordPrevalence {
   cost: number;
 }
 
-const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
+export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   ranged: { baseCost: 3, prevalence: 8 },
   haste: { baseCost: 2, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },
   moveAndAttack: { baseCost: 2, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },

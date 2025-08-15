@@ -1,0 +1,33 @@
+{
+  "id": "decaying_ray",
+  "name": "Decaying Ray",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "decay",
+          "counterValue": 2,
+          "range": {
+            "sameRow": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

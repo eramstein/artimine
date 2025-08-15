@@ -1,0 +1,31 @@
+{
+  "id": "dark_ritual",
+  "name": "Dark Ritual",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "darkRitual",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit_allies",
+          "count": 1
+        },
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

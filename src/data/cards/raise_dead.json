@@ -1,0 +1,31 @@
+{
+  "id": "raise_dead",
+  "name": "Raise Dead",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "reanimate",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "graveyard_card",
+          "count": 1
+        },
+        {
+          "type": "cell_empty",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

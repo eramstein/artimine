@@ -1,0 +1,33 @@
+{
+  "id": "fireball",
+  "name": "Fireball",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 4,
+          "range": {
+            "self": true,
+            "adjacent": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}
