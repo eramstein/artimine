@@ -6,6 +6,7 @@
   import { loadGameStateFromLocalStorage, bs, uiState } from './lib/_state';
   import { UiView } from './lib/_model';
   import { initBattle } from './lib/battle/init';
+  import Analytics from './tools/analytics/Analytics.svelte';
 
   let isLoading = $state(true);
 
@@ -42,8 +43,9 @@
     <p>Loading game data...</p>
   </div>
 {:else}
+  <Analytics />
   <!-- <CardBuilder /> -->
-  <Main />
+  <!-- <Main /> -->
 {/if}
 
 <style>
