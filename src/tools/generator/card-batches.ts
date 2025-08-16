@@ -1,5 +1,5 @@
-import { CardColor, CardRarity, CardType } from '../_model';
-import { getRandomFromArray, getRandomWeighted } from '../_utils/random';
+import { CardColor, CardRarity, CardType } from '../../lib/_model';
+import { getRandomFromArray, getRandomWeighted } from '../../lib/_utils/random';
 import { MOCK_BATCH } from './_sample-batch';
 import { getKeywordSuggestion } from './keywords';
 import { generatePrompt } from './llm-card-extension';

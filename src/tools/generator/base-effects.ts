@@ -10,7 +10,7 @@ import {
   type TargetDefinition,
   type UnitKeywords,
   type UnitStatuses,
-} from '../_model';
+} from '../../lib/_model';
 import { counterCost, getTargetCount, statusCost } from './budgets';
 import { getRangeMultiplier } from './budgets';
 import { keywordConfig } from './keywords';

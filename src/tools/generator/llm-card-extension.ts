@@ -1,4 +1,4 @@
-import { CardColor, CardRarity, CardType, UnitType, type UnitKeywords } from '../_model';
+import { CardColor, CardRarity, CardType, UnitType, type UnitKeywords } from '../../lib/_model';
 import { MOCK_LLM_OUTPUT } from './_mocks';
 import { type BaseTemplate, type ColorCombo } from './card-batches';
 

@@ -3,12 +3,12 @@
   Points can then be used to get power, health, keywords and abilities.
 */
 
-import { config } from '../_config';
-import { CardColor, CounterType } from '../_model';
-import type { UnitStatuses } from '../_model/model-battle';
+import { config } from '../../lib/_config';
+import { CardColor, CounterType } from '../../lib/_model';
+import type { UnitStatuses } from '../../lib/_model/model-battle';
 import { getBaseEffect } from './base-effects';
-import type { ActionDefinition, TargetDefinition } from '../_model/model-battle';
-import type { UnitFilterArgs } from '../battle/effects/unitFilters';
+import type { ActionDefinition, TargetDefinition } from '../../lib/_model/model-battle';
+import type { UnitFilterArgs } from '../../lib/battle/effects/unitFilters';
 
 export const budgetPerCost: Record<number, number> = {
   1: 5,

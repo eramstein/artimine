@@ -2,14 +2,14 @@
   /*
     Giant vibecoded form to help create cards, not meant to be used by other people.
   */
-  import { CardType, CardRarity, CardColor, UnitType } from '../../_model/enums';
+  import { CardType, CardRarity, CardColor, UnitType } from '../../../lib/_model';
   import type {
     UnitCardTemplate,
     SpellCardTemplate,
     UnitKeywords,
     ActionDefinition,
     TargetDefinition,
-  } from '../../_model/model-battle';
+  } from '../../../lib/_model';
   import { baseStatsCost, getBudgetForUnit, getBudgetForSpell, getActionsBudget } from '../budgets';
   import { costPerKeywordForUnit } from '../keywords';
 

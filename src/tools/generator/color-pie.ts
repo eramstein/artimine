@@ -1,4 +1,4 @@
-import { CardColor, type UnitKeywords } from '../_model';
+import { CardColor, type UnitKeywords } from '../../lib/_model';
 
 // each color allocates different amounts of budget to power and health
 // numbers are a % of the budget, they don't need to add up to 1, the rest will go into keywords and abilities

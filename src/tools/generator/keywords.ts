@@ -1,5 +1,5 @@
-import { CardRarity, type CardColor, type UnitCard, type UnitKeywords } from '../_model';
-import { getRandomFromArray, getRandomWeighted } from '../_utils/random';
+import { CardRarity, type CardColor, type UnitCard, type UnitKeywords } from '../../lib/_model';
+import { getRandomFromArray, getRandomWeighted } from '../../lib/_utils/random';
 import { getDominantColor } from './_utils';
 import { keywordColorPreferences } from './color-pie';
 

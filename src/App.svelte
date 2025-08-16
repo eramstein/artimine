@@ -1,6 +1,6 @@
 <script lang="ts">
   import Main from './lib/ui/Main.svelte';
-  import CardBuilder from './lib/generator/card-builder-ui/CardBuilder.svelte';
+  import CardBuilder from './tools/generator/card-builder-ui/CardBuilder.svelte';
   import { onMount, onDestroy } from 'svelte';
   import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
   import { loadGameStateFromLocalStorage, bs, uiState } from './lib/_state';
@@ -42,7 +42,7 @@
     <p>Loading game data...</p>
   </div>
 {:else}
-  <!-- <CardBuilder /> -->
+  <CardBuilder />
   <Main />
 {/if}
 

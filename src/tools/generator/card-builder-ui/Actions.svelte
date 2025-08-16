@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CardType, UnitType, TargetType } from '../../_model/enums';
-  import type { ActionDefinition, TargetDefinition } from '../../_model/model-battle';
+  import { CardType, UnitType, TargetType } from '../../../lib/_model';
+  import type { ActionDefinition, TargetDefinition } from '../../../lib/_model';
   import { baseEffects, getBaseEffect } from '../base-effects';
 
   const props = $props<{

@@ -1,0 +1,22 @@
+{
+  "id": "bison",
+  "name": "Bison",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 7,
+  "power": 8,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "trample": true,
+    "retaliate": 3
+  }
+}

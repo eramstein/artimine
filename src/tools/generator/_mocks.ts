@@ -1,4 +1,4 @@
-import { CardColor, CardRarity, CardType } from '../_model';
+import { CardColor, CardRarity, CardType } from '../../lib/_model';
 
 export const MOCK_BASE_CARDS = [
   {

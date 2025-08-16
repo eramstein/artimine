@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CardType, UnitType } from '../../_model/enums';
+  import { CardType, UnitType } from '../../../lib/_model';
 
   export let state: {
     type: CardType;
