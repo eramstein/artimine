@@ -1,5 +1,6 @@
 import type {
   Ability,
+  Card,
   EffectTargets,
   SpellCard,
   TargetDefinition,
@@ -35,6 +36,10 @@ export type UiState = {
     body: string;
     onConfirm?: () => void;
     onCancel?: () => void;
+  };
+  cardFullOverlay: {
+    visible: boolean;
+    card: Card | null;
   };
 };
 

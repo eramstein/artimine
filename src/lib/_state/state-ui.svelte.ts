@@ -24,4 +24,8 @@ export const uiState: UiState = $state({
     onConfirm: undefined,
     onCancel: undefined,
   },
+  cardFullOverlay: {
+    visible: false,
+    card: null,
+  },
 });

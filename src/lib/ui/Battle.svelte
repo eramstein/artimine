@@ -1,11 +1,13 @@
 <script lang="ts">
   import { bs } from '../_state';
+  import { uiState } from '../_state/state-ui.svelte';
   import Board from './Board.svelte';
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
   import GameWonModal from './GameWonModal.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
   import GraveyardModal from './GraveyardModal.svelte';
+  import CardFull from './CardFull.svelte';
   import { nextTurn } from '../battle/turn';
 
   // Derived value to check if game is won
@@ -42,6 +44,18 @@
 {/if}
 
 <GraveyardModal />
+
+<!-- CardFull overlay -->
+{#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
+  <div class="card-full-overlay" onclick={() => (uiState.cardFullOverlay.visible = false)}>
+    <div class="card-full-container" onclick={(e) => e.stopPropagation()}>
+      <CardFull card={uiState.cardFullOverlay.card} />
+      <button class="close-button" onclick={() => (uiState.cardFullOverlay.visible = false)}
+        >×</button
+      >
+    </div>
+  </div>
+{/if}
 
 <style>
   .battle {
@@ -157,5 +171,52 @@
     justify-content: space-between;
     gap: 2rem;
     width: 100%;
+  }
+
+  .card-full-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    min-height: 100vh;
+    min-width: 100vw;
+  }
+
+  .card-full-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-button {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    color: white;
+    border: 2px solid var(--color-golden);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 1001;
+  }
+
+  .close-button:hover {
+    background: #555;
+    transform: scale(1.1);
   }
 </style>

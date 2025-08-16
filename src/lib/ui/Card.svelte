@@ -9,6 +9,7 @@
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
   import { DataEffectTemplates } from '../battle/effects/effectTemplates';
+  import CardFull from './CardFull.svelte';
 
   let {
     card,
@@ -107,6 +108,13 @@
       event.dataTransfer.effectAllowed = 'move';
     }
   }
+
+  // Handle right-click to show CardFull
+  function handleContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    uiState.cardFullOverlay.visible = true;
+    uiState.cardFullOverlay.card = card;
+  }
 </script>
 
 <div
@@ -117,6 +125,7 @@
   ondragstart={handleDragStart}
   ondrag={handleDrag}
   onclick={handleClick}
+  oncontextmenu={handleContextMenu}
 >
   <!-- Card name bar with integrated cost -->
   <div
