@@ -90,6 +90,7 @@ export const DataEffectTemplates: Record<
     range?: UnitFilterArgs;
   }) => ({
     fn: ({ unit, targets, player }) => {
+      console.log('addCounters', { unit, targets, player });
       const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
         addCounters(u, counterType, counterValue);

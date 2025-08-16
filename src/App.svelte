@@ -42,7 +42,7 @@
     <p>Loading game data...</p>
   </div>
 {:else}
-  <CardBuilder />
+  <!-- <CardBuilder /> -->
   <Main />
 {/if}
 

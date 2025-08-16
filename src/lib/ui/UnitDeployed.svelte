@@ -32,7 +32,7 @@
 
   // Check if unit should be dimmed when targetBeingSelected is a unit and this unit is not a valid target
   let isDimmed = $derived(
-    uiState.battle.targetBeingSelected?.type === TargetType.Unit &&
+    uiState.battle.targetBeingSelected?.type === TargetType.Units &&
       !isValidTarget &&
       uiState.battle.targetBeingSelected !== null
   );
@@ -58,6 +58,13 @@
     }
   }
 
+  // Handle right-click to show CardFull
+  function handleContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    uiState.cardFullOverlay.visible = true;
+    uiState.cardFullOverlay.card = unit;
+  }
+
   // Attack direction - move towards the target based on player
   let attackDirection = $derived(unit.ownerPlayerId === 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
 </script>
@@ -70,6 +77,7 @@
     : ''}"
   style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
   onclick={handleUnitClick}
+  oncontextmenu={handleContextMenu}
 >
   {#if unit.statuses}
     <div class="statuses-container">

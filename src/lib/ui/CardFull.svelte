@@ -178,14 +178,6 @@
           </div>
         </div>
       {/if}
-
-      <!-- Spell effect display for SpellCard -->
-      {#if isSpellCard(card)}
-        <div class="spell-effect">
-          <h4>Spell Effect:</h4>
-          <div class="spell-text">{getSpellText()}</div>
-        </div>
-      {/if}
     </div>
   </div>
 
@@ -220,6 +212,13 @@
           <span class="keyword-name">{name} {value}</span>
         </div>
       {/each}
+    {/if}
+
+    <!-- Spell effect display for SpellCard -->
+    {#if isSpellCard(card)}
+      <div class="spell-effect-item">
+        <div class="spell-text">{getSpellText()}</div>
+      </div>
     {/if}
   </div>
 </div>
@@ -411,6 +410,12 @@
     color: white;
   }
 
+  .spell-effect-item {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+
   .bottom-section {
     position: relative;
     z-index: 2;
@@ -443,24 +448,10 @@
     font-weight: bold;
   }
 
-  .spell-effect {
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  }
-
-  .spell-effect h4 {
-    margin: 0 0 8px 0;
-    color: var(--color-golden);
-    font-size: 1rem;
-  }
-
   .spell-text {
     font-size: 0.9rem;
     line-height: 1.3;
     white-space: pre-line;
+    color: white;
   }
 </style>

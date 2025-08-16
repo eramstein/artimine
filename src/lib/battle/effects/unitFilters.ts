@@ -101,6 +101,8 @@ export function getUnitsInRange(
     });
   } else if (range) {
     unitsInRange = filterUnits({ unit, player, ...range });
+  } else if (unit) {
+    unitsInRange = [unit];
   }
   return unitsInRange;
 }
