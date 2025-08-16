@@ -11,11 +11,117 @@
     onFiltersChange: (filters: Partial<Filters>) => void;
   } = $props();
 
-  // Calculate color combination data
+  // Get filtered cards excluding card type filter
+  let cardsForTypeChart = $derived.by(() => {
+    let filtered = allCards;
+
+    if (filters.colorCombination) {
+      filtered = filtered.filter((card) => {
+        const cardColors = card.colors
+          .map((c) => c.color)
+          .sort()
+          .join('-');
+        return cardColors === filters.colorCombination;
+      });
+    }
+
+    if (filters.cost !== undefined) {
+      filtered = filtered.filter((card) => card.cost === filters.cost);
+    }
+
+    if (filters.rarity) {
+      filtered = filtered.filter((card) => card.rarity === filters.rarity);
+    }
+
+    return filtered;
+  });
+
+  // Get filtered cards excluding color filter
+  let cardsForColorChart = $derived.by(() => {
+    let filtered = allCards;
+
+    if (filters.cardType) {
+      filtered = filtered.filter((card) => card.type === filters.cardType);
+    }
+
+    if (filters.cost !== undefined) {
+      filtered = filtered.filter((card) => card.cost === filters.cost);
+    }
+
+    if (filters.rarity) {
+      filtered = filtered.filter((card) => card.rarity === filters.rarity);
+    }
+
+    return filtered;
+  });
+
+  // Get filtered cards excluding cost filter
+  let cardsForCostChart = $derived.by(() => {
+    let filtered = allCards;
+
+    if (filters.cardType) {
+      filtered = filtered.filter((card) => card.type === filters.cardType);
+    }
+
+    if (filters.colorCombination) {
+      filtered = filtered.filter((card) => {
+        const cardColors = card.colors
+          .map((c) => c.color)
+          .sort()
+          .join('-');
+        return cardColors === filters.colorCombination;
+      });
+    }
+
+    if (filters.rarity) {
+      filtered = filtered.filter((card) => card.rarity === filters.rarity);
+    }
+
+    return filtered;
+  });
+
+  // Get filtered cards excluding rarity filter
+  let cardsForRarityChart = $derived.by(() => {
+    let filtered = allCards;
+
+    if (filters.cardType) {
+      filtered = filtered.filter((card) => card.type === filters.cardType);
+    }
+
+    if (filters.colorCombination) {
+      filtered = filtered.filter((card) => {
+        const cardColors = card.colors
+          .map((c) => c.color)
+          .sort()
+          .join('-');
+        return cardColors === filters.colorCombination;
+      });
+    }
+
+    if (filters.cost !== undefined) {
+      filtered = filtered.filter((card) => card.cost === filters.cost);
+    }
+
+    return filtered;
+  });
+
+  // Calculate color combination data (using cardsForColorChart)
   let colorCombinations = $derived.by(() => {
     const combinations = new Map<string, number>();
 
+    // Get all possible color combinations from all cards
     allCards.forEach((card) => {
+      const colors = card.colors
+        .map((c) => c.color)
+        .sort()
+        .join('-');
+      if (!combinations.has(colors)) {
+        combinations.set(colors, 0);
+      }
+    });
+
+    // Count occurrences in filtered cards
+    cardsForColorChart.forEach((card) => {
       const colors = card.colors
         .map((c) => c.color)
         .sort()
@@ -28,11 +134,19 @@
       .sort((a, b) => b.count - a.count);
   });
 
-  // Calculate cost distribution
+  // Calculate cost distribution (using cardsForCostChart)
   let costDistribution = $derived.by(() => {
     const costs = new Map<number, number>();
 
+    // Get all possible costs from all cards
     allCards.forEach((card) => {
+      if (!costs.has(card.cost)) {
+        costs.set(card.cost, 0);
+      }
+    });
+
+    // Count occurrences in filtered cards
+    cardsForCostChart.forEach((card) => {
       costs.set(card.cost, (costs.get(card.cost) || 0) + 1);
     });
 
@@ -41,11 +155,19 @@
       .sort((a, b) => a.cost - b.cost);
   });
 
-  // Calculate card type distribution
+  // Calculate card type distribution (using cardsForTypeChart)
   let cardTypeDistribution = $derived.by(() => {
     const types = new Map<string, number>();
 
+    // Get all possible types from all cards
     allCards.forEach((card) => {
+      if (!types.has(card.type)) {
+        types.set(card.type, 0);
+      }
+    });
+
+    // Count occurrences in filtered cards
+    cardsForTypeChart.forEach((card) => {
       types.set(card.type, (types.get(card.type) || 0) + 1);
     });
 
@@ -54,11 +176,19 @@
       .sort((a, b) => b.count - a.count);
   });
 
-  // Calculate rarity distribution
+  // Calculate rarity distribution (using cardsForRarityChart)
   let rarityDistribution = $derived.by(() => {
     const rarities = new Map<string, number>();
 
+    // Get all possible rarities from all cards
     allCards.forEach((card) => {
+      if (!rarities.has(card.rarity)) {
+        rarities.set(card.rarity, 0);
+      }
+    });
+
+    // Count occurrences in filtered cards
+    cardsForRarityChart.forEach((card) => {
       rarities.set(card.rarity, (rarities.get(card.rarity) || 0) + 1);
     });
 
@@ -276,7 +406,12 @@
   }
 
   .bar-item.active .bar {
-    background: linear-gradient(90deg, #28a745, #1e7e34);
+    background: linear-gradient(90deg, #ff8c00, #e67e00);
+  }
+
+  /* Only apply light blue to non-active bars when there's an active filter in this field */
+  .filter-section:has(.bar-item.active) .bar-item:not(.active) .bar {
+    background: linear-gradient(90deg, rgba(0, 123, 255, 0.2), rgba(0, 86, 179, 0.2));
   }
 
   .bar-count {

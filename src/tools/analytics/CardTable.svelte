@@ -5,7 +5,16 @@
   let { filteredCards = [] }: { filteredCards?: Card[] } = $props();
 
   type SortDirection = 'asc' | 'desc' | null;
-  type SortField = 'name' | 'type' | 'cost' | 'colors' | 'rarity' | 'unitTypes' | 'keywords';
+  type SortField =
+    | 'name'
+    | 'type'
+    | 'cost'
+    | 'power'
+    | 'health'
+    | 'colors'
+    | 'rarity'
+    | 'unitTypes'
+    | 'keywords';
 
   let sortField = $state<SortField | null>(null);
   let sortDirection = $state<SortDirection>(null);
@@ -51,6 +60,14 @@
         case 'cost':
           aValue = a.cost;
           bValue = b.cost;
+          break;
+        case 'power':
+          aValue = a.power || 0;
+          bValue = b.power || 0;
+          break;
+        case 'health':
+          aValue = a.maxHealth || 0;
+          bValue = b.maxHealth || 0;
           break;
         case 'colors':
           aValue = formatColors(a.colors).toLowerCase();
@@ -129,13 +146,16 @@
   function formatKeywords(keywords?: Record<string, any>): string {
     if (!keywords) return '';
     return Object.entries(keywords)
-      .map(([key, value]) => `${key}${value !== true ? `:${value}` : ''}`)
-      .join(', ');
+      .map(([key, value]) => `${key}${value !== true ? ` ${value}` : ''}`)
+      .join(' - ');
   }
 
   function getCardType(card: Card): string {
     if (card.type === 'unit') {
-      return `Unit (${card.power}/${card.maxHealth})`;
+      return 'Unit';
+    }
+    if (card.type === 'spell') {
+      return 'Spell';
     }
     return card.type;
   }
@@ -166,6 +186,12 @@
           <th class="sortable" onclick={() => handleSort('cost')}>
             {getSortIcon('cost')} Cost
           </th>
+          <th class="sortable" onclick={() => handleSort('power')}>
+            {getSortIcon('power')} Power
+          </th>
+          <th class="sortable" onclick={() => handleSort('health')}>
+            {getSortIcon('health')} Health
+          </th>
           <th class="sortable" onclick={() => handleSort('colors')}>
             {getSortIcon('colors')} Colors
           </th>
@@ -186,6 +212,8 @@
             <td class="card-name">{card.name}</td>
             <td class="card-type">{getCardType(card)}</td>
             <td class="card-cost">{card.cost}</td>
+            <td class="card-power">{card.power || '-'}</td>
+            <td class="card-health">{card.maxHealth || '-'}</td>
             <td class="card-colors">
               <div class="color-circles">
                 {#each card.colors as color}
@@ -319,14 +347,14 @@
     color: #2c3e50;
   }
 
-  .card-type {
-    font-family: monospace;
-    color: #7f8c8d;
+  .card-cost {
+    font-weight: 600;
   }
 
-  .card-cost {
-    text-align: center;
+  .card-power,
+  .card-health {
     font-weight: 600;
+    text-align: center;
   }
 
   .card-colors {
