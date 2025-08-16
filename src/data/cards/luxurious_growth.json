@@ -1,0 +1,18 @@
+{
+  "id": "luxurious_growth",
+  "name": "Luxurious Growth",
+  "type": "spell",
+  "rarity": "common",
+  "cost": 2,
+  "colors": [{ "color": "green", "count": 2 }],
+  "actions": [
+    {
+      "effect": {
+        "name": "incrementColor",
+        "args": {
+          "color": "green"
+        }
+      }
+    }
+  ]
+}
