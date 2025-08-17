@@ -75,10 +75,21 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'staticKeyword',
     argNames: ['abilityName', 'keyword', 'range', 'reset'],
     budget: (args, targets) => {
-      const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost;
+      const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost; // TBD
       const targetMultiplier = getTargetCount(targets);
       return baseCost * targetMultiplier;
     },
+  },
+  {
+    effectName: 'temporaryEffect',
+    argNames: ['effect', 'range'],
+    budget: (args, targets) => {
+      const baseCost = 12; // TBD
+      const targetMultiplier = getTargetCount(targets);
+      const rangeMultiplier = getRangeMultiplier(args.range);
+      return baseCost * targetMultiplier * rangeMultiplier;
+    },
+    defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
     effectName: 'untapPlayer',

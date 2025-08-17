@@ -7,7 +7,7 @@ import path from 'path';
 import sharp from 'sharp';
 
 // Settings
-const rootDir = '../assets/images/cards'; // starting folder
+const rootDir = './src/assets/images/cards'; // starting folder
 const overwriteOriginals = true; // true = replace PNGs with JPGs
 const targetWidth = 512; // desired width
 const targetHeight = 512; // desired height
@@ -34,7 +34,14 @@ async function processImage(inputPath) {
       .toFile(outputPath);
 
     if (overwriteOriginals) {
-      fs.renameSync(outputPath, inputPath.replace(/\.(png|jpg|jpeg)$/i, '.jpg'));
+      const finalOutputPath = inputPath.replace(/\.(png|jpg|jpeg)$/i, '.jpg');
+      fs.renameSync(outputPath, finalOutputPath);
+
+      // Delete the original PNG file after successful conversion
+      if (ext === '.png') {
+        fs.unlinkSync(inputPath);
+        console.log(`🗑️ Deleted original PNG: ${inputPath}`);
+      }
     }
 
     console.log(`✅ Processed: ${inputPath}`);

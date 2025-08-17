@@ -130,6 +130,25 @@ export const DataEffectTemplates: Record<
       return `Give ${keyword} to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
+  temporaryEffect: ({
+    effect,
+    range,
+  }: {
+    effect: UnitEndOfTurnEffects;
+    range?: UnitFilterArgs;
+  }) => ({
+    fn: ({ unit, targets, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      console.log('temporaryEffect', unitsInRange);
+      unitsInRange.forEach((u) => {
+        applyTemporaryEffect(u, effect);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Apply ${JSON.stringify(effect)} effect to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+    },
+  }),
   untapPlayer: () => ({
     fn: ({ player }) => {
       untapPlayer(player);

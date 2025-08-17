@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
     "tools:merge-cards": "node src/tools/merge-cards.js",
-    "tools:convert-images": "node src/tools/convert-images.js"
+    "tools:convert-images": "node src/tools/convert-images.js",
+    "tools:all": "npm run tools:merge-cards && npm run tools:convert-images"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
