@@ -9,6 +9,7 @@ import type {
 
 export type UiState = {
   currentView: UiView;
+  navigationVisible: boolean;
   battle: {
     selectedUnit: UnitDeployed | null;
     validTargets: {
@@ -45,4 +46,6 @@ export type UiState = {
 
 export enum UiView {
   Battle = 'Battle',
+  CardBuilder = 'CardBuilder',
+  Analytics = 'Analytics',
 }

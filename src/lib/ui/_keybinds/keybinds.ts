@@ -5,6 +5,7 @@ import {
   getCurrentBattleState,
   bs,
 } from '../../_state';
+import { uiState } from '../../_state/state-ui.svelte';
 
 export function handleKeybinds(event: KeyboardEvent) {
   // Skip keybinds if user is typing in an input field
@@ -33,5 +34,9 @@ export function handleKeybinds(event: KeyboardEvent) {
     console.log('Battle state reset');
   } else if (event.key === 'l') {
     console.log('Current battle state:', getCurrentBattleState());
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+    // Toggle navigation visibility
+    uiState.navigationVisible = !uiState.navigationVisible;
   }
 }
