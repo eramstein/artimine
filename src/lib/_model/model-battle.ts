@@ -82,10 +82,9 @@ export interface UnitDeployed extends UnitCard, BaseCardDeployed {
   statuses: UnitStatuses;
   untilEndOfTurn: UnitEndOfTurnEffects;
   staticModifiers: {
-    source: { unitId: string; abilityName: string };
+    source: { unitId?: string; effectName: string };
     permanent: boolean;
     keyword?: UnitKeywordDefinition;
-    abilityName?: string;
     attack?: number;
   }[];
   counters: Partial<Record<CounterType, number>>;

@@ -6,16 +6,14 @@ import type {
 } from '@/lib/_model/model-battle';
 import { bs } from '../_state';
 
-// TODO: abilities and attack updates
-
-// when a unit is destroyed, we need to clear all static abilities it generated
-export function clearUnitStaticAbilities(unit: UnitDeployed) {
+// removes static abilities originating from a unit
+export function clearUnitStaticAbilities(unit: UnitDeployed, sourceEffectName?: string) {
   bs.units.forEach((targetUnit) => {
     targetUnit.staticModifiers
       .filter((sm) => sm.source.unitId === unit.instanceId && !sm.permanent)
       .forEach((sm) => {
         if (sm.keyword) {
-          removeStaticKeyword(targetUnit, unit);
+          removeStaticKeyword(targetUnit, sourceEffectName, unit);
         }
       });
   });
@@ -23,15 +21,16 @@ export function clearUnitStaticAbilities(unit: UnitDeployed) {
 
 export function removeStaticKeyword(
   targetUnit: UnitDeployed,
-  sourceUnit: UnitDeployed,
-  sourceAbilityName?: string
+  sourceEffectName?: string,
+  sourceUnit?: UnitDeployed
 ) {
+  // adjust unit keywords
   targetUnit.staticModifiers
     .filter(
       (sm) =>
         sm.keyword &&
-        sm.source.unitId === sourceUnit.instanceId &&
-        (!sourceAbilityName || sm.source.abilityName === sourceAbilityName)
+        (!sourceUnit || sm.source.unitId === sourceUnit.instanceId) &&
+        (!sourceEffectName || sm.source.effectName === sourceEffectName)
     )
     .forEach((sm) => {
       const { key, value } = sm.keyword as UnitKeywordDefinition;
@@ -53,24 +52,27 @@ export function removeStaticKeyword(
         }
       }
     });
-
+  // remove modifier
   targetUnit.staticModifiers = targetUnit.staticModifiers.filter(
     (sm) =>
-      sm.source.unitId !== sourceUnit.instanceId || sm.source.abilityName !== sourceAbilityName
+      (!sourceUnit || sm.source.unitId !== sourceUnit.instanceId) &&
+      (!sourceEffectName || sm.source.effectName !== sourceEffectName)
   );
 }
 
 export function addStaticKeyword(
   targetUnit: UnitDeployed,
-  sourceUnit: UnitDeployed,
   keyword: UnitKeywordDefinition,
   permanent: boolean,
-  sourceAbilityName: string
+  effectName: string,
+  sourceUnit?: UnitDeployed
 ) {
+  // don't add it if it had it already
   if (
     targetUnit.staticModifiers.filter(
       (sm) =>
-        sm.source.unitId === sourceUnit.instanceId && sm.source.abilityName === sourceAbilityName
+        (!sourceUnit || sm.source.unitId === sourceUnit.instanceId) &&
+        sm.source.effectName === effectName
     ).length > 0
   ) {
     return false;
@@ -84,7 +86,7 @@ export function addStaticKeyword(
     (targetUnit.keywords[keyword.key] as boolean) = keyword.value as boolean;
   }
   targetUnit.staticModifiers.push({
-    source: { unitId: sourceUnit.instanceId, abilityName: sourceAbilityName },
+    source: { unitId: sourceUnit?.instanceId, effectName },
     permanent,
     keyword,
   });

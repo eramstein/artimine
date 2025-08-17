@@ -72,8 +72,8 @@ export const baseEffects: BaseEffect[] = [
     defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
-    effectName: 'staticKeywordAdjAllies',
-    argNames: ['name', 'keyword'],
+    effectName: 'staticKeyword',
+    argNames: ['abilityName', 'keyword', 'range', 'reset'],
     budget: (args, targets) => {
       const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost;
       const targetMultiplier = getTargetCount(targets);

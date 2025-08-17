@@ -2,6 +2,9 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "shroomy_protecs",
+      "young_hobbit",
+      "who_is_fat",
       "city_guard",
       "gaul_brawler",
       "pandy_panda",
@@ -25,7 +28,6 @@
       "unicorn",
       "wall_of_brambles",
       "wolf",
-      "young_hobbit",
       "dark_ritual",
       "raise_dead",
       "guinea_pig",

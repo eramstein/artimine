@@ -15,6 +15,7 @@ import {
   removeCounters,
   healUnit,
   drawCard,
+  clearUnitStaticAbilities,
 } from '@/lib/battle';
 import { CardColor, CounterType, StatusType } from '@/lib/_model';
 import type {
@@ -26,6 +27,7 @@ import type {
   UnitEndOfTurnEffects,
   UnitCardTemplate,
   TargetDefinition,
+  UnitKeywords,
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { reanimate } from '../graveyard';
@@ -90,7 +92,6 @@ export const DataEffectTemplates: Record<
     range?: UnitFilterArgs;
   }) => ({
     fn: ({ unit, targets, player }) => {
-      console.log('addCounters', { unit, targets, player });
       const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
         addCounters(u, counterType, counterValue);
@@ -101,23 +102,33 @@ export const DataEffectTemplates: Record<
       return `Add ${counterValue} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
-  staticKeywordAdjAllies: ({ name, keyword }) => ({
-    fn: ({ unit }) => {
-      const unitsInRange = filterUnits({ unit, adjacent: true, allies: true });
+  staticKeyword: ({
+    abilityName,
+    keyword,
+    keyWordValue,
+    range,
+    reset,
+  }: {
+    abilityName: string;
+    keyword: keyof UnitKeywords;
+    keyWordValue?: number;
+    range?: UnitFilterArgs;
+    reset?: boolean;
+  }) => ({
+    fn: ({ unit, targets, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      const keywordDef = { key: keyword, value: keyWordValue ?? true };
+      if (unit && reset) {
+        clearUnitStaticAbilities(unit, abilityName);
+      }
       unitsInRange.forEach((u) => {
-        addStaticKeyword(u, unit, keyword, false, name);
-      });
-      bs.units.forEach((u) => {
-        if (
-          u.staticModifiers.filter(
-            (sm) => sm.source.unitId === unit.instanceId && sm.source.abilityName === name
-          ).length > 0
-        ) {
-          removeStaticKeyword(u, unit, name);
-        }
+        addStaticKeyword(u, keywordDef, false, abilityName, unit);
       });
     },
-    label: () => `Give ${keyword} to adjacent allies (${name})`,
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Give ${keyword} to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+    },
   }),
   untapPlayer: () => ({
     fn: ({ player }) => {

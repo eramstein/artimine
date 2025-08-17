@@ -1,0 +1,30 @@
+{
+  "id": "who_is_fat",
+  "name": "Who is fat ???",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "whoFat",
+          "keyword": "cleave"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

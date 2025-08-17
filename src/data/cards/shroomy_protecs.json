@@ -1,0 +1,32 @@
+{
+  "id": "shroomy_protecs",
+  "name": "Shroomy Protecs",
+  "type": "unit",
+  "cost": 1,
+  "power": 0,
+  "maxHealth": 3,
+  "colors": [{ "color": "green", "count": 1 }],
+  "rarity": "common",
+  "unitTypes": ["mushroom"],
+  "abilities": [
+    {
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "shroomy_protecs_resist",
+              "keyword": "resist",
+              "keyWordValue": 1,
+              "reset": true,
+              "range": {
+                "adjacent": true
+              }
+            }
+          }
+        }
+      ],
+      "trigger": { "type": "Static" }
+    }
+  ]
+}
