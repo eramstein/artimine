@@ -187,10 +187,10 @@
             {getSortIcon('cost')} Cost
           </th>
           <th class="sortable" onclick={() => handleSort('power')}>
-            {getSortIcon('power')} Power
+            {getSortIcon('power')} P
           </th>
           <th class="sortable" onclick={() => handleSort('health')}>
-            {getSortIcon('health')} Health
+            {getSortIcon('health')} T
           </th>
           <th class="sortable" onclick={() => handleSort('colors')}>
             {getSortIcon('colors')} Colors

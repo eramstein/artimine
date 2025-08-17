@@ -27,7 +27,7 @@
       "effect": {
         "name": "drawCard",
         "args": {
-          "cardCount": "1"
+          "cardCount": 1
         }
       }
     }

@@ -26,13 +26,18 @@
     const cleanArgs: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(args)) {
-      if (value !== undefined && value !== null && value !== '' && value !== 0) {
+      if (value !== undefined && value !== null && value !== '') {
         if (typeof value === 'object' && Object.keys(value).length > 0) {
           // For objects (like range), only include if they have properties
           cleanArgs[key] = value;
         } else if (typeof value !== 'object') {
           // For non-objects, include if they have a meaningful value
-          cleanArgs[key] = value;
+          // Ensure numeric values are properly typed as numbers
+          if (typeof value === 'string' && !isNaN(Number(value)) && value.trim() !== '') {
+            cleanArgs[key] = Number(value);
+          } else {
+            cleanArgs[key] = value;
+          }
         }
       }
     }
