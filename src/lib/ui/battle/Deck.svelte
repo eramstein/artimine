@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Player } from '../_model';
-  import Tooltip from './Tooltip.svelte';
+  import type { Player } from '@lib/_model';
+  import Tooltip from '../Tooltip.svelte';
 
   let { player }: { player: Player } = $props();
 

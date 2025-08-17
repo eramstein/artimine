@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type { Card, SpellCard } from '../_model/model-battle';
-  import { CARD_WIDTH, CARD_HEIGHT } from '../_config/ui-config';
-  import { CardColor, CardType, UnitType } from '../_model/enums';
-  import { isPayable } from '../battle/cost';
-  import { activateSpell } from './_helpers/abilities';
-  import { uiState } from '../_state';
+  import type { Card, SpellCard } from '@lib/_model/model-battle';
+  import { CARD_WIDTH, CARD_HEIGHT } from '@lib/_config/ui-config';
+  import { CardColor, CardType, UnitType } from '@lib/_model/enums';
+  import { isPayable } from '@lib/battle/cost';
+  import { activateSpell } from '@lib/ui/_helpers/abilities';
+  import { uiState } from '@lib/_state';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
-  import { DataEffectTemplates } from '../battle/effects/effectTemplates';
-  import CardFull from './CardFull.svelte';
+  import { DataEffectTemplates } from '@lib/battle/effects/effectTemplates';
 
   let {
     card,

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { UnitKeywords } from '../_model/model-battle';
-  import Tooltip from './Tooltip.svelte';
+  import type { UnitKeywords } from '@lib/_model';
+  import Tooltip from '../Tooltip.svelte';
 
   let { keywords }: { keywords: UnitKeywords } = $props();
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { UiView } from '../_model';
   import { uiState, bs } from '../_state';
-  import Battle from './Battle.svelte';
+  import Battle from './battle/Battle.svelte';
   import ModalHost from './ModalHost.svelte';
 </script>
 

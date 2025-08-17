@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { UnitStatuses } from '../_model/model-battle';
-  import Tooltip from './Tooltip.svelte';
+  import type { UnitStatuses } from '@lib/_model';
+  import Tooltip from '../Tooltip.svelte';
 
   let { statuses }: { statuses: UnitStatuses } = $props();
 

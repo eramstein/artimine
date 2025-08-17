@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Ability, UnitDeployed } from '../_model/model-battle';
-  import { TriggerType } from '../_model/enums';
-  import Tooltip from './Tooltip.svelte';
-  import { activateAbility } from './_helpers/abilities';
-  import { uiState } from '../_state';
-  import { TRIGGER_ICONS } from './_helpers/triggerIcons';
-  import { DataEffectTemplates } from '../battle/effects/effectTemplates';
+  import type { Ability, UnitDeployed } from '../../_model/model-battle';
+  import { TriggerType } from '../../_model/enums';
+  import Tooltip from '../Tooltip.svelte';
+  import { activateAbility } from '../_helpers/abilities';
+  import { uiState } from '../../_state';
+  import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
+  import { DataEffectTemplates } from '../../battle/effects/effectTemplates';
   let { abilities, unit }: { abilities: Ability[]; unit?: UnitDeployed } = $props();
 
   // Tooltip state

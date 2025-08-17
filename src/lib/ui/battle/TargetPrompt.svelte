@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uiState } from '../_state';
+  import { uiState } from '@lib/_state';
 
   let targetPrompt = $derived(() => {
     const battle = uiState.battle;

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { bs } from '../_state';
-  import { uiState } from '../_state/state-ui.svelte';
+  import { bs } from '@lib/_state';
+  import { uiState } from '@lib/_state/state-ui.svelte';
   import Board from './Board.svelte';
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
   import GameWonModal from './GameWonModal.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
   import GraveyardModal from './GraveyardModal.svelte';
-  import CardFull from './CardFull.svelte';
-  import { nextTurn } from '../battle/turn';
+  import CardFull from '../cards/CardFull.svelte';
+  import { nextTurn } from '@lib/battle/turn';
 
   // Derived value to check if game is won
   let gameWon = $derived(bs.playerIdWon !== null);

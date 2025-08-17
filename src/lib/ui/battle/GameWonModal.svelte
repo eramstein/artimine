@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Player } from '../_model/model-battle';
+  import type { Player } from '@lib/_model';
 
   let { winningPlayer }: { winningPlayer: Player } = $props();
 </script>

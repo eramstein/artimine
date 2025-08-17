@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Land } from '../_model/model-battle';
-  import { uiState } from '../_state';
-  import { attackLand } from '../battle/combat';
-  import { clearSelections, setUnitsTargets } from './_helpers/selections';
+  import type { Land } from '@lib/_model';
+  import { uiState } from '@lib/_state';
+  import { attackLand } from '@lib/battle/combat';
+  import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
 
   let { land }: { land: Land } = $props();
 

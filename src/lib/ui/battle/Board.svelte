@@ -4,12 +4,16 @@
   import UnitDeployed from './UnitDeployed.svelte';
   import { bs, uiState } from '@lib/_state';
   import { deployUnit } from '@lib/battle/unit';
-  import { isUnitCard, type UnitCardTemplate } from '@lib/_model';
+  import { isUnitCard } from '@lib/_model';
   import type { Position, Card } from '@lib/_model';
-  import { isOnPlayersSide, getPositionKey } from '../battle/boards';
-  import { moveUnit } from '../battle/move';
-  import { clearSelections, setUnitsTargets, toggleUnitSelection } from './_helpers/selections';
-  import { targetCell } from './_helpers/abilities';
+  import { isOnPlayersSide, getPositionKey } from '@lib/battle/boards';
+  import { moveUnit } from '@lib/battle/move';
+  import {
+    clearSelections,
+    setUnitsTargets,
+    toggleUnitSelection,
+  } from '@lib/ui/_helpers/selections';
+  import { targetCell } from '@lib/ui/_helpers/abilities';
   import { fly } from 'svelte/transition';
 
   // Create arrays for rows and columns based on config

@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { Player } from '../_model/model-battle';
-  import { uiState } from '../_state/state-ui.svelte';
-  import { bs } from '../_state';
+  import { uiState } from '@lib/_state/state-ui.svelte';
+  import { bs } from '@lib/_state';
   import Card from './Card.svelte';
-  import { targetCard } from './_helpers/abilities';
+  import { targetCard } from '@lib/ui/_helpers/abilities';
 
   // Get the player from the battle state using the playerId from UI state
   let player = $derived(

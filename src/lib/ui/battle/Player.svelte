@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Player } from '../_model/model-battle';
-  import { CardColor } from '../_model/enums';
+  import type { Player } from '@lib/_model';
+  import { CardColor } from '@lib/_model/enums';
   import Deck from './Deck.svelte';
   import Graveyard from './Graveyard.svelte';
-  import { uiState } from '../_state';
-  import { attackPlayer } from '../battle/combat';
-  import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '../battle/player';
-  import { clearSelections, setUnitsTargets } from './_helpers/selections';
+  import { uiState } from '@lib/_state';
+  import { attackPlayer } from '@lib/battle/combat';
+  import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '@lib/battle/player';
+  import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
 
   let { player }: { player: Player } = $props();
 

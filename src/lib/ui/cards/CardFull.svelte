@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Card, SpellCard } from '../_model/model-battle';
-  import { CardColor, CardType, UnitType } from '../_model/enums';
-  import { DataEffectTemplates } from '../battle/effects/effectTemplates';
-  import { TRIGGER_ICONS } from './_helpers/triggerIcons';
+  import type { Card, SpellCard } from '../../_model/model-battle';
+  import { CardColor, CardType, UnitType } from '../../_model/enums';
+  import { DataEffectTemplates } from '../../battle/effects/effectTemplates';
+  import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
 
   let { card }: { card: Card } = $props();
 

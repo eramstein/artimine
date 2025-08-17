@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Player } from '../_model';
-  import { uiState } from '../_state/state-ui.svelte';
-  import Tooltip from './Tooltip.svelte';
+  import type { Player } from '@lib/_model';
+  import { uiState } from '@lib/_state/state-ui.svelte';
+  import Tooltip from '../Tooltip.svelte';
 
   let { player }: { player: Player } = $props();
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Player } from '../_model/model-battle';
+  import type { Player } from '@lib/_model';
   import Card from './Card.svelte';
-  import { CARD_WIDTH } from '../_config/ui-config';
+  import { CARD_WIDTH } from '@lib/_config/ui-config';
 
   let { player }: { player: Player } = $props();
 

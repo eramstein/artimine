@@ -1,17 +1,17 @@
 <script lang="ts">
-  import type { UnitDeployed } from '../_model';
-  import { isUnitActive } from '../battle/unit';
-  import { uiState } from '../_state';
-  import { setUnitsTargets, toggleUnitSelection } from './_helpers/selections';
-  import { attackUnit } from '../battle/combat';
-  import { clearSelections } from './_helpers/selections';
+  import type { UnitDeployed } from '@lib/_model';
+  import { isUnitActive } from '@lib/battle/unit';
+  import { uiState } from '@lib/_state';
+  import { setUnitsTargets, toggleUnitSelection } from '@lib/ui/_helpers/selections';
+  import { attackUnit } from '@lib/battle/combat';
+  import { clearSelections } from '@lib/ui/_helpers/selections';
   import Keywords from './Keywords.svelte';
   import Abilities from './Abilities.svelte';
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
   import Counters from './Counters.svelte';
-  import { targetUnit } from './_helpers/abilities';
-  import { TargetType } from '../_model/enums';
+  import { targetUnit } from '@lib/ui/_helpers/abilities';
+  import { TargetType } from '@lib/_model/enums';
 
   let { unit }: { unit: UnitDeployed } = $props();
 

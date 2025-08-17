@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Color, Card } from './types';
-  import CardFull from '../../lib/ui/CardFull.svelte';
+  import CardFull from '@lib/ui/cards/CardFull.svelte';
 
   let { filteredCards = [] }: { filteredCards?: Card[] } = $props();
 
