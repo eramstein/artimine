@@ -94,6 +94,24 @@ export function getAdjacentUnits(position: Position): UnitDeployed[] {
   );
 }
 
+export function getAdjacentUnitsInColumn(unit: UnitDeployed): UnitDeployed[] {
+  return bs.units.filter(
+    (u) =>
+      u.position.column === unit.position.column &&
+      (u.position.row === unit.position.row + 1 || u.position.row === unit.position.row - 1)
+  );
+}
+
+export function getAdjacentAlliesInRow(unit: UnitDeployed): UnitDeployed[] {
+  return bs.units.filter(
+    (u) =>
+      u.position.row === unit.position.row &&
+      (u.position.column === unit.position.column + 1 ||
+        u.position.column === unit.position.column - 1) &&
+      u.ownerPlayerId === unit.ownerPlayerId
+  );
+}
+
 export function getOwnUnits(playerId: number): UnitDeployed[] {
   return bs.units.filter((u) => u.ownerPlayerId === playerId);
 }

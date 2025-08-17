@@ -80,6 +80,8 @@
     regeneration: '💚',
     trample: '🐘',
     zerk: '💥',
+    cleave: '🔪',
+    lance: '🗡️',
   };
 
   // Full keyword names
@@ -94,6 +96,8 @@
     regeneration: 'Regeneration',
     trample: 'Trample',
     zerk: 'Zerk',
+    cleave: 'Cleave',
+    lance: 'Lance',
   };
 
   // Get all active keywords with their values

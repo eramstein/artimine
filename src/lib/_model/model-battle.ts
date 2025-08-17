@@ -126,6 +126,8 @@ export interface UnitKeywords {
   regeneration?: number;
   trample?: boolean;
   zerk?: boolean;
+  cleave?: boolean;
+  lance?: boolean;
 }
 
 export type UnitEndOfTurnEffects = UnitKeywords & {

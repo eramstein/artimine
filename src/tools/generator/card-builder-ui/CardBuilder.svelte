@@ -71,6 +71,8 @@
     regeneration: 0,
     trample: false,
     zerk: false,
+    cleave: false,
+    lance: false,
   });
 
   // Action editing state
@@ -115,6 +117,8 @@
     if (state_keywords.moveAndAttack) keywords.moveAndAttack = true;
     if (state_keywords.trample) keywords.trample = true;
     if (state_keywords.zerk) keywords.zerk = true;
+    if (state_keywords.cleave) keywords.cleave = true;
+    if (state_keywords.lance) keywords.lance = true;
 
     if (state_keywords.retaliate > 0) keywords.retaliate = state_keywords.retaliate;
     if (state_keywords.armor > 0) keywords.armor = state_keywords.armor;

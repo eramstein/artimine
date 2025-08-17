@@ -35,6 +35,7 @@ export const keywordColorPreferences: Record<
     ranged: 9,
     moveAndAttack: 6,
     resist: 6,
+    cleave: -3,
   },
   [CardColor.Green]: {
     retaliate: 2,
@@ -42,6 +43,7 @@ export const keywordColorPreferences: Record<
     trample: 6,
     poisonous: 5,
     moveAndAttack: -3,
+    cleave: 3,
   },
   [CardColor.Black]: {
     ranged: 3,
@@ -49,5 +51,6 @@ export const keywordColorPreferences: Record<
     armor: 6,
     poisonous: 3,
     moveAndAttack: -3,
+    lance: 3,
   },
 };

@@ -129,7 +129,7 @@ export const DataEffectTemplates: Record<
     fn: ({ player }) => {
       incrementColor(player, color, 1);
     },
-    label: () => `Add 1 ${color} mana`,
+    label: () => `Add 1 ${color.color} mana`,
   }),
   applyUnitStatus: ({
     statusType,
@@ -148,7 +148,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Apply ${statusType} for ${duration} turn${duration !== 1 ? 's' : ''}${targetsLabel}`;
+      return `Apply ${statusType} for ${duration} turn${duration !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   summon: ({

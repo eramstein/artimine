@@ -1,0 +1,22 @@
+{
+  "id": "city_guard",
+  "name": "City Guard",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "lance": true,
+    "retaliate": 1
+  }
+}

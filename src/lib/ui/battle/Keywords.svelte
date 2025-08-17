@@ -19,6 +19,8 @@
     regeneration: '💚',
     trample: '🐘',
     zerk: '💥',
+    cleave: '🔪',
+    lance: '🗡️',
   };
 
   // Tooltip content for each keyword
@@ -37,6 +39,8 @@
     regeneration: (value: number) =>
       `Regeneration ${value}: This unit heals ${value} health at the start of each turn.`,
     trample: 'Trample: Excess damage is dealt to the unit, land or player behind.',
+    cleave: 'Cleave: Attacks adjacent ennemies too.',
+    lance: 'Lance: Attacks both units in the row.',
   };
 
   function handleMouseEnter(keyword: string) {

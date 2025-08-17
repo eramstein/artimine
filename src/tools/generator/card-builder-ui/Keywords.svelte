@@ -16,6 +16,8 @@
     regeneration: number;
     trample: boolean;
     zerk: boolean;
+    cleave: boolean;
+    lance: boolean;
   };
 
   export let keywordCosts: any;
@@ -57,6 +59,20 @@
       <label class="checkbox-label">
         <input type="checkbox" bind:checked={state_keywords.zerk} />
         Zerk <span class="keyword-cost">({keywordCosts.zerk} pts)</span>
+      </label>
+    </div>
+
+    <div class="keyword-group">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={state_keywords.cleave} />
+        Cleave <span class="keyword-cost">({keywordCosts.cleave} pts)</span>
+      </label>
+    </div>
+
+    <div class="keyword-group">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={state_keywords.lance} />
+        Lance <span class="keyword-cost">({keywordCosts.lance} pts)</span>
       </label>
     </div>
 

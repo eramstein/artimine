@@ -4,7 +4,7 @@ import { bs } from '../_state';
 import { uiState } from '../_state/state-ui.svelte';
 import { damageLand } from './land';
 import { damagePlayer, getOpposingPlayer } from './player';
-import { damageUnit } from './unit';
+import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './unit';
 import { onCombatResolution } from './listeners';
 import { soundManager } from './sound';
 import { isLand, isPlayer } from '../_model/type-lookup-battle';
@@ -62,24 +62,35 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
-  const preventedDamage = target.keywords?.armor || 0;
-  const dealtDamage = unit.power - preventedDamage;
-  const excessDamage = dealtDamage - target.health;
-  if (unit.keywords?.poisonous) {
-    target.statuses.poison = (target.statuses.poison || 0) + unit.keywords.poisonous;
+
+  let attackedUnits = [target];
+  if (unit.keywords?.cleave) {
+    attackedUnits = attackedUnits.concat(getAdjacentUnitsInColumn(target));
   }
-  const wasDestroyed = damageUnit(target, dealtDamage);
-  if (!wasDestroyed && target.keywords?.retaliate && !unit.keywords?.ranged) {
-    damageUnit(unit, target.keywords.retaliate, true);
+  if (unit.keywords?.lance) {
+    attackedUnits = attackedUnits.concat(getAdjacentAlliesInRow(target));
   }
-  if (excessDamage && unit.keywords?.trample) {
-    const nextUnit = getClosestBlocker(unit);
-    if (nextUnit) {
-      damageUnit(nextUnit, excessDamage);
-    } else {
-      damageLand(bs.players[target.ownerPlayerId].lands[unit.position.row], excessDamage);
+
+  attackedUnits.forEach((attackedUnit) => {
+    const preventedDamage = attackedUnit.keywords?.armor || 0;
+    const dealtDamage = unit.power - preventedDamage;
+    const excessDamage = dealtDamage - attackedUnit.health;
+    if (unit.keywords?.poisonous) {
+      attackedUnit.statuses.poison = (attackedUnit.statuses.poison || 0) + unit.keywords.poisonous;
     }
-  }
+    const wasDestroyed = damageUnit(attackedUnit, dealtDamage);
+    if (!wasDestroyed && attackedUnit.keywords?.retaliate && !unit.keywords?.ranged) {
+      damageUnit(unit, attackedUnit.keywords.retaliate, true);
+    }
+    if (excessDamage && unit.keywords?.trample) {
+      const nextUnit = getClosestBlocker(unit);
+      if (nextUnit) {
+        damageUnit(nextUnit, excessDamage);
+      } else {
+        damageLand(bs.players[attackedUnit.ownerPlayerId].lands[unit.position.row], excessDamage);
+      }
+    }
+  });
   onCombatResolution(unit, target);
   recordUnitHasAttacked(unit);
 }

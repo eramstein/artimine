@@ -1,0 +1,22 @@
+{
+  "id": "gaul_brawler",
+  "name": "Gaul Brawler",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 5,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "cleave": true,
+    "retaliate": 1
+  }
+}

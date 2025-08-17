@@ -33,6 +33,8 @@ export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   regeneration: { type: 'number', baseCost: 2, prevalence: 3, requiresSomeHealth: true },
   trample: { baseCost: 3, prevalence: 4, requiresSomePower: true },
   zerk: { baseCost: -3, prevalence: 1, requiresSomePower: true },
+  cleave: { baseCost: 7, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
+  lance: { baseCost: 5, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
 };
 
 // Extract prevalence from definitions

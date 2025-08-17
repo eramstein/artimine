@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "city_guard",
+      "gaul_brawler",
       "pandy_panda",
       "dryad",
       "bison",
