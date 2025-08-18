@@ -1,0 +1,27 @@
+{
+  "id": "tim",
+  "name": "Tim",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [{ "color": "red", "count": 2 }],
+  "rarity": "common",
+  "abilities": [
+    {
+      "actions": [
+        {
+          "targets": [{ "type": "unit", "count": 1 }],
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 1
+            }
+          }
+        }
+      ],
+      "trigger": { "type": "Activated" },
+      "exhausts": true
+    }
+  ]
+}

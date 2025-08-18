@@ -1,0 +1,26 @@
+{
+  "id": "frenzied_shaman",
+  "name": "Frenzied Shaman",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [{ "color": "red", "count": 2 }],
+  "rarity": "common",
+  "abilities": [
+    {
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 1
+            }
+          }
+        }
+      ],
+      "trigger": { "type": "On Death", "range": { "allies": true } }
+    }
+  ]
+}

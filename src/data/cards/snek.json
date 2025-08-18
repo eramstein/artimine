@@ -1,0 +1,18 @@
+{
+  "id": "snek",
+  "name": "Snek",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "poisonous": 2
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "ebonheart",
+  "name": "Ebonheart",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 4,
+  "colors": [
+    { "color": "black", "count": 1 },
+    { "color": "green", "count": 2 }
+  ],
+  "rarity": "uncommon",
+  "abilities": [
+    {
+      "actions": [
+        {
+          "targets": [{ "type": "cell_ally", "count": 1 }],
+          "effect": {
+            "name": "summon",
+            "args": {
+              "summonedUnit": {
+                "id": "shroomy_shooty",
+                "name": "Shroomy Shooty",
+                "type": "unit",
+                "rarity": "common",
+                "unitTypes": ["mushroom"],
+                "cost": 1,
+                "power": 1,
+                "maxHealth": 1,
+                "colors": [{ "color": "green", "count": 1 }],
+                "keywords": { "ranged": true }
+              }
+            }
+          }
+        }
+      ],
+      "cost": 1,
+      "trigger": { "type": "Activated" },
+      "exhausts": true
+    }
+  ]
+}

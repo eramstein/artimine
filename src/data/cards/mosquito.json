@@ -1,0 +1,27 @@
+{
+  "id": "mosquito",
+  "name": "Mosquito",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [{ "color": "black", "count": 1 }],
+  "rarity": "common",
+  "abilities": [
+    {
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "decay",
+              "counterValue": 1,
+              "range": { "sameRow": true, "ennemies": true }
+            }
+          }
+        }
+      ],
+      "trigger": { "type": "After Moving", "range": { "self": true } }
+    }
+  ]
+}

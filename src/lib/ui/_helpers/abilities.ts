@@ -234,7 +234,9 @@ export function targetCell(position: Position) {
   if (
     (!ui.abilityPending && !ui.spellPending) ||
     !ui.targetBeingSelected ||
-    ui.targetBeingSelected.type !== TargetType.Cell
+    ![TargetType.Cell, TargetType.AllyCell, TargetType.EmptyCell].includes(
+      ui.targetBeingSelected.type
+    )
   )
     return;
   const currentEffectIdx = ui.currentEffectIndex || 0;

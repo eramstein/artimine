@@ -1,0 +1,33 @@
+{
+  "id": "caring_druidess",
+  "name": "Caring Druidess",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "actions": [
+        {
+          "targets": [{ "type": "unit", "count": 1 }],
+          "effect": {
+            "name": "healUnit",
+            "args": {
+              "health": 99
+            }
+          }
+        }
+      ],
+      "trigger": { "type": "Activated" },
+      "exhausts": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "modis_chosen",
+  "name": "Modi's Chosen",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [{ "color": "red", "count": 2 }],
+  "rarity": "common",
+  "keywords": {
+    "haste": true,
+    "zerk": true
+  }
+}

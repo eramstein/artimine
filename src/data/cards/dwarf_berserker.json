@@ -1,0 +1,14 @@
+{
+  "id": "dwarf_berserker",
+  "name": "Dwarf Berserker",
+  "type": "unit",
+  "cost": 2,
+  "power": 3,
+  "maxHealth": 2,
+  "colors": [{ "color": "red", "count": 2 }],
+  "rarity": "common",
+  "unitTypes": ["dwarf"],
+  "keywords": {
+    "zerk": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "the_beast",
+  "name": "The Beast",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 6,
+  "power": 6,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "green",
+      "count": 6
+    }
+  ],
+  "unitTypes": [
+    "beast",
+    "demon"
+  ],
+  "keywords": {
+    "trample": true,
+    "retaliate": 6
+  }
+}
