@@ -28,12 +28,6 @@ export enum TriggerType {
   OnTurnStart = 'On Turn Start',
 }
 
-export enum TriggerRange {
-  Self = 'self',
-  Allies = 'allies',
-  Ennemies = 'ennemies',
-}
-
 export enum TargetType {
   Self = 'self',
   Ennemies = 'unit_ennemies',
@@ -65,6 +59,7 @@ export enum UnitType {
   Angel = 'angel',
   Demon = 'demon',
   Halfing = 'halfing',
+  Plant = 'plant',
 }
 
 export enum CounterType {

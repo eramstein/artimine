@@ -2,7 +2,7 @@ import { config } from '../_config';
 import type { Position, UnitDeployed } from '../_model/model-battle';
 import { getPositionKey, isCellFree } from './boards';
 import { isHumanPlayer } from './player';
-import { onAfterMoveUnit } from './listeners';
+import { onAfterMoveUnit, onBeforeMoveUnit } from './listeners';
 
 export function canMove(unit: UnitDeployed) {
   return (
@@ -43,6 +43,7 @@ export function moveUnit(unit: UnitDeployed, targetPosition: Position) {
   // check if possible
   if (!canMove(unit)) return;
   if (!validMoveTargets(unit)[getPositionKey(targetPosition)]) return;
+  onBeforeMoveUnit(unit, targetPosition);
   // move unit
   unit.position = targetPosition;
   unit.hasMoved = true;

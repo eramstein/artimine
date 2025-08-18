@@ -12,6 +12,7 @@
       "count": 1
     }
   ],
+  "unitTypes": ["plant"],
   "keywords": {
     "retaliate": 2
   }

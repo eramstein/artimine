@@ -1,0 +1,52 @@
+{
+  "id": "hobbit_gardener",
+  "name": "Hobbit Gardener",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["halfing"],
+  "abilities": [
+    {
+      "actions": [
+        {
+          "effect": {
+            "name": "summon",
+            "args": {
+              "summonedUnit": {
+                "id": "shrubbery",
+                "name": "Shrubbery",
+                "rarity": "common",
+                "type": "unit",
+                "cost": 1,
+                "power": 0,
+                "maxHealth": 1,
+                "colors": [
+                  {
+                    "color": "green",
+                    "count": 1
+                  }
+                ],
+                "unitTypes": ["plant"]
+              },
+              "isRespawn": true
+            }
+          }
+        }
+      ],
+      "trigger": {
+        "type": "Before Moving",
+        "range": {
+          "self": true
+        }
+      }
+    }
+  ]
+}

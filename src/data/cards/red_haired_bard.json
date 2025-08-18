@@ -33,7 +33,9 @@
       ],
       "trigger": {
         "type": "After Moving",
-        "range": "self"
+        "range": {
+          "self": true
+        }
       }
     }
   ]

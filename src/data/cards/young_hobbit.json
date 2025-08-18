@@ -12,7 +12,5 @@
       "count": 1
     }
   ],
-  "unitTypes": [
-    "dwarf"
-  ]
+  "unitTypes": ["hobbit"]
 }

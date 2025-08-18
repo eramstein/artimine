@@ -1,10 +1,10 @@
+import type { UnitFilterArgs } from '../battle/effects';
 import {
   CardColor,
   CardRarity,
   CardType,
   CounterType,
   TargetType,
-  TriggerRange,
   TriggerType,
   UnitType,
 } from './enums';
@@ -156,7 +156,7 @@ export interface EffectArgs {
 
 export interface Trigger {
   type: TriggerType;
-  range?: TriggerRange;
+  range?: UnitFilterArgs;
   staticRecompute?: TriggerType[];
   text?: string;
 }

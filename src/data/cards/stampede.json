@@ -1,0 +1,41 @@
+{
+  "id": "stampede",
+  "name": "Stampede",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 7,
+  "colors": [
+    {
+      "color": "green",
+      "count": 4
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "growth",
+          "counterValue": 3,
+          "range": {
+            "allies": true,
+            "unitType": "beast"
+          }
+        }
+      }
+    },
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "stampede",
+          "keyword": "trample",
+          "range": {
+            "allies": true,
+            "unitType": "beast"
+          }
+        }
+      }
+    }
+  ]
+}

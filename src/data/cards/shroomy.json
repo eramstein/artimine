@@ -23,7 +23,9 @@
       ],
       "trigger": {
         "type": "On Turn Start",
-        "range": "self"
+        "range": {
+          "self": true
+        }
       }
     }
   ]

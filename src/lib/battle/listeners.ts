@@ -7,10 +7,9 @@ import {
   type Player,
   type Land,
   type EffectTargets,
-  TriggerRange,
 } from '@/lib/_model';
 import { getEligibleTargets } from './target';
-import { DataEffectTemplates } from './effects';
+import { DataEffectTemplates, filterUnits } from './effects';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
   bs.units.forEach((u) => {
@@ -62,10 +61,7 @@ function checkTriggerCondition(
   }
 
   // special case for turn start, here Self means the player
-  if (
-    ability.trigger.type === TriggerType.OnTurnStart &&
-    ability.trigger.range === TriggerRange.Self
-  ) {
+  if (ability.trigger.type === TriggerType.OnTurnStart && ability.trigger.range.self) {
     return triggerArgs.player.id === unitWithAbility.ownerPlayerId;
   }
 
@@ -78,24 +74,20 @@ function checkTriggerCondition(
   ) {
     unitCausingTrigger = triggerArgs.unit;
   }
-  if (ability.trigger.type === TriggerType.AfterMove) {
+  if (
+    ability.trigger.type === TriggerType.AfterMove ||
+    ability.trigger.type === TriggerType.BeforeMove
+  ) {
     unitCausingTrigger = triggerArgs.mover;
   }
   if (ability.trigger.type === TriggerType.AfterCombat) {
     unitCausingTrigger = triggerArgs.attacker;
   }
 
-  if (ability.trigger.range === TriggerRange.Self) {
-    return unitWithAbility.instanceId === unitCausingTrigger.instanceId;
-  }
-  if (ability.trigger.range === TriggerRange.Allies) {
-    return unitWithAbility.ownerPlayerId === unitCausingTrigger.ownerPlayerId;
-  }
-  if (ability.trigger.range === TriggerRange.Ennemies) {
-    return unitWithAbility.ownerPlayerId !== unitCausingTrigger.ownerPlayerId;
-  }
-
-  return false;
+  const validTriggeringUnits = filterUnits({ ...ability.trigger.range, unit: unitWithAbility }).map(
+    (u) => u.instanceId
+  );
+  return validTriggeringUnits.includes(unitCausingTrigger.instanceId);
 }
 
 /* 
@@ -111,6 +103,10 @@ export function onCombatResolution(attacker: UnitDeployed, defender: UnitDeploye
 
 export function onAfterMoveUnit(unit: UnitDeployed, pos: Position) {
   triggerAbilities(TriggerType.AfterMove, { mover: unit, pos });
+}
+
+export function onBeforeMoveUnit(unit: UnitDeployed, pos: Position) {
+  triggerAbilities(TriggerType.BeforeMove, { mover: unit, pos });
 }
 
 export function onDeployUnit(unit: UnitDeployed) {

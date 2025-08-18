@@ -1,21 +1,18 @@
 {
-  "id": "pandy_panda",
-  "name": "Pandy Panda",
-  "rarity": "rare",
+  "id": "not_so_little_pig",
+  "name": "Not So Little Pig",
+  "rarity": "common",
   "type": "unit",
-  "cost": 5,
-  "power": 3,
-  "maxHealth": 3,
+  "cost": 2,
+  "power": 0,
+  "maxHealth": 1,
   "colors": [
     {
       "color": "green",
-      "count": 3
+      "count": 1
     }
   ],
   "unitTypes": ["beast"],
-  "keywords": {
-    "regeneration": 3
-  },
   "abilities": [
     {
       "actions": [
@@ -30,9 +27,10 @@
         }
       ],
       "trigger": {
-        "type": "On Turn Start",
+        "type": "On Deploy",
         "range": {
-          "self": true
+          "allies": true,
+          "adjacent": true
         }
       }
     }
