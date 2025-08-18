@@ -1,0 +1,19 @@
+{
+  "id": "gate_keepers",
+  "name": "Gate Keepers",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "retaliate": 4
+  }
+}

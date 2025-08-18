@@ -1,0 +1,45 @@
+{
+  "id": "angry_mob",
+  "name": "Angry Mob",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "unitType": "human"
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 1,
+              "range": {
+                "sameRow": true,
+                "ennemies": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

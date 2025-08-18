@@ -2,6 +2,12 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "angry_mob",
+      "city_guard",
+      "street_slinger",
+      "royal_halberdier",
+      "elite_crossbowmen",
+      "gate_keepers",
       "fireball",
       "teutonic_knight",
       "dwarf_berserker",
@@ -22,7 +28,6 @@
       "shroomy_protecs",
       "young_hobbit",
       "who_is_fat",
-      "city_guard",
       "gaul_brawler",
       "pandy_panda",
       "dryad",

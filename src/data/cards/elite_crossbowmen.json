@@ -1,0 +1,20 @@
+{
+  "id": "elite_crossbowmen",
+  "name": "Elite Crossbowmen",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 6,
+  "power": 5,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "ranged": true,
+    "retaliate": 2
+  }
+}
