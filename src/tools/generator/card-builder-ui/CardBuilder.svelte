@@ -2,13 +2,21 @@
   /*
     Giant vibecoded form to help create cards, not meant to be used by other people.
   */
-  import { CardType, CardRarity, CardColor, UnitType } from '../../../lib/_model';
+  // @ts-ignore - Svelte 5 rune provided at runtime
+  declare const $state: any;
+  // @ts-ignore - Svelte 5 rune provided at runtime
+  declare const $derived: any;
+  // @ts-ignore - Svelte 5 rune provided at runtime
+  declare const $effect: any;
+  import { CardType, CardRarity, CardColor, UnitType, TriggerType } from '../../../lib/_model';
+  import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import type {
     UnitCardTemplate,
     SpellCardTemplate,
     UnitKeywords,
     ActionDefinition,
     TargetDefinition,
+    Ability,
   } from '../../../lib/_model';
   import { baseStatsCost, getBudgetForUnit, getBudgetForSpell, getActionsBudget } from '../budgets';
   import { costPerKeywordForUnit } from '../keywords';
@@ -19,6 +27,7 @@
   import UnitTypes from './UnitTypes.svelte';
   import Keywords from './Keywords.svelte';
   import Actions from './Actions.svelte';
+  import Abilities from './Abilities.svelte';
   import JsonOutput from './JsonOutput.svelte';
 
   // Filter out empty arguments for clean JSON output
@@ -46,10 +55,24 @@
   }
 
   // Form state
-  let state = $state({
+  type BuilderState = {
+    name: string;
+    rarity: CardRarity;
+    type: CardType;
+    cost: number;
+    power: number;
+    maxHealth: number;
+    colors: { color: CardColor; count: number }[];
+    unitTypes: UnitType[];
+    keywords: UnitKeywords | undefined;
+    actions: ActionDefinition[];
+    abilities: Ability[];
+  };
+
+  const initialState: BuilderState = {
     name: '',
     rarity: CardRarity.Common,
-    type: CardType.Spell,
+    type: CardType.Unit,
     cost: 1,
     power: 1,
     maxHealth: 1,
@@ -57,7 +80,9 @@
     unitTypes: [] as UnitType[],
     keywords: undefined as UnitKeywords | undefined,
     actions: [] as ActionDefinition[],
-  });
+    abilities: [] as Ability[],
+  };
+  let state = $state(initialState);
 
   // Keywords state
   let state_keywords = $state({
@@ -82,6 +107,18 @@
     effectArgs: {} as Record<string, any>,
     hasTargets: false,
     targets: [] as TargetDefinition[],
+  });
+
+  // Ability editing state
+  let editingAbilityIndex = $state(-1);
+  let newAbility = $state({
+    triggerType: TriggerType.Activated,
+    range: {} as UnitFilterArgs,
+    cost: 0,
+    exhausts: false,
+    staticRecompute: [] as TriggerType[],
+    text: '',
+    actions: [] as ActionDefinition[],
   });
 
   // Color management
@@ -216,6 +253,7 @@
         colors: state.colors,
         unitTypes: state.unitTypes.length > 0 ? state.unitTypes : undefined,
         keywords: state.keywords,
+        abilities: state.abilities.length > 0 ? state.abilities : undefined,
       };
       return JSON.stringify(cardData, null, 2);
     } else {
@@ -277,7 +315,6 @@
         Object.keys(state.keywords).length === 0
       )
         return 0;
-
       let total = 0;
       Object.entries(state.keywords).forEach(([key, value]) => {
         const keywordKey = key as keyof UnitKeywords;
@@ -311,6 +348,7 @@
     state.maxHealth = 1;
     state.unitTypes = [];
     state.actions = [];
+    state.abilities = [];
 
     // Reset keywords state
     state_keywords.ranged = false;
@@ -326,6 +364,106 @@
 
     // Reset action editing
     cancelEdit();
+
+    // Reset ability editing
+    cancelEditAbility();
+  }
+
+  // Ability management
+  function addAbility() {
+    try {
+      const ability: Ability = {
+        trigger: {
+          type: newAbility.triggerType,
+          ...(Object.keys(newAbility.range || {}).length > 0
+            ? { range: newAbility.range as any }
+            : {}),
+          ...(newAbility.triggerType === TriggerType.Static && newAbility.staticRecompute.length
+            ? { staticRecompute: [...newAbility.staticRecompute] }
+            : {}),
+          ...(newAbility.text?.trim() ? { text: newAbility.text.trim() } : {}),
+        },
+        actions: [...newAbility.actions],
+        ...(newAbility.cost > 0 ? { cost: newAbility.cost } : {}),
+        ...(newAbility.exhausts ? { exhausts: true } : {}),
+      };
+      state.abilities = [...state.abilities, ability];
+
+      // reset
+      newAbility.triggerType = TriggerType.Activated;
+      newAbility.range = {};
+      newAbility.cost = 0;
+      newAbility.exhausts = false;
+      newAbility.staticRecompute = [];
+      newAbility.text = '';
+      newAbility.actions = [];
+    } catch (error) {
+      alert('Error adding ability: ' + error);
+    }
+  }
+
+  function removeAbility(index: number) {
+    state.abilities = state.abilities.filter((_: any, i: number) => i !== index);
+  }
+
+  function editAbility(index: number) {
+    const ability = state.abilities[index];
+    newAbility.triggerType = ability.trigger.type;
+    newAbility.range = { ...(ability.trigger.range || {}) } as any;
+    newAbility.cost = ability.cost || 0;
+    newAbility.exhausts = !!ability.exhausts;
+    newAbility.staticRecompute = ability.trigger.staticRecompute
+      ? [...ability.trigger.staticRecompute]
+      : [];
+    newAbility.text = ability.trigger.text || '';
+    newAbility.actions = ability.actions ? [...ability.actions] : [];
+    editingAbilityIndex = index;
+  }
+
+  function updateAbility() {
+    try {
+      const ability: Ability = {
+        trigger: {
+          type: newAbility.triggerType,
+          ...(Object.keys(newAbility.range || {}).length > 0
+            ? { range: newAbility.range as any }
+            : {}),
+          ...(newAbility.triggerType === TriggerType.Static && newAbility.staticRecompute.length
+            ? { staticRecompute: [...newAbility.staticRecompute] }
+            : {}),
+          ...(newAbility.text?.trim() ? { text: newAbility.text.trim() } : {}),
+        },
+        actions: [...newAbility.actions],
+        ...(newAbility.cost > 0 ? { cost: newAbility.cost } : {}),
+        ...(newAbility.exhausts ? { exhausts: true } : {}),
+      };
+      state.abilities = state.abilities.map((a: any, i: number) =>
+        i === editingAbilityIndex ? ability : a
+      );
+
+      // reset
+      newAbility.triggerType = TriggerType.Activated;
+      newAbility.range = {};
+      newAbility.cost = 0;
+      newAbility.exhausts = false;
+      newAbility.staticRecompute = [];
+      newAbility.text = '';
+      newAbility.actions = [];
+      editingAbilityIndex = -1;
+    } catch (error) {
+      alert('Error updating ability: ' + error);
+    }
+  }
+
+  function cancelEditAbility() {
+    newAbility.triggerType = TriggerType.Activated;
+    newAbility.range = {};
+    newAbility.cost = 0;
+    newAbility.exhausts = false;
+    newAbility.staticRecompute = [];
+    newAbility.text = '';
+    newAbility.actions = [];
+    editingAbilityIndex = -1;
   }
 
   // Download JSON function
@@ -374,6 +512,17 @@
       {editAction}
       {updateAction}
       {cancelEdit}
+    />
+
+    <Abilities
+      {state}
+      {editingAbilityIndex}
+      {newAbility}
+      {addAbility}
+      {removeAbility}
+      {editAbility}
+      {updateAbility}
+      {cancelEditAbility}
     />
 
     <JsonOutput {jsonOutput} {downloadJSON} />

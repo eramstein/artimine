@@ -17,7 +17,7 @@
         "args": {
           "damage": 4,
           "range": {
-            "self": true,
+            "addSelf": true,
             "adjacent": true
           }
         }

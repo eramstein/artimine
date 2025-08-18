@@ -73,7 +73,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'staticKeyword',
-    argNames: ['abilityName', 'keyword', 'range', 'reset'],
+    argNames: ['abilityName', 'keyword', 'keyWordValue', 'range', 'reset'],
     budget: (args, targets) => {
       const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost; // TBD
       const targetMultiplier = getTargetCount(targets);

@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "fireball",
+      "teutonic_knight",
       "dwarf_berserker",
       "frenzied_shaman",
       "modis_chosen",
@@ -47,7 +49,6 @@
       "raise_dead",
       "guinea_pig",
       "decaying_ray",
-      "fireball",
       "energyze"
     ],
     "lands": ["forest", "mountain", "island", "swamp"]

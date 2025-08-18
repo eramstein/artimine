@@ -50,12 +50,14 @@ function checkTriggerType(ability: Ability, triggerType: TriggerType): boolean {
   );
 }
 
+// This is checking if a given ability gets triggered by trigger args
+// For example, an ability with trigger type "After Moving" and range { allies: true } will trigger if the moving unit in triggerArgs is an ally
 function checkTriggerCondition(
   ability: Ability,
   unitWithAbility: UnitDeployed,
   triggerArgs: any
 ): boolean {
-  // if no range is specified, the trigger is always triggered
+  // if no range is specified, the ability is always triggered
   if (!ability.trigger.range) {
     return true;
   }
@@ -66,6 +68,8 @@ function checkTriggerCondition(
   }
 
   // all others check if the unit causing the trigger is in the range
+  console.log(unitWithAbility, triggerArgs, ability.trigger.range);
+
   let unitCausingTrigger = null;
   if (
     [TriggerType.OnDeath, TriggerType.OnDeploy, TriggerType.BeforeDamage].includes(
@@ -87,7 +91,15 @@ function checkTriggerCondition(
   const validTriggeringUnits = filterUnits({ ...ability.trigger.range, unit: unitWithAbility }).map(
     (u) => u.instanceId
   );
-  return validTriggeringUnits.includes(unitCausingTrigger.instanceId);
+  console.log(
+    'validTriggeringUnits',
+    validTriggeringUnits,
+    'unitCausingTrigger',
+    unitCausingTrigger
+  );
+  return validTriggeringUnits
+    ? validTriggeringUnits.includes(unitCausingTrigger.instanceId)
+    : false;
 }
 
 /* 

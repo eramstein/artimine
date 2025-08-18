@@ -22,8 +22,21 @@
     cancelEdit: () => void;
   }>();
 
-  // Get available effect names
-  const effectNames = baseEffects.map((effect) => effect.effectName);
+  // Humanize effect names for display and sort alphabetically
+  function toDisplayLabel(raw: string): string {
+    const spaced = raw
+      .replace(/_/g, ' ')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return spaced.replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  const effectOptions = $derived(
+    baseEffects
+      .map((effect) => ({ value: effect.effectName, label: toDisplayLabel(effect.effectName) }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  );
 
   // Get current base effect
   const currentBaseEffect = $derived(
@@ -175,8 +188,8 @@
       <label for="effectName">Effect Name:</label>
       <select id="effectName" bind:value={props.newAction.effectName}>
         <option value="">Select an effect...</option>
-        {#each effectNames as effectName}
-          <option value={effectName}>{effectName}</option>
+        {#each effectOptions as opt}
+          <option value={opt.value}>{opt.label}</option>
         {/each}
       </select>
     </div>

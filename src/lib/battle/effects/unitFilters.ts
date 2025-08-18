@@ -5,12 +5,13 @@ import { bs } from '@/lib/_state';
 
 export interface UnitFilterArgs {
   // references
-  self?: boolean;
   unit?: UnitDeployed;
   position?: Position;
   player?: Player;
   all?: boolean;
   // relative to the references
+  self?: boolean;
+  addSelf?: boolean;
   sameRow?: boolean;
   sameColumn?: boolean;
   allies?: boolean;
@@ -23,6 +24,9 @@ export interface UnitFilterArgs {
 export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
   if (filterArgs.all) {
     return bs.units;
+  }
+  if (filterArgs.self && filterArgs.unit) {
+    return [filterArgs.unit];
   }
   const relativeToPlayerId = filterArgs.player?.id ?? filterArgs.unit?.ownerPlayerId;
   const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
@@ -52,7 +56,7 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
     }
     return valid;
   });
-  if (filterArgs.self && filterArgs.unit) {
+  if (filterArgs.addSelf && filterArgs.unit) {
     validUnits.push(filterArgs.unit);
   }
   return validUnits;
