@@ -1,7 +1,13 @@
 // Utility function to get the correct asset path for both development and production
 export function getAssetPath(path: string): string {
-  // Assets are now in the public directory, so they're served from the root
-  return `/assets/${path}`;
+  // Assets are now in the public directory
+  // In development, serve from root
+  // In production, include the base path (/artimine/)
+  if (import.meta.env.DEV) {
+    return `/assets/${path}`;
+  } else {
+    return `/artimine/assets/${path}`;
+  }
 }
 
 // Specific asset path helpers
