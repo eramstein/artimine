@@ -1,0 +1,45 @@
+{
+  "id": "not_a_fox",
+  "name": "Not a Fox",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 6,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "resist": 5
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageEnemyPlayer",
+            "args": {
+              "damage": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

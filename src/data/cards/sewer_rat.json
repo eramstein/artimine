@@ -1,0 +1,41 @@
+{
+  "id": "sewer_rat",
+  "name": "Sewer Rat",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 1,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["beast"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "poison",
+              "duration": 1,
+              "range": {
+                "sameRow": true,
+                "ennemies": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,10 @@ import path from 'path';
 import sharp from 'sharp';
 
 // Settings
-const rootDir = './src/assets/images/cards'; // starting folder
+const rootDirs = [
+  './public/assets/images/cards', // cards folder
+  './public/assets/images/lands', // lands folder
+]; // starting folders
 const overwriteOriginals = true; // true = replace PNGs with JPGs
 const targetWidth = 512; // desired width
 const targetHeight = 512; // desired height
@@ -64,4 +67,12 @@ function walkDir(dir) {
   });
 }
 
-walkDir(rootDir);
+// Process each directory
+rootDirs.forEach((dir) => {
+  console.log(`\n🔄 Processing directory: ${dir}`);
+  if (fs.existsSync(dir)) {
+    walkDir(dir);
+  } else {
+    console.log(`⚠️ Directory not found: ${dir}`);
+  }
+});

@@ -830,6 +830,28 @@
     ]
   },
   {
+    "id": "iron_golem",
+    "name": "Iron Golem",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 2,
+    "maxHealth": 5,
+    "unitTypes": [
+      "mechanical"
+    ],
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "retaliate": 3,
+      "armor": 3
+    }
+  },
+  {
     "id": "jumping_hare",
     "name": "Jumping Hare",
     "rarity": "uncommon",
@@ -1072,6 +1094,51 @@
     ]
   },
   {
+    "id": "not_a_fox",
+    "name": "Not a Fox",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 6,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "resist": 5
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageEnemyPlayer",
+              "args": {
+                "damage": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "not_so_little_pig",
     "name": "Not So Little Pig",
     "rarity": "common",
@@ -1266,6 +1333,49 @@
       {
         "color": "red",
         "count": 1
+      }
+    ]
+  },
+  {
+    "id": "sewer_rat",
+    "name": "Sewer Rat",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "poison",
+                "duration": 1,
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },

@@ -60,6 +60,7 @@ export enum UnitType {
   Demon = 'demon',
   Halfing = 'halfing',
   Plant = 'plant',
+  Mechanical = 'mechanical',
 }
 
 export enum CounterType {

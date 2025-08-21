@@ -1,0 +1,20 @@
+{
+  "id": "iron_golem",
+  "name": "Iron Golem",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 2,
+  "maxHealth": 5,
+  "unitTypes": ["mechanical"],
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "retaliate": 3,
+    "armor": 3
+  }
+}

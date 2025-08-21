@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "not_a_fox",
+      "sewer_rat",
       "angry_mob",
       "city_guard",
       "street_slinger",
@@ -56,7 +58,7 @@
       "decaying_ray",
       "energyze"
     ],
-    "lands": ["forest", "mountain", "island", "swamp"]
+    "lands": ["forest", "mountain", "island", "city"]
   },
   "foe": {
     "name": "The Dude",
