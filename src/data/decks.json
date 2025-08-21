@@ -2,6 +2,7 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "coal_demon",
       "assassin",
       "execution",
       "not_a_fox",

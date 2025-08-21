@@ -1,0 +1,53 @@
+{
+  "id": "coal_demon",
+  "name": "Coal Demon",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 4,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["elemental", "demon"],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "summon",
+            "args": {
+              "randomPositions": 2,
+              "summonedUnit": {
+                "id": "coal_demon_shard",
+                "name": "Coal Demon Shard",
+                "type": "unit",
+                "rarity": "common",
+                "unitTypes": ["demon"],
+                "cost": 1,
+                "power": 2,
+                "maxHealth": 3,
+                "colors": [{ "color": "black", "count": 1 }],
+                "keywords": {
+                  "retaliate": 1
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

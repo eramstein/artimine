@@ -4,7 +4,6 @@ import {
   damagePlayer,
   damageUnit,
   getOpposingPlayer,
-  removeStaticKeyword,
   addCounters,
   untapPlayer,
   incrementColor,
@@ -16,6 +15,7 @@ import {
   healUnit,
   drawCard,
   clearUnitStaticAbilities,
+  getRandomEmptyAlliedCells,
 } from '@/lib/battle';
 import { CardColor, CounterType, StatusType } from '@/lib/_model';
 import type {
@@ -23,7 +23,6 @@ import type {
   Position,
   UnitCard,
   UnitDeployed,
-  UnitKeywordDefinition,
   UnitEndOfTurnEffects,
   UnitCardTemplate,
   TargetDefinition,
@@ -184,19 +183,29 @@ export const DataEffectTemplates: Record<
   summon: ({
     summonedUnit,
     isRespawn,
+    randomPositions,
   }: {
     summonedUnit: UnitCardTemplate;
     isRespawn?: boolean;
+    randomPositions?: number;
   }) => ({
     fn: ({ targets, player, unit }) => {
       if (isRespawn) {
         const createdUnit = makeUnit(player.id, summonedUnit);
         summonUnit(createdUnit, unit.position);
       } else {
-        (targets[0] as Position[]).forEach((cell: Position) => {
-          const createdUnit = makeUnit(player.id, summonedUnit);
-          summonUnit(createdUnit, cell);
-        });
+        if (randomPositions) {
+          const cells = getRandomEmptyAlliedCells(player.isPlayer, randomPositions);
+          cells.forEach((cell) => {
+            const createdUnit = makeUnit(player.id, summonedUnit);
+            summonUnit(createdUnit, cell);
+          });
+        } else {
+          (targets[0] as Position[]).forEach((cell: Position) => {
+            const createdUnit = makeUnit(player.id, summonedUnit);
+            summonUnit(createdUnit, cell);
+          });
+        }
       }
     },
     label: () =>

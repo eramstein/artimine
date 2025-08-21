@@ -47,3 +47,8 @@ export function getEmptyCells(isPlayer: boolean): Position[] {
   }
   return positions;
 }
+export function getRandomEmptyAlliedCells(isPlayer: boolean, count: number = 1): Position[] {
+  const emptyCells = getEmptyCells(isPlayer);
+  const alliedCells = emptyCells.filter((cell) => isOnPlayersSide(cell, isPlayer ? 0 : 1));
+  return alliedCells.sort(() => Math.random() - 0.5).slice(0, count);
+}

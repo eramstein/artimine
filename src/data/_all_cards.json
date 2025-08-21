@@ -72,6 +72,48 @@
     ]
   },
   {
+    "id": "assassin",
+    "name": "Assassin",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 2,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "destroyUnit",
+              "args": {}
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bear_minimum",
     "name": "Bear Minimum",
     "rarity": "uncommon",
@@ -195,6 +237,69 @@
       "lance": true,
       "retaliate": 1
     }
+  },
+  {
+    "id": "coal_demon",
+    "name": "Coal Demon",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 8,
+    "power": 4,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "elemental",
+      "demon"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "summon",
+              "args": {
+                "randomPositions": 2,
+                "summonedUnit": {
+                  "id": "coal_demon_shard",
+                  "name": "Coal Demon Shard",
+                  "type": "unit",
+                  "rarity": "common",
+                  "unitTypes": [
+                    "demon"
+                  ],
+                  "cost": 1,
+                  "power": 2,
+                  "maxHealth": 3,
+                  "colors": [
+                    {
+                      "color": "black",
+                      "count": 1
+                    }
+                  ],
+                  "keywords": {
+                    "retaliate": 1
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "dark_ritual",
@@ -474,6 +579,33 @@
       "retaliate": 3,
       "armor": 4
     }
+  },
+  {
+    "id": "execution",
+    "name": "Execution",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 6,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "destroyUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "ferocious_badger",
