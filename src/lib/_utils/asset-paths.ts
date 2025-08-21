@@ -1,12 +1,7 @@
 // Utility function to get the correct asset path for both development and production
 export function getAssetPath(path: string): string {
-  // In development, Vite serves assets from the src directory
-  // In production, assets are processed and served from the base path
-  if (import.meta.env.DEV) {
-    return `/src/assets/${path}`;
-  } else {
-    return `/artimine/assets/${path}`;
-  }
+  // Assets are now in the public directory, so they're served from the root
+  return `/assets/${path}`;
 }
 
 // Specific asset path helpers
