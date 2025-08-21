@@ -3,11 +3,12 @@
   import { CardColor, CardType, UnitType } from '../../_model/enums';
   import { DataEffectTemplates } from '../../battle/effects/effectTemplates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let { card }: { card: Card } = $props();
 
   // Create the background image path using the card id
-  let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.jpg`);
+  let cardImagePath = $derived(getCardImagePath(card.id));
 
   // Check if card is a unit card (works with Card type)
   function isUnitCard(card: Card): card is Card & {

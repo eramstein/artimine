@@ -3,10 +3,11 @@
   import { uiState } from '@lib/_state';
   import { attackLand } from '@lib/battle/combat';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
+  import { getLandImagePath } from '@lib/_utils/asset-paths';
 
   let { land }: { land: Land } = $props();
 
-  let imagePath = $derived(`/src/assets/images/lands/${land.id}.jpg`);
+  let imagePath = $derived(getLandImagePath(land.id));
   let isValidTarget = $derived(uiState.battle.validTargets?.lands?.[land.instanceId] === true);
 
   function handleLandClick() {

@@ -9,6 +9,7 @@
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
   import { DataEffectTemplates } from '@lib/battle/effects/effectTemplates';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let {
     card,
@@ -17,7 +18,7 @@
   }: { card: Card; displayKeywords?: boolean; inHand?: boolean } = $props();
 
   // Create the background image path using the card id
-  let cardImagePath = $derived(`/src/assets/images/cards/${card.id}.jpg`);
+  let cardImagePath = $derived(getCardImagePath(card.id));
 
   // Check if this card is the currently pending spell
   let isPendingSpell = $derived(

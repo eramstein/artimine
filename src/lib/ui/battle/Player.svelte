@@ -7,6 +7,7 @@
   import { attackPlayer } from '@lib/battle/combat';
   import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '@lib/battle/player';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
+  import { getCharacterImagePath } from '@lib/_utils/asset-paths';
 
   let { player }: { player: Player } = $props();
 
@@ -14,7 +15,7 @@
   let characterImageName = $derived(player.name.toLowerCase().replace(/\s+/g, '_'));
 
   // Create the image path
-  let characterImagePath = $derived(`/src/assets/images/characters/${characterImageName}.jpg`);
+  let characterImagePath = $derived(getCharacterImagePath(characterImageName));
 
   // Get available colors for the player
   let availableColors = $derived(Object.entries(player.colors || {}));

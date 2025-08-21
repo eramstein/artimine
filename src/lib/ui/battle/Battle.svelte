@@ -9,13 +9,14 @@
   import GraveyardModal from './GraveyardModal.svelte';
   import CardFull from '../cards/CardFull.svelte';
   import { nextTurn } from '@lib/battle/turn';
+  import { getTableImagePath } from '@lib/_utils/asset-paths';
 
   // Derived value to check if game is won
   let gameWon = $derived(bs.playerIdWon !== null);
   let winningPlayer = $derived(gameWon ? bs.players[bs.playerIdWon!] : null);
 </script>
 
-<div class="battle">
+<div class="battle" style="background-image: url('{getTableImagePath()}');">
   <div class="top-section">
     <Player player={bs.players[0]} />
     <Board />
@@ -63,7 +64,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('/src/assets/images/table.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

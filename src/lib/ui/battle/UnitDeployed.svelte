@@ -12,11 +12,12 @@
   import Counters from './Counters.svelte';
   import { targetUnit } from '@lib/ui/_helpers/abilities';
   import { TargetType } from '@lib/_model/enums';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let { unit }: { unit: UnitDeployed } = $props();
 
   // Create the background image path using the card id (same as Card.svelte)
-  let cardImagePath = $derived(`/src/assets/images/cards/${unit.id}.jpg`);
+  let cardImagePath = $derived(getCardImagePath(unit.id));
 
   // Determine if unit is active for border styling
   let isActive = $derived(isUnitActive(unit));

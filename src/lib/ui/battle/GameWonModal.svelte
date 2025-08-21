@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { Player } from '@lib/_model';
+  import { getCharacterImagePath } from '@lib/_utils/asset-paths';
 
   let { winningPlayer }: { winningPlayer: Player } = $props();
+
+  // Convert player name to filename format (lowercase with underscores)
+  let characterImageName = $derived(winningPlayer.name.toLowerCase().replace(/\s+/g, '_'));
+  let characterImagePath = $derived(getCharacterImagePath(characterImageName));
 </script>
 
 <div class="game-won-overlay">
@@ -11,12 +16,7 @@
       <p>{winningPlayer.name} has won the game!</p>
     </div>
     <div class="winner-info">
-      <div
-        class="winner-avatar"
-        style="background-image: url('/src/assets/images/characters/{winningPlayer.name
-          .toLowerCase()
-          .replace(/\s+/g, '_')}.jpg')"
-      ></div>
+      <div class="winner-avatar" style="background-image: url('{characterImagePath}')"></div>
       <div class="winner-details">
         <h2>{winningPlayer.name}</h2>
         <p>Final Life: {winningPlayer.life}</p>

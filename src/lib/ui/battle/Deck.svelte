@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Player } from '@lib/_model';
   import Tooltip from '../Tooltip.svelte';
+  import { getCardBackImagePath } from '@lib/_utils/asset-paths';
 
   let { player }: { player: Player } = $props();
 
@@ -23,7 +24,7 @@
           class="card-back"
           style="z-index: {stackSize - index}; transform: translateY({index * 3}px);"
         >
-          <img src="/src/assets/images/card_back.jpg" alt="Card Back" class="card-image" />
+          <img src={getCardBackImagePath()} alt="Card Back" class="card-image" />
         </div>
       {/each}
     </div>

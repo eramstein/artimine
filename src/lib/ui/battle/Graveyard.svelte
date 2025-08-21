@@ -2,6 +2,7 @@
   import type { Player } from '@lib/_model';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import Tooltip from '../Tooltip.svelte';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let { player }: { player: Player } = $props();
 
@@ -14,7 +15,7 @@
   );
 
   // Create the background image path using the card id
-  let cardImagePath = $derived(topCard ? `/src/assets/images/cards/${topCard.id}.jpg` : '');
+  let cardImagePath = $derived(topCard ? getCardImagePath(topCard.id) : '');
 
   function handleGraveyardClick() {
     uiState.battle.graveyardModal.visible = true;

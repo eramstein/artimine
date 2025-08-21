@@ -1,4 +1,6 @@
 // Sound effects for battle actions
+import { getSoundPath } from '@lib/_utils/asset-paths';
+
 class SoundManager {
   private sounds: Map<string, HTMLAudioElement> = new Map();
 
@@ -8,9 +10,9 @@ class SoundManager {
 
   private preloadSounds() {
     const soundFiles = {
-      'karate-chop': '/src/assets/sounds/battle/karate-chop.mp3',
-      'power-punch': '/src/assets/sounds/battle/power-punch.mp3',
-      jumpland: '/src/assets/sounds/battle/jumpland.mp3',
+      'karate-chop': getSoundPath('karate-chop'),
+      'power-punch': getSoundPath('power-punch'),
+      jumpland: getSoundPath('jumpland'),
     };
 
     for (const [name, path] of Object.entries(soundFiles)) {

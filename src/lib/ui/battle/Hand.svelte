@@ -2,6 +2,7 @@
   import type { Player } from '@lib/_model';
   import Card from './Card.svelte';
   import { CARD_WIDTH } from '@lib/_config/ui-config';
+  import { getCardBackImagePath } from '@lib/_utils/asset-paths';
 
   let { player }: { player: Player } = $props();
 
@@ -51,7 +52,7 @@
       {#if player.isPlayer}
         <Card {card} />
       {:else}
-        <div class="gray-card"></div>
+        <div class="gray-card" style="background-image: url('{getCardBackImagePath()}');"></div>
       {/if}
     </div>
   {/each}
@@ -134,7 +135,6 @@
   .gray-card {
     width: var(--card-width, 200px);
     height: var(--card-height, 240px);
-    background-image: url('/src/assets/images/card_back.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

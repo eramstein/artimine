@@ -1,0 +1,7 @@
+# Exclude tools folder from deployment builds
+src/tools/
+node_modules/
+.git/
+.gitignore
+README.md
+*.log
