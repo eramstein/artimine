@@ -134,6 +134,14 @@ export const baseEffects: BaseEffect[] = [
       return args.cardCount * 16;
     },
   },
+  {
+    effectName: 'destroyUnit',
+    argNames: [],
+    budget: (args, targets) => {
+      const targetMultiplier = getTargetCount(targets);
+      return 34 * targetMultiplier;
+    },
+  },
 ];
 
 // Helper function to get a base effect by name

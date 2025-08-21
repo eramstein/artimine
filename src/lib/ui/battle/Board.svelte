@@ -13,7 +13,7 @@
     setUnitsTargets,
     toggleUnitSelection,
   } from '@lib/ui/_helpers/selections';
-  import { targetCell } from '@lib/ui/_helpers/abilities';
+  import { targetCell } from '@lib/ui/_helpers/targetting';
   import { fly } from 'svelte/transition';
 
   // Create arrays for rows and columns based on config

@@ -21,6 +21,7 @@ export type UiState = {
     } | null;
     abilityPending: { unit: UnitDeployed; ability: Ability } | null;
     spellPending: SpellCard | null;
+    triggeredAbilityPending: { unit: UnitDeployed; ability: Ability; triggerParams: any } | null;
     selectedTargets: EffectTargets[][];
     currentEffectIndex: number;
     currentTargetIndex: number;

@@ -1,0 +1,40 @@
+{
+  "id": "assassin",
+  "name": "Assassin",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 2,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "destroyUnit",
+            "args": {}
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

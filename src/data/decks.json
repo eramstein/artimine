@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "assassin",
+      "execution",
       "not_a_fox",
       "sewer_rat",
       "angry_mob",

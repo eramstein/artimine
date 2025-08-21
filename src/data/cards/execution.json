@@ -1,0 +1,27 @@
+{
+  "id": "execution",
+  "name": "Execution",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 6,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "destroyUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
   import Counters from './Counters.svelte';
-  import { targetUnit } from '@lib/ui/_helpers/abilities';
+  import { targetUnit } from '@lib/ui/_helpers/targetting';
   import { TargetType } from '@lib/_model/enums';
   import { getCardImagePath } from '@lib/_utils/asset-paths';
 

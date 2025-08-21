@@ -240,4 +240,16 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}`,
   }),
+  destroyUnit: () => ({
+    fn: ({ targets }) => {
+      const units = targets[0] as UnitDeployed[];
+      units.forEach((u) => {
+        destroyUnit(u);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}`;
+    },
+  }),
 };

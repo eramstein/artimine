@@ -8,6 +8,7 @@ export const uiState: UiState = $state({
     validTargets: null,
     abilityPending: null,
     spellPending: null,
+    triggeredAbilityPending: null,
     selectedTargets: [],
     currentTargetIndex: 0,
     targetBeingSelected: null,

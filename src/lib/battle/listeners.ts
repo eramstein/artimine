@@ -8,8 +8,8 @@ import {
   type Land,
   type EffectTargets,
 } from '@/lib/_model';
-import { getEligibleTargets } from './target';
 import { DataEffectTemplates, filterUnits } from './effects';
+import { activateTriggeredAbility } from '@/lib/ui/_helpers/targetting';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
   bs.units.forEach((u) => {
@@ -17,24 +17,28 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
       ?.filter((a) => checkTriggerType(a, type))
       .filter((a) => checkTriggerCondition(a, u, { ...rest }))
       .forEach((a) => {
-        // TODO: if a.actions[0].targets, ask player or AI for targets
-        // (store ability in a "pendingTriggeredAbilities" array ?)
-        // console.log(u.name + ' triggers ' + a.actions[0].text, a, { ...rest });
         const triggerParams: any = { ...rest };
 
-        // Execute each effect in the ability
-        a.actions.forEach((actionDef) => {
-          let targets: EffectTargets = [];
-          if (actionDef.targets && actionDef.targets.length > 0) {
-            targets = getEligibleTargets(u, actionDef.targets[0]) as EffectTargets;
-          }
-          DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
-            unit: u,
-            targets: [targets],
-            triggerParams,
-            player: bs.players[u.ownerPlayerId],
+        // Check if any action in the ability requires targeting
+        const hasTargets = a.actions.some(
+          (actionDef) => actionDef.targets && actionDef.targets.length > 0
+        );
+
+        if (hasTargets) {
+          // If targeting is required, set up the UI state for user selection
+          activateTriggeredAbility(u, a, triggerParams);
+        } else {
+          // If no targeting is required, execute immediately
+          a.actions.forEach((actionDef) => {
+            let targets: EffectTargets = [];
+            DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
+              unit: u,
+              targets: [targets],
+              triggerParams,
+              player: bs.players[u.ownerPlayerId],
+            });
           });
-        });
+        }
       });
   });
 }

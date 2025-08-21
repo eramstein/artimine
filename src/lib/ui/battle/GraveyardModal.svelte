@@ -2,7 +2,7 @@
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { bs } from '@lib/_state';
   import Card from './Card.svelte';
-  import { targetCard } from '@lib/ui/_helpers/abilities';
+  import { targetCard } from '@lib/ui/_helpers/targetting';
 
   // Get the player from the battle state using the playerId from UI state
   let player = $derived(

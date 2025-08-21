@@ -3,7 +3,7 @@
   import { CARD_WIDTH, CARD_HEIGHT } from '@lib/_config/ui-config';
   import { CardColor, CardType, UnitType } from '@lib/_model/enums';
   import { isPayable } from '@lib/battle/cost';
-  import { activateSpell } from '@lib/ui/_helpers/abilities';
+  import { activateSpell } from '@lib/ui/_helpers/targetting';
   import { uiState } from '@lib/_state';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';

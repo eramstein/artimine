@@ -16,6 +16,8 @@ import { isActivityPayable } from '@/lib/battle/cost';
 import { getPositionKey } from '@/lib/battle/boards';
 import { playSpell } from '@/lib/battle/spell';
 import { getEligibleTargets } from '@/lib/battle/target';
+import { DataEffectTemplates } from '@/lib/battle/effects/effectTemplates';
+import { bs } from '@/lib/_state';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (isActivityPayable(unit, ability) === false) {
@@ -82,6 +84,63 @@ export function activateSpell(spell: SpellCard) {
   }
 }
 
+export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, triggerParams: any) {
+  const ui = uiState.battle;
+  ui.triggeredAbilityPending = { unit, ability, triggerParams };
+  ui.currentEffectIndex = 0;
+  ui.currentTargetIndex = 0;
+  ui.selectedTargets = [];
+
+  const actions = ability.actions || [];
+  if (actions.length > 0) {
+    const firstEffect = actions[0];
+    if (firstEffect.targets && firstEffect.targets.length > 0) {
+      ui.targetBeingSelected = firstEffect.targets[0];
+      highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]));
+    } else {
+      ui.targetBeingSelected = null;
+      playTriggeredAbility(unit, ability, [], triggerParams);
+      clearUiState();
+    }
+  } else {
+    ui.targetBeingSelected = null;
+    playTriggeredAbility(unit, ability, [], triggerParams);
+    clearUiState();
+  }
+}
+
+function playTriggeredAbility(
+  unit: UnitDeployed,
+  ability: Ability,
+  targets: EffectTargets[][],
+  triggerParams: any
+) {
+  console.log(
+    unit.name +
+      ' uses triggered ability on ' +
+      (targets && targets.map((t) => JSON.stringify(t)).join(', '))
+  );
+
+  // Execute each effect in the ability
+  ability.actions.forEach((actionDef, actionIndex) => {
+    const effectTargets = [...targets[actionIndex]];
+    // If any TargetType is Self, replace the corresponding targets entry with [unit]
+    if (actionDef.targets) {
+      actionDef.targets.forEach((def, i) => {
+        if (def.type === TargetType.Self) {
+          effectTargets[i] = [unit];
+        }
+      });
+    }
+    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
+      unit,
+      targets: effectTargets,
+      triggerParams,
+      player: bs.players[unit.ownerPlayerId],
+    });
+  });
+}
+
 function highlightEligibleTargets(eligibleTargets: EffectTargets) {
   const ui = uiState.battle;
   if (ui.targetBeingSelected && ui.targetBeingSelected.type !== TargetType.Self) {
@@ -137,14 +196,20 @@ function clearUiState() {
   ui.targetBeingSelected = null;
   ui.abilityPending = null;
   ui.spellPending = null;
+  ui.triggeredAbilityPending = null;
   ui.validTargets = null;
 }
 
 function advanceTargetStep() {
   const ui = uiState.battle;
-  const actions = ui.abilityPending
-    ? ui.abilityPending.ability.actions || []
-    : ui.spellPending?.actions || [];
+  let actions: any[] = [];
+  if (ui.abilityPending) {
+    actions = ui.abilityPending.ability.actions || [];
+  } else if (ui.spellPending) {
+    actions = ui.spellPending.actions || [];
+  } else if (ui.triggeredAbilityPending) {
+    actions = ui.triggeredAbilityPending.ability.actions || [];
+  }
 
   if (actions.length === 0) {
     // No actions, play immediately
@@ -152,6 +217,13 @@ function advanceTargetStep() {
       playAbility(ui.abilityPending.unit, ui.abilityPending.ability, []);
     } else if (ui.spellPending) {
       playSpell(ui.spellPending, []);
+    } else if (ui.triggeredAbilityPending) {
+      playTriggeredAbility(
+        ui.triggeredAbilityPending.unit,
+        ui.triggeredAbilityPending.ability,
+        [],
+        ui.triggeredAbilityPending.triggerParams
+      );
     }
     clearUiState();
     return;
@@ -175,6 +247,10 @@ function advanceTargetStep() {
           ui.currentTargetIndex
         )
       );
+    } else if (ui.triggeredAbilityPending) {
+      highlightEligibleTargets(
+        getEligibleTargets(ui.triggeredAbilityPending.unit, targets[ui.currentTargetIndex])
+      );
     }
   } else {
     // All targets for current effect selected, move to next effect
@@ -193,6 +269,10 @@ function advanceTargetStep() {
           highlightEligibleTargets(
             getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentEffectIndex, 0)
           );
+        } else if (ui.triggeredAbilityPending) {
+          highlightEligibleTargets(
+            getEligibleTargets(ui.triggeredAbilityPending.unit, nextEffect.targets[0])
+          );
         }
       } else {
         // Next effect has no targets, advance again
@@ -204,6 +284,13 @@ function advanceTargetStep() {
         playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
       } else if (ui.spellPending) {
         playSpell(ui.spellPending, ui.selectedTargets);
+      } else if (ui.triggeredAbilityPending) {
+        playTriggeredAbility(
+          ui.triggeredAbilityPending.unit,
+          ui.triggeredAbilityPending.ability,
+          ui.selectedTargets,
+          ui.triggeredAbilityPending.triggerParams
+        );
       }
       clearUiState();
     }
@@ -212,7 +299,11 @@ function advanceTargetStep() {
 
 export function targetUnit(unit: UnitDeployed) {
   const ui = uiState.battle;
-  if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
+  if (
+    (!ui.abilityPending && !ui.spellPending && !ui.triggeredAbilityPending) ||
+    !ui.targetBeingSelected
+  )
+    return;
   const currentEffectIdx = ui.currentEffectIndex || 0;
   const currentTargetIdx = ui.currentTargetIndex || 0;
 
@@ -232,7 +323,7 @@ export function targetUnit(unit: UnitDeployed) {
 export function targetCell(position: Position) {
   const ui = uiState.battle;
   if (
-    (!ui.abilityPending && !ui.spellPending) ||
+    (!ui.abilityPending && !ui.spellPending && !ui.triggeredAbilityPending) ||
     !ui.targetBeingSelected ||
     ![TargetType.Cell, TargetType.AllyCell, TargetType.EmptyCell].includes(
       ui.targetBeingSelected.type
@@ -257,7 +348,11 @@ export function targetCell(position: Position) {
 
 export function targetCard(card: Card) {
   const ui = uiState.battle;
-  if ((!ui.abilityPending && !ui.spellPending) || !ui.targetBeingSelected) return;
+  if (
+    (!ui.abilityPending && !ui.spellPending && !ui.triggeredAbilityPending) ||
+    !ui.targetBeingSelected
+  )
+    return;
   const currentEffectIdx = ui.currentEffectIndex || 0;
   const currentTargetIdx = ui.currentTargetIndex || 0;
 
