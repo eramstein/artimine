@@ -73,19 +73,19 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
   if (filterArgs.sameColumn) {
     labels.push('same column');
   }
+  if (filterArgs.adjacent) {
+    labels.push('adjacent');
+  }
   if (filterArgs.allies) {
     labels.push('allies');
   }
   if (filterArgs.ennemies) {
     labels.push('ennemies');
   }
-  if (filterArgs.adjacent) {
-    labels.push('adjacent');
-  }
   if (filterArgs.unitType) {
     labels.push(filterArgs.unitType);
   }
-  return `Range: ${labels.join(' ')}`;
+  return `Range: ${labels.join(' ')}.`;
 }
 
 // helper function to loop units.

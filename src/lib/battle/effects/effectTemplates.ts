@@ -127,7 +127,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Give ${keyword} to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      return `Give ${keyword} ${keyWordValue ? keyWordValue : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   temporaryEffect: ({

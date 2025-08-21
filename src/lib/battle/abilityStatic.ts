@@ -75,13 +75,18 @@ export function addStaticKeyword(
         sm.source.effectName === effectName
     ).length > 0
   ) {
+    console.log('had it already');
     return false;
   }
   if (!targetUnit.keywords) {
-    targetUnit.keywords = { [keyword.key]: 0 };
+    targetUnit.keywords = {};
   }
   if (typeof keyword.value === 'number') {
-    (targetUnit.keywords[keyword.key] as number) += keyword.value;
+    if (targetUnit.keywords[keyword.key]) {
+      (targetUnit.keywords[keyword.key] as number) += keyword.value;
+    } else {
+      (targetUnit.keywords[keyword.key] as number) = keyword.value;
+    }
   } else {
     (targetUnit.keywords[keyword.key] as boolean) = keyword.value as boolean;
   }
@@ -90,4 +95,5 @@ export function addStaticKeyword(
     permanent,
     keyword,
   });
+  console.log('added static keyword', keyword, JSON.stringify(targetUnit.keywords));
 }
