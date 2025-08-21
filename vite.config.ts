@@ -13,15 +13,4 @@ export default defineConfig(({ command }) => ({
       '@data': path.resolve(__dirname, './src/data'),
     },
   },
-  build: {
-    rollupOptions: {
-      external: (id) => {
-        // Only exclude tools folder during build, not during development
-        if (command === 'build') {
-          return id.includes('/tools/') || id.includes('\\tools\\');
-        }
-        return false;
-      },
-    },
-  },
 }));

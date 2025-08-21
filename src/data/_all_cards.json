@@ -1,0 +1,1646 @@
+[
+  {
+    "id": "angry_mob",
+    "name": "Angry Mob",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "unitType": "human"
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "artificial_plague",
+    "name": "Artificial Plague",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "decay",
+            "counterValue": 1,
+            "range": {
+              "ennemies": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "bear_minimum",
+    "name": "Bear Minimum",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 5,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "retaliate": 2
+    }
+  },
+  {
+    "id": "bison",
+    "name": "Bison",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 7,
+    "power": 8,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "trample": true,
+      "retaliate": 3
+    }
+  },
+  {
+    "id": "boring_boar",
+    "name": "Boring Boar",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 3,
+    "maxHealth": 3,
+    "unitTypes": [
+      "beast"
+    ],
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "caring_druidess",
+    "name": "Caring Druidess",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "actions": [
+          {
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ],
+            "effect": {
+              "name": "healUnit",
+              "args": {
+                "health": 99
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "Activated"
+        },
+        "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "city_guard",
+    "name": "City Guard",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "lance": true,
+      "retaliate": 1
+    }
+  },
+  {
+    "id": "dark_ritual",
+    "name": "Dark Ritual",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "darkRitual",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit_allies",
+            "count": 1
+          },
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "decaying_ray",
+    "name": "Decaying Ray",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "decay",
+            "counterValue": 2,
+            "range": {
+              "sameRow": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "deer",
+    "name": "Deer",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 4,
+    "maxHealth": 5,
+    "unitTypes": [
+      "beast"
+    ],
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "dryad",
+    "name": "Dryad",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "keywords": {
+      "regeneration": 4
+    }
+  },
+  {
+    "id": "dwarf_berserker",
+    "name": "Dwarf Berserker",
+    "type": "unit",
+    "cost": 2,
+    "power": 3,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "rarity": "common",
+    "unitTypes": [
+      "dwarf"
+    ],
+    "keywords": {
+      "zerk": true
+    }
+  },
+  {
+    "id": "earthquake",
+    "name": "Earthquake",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 3,
+            "range": {
+              "all": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "ebonheart",
+    "name": "Ebonheart",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "rarity": "uncommon",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "targets": [
+              {
+                "type": "cell_ally",
+                "count": 1
+              }
+            ],
+            "effect": {
+              "name": "summon",
+              "args": {
+                "summonedUnit": {
+                  "id": "shroomy_shooty",
+                  "name": "Shroomy Shooty",
+                  "type": "unit",
+                  "rarity": "common",
+                  "unitTypes": [
+                    "mushroom"
+                  ],
+                  "cost": 1,
+                  "power": 1,
+                  "maxHealth": 1,
+                  "colors": [
+                    {
+                      "color": "green",
+                      "count": 1
+                    }
+                  ],
+                  "keywords": {
+                    "ranged": true
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "cost": 1,
+        "trigger": {
+          "type": "Activated"
+        },
+        "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "elite_crossbowmen",
+    "name": "Elite Crossbowmen",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 6,
+    "power": 5,
+    "maxHealth": 7,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "retaliate": 2
+    }
+  },
+  {
+    "id": "energyze",
+    "name": "Energyze",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "untapPlayer",
+          "args": {}
+        }
+      }
+    ]
+  },
+  {
+    "id": "ent",
+    "name": "Ent",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 8,
+    "power": 7,
+    "maxHealth": 7,
+    "colors": [
+      {
+        "color": "green",
+        "count": 4
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "keywords": {
+      "retaliate": 3,
+      "armor": 4
+    }
+  },
+  {
+    "id": "ferocious_badger",
+    "name": "Ferocious Badger",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 4,
+    "maxHealth": 5,
+    "unitTypes": [
+      "beast"
+    ],
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "retaliate": 5
+    }
+  },
+  {
+    "id": "fireball",
+    "name": "Fireball",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 4,
+            "range": {
+              "addSelf": true,
+              "adjacent": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "frenzied_shaman",
+    "name": "Frenzied Shaman",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "rarity": "common",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 1
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "allies": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "gate_keepers",
+    "name": "Gate Keepers",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 7,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 4
+    }
+  },
+  {
+    "id": "gaul_brawler",
+    "name": "Gaul Brawler",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 5,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "cleave": true,
+      "retaliate": 1
+    }
+  },
+  {
+    "id": "giant_growth",
+    "name": "Giant Growth",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "growth",
+            "counterValue": 3
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "giant_spider",
+    "name": "Giant Spider",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "keywords": {
+      "retaliate": 1,
+      "poisonous": 2
+    }
+  },
+  {
+    "id": "grim_guard",
+    "name": "Grim Guard",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "rarity": "common",
+    "keywords": {
+      "ranged": true
+    }
+  },
+  {
+    "id": "guinea_pig",
+    "name": "Guinea Pig",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "transferCounters",
+          "args": {
+            "counterType": "decay"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "healing_salve",
+    "name": "Healing Salve",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "healUnit",
+          "args": {
+            "health": "8"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hobbit_gardener",
+    "name": "Hobbit Gardener",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "halfing"
+    ],
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "summon",
+              "args": {
+                "summonedUnit": {
+                  "id": "shrubbery",
+                  "name": "Shrubbery",
+                  "rarity": "common",
+                  "type": "unit",
+                  "cost": 1,
+                  "power": 0,
+                  "maxHealth": 1,
+                  "colors": [
+                    {
+                      "color": "green",
+                      "count": 1
+                    }
+                  ],
+                  "unitTypes": [
+                    "plant"
+                  ]
+                },
+                "isRespawn": true
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "Before Moving",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "hobbit_villager",
+    "name": "Hobbit Villager",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "halfing"
+    ],
+    "keywords": {
+      "retaliate": 1,
+      "regeneration": 1
+    }
+  },
+  {
+    "id": "hungry_wolf",
+    "name": "Hungry Wolf",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 4,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ]
+  },
+  {
+    "id": "jumping_hare",
+    "name": "Jumping Hare",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "keywords": {
+      "haste": true,
+      "moveAndAttack": true
+    }
+  },
+  {
+    "id": "lightning_bolt",
+    "name": "Lightning Bolt",
+    "type": "spell",
+    "rarity": "common",
+    "cost": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 3
+          }
+        },
+        "targets": [
+          {
+            "type": "unit"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "luxurious_growth",
+    "name": "Luxurious Growth",
+    "type": "spell",
+    "rarity": "common",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "incrementColor",
+          "args": {
+            "color": "green"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mass_root",
+    "name": "Mass Root",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "applyUnitStatus",
+          "args": {
+            "statusType": "root",
+            "duration": 1,
+            "range": {
+              "ennemies": true
+            }
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mega_moss_monster",
+    "name": "Mega Moss Monster",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 9,
+    "power": 12,
+    "maxHealth": 12,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "plant"
+    ]
+  },
+  {
+    "id": "modis_chosen",
+    "name": "Modi's Chosen",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "rarity": "common",
+    "keywords": {
+      "haste": true,
+      "zerk": true
+    }
+  },
+  {
+    "id": "mosquito",
+    "name": "Mosquito",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "rarity": "common",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "decay",
+                "counterValue": 1,
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "mycosed_bear",
+    "name": "Mycosed Bear",
+    "type": "unit",
+    "cost": 3,
+    "power": 3,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "rarity": "common",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "summon",
+              "args": {
+                "summonedUnit": {
+                  "id": "shroomy_shooty",
+                  "name": "Shroomy Shooty",
+                  "type": "unit",
+                  "rarity": "common",
+                  "unitTypes": [
+                    "mushroom"
+                  ],
+                  "cost": 1,
+                  "power": 1,
+                  "maxHealth": 1,
+                  "colors": [
+                    {
+                      "color": "green",
+                      "count": 1
+                    }
+                  ],
+                  "keywords": {
+                    "ranged": true
+                  }
+                },
+                "isRespawn": true
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "not_so_little_pig",
+    "name": "Not So Little Pig",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "allies": true,
+            "adjacent": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "pandy_panda",
+    "name": "Pandy Panda",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "regeneration": 3
+    },
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "raise_dead",
+    "name": "Raise Dead",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "reanimate",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "graveyard_card",
+            "count": 1
+          },
+          {
+            "type": "cell_empty",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "red_haired_bard",
+    "name": "Red Haired Bard",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "temporaryEffect",
+              "args": {
+                "effect": {
+                  "moveAndAttack": true
+                },
+                "range": {
+                  "allies": true,
+                  "adjacent": true
+                }
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "royal_halberdier",
+    "name": "Royal Halberdier",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 7,
+    "power": 5,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "lance": true,
+      "retaliate": 4,
+      "armor": 2
+    }
+  },
+  {
+    "id": "lion",
+    "name": "Savannah Lion",
+    "type": "unit",
+    "rarity": "common",
+    "cost": 2,
+    "power": 2,
+    "maxHealth": 2,
+    "keywords": {
+      "retaliate": 1
+    },
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "shroomy",
+    "name": "Shroomy",
+    "type": "unit",
+    "unitTypes": [
+      "mushroom"
+    ],
+    "cost": 1,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "rarity": "common",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "shroomy_protecs",
+    "name": "Shroomy Protecs",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "rarity": "common",
+    "unitTypes": [
+      "mushroom"
+    ],
+    "abilities": [
+      {
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "shroomy_protecs_resist",
+                "keyword": "resist",
+                "keyWordValue": 1,
+                "reset": true,
+                "range": {
+                  "adjacent": true
+                }
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "Static"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snek",
+    "name": "Snek",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "poisonous": 2
+    }
+  },
+  {
+    "id": "stampede",
+    "name": "Stampede",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 7,
+    "colors": [
+      {
+        "color": "green",
+        "count": 4
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "growth",
+            "counterValue": 3,
+            "range": {
+              "allies": true,
+              "unitType": "beast"
+            }
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "stampede",
+            "keyword": "trample",
+            "range": {
+              "allies": true,
+              "unitType": "beast"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "street_slinger",
+    "name": "Street Slinger",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true
+    }
+  },
+  {
+    "id": "teutonic_knight",
+    "name": "Teutonic Knight",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Static"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "teutonicKnight",
+                "keyword": "armor",
+                "keyWordValue": 2,
+                "range": {
+                  "allies": true,
+                  "adjacent": true
+                },
+                "reset": "true"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "the_beast",
+    "name": "The Beast",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 6,
+    "power": 6,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "green",
+        "count": 6
+      }
+    ],
+    "unitTypes": [
+      "beast",
+      "demon"
+    ],
+    "keywords": {
+      "trample": true,
+      "retaliate": 6
+    }
+  },
+  {
+    "id": "tim",
+    "name": "Tim",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "rarity": "common",
+    "abilities": [
+      {
+        "actions": [
+          {
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ],
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1
+              }
+            }
+          }
+        ],
+        "trigger": {
+          "type": "Activated"
+        },
+        "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "unicorn",
+    "name": "Unicorn",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 4,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "trample": true,
+      "retaliate": 3,
+      "resist": 2
+    }
+  },
+  {
+    "id": "wall_of_brambles",
+    "name": "Wall of brambles",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 0,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "plant"
+    ],
+    "keywords": {
+      "retaliate": 2
+    }
+  },
+  {
+    "id": "who_is_fat",
+    "name": "Who is fat ???",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "whoFat",
+            "keyword": "cleave"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "keywords": {
+      "retaliate": 1
+    }
+  },
+  {
+    "id": "young_hobbit",
+    "name": "Young Hobbit",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "hobbit"
+    ]
+  }
+]

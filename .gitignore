@@ -27,6 +27,3 @@ dist-ssr
 chroma
 
 .env
-
-# Generated files
-src/data/_all_cards.json
