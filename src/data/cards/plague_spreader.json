@@ -1,0 +1,37 @@
+{
+  "id": "plague_spreader",
+  "name": "Plague Spreader",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 9,
+  "power": 1,
+  "maxHealth": 13,
+  "colors": [
+    {
+      "color": "black",
+      "count": 4
+    }
+  ],
+  "unitTypes": ["human", "demon"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "decay",
+              "counterValue": 1,
+              "range": {
+                "all": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

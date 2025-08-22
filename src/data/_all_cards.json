@@ -135,6 +135,51 @@
     }
   },
   {
+    "id": "benevolent_monk",
+    "name": "Benevolent Monk",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Static",
+          "staticRecompute": [
+            "On Death",
+            "On Deploy"
+          ]
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "monkProtecs",
+                "keyword": "resist",
+                "keyWordValue": 2,
+                "range": {
+                  "addSelf": true,
+                  "allies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bison",
     "name": "Bison",
     "rarity": "common",
@@ -792,17 +837,20 @@
   {
     "id": "grim_guard",
     "name": "Grim Guard",
+    "rarity": "common",
     "type": "unit",
-    "cost": 2,
-    "power": 1,
-    "maxHealth": 4,
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
     "colors": [
       {
         "color": "black",
-        "count": 2
+        "count": 1
       }
     ],
-    "rarity": "common",
+    "unitTypes": [
+      "human"
+    ],
     "keywords": {
       "ranged": true
     }
@@ -1052,6 +1100,27 @@
         }
       }
     ]
+  },
+  {
+    "id": "market_beggar",
+    "name": "Market Beggar",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 1
+    }
   },
   {
     "id": "mass_root",
@@ -1311,6 +1380,51 @@
     ]
   },
   {
+    "id": "opera_singer",
+    "name": "Opera Singer",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 6,
+    "power": 5,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 4
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "daze",
+                "duration": 1,
+                "range": {
+                  "inFrontOf": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "pandy_panda",
     "name": "Pandy Panda",
     "rarity": "rare",
@@ -1349,6 +1463,46 @@
             "self": true
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "plague_spreader",
+    "name": "Plague Spreader",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 9,
+    "power": 1,
+    "maxHealth": 13,
+    "colors": [
+      {
+        "color": "black",
+        "count": 4
+      }
+    ],
+    "unitTypes": [
+      "human",
+      "demon"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "decay",
+                "counterValue": 1,
+                "range": {
+                  "all": true
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },
@@ -1653,17 +1807,17 @@
   {
     "id": "street_slinger",
     "name": "Street Slinger",
-    "rarity": "common",
     "type": "unit",
-    "cost": 3,
-    "power": 2,
-    "maxHealth": 3,
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 4,
     "colors": [
       {
         "color": "black",
-        "count": 1
+        "count": 2
       }
     ],
+    "rarity": "common",
     "unitTypes": [
       "human"
     ],

@@ -219,7 +219,9 @@ export const DataEffectTemplates: Record<
       const targetUnit = targets[1][0] as UnitDeployed;
       const sacrificedHealth = sacrificedUnit.health;
       damageUnit(targetUnit, sacrificedHealth);
-      destroyUnit(sacrificedUnit);
+      if (!sacrificedUnit.isDying) {
+        destroyUnit(sacrificedUnit);
+      }
     },
     label: () => 'Sacrifice a unit to deal damage equal to its health to another unit',
   }),
@@ -253,7 +255,9 @@ export const DataEffectTemplates: Record<
     fn: ({ targets }) => {
       const units = targets[0] as UnitDeployed[];
       units.forEach((u) => {
-        destroyUnit(u);
+        if (!u.isDying) {
+          destroyUnit(u);
+        }
       });
     },
     label: (targets: TargetDefinition[]) => {

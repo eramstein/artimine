@@ -1,0 +1,21 @@
+{
+  "id": "market_beggar",
+  "name": "Market Beggar",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 1
+  }
+}

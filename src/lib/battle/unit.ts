@@ -67,7 +67,7 @@ export function damageUnit(unit: UnitDeployed, damage: number, isCombatDamage = 
   }
   onDamageUnit(unit, damageDealt, isCombatDamage);
   unit.health -= damageDealt;
-  if (unit.health <= 0) {
+  if (unit.health <= 0 && !unit.isDying) {
     destroyUnit(unit);
     return true;
   }
@@ -82,6 +82,8 @@ export function healUnit(unit: UnitDeployed, amount: number) {
 }
 
 export function destroyUnit(unit: UnitDeployed) {
+  // prevent infinite loop in case the onUnitDeath triggers the same unit to die again
+  unit.isDying = true;
   onUnitDeath(unit);
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
   bs.players[unit.ownerPlayerId].graveyard.push(unit);
@@ -158,7 +160,7 @@ export const modifyUnitHealth = (unit: UnitDeployed, amount: number) => {
   if (unit.health > unit.maxHealth) {
     unit.health = unit.maxHealth;
   }
-  if (unit.health <= 0) {
+  if (unit.health <= 0 && !unit.isDying) {
     destroyUnit(unit);
   }
 };

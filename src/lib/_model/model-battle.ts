@@ -88,6 +88,7 @@ export interface UnitDeployed extends UnitCard, BaseCardDeployed {
     attack?: number;
   }[];
   counters: Partial<Record<CounterType, number>>;
+  isDying?: boolean;
 }
 
 export interface SpellCardDeployed extends SpellCard, BaseCardDeployed {

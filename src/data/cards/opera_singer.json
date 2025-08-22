@@ -3,7 +3,7 @@
   "name": "Opera Singer",
   "rarity": "common",
   "type": "unit",
-  "cost": 1,
+  "cost": 6,
   "power": 5,
   "maxHealth": 6,
   "colors": [

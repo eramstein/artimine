@@ -2,7 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
-      "opera_singer",
+      "market_beggar",
+      "plague_spreader",
       "benevolent_monk",
       "coal_demon",
       "assassin",
@@ -44,6 +45,7 @@
       "mass_root",
       "healing_salve",
       "giant_growth",
+      "opera_singer",
       "bear_minimum",
       "boring_boar",
       "deer",
