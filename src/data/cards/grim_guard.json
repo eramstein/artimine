@@ -1,12 +1,18 @@
 {
   "id": "grim_guard",
   "name": "Grim Guard",
-  "type": "unit",
-  "cost": 2,
-  "power": 1,
-  "maxHealth": 4,
-  "colors": [{ "color": "black", "count": 2 }],
   "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
   "keywords": {
     "ranged": true
   }

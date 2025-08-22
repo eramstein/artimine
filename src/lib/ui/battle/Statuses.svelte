@@ -13,6 +13,7 @@
     mezz: '💤',
     root: '🌱',
     stun: '💫',
+    daze: '😵',
   };
 
   // Tooltip content for each status
@@ -23,6 +24,7 @@
       `Mezzed (${value}): This unit cannot attack or move for ${value} more turns.`,
     root: (value: number) => `Rooted (${value}): This unit cannot move for ${value} more turns.`,
     stun: (value: number) => `Stunned (${value}): This unit cannot attack for ${value} more turns.`,
+    daze: (value: number) => `Dazed (${value}): This unit cannot attack for ${value} more turns.`,
   };
 
   function handleMouseEnter(status: string) {

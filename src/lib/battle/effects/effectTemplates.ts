@@ -106,7 +106,7 @@ export const DataEffectTemplates: Record<
     keyword,
     keyWordValue,
     range,
-    reset,
+    reset = true,
   }: {
     abilityName: string;
     keyword: keyof UnitKeywords;

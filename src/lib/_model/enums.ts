@@ -45,6 +45,7 @@ export enum StatusType {
   Mezz = 'mezz',
   Stun = 'stun',
   Root = 'root',
+  Daze = 'daze',
 }
 
 export enum UnitType {

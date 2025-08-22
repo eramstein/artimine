@@ -10,7 +10,13 @@ import { soundManager } from './sound';
 import { isLand, isPlayer } from '../_model/type-lookup-battle';
 
 export function canAttack(unit: UnitDeployed) {
-  return !unit.exhausted && !unit.hasAttacked && !unit.statuses.stun && !unit.statuses.mezz;
+  return (
+    !unit.exhausted &&
+    !unit.hasAttacked &&
+    !unit.statuses.stun &&
+    !unit.statuses.mezz &&
+    !unit.statuses.daze
+  );
 }
 
 export function validAttackTargets(unit: UnitDeployed): UnitDeployed[] | Land | Player {

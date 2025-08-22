@@ -245,6 +245,21 @@
                         <label class="checkbox-label">
                           <input
                             type="checkbox"
+                            checked={!!props.newAction.effectArgs[argName].inFrontOf}
+                            onchange={(e) => {
+                              const target = e.target as HTMLInputElement;
+                              if (target.checked) {
+                                props.newAction.effectArgs[argName].in = true;
+                              } else {
+                                delete props.newAction.effectArgs[argName].in;
+                              }
+                            }}
+                          />
+                          In Front Of
+                        </label>
+                        <label class="checkbox-label">
+                          <input
+                            type="checkbox"
                             checked={!!props.newAction.effectArgs[argName].sameColumn}
                             onchange={(e) => {
                               const target = e.target as HTMLInputElement;

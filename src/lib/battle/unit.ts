@@ -62,6 +62,9 @@ export function damageUnit(unit: UnitDeployed, damage: number, isCombatDamage = 
   if (damageDealt < 0) {
     damageDealt = 0;
   }
+  if (unit.statuses.mezz && damageDealt > 0) {
+    unit.statuses.mezz = 0;
+  }
   onDamageUnit(unit, damageDealt, isCombatDamage);
   unit.health -= damageDealt;
   if (unit.health <= 0) {
@@ -110,6 +113,28 @@ export function getAdjacentAlliesInRow(unit: UnitDeployed): UnitDeployed[] {
         u.position.column === unit.position.column - 1) &&
       u.ownerPlayerId === unit.ownerPlayerId
   );
+}
+
+export function getClosestEnnemyInRow(unit: UnitDeployed): UnitDeployed | undefined {
+  const ennemiesInRow = bs.units.filter(
+    (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+  );
+  if (ennemiesInRow.length === 0) {
+    return undefined;
+  }
+  console.log(
+    'ennemiesInRow',
+    ennemiesInRow.sort(
+      (a, b) =>
+        Math.abs(unit.position.column - a.position.column) -
+        Math.abs(unit.position.column - b.position.column)
+    )[0]
+  );
+  return ennemiesInRow.sort(
+    (a, b) =>
+      Math.abs(unit.position.column - a.position.column) -
+      Math.abs(unit.position.column - b.position.column)
+  )[0];
 }
 
 export function getOwnUnits(playerId: number): UnitDeployed[] {

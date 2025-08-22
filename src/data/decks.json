@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "opera_singer",
+      "benevolent_monk",
       "coal_demon",
       "assassin",
       "execution",

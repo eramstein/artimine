@@ -138,6 +138,7 @@ export interface UnitStatuses {
   mezz?: number;
   root?: number;
   stun?: number;
+  daze?: number;
 }
 
 export interface Ability {

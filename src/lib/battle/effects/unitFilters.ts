@@ -1,6 +1,6 @@
 import type { EffectTargets, Player, Position, UnitDeployed } from '@/lib/_model';
 import { UnitType } from '@/lib/_model/enums';
-import { getAdjacentUnits } from '../unit';
+import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 import { bs } from '@/lib/_state';
 
 export interface UnitFilterArgs {
@@ -17,6 +17,7 @@ export interface UnitFilterArgs {
   allies?: boolean;
   ennemies?: boolean;
   adjacent?: boolean;
+  inFrontOf?: boolean;
   // absolute
   unitType?: UnitType;
 }
@@ -30,9 +31,14 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
   }
   const relativeToPlayerId = filterArgs.player?.id ?? filterArgs.unit?.ownerPlayerId;
   const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
+  const closestEnnemyInRow =
+    filterArgs.inFrontOf && filterArgs.unit ? getClosestEnnemyInRow(filterArgs.unit) : undefined;
   const validUnits = bs.units.filter((u) => {
     let valid = true;
     if (filterArgs.sameRow && u.position.row !== relativeToPosition?.row) {
+      valid = false;
+    }
+    if (filterArgs.inFrontOf && closestEnnemyInRow?.instanceId !== u.instanceId) {
       valid = false;
     }
     if (filterArgs.sameColumn && u.position.column !== relativeToPosition?.column) {
@@ -81,6 +87,9 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
   }
   if (filterArgs.ennemies) {
     labels.push('ennemies');
+  }
+  if (filterArgs.inFrontOf) {
+    labels.push('in front of');
   }
   if (filterArgs.unitType) {
     labels.push(filterArgs.unitType);

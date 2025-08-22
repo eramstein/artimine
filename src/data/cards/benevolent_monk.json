@@ -1,0 +1,40 @@
+{
+  "id": "benevolent_monk",
+  "name": "Benevolent Monk",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Static",
+        "staticRecompute": ["On Death", "On Deploy"]
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "monkProtecs",
+              "keyword": "resist",
+              "keyWordValue": 2,
+              "range": {
+                "addSelf": true,
+                "allies": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

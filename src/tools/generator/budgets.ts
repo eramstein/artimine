@@ -173,4 +173,5 @@ export const statusCost: Record<keyof UnitStatuses, number> = {
   mezz: 8,
   root: 4,
   stun: 12,
+  daze: 6,
 };

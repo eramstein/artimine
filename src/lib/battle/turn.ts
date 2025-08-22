@@ -11,6 +11,8 @@ import { removeTemporaryEffects } from './temporary-effects';
 export function nextTurn() {
   console.log('next turn', bs.turn, bs.isPlayersTurn);
   clearSelections();
+  const previousPlayer = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
+  updateStatuses(previousPlayer);
   bs.turn++;
   bs.isPlayersTurn = !bs.isPlayersTurn;
   const player = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
@@ -30,6 +32,14 @@ function initPlayerTurn(player: Player) {
   drawCard(player);
 }
 
+function updateStatuses(player: Player) {
+  bs.units
+    .filter((unit) => unit.ownerPlayerId === player.id)
+    .forEach((unit) => {
+      statuses(unit);
+    });
+}
+
 function updateUnits(player: Player) {
   bs.units
     .filter((unit) => unit.ownerPlayerId === player.id)
@@ -38,7 +48,6 @@ function updateUnits(player: Player) {
       unit.hasMoved = false;
       unit.exhausted = false;
       removeTemporaryEffects(unit);
-      statuses(unit);
       hotAndDot(unit);
       forcedActions(unit);
     });
@@ -63,6 +72,9 @@ function statuses(unit: UnitDeployed) {
   }
   if (unit.statuses.root && unit.statuses.root > 0) {
     unit.statuses.root--;
+  }
+  if (unit.statuses.daze && unit.statuses.daze > 0) {
+    unit.statuses.daze--;
   }
 }
 

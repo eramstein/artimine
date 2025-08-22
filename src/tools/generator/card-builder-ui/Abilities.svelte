@@ -251,6 +251,14 @@
         <label class="checkbox-label">
           <input
             type="checkbox"
+            checked={!!props.newAbility.range.addSelf}
+            onchange={(e) => toggleRangeFlag('addSelf', (e.target as HTMLInputElement).checked)}
+          />
+          Add Self
+        </label>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
             checked={!!props.newAbility.range.all}
             onchange={(e) => toggleRangeFlag('all', (e.target as HTMLInputElement).checked)}
           />
@@ -263,6 +271,14 @@
             onchange={(e) => toggleRangeFlag('sameRow', (e.target as HTMLInputElement).checked)}
           />
           Same Row
+        </label>
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            checked={!!props.newAbility.range.inFrontOf}
+            onchange={(e) => toggleRangeFlag('inFrontOf', (e.target as HTMLInputElement).checked)}
+          />
+          In Front Of
         </label>
         <label class="checkbox-label">
           <input
