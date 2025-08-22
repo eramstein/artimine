@@ -1,7 +1,8 @@
 <script lang="ts">
   import { CardType, UnitType, TargetType } from '../../../lib/_model';
-  import type { ActionDefinition, TargetDefinition } from '../../../lib/_model';
+  import type { ActionDefinition, TargetDefinition, UnitKeywords } from '../../../lib/_model';
   import { baseEffects, getBaseEffect } from '../base-effects';
+  import RangeOptions from './RangeOptions.svelte';
 
   const props = $props<{
     state: {
@@ -140,6 +141,11 @@
 
     return cleanArgs;
   }
+
+  // Helper function for range changes
+  function onRangeChange(newRange: Record<string, any>) {
+    props.newAction.effectArgs.range = newRange;
+  }
 </script>
 
 <div class="form-section" class:hidden={props.state.type !== CardType.Spell}>
@@ -208,139 +214,7 @@
               {#if argName === 'range'}
                 <!-- Special handling for range argument -->
                 {#if props.newAction.effectArgs[argName]}
-                  <div class="range-options">
-                    <div class="range-section">
-                      <h6>Range Options:</h6>
-                      <div class="checkbox-grid">
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].self}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].self = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].self;
-                              }
-                            }}
-                          />
-                          Self
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].sameRow}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].sameRow = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].sameRow;
-                              }
-                            }}
-                          />
-                          Same Row
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].inFrontOf}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].in = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].in;
-                              }
-                            }}
-                          />
-                          In Front Of
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].sameColumn}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].sameColumn = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].sameColumn;
-                              }
-                            }}
-                          />
-                          Same Column
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].allies}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].allies = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].allies;
-                              }
-                            }}
-                          />
-                          Allies
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].ennemies}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].ennemies = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].ennemies;
-                              }
-                            }}
-                          />
-                          Enemies
-                        </label>
-                        <label class="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={!!props.newAction.effectArgs[argName].adjacent}
-                            onchange={(e) => {
-                              const target = e.target as HTMLInputElement;
-                              if (target.checked) {
-                                props.newAction.effectArgs[argName].adjacent = true;
-                              } else {
-                                delete props.newAction.effectArgs[argName].adjacent;
-                              }
-                            }}
-                          />
-                          Adjacent
-                        </label>
-                      </div>
-                    </div>
-                    <div class="range-section">
-                      <label for="unitType">Unit Type (optional):</label>
-                      <select
-                        id="unitType"
-                        value={props.newAction.effectArgs[argName].unitType || ''}
-                        onchange={(e) => {
-                          const target = e.target as HTMLSelectElement;
-                          const value = target.value;
-                          if (value && value !== '') {
-                            props.newAction.effectArgs[argName].unitType = value;
-                          } else {
-                            delete props.newAction.effectArgs[argName].unitType;
-                          }
-                        }}
-                      >
-                        <option value="">None</option>
-                        {#each Object.values(UnitType) as unitType}
-                          <option value={unitType}>{unitType}</option>
-                        {/each}
-                      </select>
-                    </div>
-                  </div>
+                  <RangeOptions range={props.newAction.effectArgs[argName]} {onRangeChange} />
                 {:else}
                   <div class="range-placeholder">
                     <em>Select an effect to configure range options</em>
@@ -557,34 +431,6 @@
     font-size: 12px;
     color: #666;
     font-style: italic;
-  }
-
-  .range-options {
-    background-color: white;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    padding: 15px;
-  }
-
-  .range-section {
-    margin-bottom: 15px;
-  }
-
-  .range-section:last-child {
-    margin-bottom: 0;
-  }
-
-  .range-section h6 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
-    font-size: 14px;
-  }
-
-  .checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 8px;
   }
 
   .range-placeholder {

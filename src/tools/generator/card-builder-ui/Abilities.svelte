@@ -1,9 +1,10 @@
 <script lang="ts">
   import { CardType, TriggerType, UnitType } from '../../../lib/_model';
-  import type { Ability, ActionDefinition } from '../../../lib/_model';
+  import type { Ability, ActionDefinition, UnitKeywords } from '../../../lib/_model';
   import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import { getRangeLabel } from '../../../lib/battle/effects';
   import Actions from './Actions.svelte';
+  import RangeOptions from './RangeOptions.svelte';
 
   const props = $props<{
     state: {
@@ -108,21 +109,9 @@
     editingActionIndex = -1;
   }
 
-  // Helpers for range UI
-  function toggleRangeFlag(flag: keyof UnitFilterArgs, checked: boolean) {
-    if (checked) {
-      (props.newAbility.range as any)[flag] = true;
-    } else {
-      delete (props.newAbility.range as any)[flag];
-    }
-  }
-
-  function setRangeUnitType(value: string) {
-    if (value && value !== '') {
-      (props.newAbility.range as any).unitType = value as unknown as UnitType;
-    } else {
-      delete (props.newAbility.range as any).unitType;
-    }
+  // Helper for range changes
+  function onRangeChange(newRange: Record<string, any>) {
+    props.newAbility.range = newRange as UnitFilterArgs;
   }
 </script>
 
@@ -239,93 +228,7 @@
 
     <div class="range-section">
       <h5>Trigger Range</h5>
-      <div class="checkbox-grid">
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.self}
-            onchange={(e) => toggleRangeFlag('self', (e.target as HTMLInputElement).checked)}
-          />
-          Self
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.addSelf}
-            onchange={(e) => toggleRangeFlag('addSelf', (e.target as HTMLInputElement).checked)}
-          />
-          Add Self
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.all}
-            onchange={(e) => toggleRangeFlag('all', (e.target as HTMLInputElement).checked)}
-          />
-          All units
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.sameRow}
-            onchange={(e) => toggleRangeFlag('sameRow', (e.target as HTMLInputElement).checked)}
-          />
-          Same Row
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.inFrontOf}
-            onchange={(e) => toggleRangeFlag('inFrontOf', (e.target as HTMLInputElement).checked)}
-          />
-          In Front Of
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.sameColumn}
-            onchange={(e) => toggleRangeFlag('sameColumn', (e.target as HTMLInputElement).checked)}
-          />
-          Same Column
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.allies}
-            onchange={(e) => toggleRangeFlag('allies', (e.target as HTMLInputElement).checked)}
-          />
-          Allies
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.ennemies}
-            onchange={(e) => toggleRangeFlag('ennemies', (e.target as HTMLInputElement).checked)}
-          />
-          Enemies
-        </label>
-        <label class="checkbox-label">
-          <input
-            type="checkbox"
-            checked={!!props.newAbility.range.adjacent}
-            onchange={(e) => toggleRangeFlag('adjacent', (e.target as HTMLInputElement).checked)}
-          />
-          Adjacent
-        </label>
-      </div>
-      <div class="form-group">
-        <label for="rangeUnitType">Unit Type (optional):</label>
-        <select
-          id="rangeUnitType"
-          value={(props.newAbility.range as any).unitType || ''}
-          onchange={(e) => setRangeUnitType((e.target as HTMLSelectElement).value)}
-        >
-          <option value="">None</option>
-          {#each Object.values(UnitType) as unitType}
-            <option value={unitType}>{unitType}</option>
-          {/each}
-        </select>
-      </div>
+      <RangeOptions range={props.newAbility.range} {onRangeChange} />
     </div>
 
     <Actions
@@ -473,11 +376,6 @@
   .checkbox-label input[type='checkbox'] {
     width: auto;
     margin: 0;
-  }
-  .checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 8px;
   }
 
   .add-btn {

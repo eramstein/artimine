@@ -1,5 +1,53 @@
 [
   {
+    "id": "ammunition_cart",
+    "name": "Ammunition Cart",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 1,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "mechanical"
+    ],
+    "keywords": {
+      "retaliate": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "temporaryEffect",
+              "args": {
+                "effect": {
+                  "power": 2
+                },
+                "range": {
+                  "allies": true,
+                  "adjacent": true,
+                  "hasKeyword": "ranged"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "angry_mob",
     "name": "Angry Mob",
     "rarity": "uncommon",
@@ -1425,6 +1473,28 @@
     ]
   },
   {
+    "id": "orc_miner",
+    "name": "Orc Miner",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "retaliate": 1,
+      "armor": 1
+    }
+  },
+  {
     "id": "pandy_panda",
     "name": "Pandy Panda",
     "rarity": "rare",
@@ -2037,6 +2107,24 @@
     ],
     "unitTypes": [
       "hobbit"
+    ]
+  },
+  {
+    "id": "zombie",
+    "name": "Zombie",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "monster"
     ]
   }
 ]

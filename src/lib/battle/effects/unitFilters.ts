@@ -1,4 +1,4 @@
-import type { EffectTargets, Player, Position, UnitDeployed } from '@/lib/_model';
+import type { EffectTargets, Player, Position, UnitDeployed, UnitKeywords } from '@/lib/_model';
 import { UnitType } from '@/lib/_model/enums';
 import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 import { bs } from '@/lib/_state';
@@ -20,6 +20,7 @@ export interface UnitFilterArgs {
   inFrontOf?: boolean;
   // absolute
   unitType?: UnitType;
+  hasKeyword?: keyof UnitKeywords;
 }
 
 export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
@@ -58,6 +59,9 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
       valid = false;
     }
     if (filterArgs.unitType && !u.unitTypes?.includes(filterArgs.unitType)) {
+      valid = false;
+    }
+    if (filterArgs.hasKeyword && !u.keywords?.[filterArgs.hasKeyword]) {
       valid = false;
     }
     return valid;

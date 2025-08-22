@@ -1,0 +1,22 @@
+{
+  "id": "orc_miner",
+  "name": "Orc Miner",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ],
+  "keywords": {
+    "retaliate": 1,
+    "armor": 1
+  }
+}

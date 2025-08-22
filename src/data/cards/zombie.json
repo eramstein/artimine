@@ -1,0 +1,18 @@
+{
+  "id": "zombie",
+  "name": "Zombie",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ]
+}

@@ -3,6 +3,8 @@
     "name": "Henry",
     "cards": [
       "market_beggar",
+      "street_slinger",
+      "ammunition_cart",
       "plague_spreader",
       "benevolent_monk",
       "coal_demon",
@@ -12,7 +14,6 @@
       "sewer_rat",
       "angry_mob",
       "city_guard",
-      "street_slinger",
       "royal_halberdier",
       "elite_crossbowmen",
       "gate_keepers",
