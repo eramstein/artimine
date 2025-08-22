@@ -1,0 +1,29 @@
+{
+  "id": "fortify",
+  "name": "Fortify",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "fortifyLand",
+        "args": {
+          "amount": 8
+        }
+      },
+      "targets": [
+        {
+          "type": "land",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

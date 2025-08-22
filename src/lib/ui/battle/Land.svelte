@@ -4,6 +4,8 @@
   import { attackLand } from '@lib/battle/combat';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
   import { getLandImagePath } from '@lib/_utils/asset-paths';
+  import { targetLand } from '@lib/ui/_helpers/targetting';
+  import { TargetType } from '@lib/_model';
 
   let { land }: { land: Land } = $props();
 
@@ -12,6 +14,13 @@
 
   function handleLandClick() {
     const selectedUnit = uiState.battle.selectedUnit;
+    if (
+      uiState.battle.targetBeingSelected &&
+      uiState.battle.targetBeingSelected.type === TargetType.Land
+    ) {
+      targetLand(land);
+      return;
+    }
     if (selectedUnit && isValidTarget) {
       attackLand(selectedUnit, land);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {

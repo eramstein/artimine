@@ -27,11 +27,13 @@ import type {
   UnitCardTemplate,
   TargetDefinition,
   UnitKeywords,
+  Land,
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
 import { reanimate } from '../graveyard';
 import { filterUnits, getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unitFilters';
 import { getTargetLabel } from '../target';
+import { fortifyLand } from '../land';
 
 export const DataEffectTemplates: Record<
   string,
@@ -249,16 +251,26 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}`,
   }),
-  destroyUnit: () => ({
-    fn: ({ targets }) => {
-      const units = targets[0] as UnitDeployed[];
-      units.forEach((u) => {
+  destroyUnit: ({ range }: { range?: UnitFilterArgs }) => ({
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
         destroyUnit(u);
       });
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}`;
+      return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
     },
+  }),
+  fortifyLand: ({ amount }: { amount: number }) => ({
+    fn: ({ targets, unit }) => {
+      const land =
+        targets[0] && targets[0].length > 0
+          ? (targets[0][0] as Land)
+          : (bs.players[unit.ownerPlayerId].lands[unit.position.row] as Land);
+      fortifyLand(land, amount);
+    },
+    label: () => `Fortify land by ${amount}`,
   }),
 };

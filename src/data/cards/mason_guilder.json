@@ -1,0 +1,41 @@
+{
+  "id": "mason_guilder",
+  "name": "Mason Guilder",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "fortifyLand",
+            "args": {
+              "amount": 2
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

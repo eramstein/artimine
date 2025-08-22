@@ -136,11 +136,16 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'destroyUnit',
-    argNames: [],
+    argNames: ['range'],
     budget: (args, targets) => {
       const targetMultiplier = getTargetCount(targets);
       return 34 * targetMultiplier;
     },
+  },
+  {
+    effectName: 'fortifyLand',
+    argNames: ['amount'],
+    budget: (args, targets) => 2, // TBD
   },
 ];
 

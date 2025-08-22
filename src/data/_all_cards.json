@@ -228,6 +228,30 @@
     ]
   },
   {
+    "id": "big_bertha",
+    "name": "Big Bertha",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 4,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "cleave": true,
+      "lance": true,
+      "retaliate": 1
+    }
+  },
+  {
     "id": "bison",
     "name": "Bison",
     "rarity": "common",
@@ -248,6 +272,55 @@
       "trample": true,
       "retaliate": 3
     }
+  },
+  {
+    "id": "blacksmith",
+    "name": "Blacksmith",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 2,
+      "armor": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "blacksmithArmor",
+                "keyword": "armor",
+                "keyWordValue": 1,
+                "reset": "false"
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "exhausts": true
+      }
+    ]
   },
   {
     "id": "boring_boar",
@@ -701,6 +774,41 @@
     ]
   },
   {
+    "id": "expendable_recruit",
+    "name": "Expendable Recruit",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "drawCard",
+              "args": {
+                "cardCount": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "ferocious_badger",
     "name": "Ferocious Badger",
     "rarity": "uncommon",
@@ -748,6 +856,35 @@
         "targets": [
           {
             "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fortify",
+    "name": "Fortify",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "fortifyLand",
+          "args": {
+            "amount": 8
+          }
+        },
+        "targets": [
+          {
+            "type": "land",
             "count": 1
           }
         ]
@@ -1099,6 +1236,31 @@
     }
   },
   {
+    "id": "kolossal_mistake",
+    "name": "Kolossal Mistake",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "black",
+        "count": 5
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "destroyUnit",
+          "args": {
+            "range": {
+              "all": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "lightning_bolt",
     "name": "Lightning Bolt",
     "type": "spell",
@@ -1169,6 +1331,47 @@
     "keywords": {
       "retaliate": 1
     }
+  },
+  {
+    "id": "mason_guilder",
+    "name": "Mason Guilder",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "fortifyLand",
+              "args": {
+                "amount": 2
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "mass_root",

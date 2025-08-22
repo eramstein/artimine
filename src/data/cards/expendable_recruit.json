@@ -1,0 +1,33 @@
+{
+  "id": "expendable_recruit",
+  "name": "Expendable Recruit",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "drawCard",
+            "args": {
+              "cardCount": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -13,12 +13,20 @@ export function initColorsFromLands(player: Player) {
 export function damageLand(land: Land, damage: number) {
   land.health -= damage;
   if (land.health <= 0) {
-    bs.players[land.ownerPlayerId].lands = bs.players[land.ownerPlayerId].lands.filter(
-      (l) => l.instanceId !== land.instanceId
-    );
+    destroyLand(land);
   }
+}
+
+export function destroyLand(land: Land) {
+  bs.players[land.ownerPlayerId].lands = bs.players[land.ownerPlayerId].lands.filter(
+    (l) => l.instanceId !== land.instanceId
+  );
 }
 
 export function getAllLands(): Land[] {
   return bs.players.flatMap((p) => p.lands);
+}
+
+export function fortifyLand(land: Land, amount: number) {
+  land.health += amount;
 }

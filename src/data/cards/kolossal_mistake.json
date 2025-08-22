@@ -1,0 +1,25 @@
+{
+  "id": "kolossal_mistake",
+  "name": "Kolossal Mistake",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "black",
+      "count": 5
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "destroyUnit",
+        "args": {
+          "range": {
+            "all": true
+          }
+        }
+      }
+    }
+  ]
+}

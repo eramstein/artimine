@@ -2,6 +2,12 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "expendable_recruit",
+      "big_bertha",
+      "mason_guilder",
+      "fortify",
+      "kolossal_mistake",
+      "blacksmith",
       "market_beggar",
       "street_slinger",
       "ammunition_cart",

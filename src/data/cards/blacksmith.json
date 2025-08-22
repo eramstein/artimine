@@ -1,0 +1,49 @@
+{
+  "id": "blacksmith",
+  "name": "Blacksmith",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 2,
+    "armor": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "blacksmithArmor",
+              "keyword": "armor",
+              "keyWordValue": 1,
+              "reset": "false"
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "exhausts": true
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import {
   type Ability,
   type Card,
   type EffectTargets,
+  type Land,
   type Position,
   type SpellCard,
   type UnitDeployed,
@@ -338,6 +339,29 @@ export function targetCell(position: Position) {
     ui.selectedTargets[currentEffectIdx][currentTargetIdx] = [];
 
   (ui.selectedTargets[currentEffectIdx][currentTargetIdx] as Position[]).push(position);
+  if (
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx].length >=
+    (ui.targetBeingSelected.count || 1)
+  ) {
+    advanceTargetStep();
+  }
+}
+
+export function targetLand(land: Land) {
+  const ui = uiState.battle;
+  if (
+    (!ui.abilityPending && !ui.spellPending && !ui.triggeredAbilityPending) ||
+    !ui.targetBeingSelected
+  )
+    return;
+  const currentEffectIdx = ui.currentEffectIndex || 0;
+  const currentTargetIdx = ui.currentTargetIndex || 0;
+
+  if (!ui.selectedTargets[currentEffectIdx]) ui.selectedTargets[currentEffectIdx] = [];
+  if (!ui.selectedTargets[currentEffectIdx][currentTargetIdx])
+    ui.selectedTargets[currentEffectIdx][currentTargetIdx] = [];
+
+  (ui.selectedTargets[currentEffectIdx][currentTargetIdx] as Land[]).push(land);
   if (
     ui.selectedTargets[currentEffectIdx][currentTargetIdx].length >=
     (ui.targetBeingSelected.count || 1)

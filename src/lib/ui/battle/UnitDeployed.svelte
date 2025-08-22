@@ -41,7 +41,10 @@
   function handleUnitClick() {
     const selectedUnit = uiState.battle.selectedUnit;
     // if target being selected, target this unit
-    if (uiState.battle.targetBeingSelected) {
+    if (
+      uiState.battle.targetBeingSelected &&
+      uiState.battle.targetBeingSelected.type === TargetType.Units
+    ) {
       targetUnit(unit);
       return;
     }

@@ -1,0 +1,22 @@
+{
+  "id": "big_bertha",
+  "name": "Big Bertha",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 4,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "ranged": true,
+    "cleave": true,
+    "lance": true,
+    "retaliate": 1
+  }
+}
