@@ -135,20 +135,21 @@ export function getEligibleTargets(
 }
 
 export function getTargetLabel(target: TargetDefinition): string {
+  const count = target.count ?? 1;
   if (target.type === TargetType.Units) {
-    return `target unit${target.count !== 1 ? 's' : ''}`;
+    return `to target unit${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Cell) {
-    return `target cell${target.count !== 1 ? 's' : ''}`;
+    return `to target cell${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Land) {
-    return `target land${target.count !== 1 ? 's' : ''}`;
+    return `to target land${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.GraveyardCard) {
-    return `target graveyard card${target.count !== 1 ? 's' : ''}`;
+    return `to target graveyard card${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Player) {
-    return `target player${target.count !== 1 ? 's' : ''}`;
+    return `to target player${count !== 1 ? 's' : ''}`;
   }
   return '';
 }

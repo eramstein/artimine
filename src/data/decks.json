@@ -2,6 +2,9 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "mass_enrage",
+      "fire_elemental",
+      "dwarven_punisher",
       "lightning_bolt",
       "where_there_is_a_whip",
       "red_dragon",

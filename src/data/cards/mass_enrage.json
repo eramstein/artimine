@@ -1,0 +1,36 @@
+{
+  "id": "mass_enrage",
+  "name": "Mass Enrage",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "temporaryEffect",
+        "args": {
+          "effect": {
+            "zerk": true
+          },
+          "range": {
+            "all": true
+          }
+        }
+      }
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

@@ -48,6 +48,47 @@
     ]
   },
   {
+    "id": "angry_lizard",
+    "name": "Angry Lizard",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 2
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "angry_mob",
     "name": "Angry Mob",
     "rarity": "uncommon",
@@ -671,6 +712,48 @@
     ]
   },
   {
+    "id": "dwarven_punisher",
+    "name": "Dwarven Punisher",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 6,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "dwarf"
+    ],
+    "keywords": {
+      "haste": true,
+      "trample": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "transferCounters",
+              "args": {
+                "counterType": "rage"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "earthquake",
     "name": "Earthquake",
     "rarity": "uncommon",
@@ -910,6 +993,50 @@
     "keywords": {
       "retaliate": 5
     }
+  },
+  {
+    "id": "fire_elemental",
+    "name": "Fire Elemental",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 6,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "elemental"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "range": {
+                  "all": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "fireball",
@@ -1336,6 +1463,27 @@
     }
   },
   {
+    "id": "kobold_slinger",
+    "name": "Kobold Slinger",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 4,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "ranged": true
+    }
+  },
+  {
     "id": "kolossal_mistake",
     "name": "Kolossal Mistake",
     "rarity": "rare",
@@ -1470,6 +1618,42 @@
             }
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "mass_enrage",
+    "name": "Mass Enrage",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "temporaryEffect",
+          "args": {
+            "effect": {
+              "zerk": true
+            },
+            "range": {
+              "all": true
+            }
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
       }
     ]
   },
@@ -2019,6 +2203,27 @@
     ]
   },
   {
+    "id": "rock_elemental",
+    "name": "Rock Elemental",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "elemental"
+    ],
+    "keywords": {
+      "resist": 2
+    }
+  },
+  {
     "id": "royal_halberdier",
     "name": "Royal Halberdier",
     "rarity": "common",
@@ -2047,7 +2252,7 @@
     "type": "unit",
     "rarity": "common",
     "cost": 2,
-    "power": 0,
+    "power": 2,
     "maxHealth": 2,
     "keywords": {
       "retaliate": 1

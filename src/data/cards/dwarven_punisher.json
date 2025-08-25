@@ -1,0 +1,42 @@
+{
+  "id": "dwarven_punisher",
+  "name": "Dwarven Punisher",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 6,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "dwarf"
+  ],
+  "keywords": {
+    "haste": true,
+    "trample": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "transferCounters",
+            "args": {
+              "counterType": "rage"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

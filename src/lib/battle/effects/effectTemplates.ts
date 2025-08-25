@@ -68,8 +68,8 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Deal ${damage} damage to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      return `Deal ${damage} damage ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   healUnit: ({ health, range }: { health: number; range?: UnitFilterArgs }) => ({
@@ -80,7 +80,7 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
       return `Heal ${health} to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -102,7 +102,7 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      let targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      let targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
       if (fromTriggerParam) {
         targetsLabel = ` to ${fromTriggerParam}`;
       }
@@ -153,7 +153,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Apply ${JSON.stringify(effect)} effect to ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      return `Apply ${JSON.stringify(effect)} effect ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   untapPlayer: () => ({
@@ -184,7 +184,7 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
       return `Apply ${statusType} for ${duration} turn${duration !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -265,7 +265,7 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
       return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -287,8 +287,8 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Refresh ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}  `;
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      return `Refresh ${targetsLabel}. ${range ? getRangeLabel(range) : ''}  `;
     },
   }),
 };

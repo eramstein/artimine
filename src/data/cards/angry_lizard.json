@@ -1,0 +1,41 @@
+{
+  "id": "angry_lizard",
+  "name": "Angry Lizard",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 2
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

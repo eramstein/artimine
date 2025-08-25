@@ -1,0 +1,21 @@
+{
+  "id": "rock_elemental",
+  "name": "Rock Elemental",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 3,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "elemental"
+  ],
+  "keywords": {
+    "resist": 2
+  }
+}

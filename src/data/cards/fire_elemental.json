@@ -1,0 +1,44 @@
+{
+  "id": "fire_elemental",
+  "name": "Fire Elemental",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 6,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "elemental"
+  ],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 1,
+              "range": {
+                "all": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
