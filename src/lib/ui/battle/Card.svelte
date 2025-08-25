@@ -25,6 +25,11 @@
     uiState.battle.spellPending && uiState.battle.spellPending.instanceId === card.instanceId
   );
 
+  // Calculate font size based on name length
+  let nameFontSize = $derived(() => {
+    return card.name.length > 20 ? 0.75 : 0.9;
+  });
+
   // Check if card is a unit card (works with Card type)
   function isUnitCard(card: Card): card is Card & {
     power: number;
@@ -120,7 +125,7 @@
 <div
   class="card {isPendingSpell ? 'pending-spell' : ''}"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
-    40}px; border-color: {getBorderColor()};"
+    40}px; border-color: {getBorderColor()}; --name-font-size: {nameFontSize()}rem;"
   draggable={isUnitCard(card) && isPayable(card)}
   ondragstart={handleDragStart}
   ondrag={handleDrag}
@@ -336,6 +341,11 @@
 
   .name-text {
     padding-left: 8px;
+    font-size: var(--name-font-size, 0.9rem);
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .abilities-container {

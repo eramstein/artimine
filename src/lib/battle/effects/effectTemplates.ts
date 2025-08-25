@@ -16,6 +16,7 @@ import {
   drawCard,
   clearUnitStaticAbilities,
   getRandomEmptyAlliedCells,
+  refreshUnit,
 } from '@/lib/battle';
 import { CardColor, CounterType, StatusType } from '@/lib/_model';
 import type {
@@ -87,19 +88,24 @@ export const DataEffectTemplates: Record<
     counterType = CounterType.Growth,
     counterValue = 1,
     range,
+    fromTriggerParam,
   }: {
     counterType: CounterType;
     counterValue: number;
     range?: UnitFilterArgs;
+    fromTriggerParam?: string;
   }) => ({
-    fn: ({ unit, targets, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ unit, targets, player, triggerParams }) => {
+      const unitsInRange = fromTriggerParam ? [triggerParams[fromTriggerParam]] : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
         addCounters(u, counterType, counterValue);
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      let targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      if (fromTriggerParam) {
+        targetsLabel = ` to ${fromTriggerParam}`;
+      }
       return `Add ${counterValue} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -272,5 +278,17 @@ export const DataEffectTemplates: Record<
       fortifyLand(land, amount);
     },
     label: () => `Fortify land by ${amount}`,
+  }),
+  refreshUnit: ({ range }: { range?: UnitFilterArgs }) => ({
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        refreshUnit(u);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Refresh ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}  `;
+    },
   }),
 };

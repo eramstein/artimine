@@ -1,0 +1,18 @@
+{
+  "id": "hill_troll",
+  "name": "Hill Troll",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 5,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ]
+}

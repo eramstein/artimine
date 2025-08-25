@@ -1,0 +1,18 @@
+{
+  "id": "mountain_giant",
+  "name": "Mountain Giant",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 7,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "keywords": {
+    "retaliate": 3
+  }
+}

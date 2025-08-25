@@ -16,7 +16,10 @@
   "abilities": [
     {
       "trigger": {
-        "type": "On Deploy"
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
       },
       "actions": [
         {

@@ -147,6 +147,11 @@ export const baseEffects: BaseEffect[] = [
     argNames: ['amount'],
     budget: (args, targets) => 2, // TBD
   },
+  {
+    effectName: 'refreshUnit',
+    argNames: ['range'],
+    budget: (args, targets) => 6, // TBD
+  },
 ];
 
 // Helper function to get a base effect by name

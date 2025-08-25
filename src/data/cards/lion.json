@@ -4,7 +4,7 @@
   "type": "unit",
   "rarity": "common",
   "cost": 2,
-  "power": 2,
+  "power": 0,
   "maxHealth": 2,
   "keywords": {
     "retaliate": 1

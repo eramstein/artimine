@@ -1,0 +1,44 @@
+{
+  "id": "buffoon",
+  "name": "Buffoon",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 3
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "cost": 1,
+      "exhausts": true
+    }
+  ]
+}

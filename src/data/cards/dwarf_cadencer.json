@@ -1,0 +1,35 @@
+{
+  "id": "dwarf_cadencer",
+  "name": "Dwarf Cadencer",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "refreshUnit",
+            "args": {
+              "range": {
+                "allies": true,
+                "adjacent": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

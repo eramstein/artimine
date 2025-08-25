@@ -2,7 +2,7 @@
   "id": "frenzied_shaman",
   "name": "Frenzied Shaman",
   "type": "unit",
-  "cost": 3,
+  "cost": 5,
   "power": 2,
   "maxHealth": 3,
   "colors": [{ "color": "red", "count": 2 }],

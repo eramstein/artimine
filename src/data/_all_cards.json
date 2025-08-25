@@ -341,6 +341,50 @@
     ]
   },
   {
+    "id": "buffoon",
+    "name": "Buffoon",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 3
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "cost": 1,
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "caring_druidess",
     "name": "Caring Druidess",
     "rarity": "rare",
@@ -592,6 +636,41 @@
     }
   },
   {
+    "id": "dwarf_cadencer",
+    "name": "Dwarf Cadencer",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "refreshUnit",
+              "args": {
+                "range": {
+                  "allies": true,
+                  "adjacent": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "earthquake",
     "name": "Earthquake",
     "rarity": "uncommon",
@@ -793,7 +872,10 @@
     "abilities": [
       {
         "trigger": {
-          "type": "On Deploy"
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
         },
         "actions": [
           {
@@ -895,7 +977,7 @@
     "id": "frenzied_shaman",
     "name": "Frenzied Shaman",
     "type": "unit",
-    "cost": 3,
+    "cost": 5,
     "power": 2,
     "maxHealth": 3,
     "colors": [
@@ -1099,6 +1181,24 @@
     ]
   },
   {
+    "id": "hill_troll",
+    "name": "Hill Troll",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 5,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ]
+  },
+  {
     "id": "hobbit_gardener",
     "name": "Hobbit Gardener",
     "rarity": "rare",
@@ -1269,7 +1369,7 @@
     "colors": [
       {
         "color": "red",
-        "count": 1
+        "count": 3
       }
     ],
     "actions": [
@@ -1484,6 +1584,24 @@
         }
       }
     ]
+  },
+  {
+    "id": "mountain_giant",
+    "name": "Mountain Giant",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 7,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "keywords": {
+      "retaliate": 3
+    }
   },
   {
     "id": "mycosed_bear",
@@ -1811,6 +1929,52 @@
     ]
   },
   {
+    "id": "red_dragon",
+    "name": "Red Dragon",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 8,
+    "power": 6,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "keywords": {
+      "lance": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 2,
+                "range": {
+                  "addSelf": true,
+                  "adjacent": true
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "red_haired_bard",
     "name": "Red Haired Bard",
     "rarity": "rare",
@@ -1883,7 +2047,7 @@
     "type": "unit",
     "rarity": "common",
     "cost": 2,
-    "power": 2,
+    "power": 0,
     "maxHealth": 2,
     "keywords": {
       "retaliate": 1
@@ -2035,6 +2199,43 @@
     "keywords": {
       "poisonous": 2
     }
+  },
+  {
+    "id": "spirit_of_speed_and_fury",
+    "name": "Spirit of Speed and Fury",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "allies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 1,
+                "fromTriggerParam": "mover"
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "stampede",
@@ -2245,6 +2446,33 @@
     "keywords": {
       "retaliate": 2
     }
+  },
+  {
+    "id": "where_there_is_a_whip",
+    "name": "Where there is a Whip",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "refreshUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "who_is_fat",

@@ -167,3 +167,7 @@ export const modifyUnitHealth = (unit: UnitDeployed, amount: number) => {
     destroyUnit(unit);
   }
 };
+
+export function refreshUnit(unit: UnitDeployed) {
+  unit.exhausted = false;
+}

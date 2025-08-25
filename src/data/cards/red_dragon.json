@@ -1,0 +1,46 @@
+{
+  "id": "red_dragon",
+  "name": "Red Dragon",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 6,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "keywords": {
+    "lance": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 2,
+              "range": {
+                "addSelf": true,
+                "adjacent": true
+              }
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "exhausts": true
+    }
+  ]
+}

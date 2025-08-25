@@ -8,6 +8,7 @@ import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './
 import { onCombatResolution } from './listeners';
 import { soundManager } from './sound';
 import { isLand, isPlayer } from '../_model/type-lookup-battle';
+import { applyTemporaryEffect } from './temporary-effects';
 
 export function canAttack(unit: UnitDeployed) {
   return (
@@ -68,6 +69,7 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
+  useRage(unit);
 
   let attackedUnits = [target];
   if (unit.keywords?.cleave) {
@@ -105,6 +107,8 @@ export function attackLand(unit: UnitDeployed, target: Land) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
+
+  useRage(unit);
   damageLand(target, unit.power);
   const excessDamage = unit.power - target.health;
   if (excessDamage && unit.keywords?.trample) {
@@ -119,6 +123,8 @@ export function attackPlayer(unit: UnitDeployed, playerId: number) {
   if (!isValidTarget(unit, targetPlayer)) {
     throw new Error('Invalid attack target');
   }
+
+  useRage(unit);
   damagePlayer(targetPlayer, unit.power);
   onCombatResolution(unit, targetPlayer);
   recordUnitHasAttacked(unit);
@@ -159,3 +165,10 @@ export function autoAttack(unit: UnitDeployed) {
     return;
   }
 }
+
+function useRage(unit: UnitDeployed) {
+  if (unit.counters?.rage) {
+    applyTemporaryEffect(unit, { power: unit.counters.rage });
+    unit.counters.rage = 0;
+  }
+} 
