@@ -1,0 +1,45 @@
+{
+  "id": "dark_remedy",
+  "name": "Dark Remedy",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 1,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "darkRitual",
+        "args": {
+          "effect": "heal"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit_allies",
+          "count": 1
+        },
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

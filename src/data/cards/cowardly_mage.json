@@ -1,0 +1,21 @@
+{
+  "id": "cowardly_mage",
+  "name": "Cowardly Mage",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true
+  }
+}

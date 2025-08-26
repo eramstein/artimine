@@ -10,4 +10,5 @@ export const TRIGGER_ICONS: Record<TriggerType, string> = {
   [TriggerType.OnDeath]: '💀', // Skull for death triggers
   [TriggerType.OnDeploy]: '📦', // Package for deployment
   [TriggerType.OnTurnStart]: '🔄', // Circular arrows for turn-based triggers
+  [TriggerType.OnReach]: '🎯', // Target for reach triggers
 };

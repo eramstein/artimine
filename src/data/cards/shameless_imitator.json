@@ -1,0 +1,38 @@
+{
+  "id": "shameless_imitator",
+  "name": "Shameless Imitator",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "drawCard",
+            "args": {
+              "cardCount": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import { uiState } from '../_state/state-ui.svelte';
 import { damageLand } from './land';
 import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './unit';
-import { onCombatResolution } from './listeners';
+import { onCombatResolution, onUnitReach } from './listeners';
 import { soundManager } from './sound';
 import { isAttackingLand, isAttackingPlayer, isAttackingUnitDeployed } from '../_model/type-lookup-battle';
 import { applyTemporaryEffect } from './temporary-effects';
@@ -124,6 +124,7 @@ export function attackLand(unit: UnitDeployed, target: Land) {
     damagePlayer(bs.players[target.ownerPlayerId], excessDamage);
   }
   onCombatResolution(unit, target);
+  onUnitReach(unit);
   recordUnitHasAttacked(unit);
 }
 
@@ -136,6 +137,7 @@ export function attackPlayer(unit: UnitDeployed, playerId: number) {
   useRage(unit);
   damagePlayer(targetPlayer, unit.power);
   onCombatResolution(unit, targetPlayer);
+  onUnitReach(unit);
   recordUnitHasAttacked(unit);
 }
 

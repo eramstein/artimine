@@ -3,7 +3,7 @@
   "name": "Savannah Lion",
   "type": "unit",
   "rarity": "common",
-  "cost": 2,
+  "cost": 20,
   "power": 2,
   "maxHealth": 2,
   "keywords": {

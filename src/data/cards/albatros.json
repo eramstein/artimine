@@ -1,0 +1,21 @@
+{
+  "id": "albatros",
+  "name": "Albatros",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "flying": true
+  }
+}

@@ -64,6 +64,7 @@ function checkMultipleTargets(
   return true;
 }
 
+// TODO: this only works if all actions without targets are at the end of the spell
 function checkMultipleEffectsTargets(
   spell: SpellCard,
   actionDefs: ActionDefinition[],
@@ -72,10 +73,10 @@ function checkMultipleEffectsTargets(
   const actionDefsWithTargets = actionDefs.filter((a) => a.targets);
   if (actionDefsWithTargets.length === 0) {
     return true;
-  }
-  if (!Array.isArray(targets) || targets.length !== actionDefs.length) return false;
-  for (let i = 0; i < actionDefs.length; i++) {
-    if (!checkMultipleTargets(spell, actionDefs[i].targets || [], targets[i])) return false;
+  }  
+  if (!Array.isArray(targets) || targets.length !== actionDefsWithTargets.length) return false;
+  for (let i = 0; i < actionDefsWithTargets.length; i++) {
+    if (!checkMultipleTargets(spell, actionDefsWithTargets[i].targets || [], targets[i])) return false;
   }
   return true;
 }

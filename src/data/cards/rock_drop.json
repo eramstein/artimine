@@ -1,0 +1,29 @@
+{
+  "id": "rock_drop",
+  "name": "Rock Drop",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageLand",
+        "args": {
+          "damage": 2
+        }
+      },
+      "targets": [
+        {
+          "type": "land",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

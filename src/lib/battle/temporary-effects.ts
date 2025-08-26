@@ -43,3 +43,13 @@ export function removeTemporaryEffects(unit: UnitDeployed) {
   });
   unit.untilEndOfTurn = {};
 }
+
+export function getTemporaryEffectLabel(effect: UnitEndOfTurnEffects) {
+  return Object.keys(effect).map((key) => {
+    const value = effect[key as keyof UnitEndOfTurnEffects];
+    if (key === 'power') {
+      return `+${value} power`;
+    }
+    return `${key} ${value === true ? '' : value}`;
+  }).join(', ');
+}

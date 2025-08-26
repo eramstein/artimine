@@ -1,0 +1,22 @@
+{
+  "id": "arcane_sniper",
+  "name": "Arcane Sniper",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true,
+    "moveAndAttack": true
+  }
+}

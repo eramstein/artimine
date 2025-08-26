@@ -1,0 +1,29 @@
+{
+  "id": "trident",
+  "name": "Trident",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 3
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 3
+        }
+      ]
+    }
+  ]
+}

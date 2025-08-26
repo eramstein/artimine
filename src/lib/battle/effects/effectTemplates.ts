@@ -17,6 +17,7 @@ import {
   clearUnitStaticAbilities,
   getRandomEmptyAlliedCells,
   refreshUnit,
+  getTemporaryEffectLabel,
 } from '@/lib/battle';
 import { CardColor, CounterType, StatusType } from '@/lib/_model';
 import type {
@@ -34,7 +35,7 @@ import { bs } from '@/lib/_state';
 import { reanimate } from '../graveyard';
 import { filterUnits, getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unitFilters';
 import { getTargetLabel } from '../target';
-import { fortifyLand } from '../land';
+import { damageLand, fortifyLand } from '../land';
 
 export const DataEffectTemplates: Record<
   string,
@@ -59,6 +60,16 @@ export const DataEffectTemplates: Record<
       damagePlayer(getOpposingPlayer(unit), damage);
     },
     label: () => `Deal ${damage} damage to the enemy player`,
+  }),
+  damageLand: ({ damage }: { damage: number }) => ({
+    fn: ({ targets }) => {
+      targets.forEach((t) => {
+        damageLand(t as unknown as Land, damage);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      return `Deal ${damage} damage to ${getTargetLabel(targets[0])}`;
+    },
   }),
   damageUnit: ({ damage, range, fromTriggerParam }: { damage: number; range?: UnitFilterArgs; fromTriggerParam?: string }) => ({
     fn: ({ targets, unit, player, triggerParams }) => {
@@ -158,7 +169,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Apply ${JSON.stringify(effect)} effect ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      return `Apply ${getTemporaryEffectLabel(effect)} effect ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   untapPlayer: () => ({
@@ -226,15 +237,19 @@ export const DataEffectTemplates: Record<
         ? `Respawn ${summonedUnit.name} at this unit's position`
         : `Summon ${summonedUnit.name} to target position`,
   }),
-  darkRitual: () => ({
+  darkRitual: ({ effect = 'damage' }: { effect: 'damage' | 'heal' }) => ({
     fn: ({ targets }) => {
       const sacrificedUnit = targets[0][0] as UnitDeployed;
       const targetUnit = targets[1][0] as UnitDeployed;
       const sacrificedHealth = sacrificedUnit.health;
-      damageUnit(targetUnit, sacrificedHealth);
+      if (effect === 'damage') {
+        damageUnit(targetUnit, sacrificedHealth);
+      } else {
+        healUnit(targetUnit, sacrificedHealth);
+      }
       destroyUnit(sacrificedUnit);
     },
-    label: () => 'Sacrifice a unit to deal damage equal to its health to another unit',
+    label: () => `Sacrifice a unit to ${effect === 'damage' ? 'deal damage' : effect } equal to its health to another unit`,
   }),
   transferCounters: ({ counterType = CounterType.Growth }: { counterType: CounterType }) => ({
     fn: ({ targets }) => {

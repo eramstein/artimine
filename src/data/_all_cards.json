@@ -57,6 +57,27 @@
     ]
   },
   {
+    "id": "albatros",
+    "name": "Albatros",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "flying": true
+    }
+  },
+  {
     "id": "ammunition_cart",
     "name": "Ammunition Cart",
     "rarity": "uncommon",
@@ -189,6 +210,28 @@
         ]
       }
     ]
+  },
+  {
+    "id": "arcane_sniper",
+    "name": "Arcane Sniper",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 2,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "moveAndAttack": true
+    }
   },
   {
     "id": "artificial_plague",
@@ -606,6 +649,72 @@
             }
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "cowardly_mage",
+    "name": "Cowardly Mage",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true
+    }
+  },
+  {
+    "id": "dark_remedy",
+    "name": "Dark Remedy",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "darkRitual",
+          "args": {
+            "effect": "heal"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit_allies",
+            "count": 1
+          },
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
       }
     ]
   },
@@ -1542,6 +1651,48 @@
     ]
   },
   {
+    "id": "hype_goblin",
+    "name": "Hype Goblin",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "haste": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 1,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "iron_golem",
     "name": "Iron Golem",
     "rarity": "uncommon",
@@ -1697,6 +1848,43 @@
             "color": "green"
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "mad_ballooner",
+    "name": "Mad Ballooner",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "madBallooner",
+                "keyword": "flying",
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ],
+        "cost": 1
       }
     ]
   },
@@ -2386,6 +2574,35 @@
     ]
   },
   {
+    "id": "rock_drop",
+    "name": "Rock Drop",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageLand",
+          "args": {
+            "damage": 2
+          }
+        },
+        "targets": [
+          {
+            "type": "land",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "rock_elemental",
     "name": "Rock Elemental",
     "rarity": "uncommon",
@@ -2434,7 +2651,7 @@
     "name": "Savannah Lion",
     "type": "unit",
     "rarity": "common",
-    "cost": 2,
+    "cost": 20,
     "power": 2,
     "maxHealth": 2,
     "keywords": {
@@ -2444,6 +2661,45 @@
       {
         "color": "red",
         "count": 1
+      }
+    ]
+  },
+  {
+    "id": "schnell",
+    "name": "Schnell!",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 1,
+            "range": {
+              "allies": true
+            }
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "schnell",
+            "keyword": "haste",
+            "keyWordValue": 0,
+            "range": {
+              "allies": true
+            }
+          }
+        }
       }
     ]
   },
@@ -2483,6 +2739,44 @@
                   "sameRow": true,
                   "ennemies": true
                 }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "shameless_imitator",
+    "name": "Shameless Imitator",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Reach",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "drawCard",
+              "args": {
+                "cardCount": 1
               }
             }
           }
@@ -2788,6 +3082,35 @@
           "type": "Activated"
         },
         "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "trident",
+    "name": "Trident",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 3
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 3
+          }
+        ]
       }
     ]
   },

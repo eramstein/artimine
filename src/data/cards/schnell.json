@@ -1,0 +1,39 @@
+{
+  "id": "schnell",
+  "name": "Schnell!",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 1,
+          "range": {
+            "allies": true
+          }
+        }
+      }
+    },
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "schnell",
+          "keyword": "haste",
+          "keyWordValue": 0,
+          "range": {
+            "allies": true
+          }
+        }
+      }
+    }
+  ]
+}

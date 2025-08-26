@@ -88,18 +88,12 @@ function checkTriggerCondition(
   ) {
     unitCausingTrigger = triggerArgs.mover;
   }
-  if (ability.trigger.type === TriggerType.AfterCombat) {
+  if (ability.trigger.type === TriggerType.AfterCombat || ability.trigger.type === TriggerType.OnReach) {
     unitCausingTrigger = triggerArgs.attacker;
   }
 
   const validTriggeringUnits = filterUnits({ ...ability.trigger.range, unit: unitWithAbility }).map(
     (u) => u.instanceId
-  );
-  console.log(
-    'validTriggeringUnits',
-    validTriggeringUnits,
-    'unitCausingTrigger',
-    unitCausingTrigger
   );
   return validTriggeringUnits
     ? validTriggeringUnits.includes(unitCausingTrigger.instanceId)
@@ -115,6 +109,10 @@ export function onDamageUnit(unit: UnitDeployed, damage: number, isCombatDamage:
 
 export function onCombatResolution(attacker: UnitDeployed, defender: UnitDeployed | Land | Player) {
   triggerAbilities(TriggerType.AfterCombat, { attacker, defender });
+}
+
+export function onUnitReach(attacker: UnitDeployed) {
+  triggerAbilities(TriggerType.OnReach, { attacker });
 }
 
 export function onAfterMoveUnit(unit: UnitDeployed, pos: Position) {

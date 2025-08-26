@@ -43,7 +43,7 @@
     // if target being selected, target this unit
     if (
       uiState.battle.targetBeingSelected &&
-      uiState.battle.targetBeingSelected.type === TargetType.Units
+      [TargetType.Units, TargetType.Allies, TargetType.Ennemies].includes(uiState.battle.targetBeingSelected.type)
     ) {
       targetUnit(unit);
       return;

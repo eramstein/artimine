@@ -49,6 +49,14 @@ export const baseEffects: BaseEffect[] = [
     defaultTargets: [{ type: TargetType.Units, count: 1 }],
   },
   {
+    effectName: 'damageLand',
+    argNames: ['damage'],
+    budget: (args, targets) => {
+      const targetMultiplier = getTargetCount(targets);
+      return (args.damage || 1) * targetMultiplier * 7;
+    },
+  },
+  {
     effectName: 'healUnit',
     argNames: ['health', 'range'],
     budget: (args, targets) => {
@@ -119,8 +127,8 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'darkRitual',
-    argNames: [],
-    budget: (args, targets) => 12, // TBD
+    argNames: ['effect'],
+    budget: (args, targets) => args.effect === 'damage' ? 12 : 6, // TBD
   },
   {
     effectName: 'transferCounters',

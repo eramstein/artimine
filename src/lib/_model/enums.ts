@@ -26,6 +26,7 @@ export enum TriggerType {
   OnDeath = 'On Death',
   OnDeploy = 'On Deploy',
   OnTurnStart = 'On Turn Start',
+  OnReach = 'On Reach',
 }
 
 export enum TargetType {
