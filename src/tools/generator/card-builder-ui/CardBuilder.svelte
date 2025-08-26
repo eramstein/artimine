@@ -98,6 +98,7 @@
     zerk: false,
     cleave: false,
     lance: false,
+    flying: false,
   });
 
   // Action editing state
@@ -156,6 +157,7 @@
     if (state_keywords.zerk) keywords.zerk = true;
     if (state_keywords.cleave) keywords.cleave = true;
     if (state_keywords.lance) keywords.lance = true;
+    if (state_keywords.flying) keywords.flying = true;
 
     if (state_keywords.retaliate > 0) keywords.retaliate = state_keywords.retaliate;
     if (state_keywords.armor > 0) keywords.armor = state_keywords.armor;
@@ -356,6 +358,9 @@
     state_keywords.moveAndAttack = false;
     state_keywords.trample = false;
     state_keywords.zerk = false;
+    state_keywords.cleave = false;
+    state_keywords.lance = false;
+    state_keywords.flying = false;
     state_keywords.retaliate = 0;
     state_keywords.armor = 0;
     state_keywords.resist = 0;

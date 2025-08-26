@@ -1,0 +1,42 @@
+{
+  "id": "hype_goblin",
+  "name": "Hype Goblin",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 1,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ],
+  "keywords": {
+    "haste": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 1,
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

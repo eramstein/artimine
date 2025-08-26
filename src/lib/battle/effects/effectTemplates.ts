@@ -60,15 +60,18 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Deal ${damage} damage to the enemy player`,
   }),
-  damageUnit: ({ damage, range }: { damage: number; range?: UnitFilterArgs }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+  damageUnit: ({ damage, range, fromTriggerParam }: { damage: number; range?: UnitFilterArgs; fromTriggerParam?: string }) => ({
+    fn: ({ targets, unit, player, triggerParams }) => {
+      const unitsInRange = fromTriggerParam ? [triggerParams[fromTriggerParam]] : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
         damageUnit(u, damage);
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      let targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      if (fromTriggerParam) {
+        targetsLabel = ` to ${fromTriggerParam}`;
+      }
       return `Deal ${damage} damage ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -123,7 +126,9 @@ export const DataEffectTemplates: Record<
     reset?: boolean;
   }) => ({
     fn: ({ unit, targets, player }) => {
+      console.log('staticKeyword', unit, targets, player, range);
       const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      console.log('unitsInRange', unitsInRange);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
       if (unit && reset) {
         clearUnitStaticAbilities(unit, abilityName);

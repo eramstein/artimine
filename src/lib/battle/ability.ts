@@ -33,8 +33,8 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
   // EFFECTS
   // ----------------------------------------------------------------------
   ability.actions.forEach((actionDef, actionIndex) => {
-    const effectTargets = [...targets[actionIndex]];
-    // If any TargetType is Self, replace the corresponding targets entry with [unit]
+    const effectTargets = targets[actionIndex] ? [...targets[actionIndex]] : [];
+    // If TargetType is Self, replace the corresponding targets entry with [unit]
     if (actionDef.targets) {
       actionDef.targets.forEach((def, i) => {
         if (def.type === TargetType.Self) {
@@ -100,8 +100,16 @@ function checkMultipleEffectsTargets(
   actionDefs: ActionDefinition[],
   targets: EffectTargets[][]
 ): boolean {
+  let hasTargets = false;
+  actionDefs.forEach((actionDef) => {
+    if (actionDef.targets) {
+      hasTargets = true;
+    }
+  });
+  if (!hasTargets) return true;
   if (!Array.isArray(targets) || targets.length !== actionDefs.length) return false;
   for (let i = 0; i < actionDefs.length; i++) {
+    if (!actionDefs[i].targets) continue;
     if (!checkMultipleTargets(unit, actionDefs[i].targets || [], targets[i])) return false;
   }
   return true;

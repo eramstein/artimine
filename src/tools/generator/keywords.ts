@@ -35,6 +35,7 @@ export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   zerk: { baseCost: -3, prevalence: 1, requiresSomePower: true },
   cleave: { baseCost: 7, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
   lance: { baseCost: 5, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
+  flying: { baseCost: 6, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
 };
 
 // Extract prevalence from definitions

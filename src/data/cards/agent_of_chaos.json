@@ -1,0 +1,57 @@
+{
+  "id": "agent_of_chaos",
+  "name": "Agent of Chaos",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 9,
+  "power": 6,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    }
+  ],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Static",
+        "staticRecompute": [
+          "On Deploy",
+          "On Death"
+        ]
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "agentOfChaosLance",
+              "keyword": "lance",
+              "range": {
+                "all": true
+              },
+              "reset": "false"
+            }
+          }
+        },
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "agentOfChaosCleave",
+              "keyword": "cleave",
+              "range": {
+                "all": true
+              },
+              "reset": "false"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "lunging_cougar",
+  "name": "Lunging Cougar",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 4,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "haste": true
+  }
+}

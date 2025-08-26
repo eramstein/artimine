@@ -128,6 +128,7 @@ export interface UnitKeywords {
   zerk?: boolean;
   cleave?: boolean;
   lance?: boolean;
+  flying?: boolean;
 }
 
 export type UnitEndOfTurnEffects = UnitKeywords & {

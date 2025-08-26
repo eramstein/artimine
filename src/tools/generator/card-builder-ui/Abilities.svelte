@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CardType, TriggerType, UnitType } from '../../../lib/_model';
-  import type { Ability, ActionDefinition, UnitKeywords } from '../../../lib/_model';
+  import { CardType, TriggerType } from '../../../lib/_model';
+  import type { Ability, ActionDefinition } from '../../../lib/_model';
   import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import { getRangeLabel } from '../../../lib/battle/effects';
   import Actions from './Actions.svelte';

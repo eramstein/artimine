@@ -39,7 +39,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'damageUnit',
-    argNames: ['damage', 'range'],
+    argNames: ['damage', 'range', 'fromTriggerParam'],
     budget: (args, targets) => {
       const baseCost = args.damage * 3 || 1;
       const targetMultiplier = getTargetCount(targets);

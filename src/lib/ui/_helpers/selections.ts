@@ -1,5 +1,5 @@
 import { uiState } from '../../_state';
-import { isLand, isPlayer, type UnitDeployed } from '../../_model';
+import { isAttackingLand, isAttackingPlayer, isAttackingUnitDeployed, type UnitDeployed } from '../../_model';
 import { canAttack, validAttackTargets } from '@/lib/battle/combat';
 import { canMove, validMoveTargets } from '@/lib/battle/move';
 
@@ -22,17 +22,15 @@ export function setUnitsTargets(unit: UnitDeployed) {
   };
   if (canAttack(unit)) {
     const validTargets = validAttackTargets(unit);
-    if (Array.isArray(validTargets)) {
-      validTargets.forEach((target) => {
+    validTargets.forEach((target) => {
+      if (isAttackingUnitDeployed(target)) {
         uiState.battle.validTargets!.units![target.instanceId] = true;
-      });
-    } else {
-      if (isLand(validTargets)) {
-        uiState.battle.validTargets!.lands![validTargets.instanceId] = true;
-      } else if (isPlayer(validTargets)) {
-        uiState.battle.validTargets!.players![validTargets.id] = true;
+      } else if (isAttackingLand(target)) {
+        uiState.battle.validTargets!.lands![target.instanceId] = true;
+      } else if (isAttackingPlayer(target)) {
+        uiState.battle.validTargets!.players![target.id] = true;
       }
-    }
+    });
   }
   if (canMove(unit)) {
     uiState.battle.validTargets!.cells = validMoveTargets(unit);

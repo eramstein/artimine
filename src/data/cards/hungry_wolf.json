@@ -4,8 +4,11 @@
   "rarity": "common",
   "type": "unit",
   "cost": 3,
-  "power": 4,
-  "maxHealth": 1,
+  "power": 3,
+  "maxHealth": 2,
+  "keywords": {
+    "retaliate": 2
+  },
   "colors": [
     {
       "color": "green",

@@ -1,5 +1,62 @@
 [
   {
+    "id": "agent_of_chaos",
+    "name": "Agent of Chaos",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 9,
+    "power": 6,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      }
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Static",
+          "staticRecompute": [
+            "On Deploy",
+            "On Death"
+          ]
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "agentOfChaosLance",
+                "keyword": "lance",
+                "range": {
+                  "all": true
+                },
+                "reset": "false"
+              }
+            }
+          },
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "agentOfChaosCleave",
+                "keyword": "cleave",
+                "range": {
+                  "all": true
+                },
+                "reset": "false"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "ammunition_cart",
     "name": "Ammunition Cart",
     "rarity": "uncommon",
@@ -635,6 +692,26 @@
     ]
   },
   {
+    "id": "drake",
+    "name": "Drake",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 7,
+    "power": 5,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "lance": true,
+      "flying": true,
+      "retaliate": 3
+    }
+  },
+  {
     "id": "dryad",
     "name": "Dryad",
     "rarity": "uncommon",
@@ -884,6 +961,24 @@
           "args": {}
         }
       }
+    ]
+  },
+  {
+    "id": "enraged_goblin",
+    "name": "Enraged Goblin",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 4,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "monster"
     ]
   },
   {
@@ -1279,6 +1374,28 @@
     ]
   },
   {
+    "id": "harpy_huntress",
+    "name": "Harpy Huntress",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 5,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "flying": true,
+      "retaliate": 3
+    }
+  },
+  {
     "id": "healing_salve",
     "name": "Healing Salve",
     "rarity": "common",
@@ -1409,8 +1526,11 @@
     "rarity": "common",
     "type": "unit",
     "cost": 3,
-    "power": 4,
-    "maxHealth": 1,
+    "power": 3,
+    "maxHealth": 2,
+    "keywords": {
+      "retaliate": 2
+    },
     "colors": [
       {
         "color": "green",
@@ -1535,6 +1655,27 @@
         ]
       }
     ]
+  },
+  {
+    "id": "lunging_cougar",
+    "name": "Lunging Cougar",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 4,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "haste": true
+    }
   },
   {
     "id": "luxurious_growth",
@@ -1689,6 +1830,48 @@
             "cardCount": 1
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "master_of_chains",
+    "name": "Master of Chains",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 4,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "ennemies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "fromTriggerParam": "mover"
+              }
+            }
+          }
+        ]
       }
     ]
   },

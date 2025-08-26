@@ -152,6 +152,7 @@
       <option value="zerk">Zerk</option>
       <option value="cleave">Cleave</option>
       <option value="lance">Lance</option>
+      <option value="flying">Flying</option>
     </select>
   </div>
 </div>

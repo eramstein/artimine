@@ -1,0 +1,20 @@
+{
+  "id": "drake",
+  "name": "Drake",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 7,
+  "power": 5,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "lance": true,
+    "flying": true,
+    "retaliate": 3
+  }
+}

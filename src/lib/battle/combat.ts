@@ -7,7 +7,7 @@ import { damagePlayer, getOpposingPlayer } from './player';
 import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './unit';
 import { onCombatResolution } from './listeners';
 import { soundManager } from './sound';
-import { isLand, isPlayer } from '../_model/type-lookup-battle';
+import { isAttackingLand, isAttackingPlayer, isAttackingUnitDeployed } from '../_model/type-lookup-battle';
 import { applyTemporaryEffect } from './temporary-effects';
 
 export function canAttack(unit: UnitDeployed) {
@@ -20,11 +20,14 @@ export function canAttack(unit: UnitDeployed) {
   );
 }
 
-export function validAttackTargets(unit: UnitDeployed): UnitDeployed[] | Land | Player {
+export function validAttackTargets(unit: UnitDeployed): (UnitDeployed | Land | Player)[] {
   let blockers: UnitDeployed[] = [];
+  const ennemyUnits = bs.units.filter(
+    (u) => u.ownerPlayerId !== unit.ownerPlayerId
+  );
   if (unit.keywords?.ranged) {
-    const unitsInRow = bs.units.filter(
-      (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+    const unitsInRow = ennemyUnits.filter(
+      (u) => u.position.row === unit.position.row
     );
     if (unitsInRow.length > 0) {
       blockers = unitsInRow;
@@ -36,14 +39,23 @@ export function validAttackTargets(unit: UnitDeployed): UnitDeployed[] | Land | 
     }
   }
   if (blockers.length > 0) {
+    if (unit.keywords?.flying) {
+      return ennemyUnits;
+    }
     return blockers;
   }
   const opponent = getOpposingPlayer(unit);
   const landBlocker = opponent.lands.find((l) => l.position === unit.position.row);
+  let targets: (UnitDeployed | Land | Player)[] = [];
   if (landBlocker) {
-    return landBlocker;
+    targets.push(landBlocker);
+  } else {
+    targets.push(opponent);
   }
-  return opponent;
+  if (unit.keywords?.flying) {
+    targets = targets.concat(ennemyUnits);
+  }
+  return targets;
 }
 
 function getClosestBlocker(unit: UnitDeployed): UnitDeployed | null {
@@ -58,11 +70,8 @@ function getClosestBlocker(unit: UnitDeployed): UnitDeployed | null {
 }
 
 function isValidTarget(unit: UnitDeployed, target: UnitDeployed | Land | Player): boolean {
-  const validTargets = validAttackTargets(unit);
-  if (Array.isArray(validTargets)) {
-    return validTargets.includes(target as UnitDeployed);
-  }
-  return validTargets === target;
+  const validTargets = validAttackTargets(unit);  
+  return validTargets.some((t) => t === target);
 }
 
 export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
@@ -151,17 +160,17 @@ export function autoAttack(unit: UnitDeployed) {
     return;
   }
   const validTargets = validAttackTargets(unit);
-  if (!validTargets || (Array.isArray(validTargets) && validTargets.length === 0)) return;
-  if (Array.isArray(validTargets) && validTargets.length > 0) {
+  if (!validTargets || validTargets.length === 0) return;
+  if (isAttackingUnitDeployed(validTargets[0])) {
     attackUnit(unit, validTargets[0]);
     return;
   }
-  if (isLand(validTargets)) {
-    attackLand(unit, validTargets);
+  if (isAttackingLand(validTargets[0])) {
+    attackLand(unit, validTargets[0]);
     return;
   }
-  if (isPlayer(validTargets)) {
-    attackPlayer(unit, validTargets.id);
+  if (isAttackingPlayer(validTargets[0])) {
+    attackPlayer(unit, validTargets[0].id);
     return;
   }
 }

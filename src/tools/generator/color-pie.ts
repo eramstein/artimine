@@ -36,6 +36,7 @@ export const keywordColorPreferences: Record<
     moveAndAttack: 6,
     resist: 6,
     cleave: -3,
+    flying: 3,
   },
   [CardColor.Green]: {
     retaliate: 2,
@@ -52,5 +53,6 @@ export const keywordColorPreferences: Record<
     poisonous: 3,
     moveAndAttack: -3,
     lance: 3,
+    flying: -3,
   },
 };

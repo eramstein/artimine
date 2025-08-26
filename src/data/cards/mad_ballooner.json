@@ -1,0 +1,37 @@
+{
+  "id": "mad_ballooner",
+  "name": "Mad Ballooner",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "madBallooner",
+              "keyword": "flying",
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ],
+      "cost": 1
+    }
+  ]
+}

@@ -1,7 +1,6 @@
-import { CardRarity, type CardColor, type UnitCard, type UnitKeywords } from '../../lib/_model';
+import { CardRarity, type CardColor, type UnitCard } from '../../lib/_model';
 import { MOCK_BASE_CARDS } from './_mocks';
 import { baseStatsCost, getBudgetForUnit } from './budgets';
-import { type BaseTemplate } from './card-batches';
 import { getDominantColor } from './_utils';
 import { powerAndHealthPreferences } from './color-pie';
 import { clamp, getRandomIntegerWithVariance } from '../../lib/_utils/random';

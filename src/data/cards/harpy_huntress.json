@@ -1,0 +1,22 @@
+{
+  "id": "harpy_huntress",
+  "name": "Harpy Huntress",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 5,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ],
+  "keywords": {
+    "flying": true,
+    "retaliate": 3
+  }
+}

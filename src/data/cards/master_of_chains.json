@@ -1,0 +1,42 @@
+{
+  "id": "master_of_chains",
+  "name": "Master of Chains",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 4,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "ennemies": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 1,
+              "fromTriggerParam": "mover"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

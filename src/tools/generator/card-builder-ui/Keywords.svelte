@@ -18,6 +18,7 @@
     zerk: boolean;
     cleave: boolean;
     lance: boolean;
+    flying: boolean;
   };
 
   export let keywordCosts: any;
@@ -73,6 +74,13 @@
       <label class="checkbox-label">
         <input type="checkbox" bind:checked={state_keywords.lance} />
         Lance <span class="keyword-cost">({keywordCosts.lance} pts)</span>
+      </label>
+    </div>
+
+    <div class="keyword-group">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={state_keywords.flying} />
+        Flying <span class="keyword-cost">({keywordCosts.flying} pts)</span>
       </label>
     </div>
 
