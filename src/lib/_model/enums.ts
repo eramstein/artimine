@@ -36,6 +36,7 @@ export enum TargetType {
   Cell = 'cell',
   Units = 'unit',
   AllyCell = 'cell_ally',
+  EnemyCell = 'cell_enemy',
   EmptyCell = 'cell_empty',
   GraveyardCard = 'graveyard_card',
   Land = 'land',
@@ -62,7 +63,7 @@ export enum UnitType {
   Demon = 'demon',
   Halfing = 'halfing',
   Plant = 'plant',
-  Mechanical = 'mechanical',
+  Construct = 'construct',
 }
 
 export enum CounterType {

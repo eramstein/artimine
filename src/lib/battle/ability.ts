@@ -7,7 +7,7 @@ import {
   type UnitDeployed,
 } from '../_model';
 import { bs } from '../_state';
-import { DataEffectTemplates } from './effects/effectTemplates';
+import { DataEffectTemplates } from './effects/effect-templates';
 import { checkTargets } from './target';
 
 export function playAbility(unit: UnitDeployed, ability: Ability, targets: EffectTargets[][]) {

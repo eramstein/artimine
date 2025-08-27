@@ -1,0 +1,32 @@
+{
+  "id": "lightning_explosion",
+  "name": "Lightning Explosion",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 5,
+          "range": {
+            "adjacent": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "cell_empty",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

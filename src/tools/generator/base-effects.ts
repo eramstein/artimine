@@ -11,8 +11,7 @@ import {
   type UnitKeywords,
   type UnitStatuses,
 } from '../../lib/_model';
-import { counterCost, getTargetCount, statusCost } from './budgets';
-import { getRangeMultiplier } from './budgets';
+import { counterCost, getRangeMultiplier, getTargetCount, statusCost } from './budgets';
 import { keywordConfig } from './keywords';
 
 export interface BaseEffect {
@@ -128,7 +127,7 @@ export const baseEffects: BaseEffect[] = [
   {
     effectName: 'darkRitual',
     argNames: ['effect'],
-    budget: (args, targets) => args.effect === 'damage' ? 12 : 6, // TBD
+    budget: (args, targets) => (args.effect === 'damage' ? 12 : 6), // TBD
   },
   {
     effectName: 'transferCounters',
@@ -159,6 +158,16 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'refreshUnit',
     argNames: ['range'],
     budget: (args, targets) => 6, // TBD
+  },
+  {
+    effectName: 'useEnergy',
+    argNames: ['effectTemplate', 'energyUsedForArgs', 'energyCost', 'otherArgs'],
+    budget: (args, targets) => 0, // TBD
+  },
+  {
+    effectName: 'forceMoveUnit',
+    argNames: [],
+    budget: (args, targets) => 30, // TBD
   },
 ];
 

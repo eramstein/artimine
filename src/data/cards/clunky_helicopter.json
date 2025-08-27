@@ -1,0 +1,64 @@
+{
+  "id": "clunky_helicopter",
+  "name": "Clunky Helicopter",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["construct"],
+  "keywords": {
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 3,
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "temporaryEffect",
+              "energyCost": 3,
+              "otherArgs": {
+                "effect": {
+                  "flying": true
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

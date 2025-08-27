@@ -1,5 +1,5 @@
 export const config = {
-  initialMana: 2,
+  initialMana: 10,
   initialHandSize: 7,
   initialLife: 10,
   boardRows: 4,

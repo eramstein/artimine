@@ -1,7 +1,13 @@
-import type { EffectTargets, Player, Position, UnitDeployed, UnitKeywords } from '@/lib/_model';
+import {
+  isDeployedUnit,
+  type Player,
+  type Position,
+  type UnitDeployed,
+  type UnitKeywords,
+} from '@/lib/_model';
 import { UnitType } from '@/lib/_model/enums';
-import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 import { bs } from '@/lib/_state';
+import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 
 export interface UnitFilterArgs {
   // references
@@ -24,6 +30,7 @@ export interface UnitFilterArgs {
 }
 
 export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
+  console.log('filterUnits', filterArgs);
   if (filterArgs.all) {
     return bs.units;
   }
@@ -55,6 +62,13 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
       filterArgs.adjacent &&
       filterArgs.unit &&
       !getAdjacentUnits(u.position).includes(filterArgs.unit)
+    ) {
+      valid = false;
+    }
+    if (
+      filterArgs.adjacent &&
+      filterArgs.position &&
+      !getAdjacentUnits(filterArgs.position).includes(u)
     ) {
       valid = false;
     }
@@ -105,17 +119,23 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
 // if there are targets, we assume the first one is the units to loop on
 // else, only use the range (e.g. all ennemies)
 export function getUnitsInRange(
-  targets: UnitDeployed[][] | undefined, // assumption: 1st one is units
+  targets: UnitDeployed[][] | Position[][] | undefined, // assumption: 1st one is units
   range: UnitFilterArgs | undefined,
   unit: UnitDeployed,
   player: Player
 ): UnitDeployed[] {
   let unitsInRange: UnitDeployed[] = [];
   if (targets && targets[0]?.length) {
-    const targetUnits = targets[0];
-    targetUnits.forEach((u) => {
-      unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
-    });
+    const targetsToLoop = targets[0];
+    if (isDeployedUnit(targetsToLoop)) {
+      targetsToLoop.forEach((u) => {
+        unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
+      });
+    } else {
+      targetsToLoop.forEach((p) => {
+        unitsInRange = range ? filterUnits({ position: p, ...range }) : [];
+      });
+    }
   } else if (range) {
     unitsInRange = filterUnits({ unit, player, ...range });
   } else if (unit) {

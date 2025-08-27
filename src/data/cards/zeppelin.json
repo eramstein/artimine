@@ -1,0 +1,45 @@
+{
+  "id": "zeppelin",
+  "name": "Zeppelin",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 7,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "construct"
+  ],
+  "keywords": {
+    "flying": true,
+    "retaliate": 4
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 4,
+              "range": {
+                "adjacent": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

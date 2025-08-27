@@ -1,5 +1,71 @@
 [
   {
+    "id": "accumulator_cannon",
+    "name": "Accumulator Cannon",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "ranged": true,
+      "armor": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 3
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "damageUnit",
+                "energyUsedForArgs": "damage"
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "agent_of_chaos",
     "name": "Agent of Chaos",
     "rarity": "rare",
@@ -92,7 +158,7 @@
       }
     ],
     "unitTypes": [
-      "mechanical"
+      "construct"
     ],
     "keywords": {
       "retaliate": 1
@@ -590,6 +656,72 @@
     }
   },
   {
+    "id": "clunky_helicopter",
+    "name": "Clunky Helicopter",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "armor": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 3,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "temporaryEffect",
+                "energyCost": 3,
+                "otherArgs": {
+                  "effect": {
+                    "flying": true
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "coal_demon",
     "name": "Coal Demon",
     "rarity": "rare",
@@ -938,6 +1070,26 @@
         ]
       }
     ]
+  },
+  {
+    "id": "eagle_mounted_archers",
+    "name": "Eagle Mounted Archers",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 5,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "ranged": true,
+      "flying": true,
+      "retaliate": 1
+    }
   },
   {
     "id": "earthquake",
@@ -1433,6 +1585,87 @@
     }
   },
   {
+    "id": "gnome_engineer",
+    "name": "Gnome Engineer",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "healUnit",
+              "args": {
+                "health": 10,
+                "range": {
+                  "adjacent": true,
+                  "allies": true,
+                  "unitType": "construct"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "goblin_engineer",
+    "name": "Goblin Engineer",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 3,
+                "range": {
+                  "allies": true,
+                  "adjacent": true,
+                  "unitType": "construct"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "grim_guard",
     "name": "Grim Guard",
     "rarity": "common",
@@ -1701,7 +1934,7 @@
     "power": 2,
     "maxHealth": 5,
     "unitTypes": [
-      "mechanical"
+      "construct"
     ],
     "colors": [
       {
@@ -1808,6 +2041,38 @@
     ]
   },
   {
+    "id": "lightning_explosion",
+    "name": "Lightning Explosion",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 5,
+            "range": {
+              "adjacent": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "cell_empty",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "lunging_cougar",
     "name": "Lunging Cougar",
     "rarity": "uncommon",
@@ -1827,6 +2092,49 @@
     "keywords": {
       "haste": true
     }
+  },
+  {
+    "id": "luring_enchantress",
+    "name": "Luring Enchantress",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 1,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "forceMoveUnit",
+              "args": {}
+            },
+            "targets": [
+              {
+                "type": "unit_ennemies",
+                "count": 1
+              },
+              {
+                "type": "cell_enemy",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "luxurious_growth",
@@ -2651,7 +2959,7 @@
     "name": "Savannah Lion",
     "type": "unit",
     "rarity": "common",
-    "cost": 20,
+    "cost": 10,
     "power": 2,
     "maxHealth": 2,
     "keywords": {
@@ -2700,6 +3008,100 @@
             }
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "self_building_tank",
+    "name": "Self Building Tank",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "ranged": true,
+      "retaliate": 3,
+      "armor": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 1,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "staticKeyword",
+                "energyCost": 3,
+                "otherArgs": {
+                  "abilityName": "selfBuildTank",
+                  "keyword": "armor",
+                  "keyWordValue": 1,
+                  "reset": "false"
+                }
+              }
+            }
+          }
+        ],
+        "cost": 1
+      },
+      {
+        "trigger": {
+          "type": "Activated",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "addCounters",
+                "energyCost": 2,
+                "otherArgs": {
+                  "counterType": "growth",
+                  "counterValue": 1
+                }
+              }
+            }
+          }
+        ],
+        "cost": 1
       }
     ]
   },
@@ -2982,6 +3384,45 @@
     }
   },
   {
+    "id": "teleport",
+    "name": "Teleport",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "forceMoveUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit_ennemies",
+            "count": 1
+          },
+          {
+            "type": "cell_enemy",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "teutonic_knight",
     "name": "Teutonic Knight",
     "rarity": "uncommon",
@@ -3082,6 +3523,43 @@
           "type": "Activated"
         },
         "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "transfer_energy",
+    "name": "Transfer Energy",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "transferCounters",
+          "args": {
+            "counterType": "energy"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
       }
     ]
   },
@@ -3249,6 +3727,51 @@
     ],
     "unitTypes": [
       "hobbit"
+    ]
+  },
+  {
+    "id": "zeppelin",
+    "name": "Zeppelin",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 7,
+    "maxHealth": 7,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "flying": true,
+      "retaliate": 4
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 4,
+                "range": {
+                  "adjacent": true
+                }
+              }
+            }
+          }
+        ]
+      }
     ]
   },
   {

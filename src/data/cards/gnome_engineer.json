@@ -1,0 +1,40 @@
+{
+  "id": "gnome_engineer",
+  "name": "Gnome Engineer",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "healUnit",
+            "args": {
+              "health": 10,
+              "range": {
+                "adjacent": true,
+                "allies": true,
+                "unitType": "construct"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

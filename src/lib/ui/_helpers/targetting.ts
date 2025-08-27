@@ -11,14 +11,13 @@ import {
   type SpellCard,
   type UnitDeployed,
 } from '@/lib/_model';
-import { uiState } from '@/lib/_state';
+import { bs, uiState } from '@/lib/_state';
 import { playAbility } from '@/lib/battle';
-import { isActivityPayable } from '@/lib/battle/cost';
 import { getPositionKey } from '@/lib/battle/boards';
+import { isActivityPayable } from '@/lib/battle/cost';
+import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
 import { playSpell } from '@/lib/battle/spell';
 import { getEligibleTargets } from '@/lib/battle/target';
-import { DataEffectTemplates } from '@/lib/battle/effects/effectTemplates';
-import { bs } from '@/lib/_state';
 
 export function activateAbility(unit: UnitDeployed, ability: Ability) {
   if (isActivityPayable(unit, ability) === false) {
@@ -326,7 +325,7 @@ export function targetCell(position: Position) {
   if (
     (!ui.abilityPending && !ui.spellPending && !ui.triggeredAbilityPending) ||
     !ui.targetBeingSelected ||
-    ![TargetType.Cell, TargetType.AllyCell, TargetType.EmptyCell].includes(
+    ![TargetType.Cell, TargetType.AllyCell, TargetType.EmptyCell, TargetType.EnemyCell].includes(
       ui.targetBeingSelected.type
     )
   )

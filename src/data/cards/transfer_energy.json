@@ -1,0 +1,37 @@
+{
+  "id": "transfer_energy",
+  "name": "Transfer Energy",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "transferCounters",
+        "args": {
+          "counterType": "energy"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

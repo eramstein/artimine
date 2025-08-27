@@ -9,7 +9,7 @@ import { bs } from '../_state';
 import { isPayable } from './cost';
 import { checkTargets } from './target';
 import { discard } from './hand';
-import { DataEffectTemplates } from './effects/effectTemplates';
+import { DataEffectTemplates } from './effects/effect-templates';
 
 export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
   console.log(spell.name + ' on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', ')));

@@ -1,8 +1,8 @@
 import { config } from '../_config';
 import type { Position, UnitDeployed } from '../_model/model-battle';
 import { getPositionKey, isCellFree } from './boards';
-import { isHumanPlayer } from './player';
 import { onAfterMoveUnit, onBeforeMoveUnit } from './listeners';
+import { isHumanPlayer } from './player';
 
 export function canMove(unit: UnitDeployed) {
   return (
@@ -51,5 +51,21 @@ export function moveUnit(unit: UnitDeployed, targetPosition: Position) {
     unit.exhausted = true;
   }
   // triggers
+  onAfterMoveUnit(unit, targetPosition);
+}
+
+export function forceMoveUnit(unit: UnitDeployed, targetPosition: Position) {
+  const isOnPlayerSide = isHumanPlayer(unit.ownerPlayerId);
+  if (!isOnPlayerSide) {
+    if (targetPosition.row < config.boardRows / 2) {
+      return;
+    }
+  } else {
+    if (targetPosition.row >= config.boardRows / 2) {
+      return;
+    }
+  }
+  onBeforeMoveUnit(unit, targetPosition);
+  unit.position = targetPosition;
   onAfterMoveUnit(unit, targetPosition);
 }

@@ -8,7 +8,7 @@
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Abilities from './Abilities.svelte';
-  import { DataEffectTemplates } from '@lib/battle/effects/effectTemplates';
+  import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
   import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let {

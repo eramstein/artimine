@@ -1,7 +1,7 @@
-import { isPayable, payCost } from './cost';
 import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '../_model';
-import { isCellFree, isOnPlayersSide } from './boards';
 import { bs } from '../_state';
+import { isCellFree, isOnPlayersSide } from './boards';
+import { isPayable, payCost } from './cost';
 import { onDamageUnit, onDeployUnit, onUnitDeath } from './listeners';
 import { soundManager } from './sound';
 
@@ -93,6 +93,18 @@ export function destroyUnit(unit: UnitDeployed) {
 }
 
 export function getAdjacentUnits(position: Position): UnitDeployed[] {
+  console.log(
+    'getAdjacentUnits',
+    position,
+    bs.units.filter(
+      (u) =>
+        (u.position.column === position.column - 1 && u.position.row === position.row) ||
+        (u.position.column === position.column + 1 && u.position.row === position.row) ||
+        (u.position.column === position.column && u.position.row === position.row - 1) ||
+        (u.position.column === position.column && u.position.row === position.row + 1)
+    )
+  );
+
   return bs.units.filter(
     (u) =>
       (u.position.column === position.column - 1 && u.position.row === position.row) ||

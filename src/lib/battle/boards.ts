@@ -52,3 +52,13 @@ export function getRandomEmptyAlliedCells(isPlayer: boolean, count: number = 1):
   const alliedCells = emptyCells.filter((cell) => isOnPlayersSide(cell, isPlayer ? 0 : 1));
   return alliedCells.sort(() => Math.random() - 0.5).slice(0, count);
 }
+
+export function getAllPositions(): Position[] {
+  const positions: Position[] = [];
+  for (let row = 0; row < config.boardRows; row++) {
+    for (let col = 0; col < config.boardColumns; col++) {
+      positions.push({ row, column: col });
+    }
+  }
+  return positions;
+}

@@ -1,0 +1,39 @@
+{
+  "id": "teleport",
+  "name": "Teleport",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "forceMoveUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit_ennemies",
+          "count": 1
+        },
+        {
+          "type": "cell_enemy",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

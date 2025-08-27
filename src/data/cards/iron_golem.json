@@ -6,7 +6,7 @@
   "cost": 5,
   "power": 2,
   "maxHealth": 5,
-  "unitTypes": ["mechanical"],
+  "unitTypes": ["construct"],
   "colors": [
     {
       "color": "black",

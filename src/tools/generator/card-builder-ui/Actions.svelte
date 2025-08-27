@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CardType, UnitType, TargetType } from '../../../lib/_model';
-  import type { ActionDefinition, TargetDefinition, UnitKeywords } from '../../../lib/_model';
+  import type { ActionDefinition, TargetDefinition } from '../../../lib/_model';
+  import { CardType, TargetType } from '../../../lib/_model';
   import { baseEffects, getBaseEffect } from '../base-effects';
   import RangeOptions from './RangeOptions.svelte';
 
@@ -220,6 +220,14 @@
                     <em>Select an effect to configure range options</em>
                   </div>
                 {/if}
+              {:else if argName === 'effectTemplate'}
+                <!-- Special handling for effect argument -->
+                <select id={argName} bind:value={props.newAction.effectArgs[argName]}>
+                  <option value="">Select an effect...</option>
+                  {#each effectOptions as opt}
+                    <option value={opt.value}>{opt.label}</option>
+                  {/each}
+                </select>
               {:else if argName.includes('damage') || argName.includes('Value') || argName.includes('duration')}
                 <input
                   id={argName}

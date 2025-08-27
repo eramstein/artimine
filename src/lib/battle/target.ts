@@ -1,17 +1,16 @@
 import {
-  CardType,
   isUnitCard,
   TargetType,
   type Card,
   type EffectTargets,
+  type Land,
   type Position,
   type SpellCard,
   type TargetDefinition,
   type UnitDeployed,
-  type Land,
 } from '../_model';
 import { bs } from '../_state';
-import { getEmptyCells, getPositionKey, isCellFree, isOnPlayersSide } from './boards';
+import { getAllPositions, getEmptyCells, getPositionKey } from './boards';
 import { getAllGraveyardsCards } from './graveyard';
 import { getAllLands } from './land';
 
@@ -114,10 +113,13 @@ export function getEligibleTargets(
     eligibleTargets = bs.units.filter((u) => u.ownerPlayerId === card.ownerPlayerId);
   }
   if (target.type === TargetType.Cell) {
-    eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
+    eligibleTargets = getAllPositions();
   }
   if (target.type === TargetType.AllyCell) {
-    eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
+    eligibleTargets = [...getEmptyCells(true)];
+  }
+  if (target.type === TargetType.EnemyCell) {
+    eligibleTargets = [...getEmptyCells(false)];
   }
   if (target.type === TargetType.EmptyCell) {
     eligibleTargets = [...getEmptyCells(true), ...getEmptyCells(false)];
@@ -136,11 +138,27 @@ export function getEligibleTargets(
 
 export function getTargetLabel(target: TargetDefinition): string {
   const count = target.count ?? 1;
+  console.log('getTargetLabel', target);
   if (target.type === TargetType.Units) {
     return `to target unit${count !== 1 ? 's' : ''}`;
   }
+  if (target.type === TargetType.Ennemies) {
+    return `to target ennemy${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.Allies) {
+    return `to target ally${count !== 1 ? 's' : ''}`;
+  }
   if (target.type === TargetType.Cell) {
-    return `to target cell${count !== 1 ? 's' : ''}`;
+    return `, targets cell${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.AllyCell) {
+    return `, targets ally cell${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.EnemyCell) {
+    return `, targets enemy cell${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.EmptyCell) {
+    return `, targets empty cell${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Land) {
     return `to target land${count !== 1 ? 's' : ''}`;

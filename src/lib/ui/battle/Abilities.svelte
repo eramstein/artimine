@@ -5,7 +5,7 @@
   import { activateAbility } from '../_helpers/targetting';
   import { uiState } from '../../_state';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
-  import { DataEffectTemplates } from '../../battle/effects/effectTemplates';
+  import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   let { abilities, unit }: { abilities: Ability[]; unit?: UnitDeployed } = $props();
 
   // Tooltip state

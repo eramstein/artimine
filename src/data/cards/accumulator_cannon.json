@@ -1,0 +1,64 @@
+{
+  "id": "accumulator_cannon",
+  "name": "Accumulator Cannon",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["construct"],
+  "keywords": {
+    "ranged": true,
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "damageUnit",
+              "energyUsedForArgs": "damage"
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "exhausts": true
+    }
+  ]
+}

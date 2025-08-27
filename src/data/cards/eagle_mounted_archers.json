@@ -1,0 +1,20 @@
+{
+  "id": "eagle_mounted_archers",
+  "name": "Eagle Mounted Archers",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 5,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "ranged": true,
+    "flying": true,
+    "retaliate": 1
+  }
+}

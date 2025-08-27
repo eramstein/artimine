@@ -1,0 +1,92 @@
+{
+  "id": "self_building_tank",
+  "name": "Self Building Tank",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 3,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["construct"],
+  "keywords": {
+    "ranged": true,
+    "retaliate": 3,
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 1,
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "staticKeyword",
+              "energyCost": 3,
+              "otherArgs": {
+                "abilityName": "selfBuildTank",
+                "keyword": "armor",
+                "keyWordValue": 1,
+                "reset": "false"
+              }
+            }
+          }
+        }
+      ],
+      "cost": 1
+    },
+    {
+      "trigger": {
+        "type": "Activated",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "addCounters",
+              "energyCost": 2,
+              "otherArgs": {
+                "counterType": "growth",
+                "counterValue": 1
+              }
+            }
+          }
+        }
+      ],
+      "cost": 1
+    }
+  ]
+}

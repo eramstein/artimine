@@ -1,2 +1,2 @@
-export * from './effectTemplates';
+export * from './effect-templates';
 export * from './unitFilters';

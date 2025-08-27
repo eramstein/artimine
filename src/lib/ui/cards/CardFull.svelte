@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Card, SpellCard } from '../../_model/model-battle';
   import { CardColor, CardType, UnitType } from '../../_model/enums';
-  import { DataEffectTemplates } from '../../battle/effects/effectTemplates';
+  import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
   import { getCardImagePath } from '@lib/_utils/asset-paths';
 

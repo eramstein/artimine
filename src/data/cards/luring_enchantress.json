@@ -1,0 +1,41 @@
+{
+  "id": "luring_enchantress",
+  "name": "Luring Enchantress",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 1,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "forceMoveUnit",
+            "args": {}
+          },
+          "targets": [
+            {
+              "type": "unit_ennemies",
+              "count": 1
+            },
+            {
+              "type": "cell_enemy",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

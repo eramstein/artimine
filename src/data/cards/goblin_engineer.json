@@ -1,0 +1,41 @@
+{
+  "id": "goblin_engineer",
+  "name": "Goblin Engineer",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 3,
+              "range": {
+                "allies": true,
+                "adjacent": true,
+                "unitType": "construct"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
