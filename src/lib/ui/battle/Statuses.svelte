@@ -21,7 +21,7 @@
     poison: (value: number) =>
       `Poisoned (${value}): This unit takes ${value} damage at the start of each turn.`,
     mezz: (value: number) =>
-      `Mezzed (${value}): This unit cannot attack or move for ${value} more turns.`,
+      `Mezzed (${value}): This unit cannot attack or move for ${value} more turns. Any damage breaks the effect.`,
     root: (value: number) => `Rooted (${value}): This unit cannot move for ${value} more turns.`,
     stun: (value: number) => `Stunned (${value}): This unit cannot attack for ${value} more turns.`,
     daze: (value: number) => `Dazed (${value}): This unit cannot attack for ${value} more turns.`,

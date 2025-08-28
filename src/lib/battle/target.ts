@@ -52,7 +52,6 @@ export function checkTargets(
   targetDefinition: TargetDefinition,
   tentativeTargets: EffectTargets
 ): boolean {
-  console.log('checking targets', card, targetDefinition, tentativeTargets);
   if (!targetDefinition) {
     return true;
   }
@@ -138,7 +137,6 @@ export function getEligibleTargets(
 
 export function getTargetLabel(target: TargetDefinition): string {
   const count = target.count ?? 1;
-  console.log('getTargetLabel', target);
   if (target.type === TargetType.Units) {
     return `to target unit${count !== 1 ? 's' : ''}`;
   }

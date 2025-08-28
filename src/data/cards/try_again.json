@@ -1,0 +1,35 @@
+{
+  "id": "try_again",
+  "name": "Try Again",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "bounceUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

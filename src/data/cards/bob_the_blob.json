@@ -1,0 +1,39 @@
+{
+  "id": "bob_the_blob",
+  "name": "Bob the Blob",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "elemental"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "decay",
+              "counterValue": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

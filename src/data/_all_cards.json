@@ -530,6 +530,45 @@
     ]
   },
   {
+    "id": "bob_the_blob",
+    "name": "Bob the Blob",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "elemental"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "decay",
+                "counterValue": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "boring_boar",
     "name": "Boring Boar",
     "rarity": "common",
@@ -2113,7 +2152,10 @@
     "abilities": [
       {
         "trigger": {
-          "type": "On Deploy"
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
         },
         "actions": [
           {
@@ -2330,6 +2372,33 @@
     ]
   },
   {
+    "id": "mass_sleep",
+    "name": "Mass Sleep",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 7,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "applyUnitStatus",
+          "args": {
+            "statusType": "mezz",
+            "duration": 1,
+            "range": {
+              "ennemies": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "master_of_chains",
     "name": "Master of Chains",
     "rarity": "rare",
@@ -2387,6 +2456,34 @@
     ],
     "unitTypes": [
       "plant"
+    ]
+  },
+  {
+    "id": "melting_spree",
+    "name": "Melting Spree",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "meltingSpree",
+            "keyword": "armor",
+            "keyWordValue": -5,
+            "range": {
+              "hasKeyword": "armor"
+            }
+          }
+        }
+      }
     ]
   },
   {
@@ -2717,6 +2814,73 @@
             "self": true
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "peaceful_faerie",
+    "name": "Peaceful Faerie",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "ranged": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "mezz",
+                "duration": 2,
+                "fromTriggerParam": "defender"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "peasants_be_gone",
+    "name": "Peasants be gone!",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "bounceUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 2
+          }
+        ]
       }
     ]
   },
@@ -3322,6 +3486,31 @@
     ]
   },
   {
+    "id": "spirited_train",
+    "name": "Spirited Train",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 8,
+    "power": 5,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "construct",
+      "demon"
+    ],
+    "keywords": {
+      "moveAndAttack": true,
+      "retaliate": 2,
+      "armor": 3,
+      "resist": 3
+    }
+  },
+  {
     "id": "stampede",
     "name": "Stampede",
     "rarity": "common",
@@ -3587,6 +3776,74 @@
           {
             "type": "unit",
             "count": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "try_again",
+    "name": "Try Again",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "bounceUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "tsunami",
+    "name": "Tsunami",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "damageUnit",
+          "args": {
+            "damage": 4,
+            "range": {
+              "addSelf": true,
+              "sameColumn": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
           }
         ]
       }

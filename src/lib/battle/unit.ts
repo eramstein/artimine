@@ -33,7 +33,6 @@ export function makeUnit(leaderIndex: number, core: UnitCardTemplate): UnitCard 
 }
 
 export function summonUnit(unit: UnitCard, targetPosition: Position) {
-  console.log('summonUnit', unit, targetPosition);
   const unitDeployed = makeDeployedUnit(unit, targetPosition);
   bs.units.push(unitDeployed);
 }
@@ -93,18 +92,6 @@ export function destroyUnit(unit: UnitDeployed) {
 }
 
 export function getAdjacentUnits(position: Position): UnitDeployed[] {
-  console.log(
-    'getAdjacentUnits',
-    position,
-    bs.units.filter(
-      (u) =>
-        (u.position.column === position.column - 1 && u.position.row === position.row) ||
-        (u.position.column === position.column + 1 && u.position.row === position.row) ||
-        (u.position.column === position.column && u.position.row === position.row - 1) ||
-        (u.position.column === position.column && u.position.row === position.row + 1)
-    )
-  );
-
   return bs.units.filter(
     (u) =>
       (u.position.column === position.column - 1 && u.position.row === position.row) ||
@@ -139,14 +126,6 @@ export function getClosestEnnemyInRow(unit: UnitDeployed): UnitDeployed | undefi
   if (ennemiesInRow.length === 0) {
     return undefined;
   }
-  console.log(
-    'ennemiesInRow',
-    ennemiesInRow.sort(
-      (a, b) =>
-        Math.abs(unit.position.column - a.position.column) -
-        Math.abs(unit.position.column - b.position.column)
-    )[0]
-  );
   return ennemiesInRow.sort(
     (a, b) =>
       Math.abs(unit.position.column - a.position.column) -
@@ -182,4 +161,9 @@ export const modifyUnitHealth = (unit: UnitDeployed, amount: number) => {
 
 export function refreshUnit(unit: UnitDeployed) {
   unit.exhausted = false;
+}
+
+export function bounceUnit(unit: UnitDeployed) {
+  bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
+  bs.players[unit.ownerPlayerId].hand.push(unit);
 }

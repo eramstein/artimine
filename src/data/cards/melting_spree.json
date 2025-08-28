@@ -1,0 +1,28 @@
+{
+  "id": "melting_spree",
+  "name": "Melting Spree",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "meltingSpree",
+          "keyword": "armor",
+          "keyWordValue": -5,
+          "range": {
+            "hasKeyword": "armor"
+          }
+        }
+      }
+    }
+  ]
+}

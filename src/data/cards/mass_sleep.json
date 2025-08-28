@@ -1,0 +1,27 @@
+{
+  "id": "mass_sleep",
+  "name": "Mass Sleep",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 7,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "applyUnitStatus",
+        "args": {
+          "statusType": "mezz",
+          "duration": 1,
+          "range": {
+            "ennemies": true
+          }
+        }
+      }
+    }
+  ]
+}

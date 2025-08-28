@@ -16,6 +16,7 @@ import {
   addStaticKeyword,
   applyTemporaryEffect,
   applyUnitStatus,
+  bounceUnit,
   clearUnitStaticAbilities,
   damagePlayer,
   damageUnit,
@@ -203,13 +204,17 @@ export const DataEffectTemplates: Record<
     statusType,
     duration,
     range,
+    fromTriggerParam,
   }: {
     statusType: StatusType;
     duration: number;
     range?: UnitFilterArgs;
+    fromTriggerParam?: string;
   }) => ({
-    fn: ({ targets, player, unit }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, player, unit, triggerParams }) => {
+      const unitsInRange = fromTriggerParam
+        ? [triggerParams[fromTriggerParam]]
+        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
         applyUnitStatus(u, statusType, duration);
       });
@@ -303,6 +308,18 @@ export const DataEffectTemplates: Record<
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
       return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
+    },
+  }),
+  bounceUnit: ({ range }: { range?: UnitFilterArgs }) => ({
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        bounceUnit(u);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      return `Bounce ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   fortifyLand: ({ amount }: { amount: number }) => ({

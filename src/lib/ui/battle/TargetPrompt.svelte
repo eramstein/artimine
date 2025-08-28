@@ -5,7 +5,7 @@
     const battle = uiState.battle;
     if (!battle.targetBeingSelected) return null;
 
-    const targetText = `${battle.targetBeingSelected.count} ${battle.targetBeingSelected.type}`;
+    const targetText = `${battle.targetBeingSelected.count || ''} ${battle.targetBeingSelected.type}`;
 
     // Get count of currently selected targets for the current effect and target index
     const currentEffectIndex = battle.currentEffectIndex || 0;

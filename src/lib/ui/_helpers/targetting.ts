@@ -42,7 +42,9 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
     const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
-      highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]));
+      if (!highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]))) {
+        clearUiState();
+      }
     } else {
       ui.targetBeingSelected = null;
       playAbility(unit, ability, []);
@@ -71,7 +73,9 @@ export function activateSpell(spell: SpellCard) {
     const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
-      highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0, 0));
+      if (!highlightEligibleTargets(getEligibleSpellTargetsForIndex(spell, 0, 0))) {
+        clearUiState();
+      }
     } else {
       ui.targetBeingSelected = null;
       playSpell(spell, []);
@@ -96,7 +100,10 @@ export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, t
     const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
-      highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]));
+      if (!highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]))) {
+        console.log('no eligible targets');
+        clearUiState();
+      }
     } else {
       ui.targetBeingSelected = null;
       playTriggeredAbility(unit, ability, [], triggerParams);
@@ -141,7 +148,7 @@ function playTriggeredAbility(
   });
 }
 
-function highlightEligibleTargets(eligibleTargets: EffectTargets) {
+function highlightEligibleTargets(eligibleTargets: EffectTargets): boolean {
   const ui = uiState.battle;
   if (ui.targetBeingSelected && ui.targetBeingSelected.type !== TargetType.Self) {
     ui.validTargets = {
@@ -151,24 +158,30 @@ function highlightEligibleTargets(eligibleTargets: EffectTargets) {
       cells: {},
       cards: {},
     };
+    let hasEligibleTargets = false;
     if (Array.isArray(eligibleTargets)) {
       if (isDeployedUnit(eligibleTargets)) {
         (eligibleTargets as UnitDeployed[]).forEach((target) => {
           ui.validTargets!.units![target.instanceId] = true;
+          hasEligibleTargets = true;
         });
       } else if (isPosition(eligibleTargets)) {
         (eligibleTargets as Position[]).forEach((position) => {
           const positionKey = getPositionKey(position);
           ui.validTargets!.cells![positionKey] = true;
+          hasEligibleTargets = true;
         });
       } else if (isCard(eligibleTargets)) {
         (eligibleTargets as Card[]).forEach((card) => {
           ui.validTargets!.cards![card.instanceId] = true;
+          hasEligibleTargets = true;
         });
       }
     }
+    return hasEligibleTargets;
   } else {
     ui.validTargets = null;
+    return true; // Self targets don't need validation
   }
 }
 
@@ -235,12 +248,13 @@ function advanceTargetStep() {
   ui.currentTargetIndex++;
   if (ui.currentTargetIndex < targets.length) {
     ui.targetBeingSelected = targets[ui.currentTargetIndex];
+    let hasEligibleTargets = false;
     if (ui.abilityPending) {
-      highlightEligibleTargets(
+      hasEligibleTargets = highlightEligibleTargets(
         getEligibleTargets(ui.abilityPending.unit, targets[ui.currentTargetIndex])
       );
     } else if (ui.spellPending) {
-      highlightEligibleTargets(
+      hasEligibleTargets = highlightEligibleTargets(
         getEligibleSpellTargetsForIndex(
           ui.spellPending,
           ui.currentEffectIndex,
@@ -248,9 +262,15 @@ function advanceTargetStep() {
         )
       );
     } else if (ui.triggeredAbilityPending) {
-      highlightEligibleTargets(
+      hasEligibleTargets = highlightEligibleTargets(
         getEligibleTargets(ui.triggeredAbilityPending.unit, targets[ui.currentTargetIndex])
       );
+    }
+
+    // If no eligible targets, end target selection and don't play the ability/spell
+    if (!hasEligibleTargets) {
+      clearUiState();
+      return;
     }
   } else {
     // All targets for current effect selected, move to next effect
@@ -261,18 +281,25 @@ function advanceTargetStep() {
       const nextEffect = actions[ui.currentEffectIndex];
       if (nextEffect.targets && nextEffect.targets.length > 0) {
         ui.targetBeingSelected = nextEffect.targets[0];
+        let hasEligibleTargets = false;
         if (ui.abilityPending) {
-          highlightEligibleTargets(
+          hasEligibleTargets = highlightEligibleTargets(
             getEligibleTargets(ui.abilityPending.unit, nextEffect.targets[0])
           );
         } else if (ui.spellPending) {
-          highlightEligibleTargets(
+          hasEligibleTargets = highlightEligibleTargets(
             getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentEffectIndex, 0)
           );
         } else if (ui.triggeredAbilityPending) {
-          highlightEligibleTargets(
+          hasEligibleTargets = highlightEligibleTargets(
             getEligibleTargets(ui.triggeredAbilityPending.unit, nextEffect.targets[0])
           );
+        }
+
+        // If no eligible targets, end target selection and don't play the ability/spell
+        if (!hasEligibleTargets) {
+          clearUiState();
+          return;
         }
       } else {
         // Next effect has no targets, advance again

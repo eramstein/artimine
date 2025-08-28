@@ -1,14 +1,18 @@
 import { config } from '../_config';
 import type { Land, Player, UnitDeployed } from '../_model/model-battle';
+import {
+  isAttackingLand,
+  isAttackingPlayer,
+  isAttackingUnitDeployed,
+} from '../_model/type-lookup-battle';
 import { bs } from '../_state';
 import { uiState } from '../_state/state-ui.svelte';
 import { damageLand } from './land';
-import { damagePlayer, getOpposingPlayer } from './player';
-import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './unit';
 import { onCombatResolution, onUnitReach } from './listeners';
+import { damagePlayer, getOpposingPlayer } from './player';
 import { soundManager } from './sound';
-import { isAttackingLand, isAttackingPlayer, isAttackingUnitDeployed } from '../_model/type-lookup-battle';
 import { applyTemporaryEffect } from './temporary-effects';
+import { damageUnit, getAdjacentAlliesInRow, getAdjacentUnitsInColumn } from './unit';
 
 export function canAttack(unit: UnitDeployed) {
   return (
@@ -22,13 +26,9 @@ export function canAttack(unit: UnitDeployed) {
 
 export function validAttackTargets(unit: UnitDeployed): (UnitDeployed | Land | Player)[] {
   let blockers: UnitDeployed[] = [];
-  const ennemyUnits = bs.units.filter(
-    (u) => u.ownerPlayerId !== unit.ownerPlayerId
-  );
+  const ennemyUnits = bs.units.filter((u) => u.ownerPlayerId !== unit.ownerPlayerId);
   if (unit.keywords?.ranged) {
-    const unitsInRow = ennemyUnits.filter(
-      (u) => u.position.row === unit.position.row
-    );
+    const unitsInRow = ennemyUnits.filter((u) => u.position.row === unit.position.row);
     if (unitsInRow.length > 0) {
       blockers = unitsInRow;
     }
@@ -70,7 +70,7 @@ function getClosestBlocker(unit: UnitDeployed): UnitDeployed | null {
 }
 
 function isValidTarget(unit: UnitDeployed, target: UnitDeployed | Land | Player): boolean {
-  const validTargets = validAttackTargets(unit);  
+  const validTargets = validAttackTargets(unit);
   return validTargets.some((t) => t === target);
 }
 
@@ -95,7 +95,7 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
     if (unit.keywords?.poisonous) {
       attackedUnit.statuses.poison = (attackedUnit.statuses.poison || 0) + unit.keywords.poisonous;
     }
-    const wasDestroyed = damageUnit(attackedUnit, dealtDamage);
+    const wasDestroyed = damageUnit(attackedUnit, dealtDamage, true);
     if (!wasDestroyed && attackedUnit.keywords?.retaliate && !unit.keywords?.ranged) {
       damageUnit(unit, attackedUnit.keywords.retaliate, true);
     }
@@ -182,4 +182,4 @@ function useRage(unit: UnitDeployed) {
     applyTemporaryEffect(unit, { power: unit.counters.rage });
     unit.counters.rage = 0;
   }
-} 
+}

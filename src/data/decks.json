@@ -2,6 +2,13 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "melting_spree",
+      "spirited_train",
+      "peasants_be_gone",
+      "bob_the_blob",
+      "tsunami",
+      "peaceful_faerie",
+      "lightning_bolt",
       "zeppelin",
       "eagle_mounted_archers",
       "luring_enchantress",
@@ -30,7 +37,6 @@
       "mass_enrage",
       "fire_elemental",
       "dwarven_punisher",
-      "lightning_bolt",
       "where_there_is_a_whip",
       "red_dragon",
       "mountain_giant",

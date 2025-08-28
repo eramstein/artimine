@@ -110,10 +110,10 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'applyUnitStatus',
-    argNames: ['statusType', 'duration', 'range'],
+    argNames: ['statusType', 'duration', 'range', 'fromTriggerParam'],
     budget: (args, targets) => {
       const baseCost = statusCost[args.statusType as keyof UnitStatuses];
-      const targetMultiplier = getTargetCount(targets);
+      const targetMultiplier = args.fromTriggerParam ? 1 : getTargetCount(targets);
       const rangeMultiplier = getRangeMultiplier(args.range);
       return baseCost * targetMultiplier * rangeMultiplier;
     },
@@ -147,6 +147,14 @@ export const baseEffects: BaseEffect[] = [
     budget: (args, targets) => {
       const targetMultiplier = getTargetCount(targets);
       return 34 * targetMultiplier;
+    },
+  },
+  {
+    effectName: 'bounceUnit',
+    argNames: ['range'],
+    budget: (args, targets) => {
+      const targetMultiplier = getTargetCount(targets);
+      return 12 * targetMultiplier;
     },
   },
   {

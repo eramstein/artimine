@@ -1,0 +1,27 @@
+{
+  "id": "peasants_be_gone",
+  "name": "Peasants be gone!",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "bounceUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

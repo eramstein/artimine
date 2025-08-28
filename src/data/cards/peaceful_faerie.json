@@ -1,0 +1,40 @@
+{
+  "id": "peaceful_faerie",
+  "name": "Peaceful Faerie",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "ranged": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "mezz",
+              "duration": 2,
+              "fromTriggerParam": "defender"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

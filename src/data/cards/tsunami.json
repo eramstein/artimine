@@ -1,0 +1,33 @@
+{
+  "id": "tsunami",
+  "name": "Tsunami",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "damageUnit",
+        "args": {
+          "damage": 4,
+          "range": {
+            "addSelf": true,
+            "sameColumn": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -30,7 +30,6 @@ export interface UnitFilterArgs {
 }
 
 export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
-  console.log('filterUnits', filterArgs);
   if (filterArgs.all) {
     return bs.units;
   }
@@ -129,11 +128,11 @@ export function getUnitsInRange(
     const targetsToLoop = targets[0];
     if (isDeployedUnit(targetsToLoop)) {
       targetsToLoop.forEach((u) => {
-        unitsInRange = range ? filterUnits({ unit: u, ...range }) : [u];
+        unitsInRange = [...unitsInRange, ...(range ? filterUnits({ unit: u, ...range }) : [u])];
       });
     } else {
       targetsToLoop.forEach((p) => {
-        unitsInRange = range ? filterUnits({ position: p, ...range }) : [];
+        unitsInRange = [...unitsInRange, ...(range ? filterUnits({ position: p, ...range }) : [])];
       });
     }
   } else if (range) {

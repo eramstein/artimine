@@ -1,0 +1,25 @@
+{
+  "id": "spirited_train",
+  "name": "Spirited Train",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 5,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "construct",
+    "demon"
+  ],
+  "keywords": {
+    "moveAndAttack": true,
+    "retaliate": 2,
+    "armor": 3,
+    "resist": 3
+  }
+}
