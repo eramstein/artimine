@@ -38,6 +38,7 @@ export enum TargetType {
   AllyCell = 'cell_ally',
   EnemyCell = 'cell_enemy',
   EmptyCell = 'cell_empty',
+  HandCard = 'hand_card',
   GraveyardCard = 'graveyard_card',
   Land = 'land',
   Player = 'player',

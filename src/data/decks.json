@@ -2,6 +2,8 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "panicked_student",
+      "arc_lightning_specialist",
       "melting_spree",
       "spirited_train",
       "peasants_be_gone",

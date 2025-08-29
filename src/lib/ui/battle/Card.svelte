@@ -1,15 +1,15 @@
 <script lang="ts">
+  import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
+  import { CARD_HEIGHT, CARD_WIDTH } from '@lib/_config/ui-config';
+  import { CardColor, CardType, TargetType, UnitType } from '@lib/_model/enums';
   import type { Card, SpellCard } from '@lib/_model/model-battle';
-  import { CARD_WIDTH, CARD_HEIGHT } from '@lib/_config/ui-config';
-  import { CardColor, CardType, UnitType } from '@lib/_model/enums';
-  import { isPayable } from '@lib/battle/cost';
-  import { activateSpell } from '@lib/ui/_helpers/targetting';
   import { uiState } from '@lib/_state';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
+  import { isPayable } from '@lib/battle/cost';
+  import { activateSpell, targetCard } from '@lib/ui/_helpers/targetting';
+  import Abilities from './Abilities.svelte';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
-  import Abilities from './Abilities.svelte';
-  import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
-  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let {
     card,
@@ -64,6 +64,16 @@
 
   // Handle card click
   function handleClick() {
+    // If selecting a target and it's a hand card, treat this click as target selection
+    if (
+      inHand &&
+      uiState.battle.targetBeingSelected &&
+      uiState.battle.targetBeingSelected.type === TargetType.HandCard
+    ) {
+      targetCard(card);
+      return;
+    }
+
     if (inHand && isSpellCard(card) && isPayable(card)) {
       // Check if any effect in the spell has targets
       const hasTargets = card.actions.some((action) => action.targets && action.targets.length > 0);

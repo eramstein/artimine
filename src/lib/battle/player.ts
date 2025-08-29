@@ -17,6 +17,10 @@ export function isHumanPlayer(playerId: number): boolean {
   return playerId === 0;
 }
 
+export function getHumanPlayer(): Player {
+  return bs.players[0];
+}
+
 export function untapPlayer(player: Player) {
   player.abilityUsed = false;
 }

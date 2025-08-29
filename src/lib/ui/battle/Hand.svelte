@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Player } from '@lib/_model';
-  import Card from './Card.svelte';
   import { CARD_WIDTH } from '@lib/_config/ui-config';
+  import type { Player } from '@lib/_model';
   import { getCardBackImagePath } from '@lib/_utils/asset-paths';
+  import Card from './Card.svelte';
 
   let { player }: { player: Player } = $props();
 

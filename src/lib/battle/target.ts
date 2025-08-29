@@ -13,6 +13,7 @@ import { bs } from '../_state';
 import { getAllPositions, getEmptyCells, getPositionKey } from './boards';
 import { getAllGraveyardsCards } from './graveyard';
 import { getAllLands } from './land';
+import { getHumanPlayer } from './player';
 
 export function areAllTargetsValid(
   tentativeTargets: Card[] | UnitDeployed[] | Land[],
@@ -71,7 +72,6 @@ export function checkTargets(
       eligibleTargets as Card[] | UnitDeployed[] | Land[]
     );
     if (targetsValid === false) {
-      console.log('INVALID TARGETS', targetDefinition, tentativeTargets);
       return false;
     }
     return true;
@@ -129,6 +129,9 @@ export function getEligibleTargets(
   if (target.type === TargetType.Player) {
     eligibleTargets = bs.players;
   }
+  if (target.type === TargetType.HandCard) {
+    eligibleTargets = getHumanPlayer().hand;
+  }
   if (target.type === TargetType.GraveyardCard) {
     eligibleTargets = getAllGraveyardsCards();
   }
@@ -166,6 +169,9 @@ export function getTargetLabel(target: TargetDefinition): string {
   }
   if (target.type === TargetType.Player) {
     return `to target player${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.HandCard) {
+    return ` card${count !== 1 ? 's' : ''} in hand`;
   }
   return '';
 }

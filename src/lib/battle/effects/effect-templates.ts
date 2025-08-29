@@ -1,5 +1,6 @@
 import { CounterType, StatusType } from '@/lib/_model';
 import type {
+  Card,
   EffectArgs,
   Land,
   Position,
@@ -21,6 +22,7 @@ import {
   damagePlayer,
   damageUnit,
   destroyUnit,
+  discard,
   drawCard,
   getOpposingPlayer,
   getRandomEmptyAlliedCells,
@@ -351,5 +353,19 @@ export const DataEffectTemplates: Record<
       forceMoveUnit(unit, position);
     },
     label: () => `Force move unit to target position`,
+  }),
+  cycleCards: () => ({
+    fn: ({ targets }) => {
+      const cards = targets[0] as Card[];
+      const player = bs.players[cards[0].ownerPlayerId];
+      cards.forEach((c) => {
+        discard(c.instanceId, player.id);
+        drawCard(player);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const countLabel = targets[0].count ? ` ${targets[0].count}` : '';
+      return `Discard ${countLabel} cards in hand and draw ${countLabel} cards`;
+    },
   }),
 };

@@ -278,6 +278,52 @@
     ]
   },
   {
+    "id": "arc_lightning_specialist",
+    "name": "Arc Lightning Specialist",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "range": {
+                  "adjacent": true
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "cell_empty",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "cost": 3,
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "arcane_sniper",
     "name": "Arcane Sniper",
     "rarity": "common",
@@ -2814,6 +2860,48 @@
             "self": true
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "panicked_student",
+    "name": "Panicked Student",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "cycleCards",
+              "args": {}
+            },
+            "targets": [
+              {
+                "type": "hand_card",
+                "count": 1
+              }
+            ]
+          }
+        ]
       }
     ]
   },

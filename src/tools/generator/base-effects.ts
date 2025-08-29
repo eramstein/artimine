@@ -142,6 +142,14 @@ export const baseEffects: BaseEffect[] = [
     },
   },
   {
+    effectName: 'cycleCards',
+    argNames: [],
+    budget: (args, targets) => {
+      const targetMultiplier = getTargetCount(targets);
+      return targetMultiplier * 5;
+    },
+  },
+  {
     effectName: 'destroyUnit',
     argNames: ['range'],
     budget: (args, targets) => {
