@@ -11,4 +11,5 @@ export const TRIGGER_ICONS: Record<TriggerType, string> = {
   [TriggerType.OnDeploy]: '📦', // Package for deployment
   [TriggerType.OnTurnStart]: '🔄', // Circular arrows for turn-based triggers
   [TriggerType.OnReach]: '🎯', // Target for reach triggers
+  [TriggerType.OnCardDrawn]: '📄', // Card for card-drawn triggers
 };

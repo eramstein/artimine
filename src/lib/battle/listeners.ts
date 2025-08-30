@@ -1,15 +1,16 @@
-import { bs } from '@/lib/_state';
 import {
   TriggerType,
-  type UnitDeployed,
   type Ability,
-  type Position,
-  type Player,
-  type Land,
+  type Card,
   type EffectTargets,
+  type Land,
+  type Player,
+  type Position,
+  type UnitDeployed,
 } from '@/lib/_model';
-import { DataEffectTemplates, filterUnits } from './effects';
+import { bs } from '@/lib/_state';
 import { activateTriggeredAbility } from '@/lib/ui/_helpers/targetting';
+import { DataEffectTemplates, filterUnits } from './effects';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
   bs.units.forEach((u) => {
@@ -67,13 +68,14 @@ function checkTriggerCondition(
   }
 
   // special case for turn start, here Self means the player
-  if (ability.trigger.type === TriggerType.OnTurnStart && ability.trigger.range.self) {
+  if (
+    [TriggerType.OnCardDrawn, TriggerType.OnTurnStart].includes(ability.trigger.type) &&
+    ability.trigger.range.self
+  ) {
     return triggerArgs.player.id === unitWithAbility.ownerPlayerId;
   }
 
   // all others check if the unit causing the trigger is in the range
-  console.log(unitWithAbility, triggerArgs, ability.trigger.range);
-
   let unitCausingTrigger = null;
   if (
     [TriggerType.OnDeath, TriggerType.OnDeploy, TriggerType.BeforeDamage].includes(
@@ -88,7 +90,10 @@ function checkTriggerCondition(
   ) {
     unitCausingTrigger = triggerArgs.mover;
   }
-  if (ability.trigger.type === TriggerType.AfterCombat || ability.trigger.type === TriggerType.OnReach) {
+  if (
+    ability.trigger.type === TriggerType.AfterCombat ||
+    ability.trigger.type === TriggerType.OnReach
+  ) {
     unitCausingTrigger = triggerArgs.attacker;
   }
 
@@ -133,4 +138,8 @@ export function onUnitDeath(unit: UnitDeployed) {
 
 export function onTurnStart(player: Player) {
   triggerAbilities(TriggerType.OnTurnStart, { player });
+}
+
+export function onCardDrawn(player: Player, card: Card) {
+  triggerAbilities(TriggerType.OnCardDrawn, { player, card });
 }

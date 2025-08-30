@@ -1,0 +1,38 @@
+{
+  "id": "gnome_mechanic",
+  "name": "Gnome Mechanic",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["halfing"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "range": {
+                "unitType": "construct"
+              }
+            }
+          }
+        }
+      ],
+      "cost": 3
+    }
+  ]
+}

@@ -1,18 +1,21 @@
 <script lang="ts">
   import type { UnitDeployed } from '@lib/_model';
-  import { isUnitActive } from '@lib/battle/unit';
+  import { TargetType } from '@lib/_model/enums';
   import { uiState } from '@lib/_state';
-  import { setUnitsTargets, toggleUnitSelection } from '@lib/ui/_helpers/selections';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
   import { attackUnit } from '@lib/battle/combat';
-  import { clearSelections } from '@lib/ui/_helpers/selections';
-  import Keywords from './Keywords.svelte';
+  import { isUnitActive } from '@lib/battle/unit';
+  import {
+    clearSelections,
+    setUnitsTargets,
+    toggleUnitSelection,
+  } from '@lib/ui/_helpers/selections';
+  import { targetUnit } from '@lib/ui/_helpers/targetting';
   import Abilities from './Abilities.svelte';
+  import Counters from './Counters.svelte';
+  import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
   import Statuses from './Statuses.svelte';
-  import Counters from './Counters.svelte';
-  import { targetUnit } from '@lib/ui/_helpers/targetting';
-  import { TargetType } from '@lib/_model/enums';
-  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let { unit }: { unit: UnitDeployed } = $props();
 
@@ -43,7 +46,9 @@
     // if target being selected, target this unit
     if (
       uiState.battle.targetBeingSelected &&
-      [TargetType.Units, TargetType.Allies, TargetType.Ennemies].includes(uiState.battle.targetBeingSelected.type)
+      [TargetType.Units, TargetType.Allies, TargetType.Ennemies].includes(
+        uiState.battle.targetBeingSelected.type
+      )
     ) {
       targetUnit(unit);
       return;
@@ -71,6 +76,24 @@
 
   // Attack direction - move towards the target based on player
   let attackDirection = $derived(unit.ownerPlayerId === 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
+
+  // Track previous health to detect changes
+  let previousHealth = $state(unit.health);
+  let isDamaged = $state(false);
+  let damageAmount = $state(0);
+
+  // Watch for health changes to trigger damage animation
+  $effect(() => {
+    const healthDiff = previousHealth - unit.health;
+    if (healthDiff > 0) {
+      damageAmount = healthDiff;
+      isDamaged = true;
+      setTimeout(() => {
+        isDamaged = false;
+      }, 600);
+    }
+    previousHealth = unit.health;
+  });
 </script>
 
 <div
@@ -78,7 +101,7 @@
     ? 'selected'
     : ''} {isValidTarget ? 'valid-target' : ''} {isAttacking ? 'attacking' : ''} {isDimmed
     ? 'dimmed'
-    : ''}"
+    : ''} {isDamaged ? 'damaged' : ''}"
   style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
   onclick={handleUnitClick}
   oncontextmenu={handleContextMenu}
@@ -110,6 +133,10 @@
       <Abilities abilities={unit.abilities} {unit} />
     </div>
   {/if}
+
+  {#if isDamaged}
+    <div class="damage-effect">-{damageAmount}</div>
+  {/if}
 </div>
 
 <style>
@@ -128,6 +155,11 @@
       transform 0.3s ease,
       box-shadow 0.3s ease;
     transform: translateZ(0); /* Enable hardware acceleration */
+  }
+
+  .unit-deployed.damaged {
+    filter: brightness(1.05) saturate(1.1);
+    animation: damage-flash 0.6s ease-out;
   }
 
   .unit-deployed.active {
@@ -226,5 +258,46 @@
     top: 8px;
     left: 4px;
     z-index: 2;
+  }
+
+  .damage-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff4d4d;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    z-index: 3;
+    animation: damage-number 0.6s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes damage-flash {
+    0% {
+      filter: brightness(1) saturate(1);
+    }
+    50% {
+      filter: brightness(1.1) saturate(1.2);
+    }
+    100% {
+      filter: brightness(1) saturate(1);
+    }
+  }
+
+  @keyframes damage-number {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+    20% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -100%) scale(1);
+    }
   }
 </style>

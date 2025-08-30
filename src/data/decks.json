@@ -2,6 +2,13 @@
   "player": {
     "name": "Henry",
     "cards": [
+      "energy_monster",
+      "clunky_golem",
+      "gnome_mechanic",
+      "promising_prototype",
+      "security_golem",
+      "fair_trader",
+      "basic_research",
       "panicked_student",
       "arc_lightning_specialist",
       "melting_spree",

@@ -22,23 +22,28 @@ export const DataEffectPrimers: Record<
     otherArgs: any;
   }) => ({
     fn: ({ unit, player, targets, triggerParams }) => {
-      const value = energyCost ?? unit.counters?.energy;
-      if (!unit.counters?.energy || !value || (energyCost && value < energyCost)) {
+      const energyUsed = energyCost ?? unit.counters?.energy;
+      if (!unit.counters?.energy || (energyCost && unit.counters?.energy < energyCost)) {
+        console.log('not enough energy');
         return;
       }
-      DataEffectTemplates[effectTemplate]({ [energyUsedForArgs]: value, ...otherArgs }).fn({
+      DataEffectTemplates[effectTemplate]({ [energyUsedForArgs]: energyUsed, ...otherArgs }).fn({
         unit,
         player,
         targets,
         triggerParams,
       });
-      unit.counters.energy -= value;
+      unit.counters.energy -= energyUsed ?? 0;
     },
     label: (targets: TargetDefinition[]) => {
-      return DataEffectTemplates[effectTemplate]({
-        [energyUsedForArgs]: energyCost ? ` equal to ${energyCost}` : ' equal to its energy',
-        ...otherArgs,
-      }).label(targets);
+      const costLabel = energyCost ? `${energyCost} energy: ` : 'All energy: ';
+      return (
+        costLabel +
+        DataEffectTemplates[effectTemplate]({
+          [energyUsedForArgs]: energyCost ? ` equal to ${energyCost}` : ' equal to its energy',
+          ...otherArgs,
+        }).label(targets)
+      );
     },
   }),
 };

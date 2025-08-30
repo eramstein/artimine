@@ -13,6 +13,7 @@ class SoundManager {
       'karate-chop': getSoundPath('karate-chop'),
       'power-punch': getSoundPath('power-punch'),
       jumpland: getSoundPath('jumpland'),
+      lightning: getSoundPath('lightning'),
     };
 
     for (const [name, path] of Object.entries(soundFiles)) {
@@ -43,6 +44,10 @@ class SoundManager {
 
   playDeploySound() {
     this.playSound('jumpland');
+  }
+
+  playDamageSound() {
+    this.playSound('lightning');
   }
 }
 

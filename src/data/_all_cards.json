@@ -415,6 +415,29 @@
     ]
   },
   {
+    "id": "basic_research",
+    "name": "Basic Research",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 2
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "bear_minimum",
     "name": "Bear Minimum",
     "rarity": "uncommon",
@@ -739,6 +762,47 @@
       "lance": true,
       "retaliate": 1
     }
+  },
+  {
+    "id": "clunky_golem",
+    "name": "Clunky Golem",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 2,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "clunky_helicopter",
@@ -1289,6 +1353,73 @@
     }
   },
   {
+    "id": "energy_monster",
+    "name": "Energy Monster",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 3,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "addCounters",
+                "energyCost": 1,
+                "otherArgs": {
+                  "counterType": "growth"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "energyze",
     "name": "Energyze",
     "rarity": "common",
@@ -1409,6 +1540,48 @@
                 "cardCount": 1
               }
             }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fair_trader",
+    "name": "Fair Trader",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "moveAndAttack": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Reach"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "cycleCards",
+              "args": {}
+            },
+            "targets": [
+              {
+                "type": "hand_card",
+                "count": 1
+              }
+            ]
           }
         ]
       }
@@ -1706,6 +1879,46 @@
             }
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "gnome_mechanic",
+    "name": "Gnome Mechanic",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "halfing"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "range": {
+                  "unitType": "construct"
+                }
+              }
+            }
+          }
+        ],
+        "cost": 3
       }
     ]
   },
@@ -3013,6 +3226,34 @@
     ]
   },
   {
+    "id": "promising_prototype",
+    "name": "Promising Prototype",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 9,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "moveAndAttack": true,
+      "trample": true,
+      "cleave": true,
+      "lance": true,
+      "flying": true,
+      "retaliate": 5,
+      "armor": 3,
+      "resist": 3
+    }
+  },
+  {
     "id": "raise_dead",
     "name": "Raise Dead",
     "rarity": "common",
@@ -3260,6 +3501,97 @@
             }
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "security_golem",
+    "name": "Security Golem",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 6,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Card Drawn",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 1
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "applyUnitStatus",
+                "energyCost": 3,
+                "otherArgs": {
+                  "statusType": "stun",
+                  "duration": 1
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useEnergy",
+              "args": {
+                "effectTemplate": "applyUnitStatus",
+                "energyCost": 3,
+                "otherArgs": {
+                  "statusType": "mezz",
+                  "duration": 2
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
       }
     ]
   },

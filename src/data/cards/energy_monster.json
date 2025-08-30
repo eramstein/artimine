@@ -1,0 +1,63 @@
+{
+  "id": "energy_monster",
+  "name": "Energy Monster",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["monster"],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 3,
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "addCounters",
+              "energyCost": 1,
+              "otherArgs": { "counterType": "growth" }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

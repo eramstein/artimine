@@ -38,6 +38,7 @@ import {
 import { reanimate } from '../graveyard';
 import { damageLand, fortifyLand } from '../land';
 import { forceMoveUnit } from '../move';
+import { soundManager } from '../sound';
 import { getTargetLabel } from '../target';
 import { DataEffectPrimers } from './effect-primers';
 import { getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unitFilters';
@@ -93,6 +94,7 @@ export const DataEffectTemplates: Record<
       unitsInRange.forEach((u) => {
         damageUnit(u, damage);
       });
+      soundManager.playDamageSound();
     },
     label: (targets: TargetDefinition[]) => {
       let targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
@@ -155,9 +157,7 @@ export const DataEffectTemplates: Record<
     reset?: boolean;
   }) => ({
     fn: ({ unit, targets, player }) => {
-      console.log('staticKeyword', unit, targets, player, range);
       const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
-      console.log('unitsInRange', unitsInRange);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
       if (unit && reset) {
         clearUnitStaticAbilities(unit, abilityName);
@@ -180,7 +180,6 @@ export const DataEffectTemplates: Record<
   }) => ({
     fn: ({ unit, targets, player }) => {
       const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
-      console.log('temporaryEffect', unitsInRange);
       unitsInRange.forEach((u) => {
         applyTemporaryEffect(u, effect);
       });
@@ -359,13 +358,13 @@ export const DataEffectTemplates: Record<
       const cards = targets[0] as Card[];
       const player = bs.players[cards[0].ownerPlayerId];
       cards.forEach((c) => {
-        discard(c.instanceId, player.id);
         drawCard(player);
+        discard(c.instanceId, player.id);
       });
     },
     label: (targets: TargetDefinition[]) => {
       const countLabel = targets[0].count ? ` ${targets[0].count}` : '';
-      return `Discard ${countLabel} cards in hand and draw ${countLabel} cards`;
+      return `Cycle ${countLabel} card${countLabel !== '1' ? 's' : ''}`;
     },
   }),
 };

@@ -1,0 +1,28 @@
+{
+  "id": "promising_prototype",
+  "name": "Promising Prototype",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 9,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "construct"
+  ],
+  "keywords": {
+    "moveAndAttack": true,
+    "trample": true,
+    "cleave": true,
+    "lance": true,
+    "flying": true,
+    "retaliate": 5,
+    "armor": 3,
+    "resist": 3
+  }
+}

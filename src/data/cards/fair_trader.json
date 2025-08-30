@@ -1,0 +1,42 @@
+{
+  "id": "fair_trader",
+  "name": "Fair Trader",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "moveAndAttack": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "cycleCards",
+            "args": {}
+          },
+          "targets": [
+            {
+              "type": "hand_card",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

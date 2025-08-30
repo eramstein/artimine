@@ -1,0 +1,41 @@
+{
+  "id": "clunky_golem",
+  "name": "Clunky Golem",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 2,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "construct"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 1,
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

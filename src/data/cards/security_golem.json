@@ -1,0 +1,83 @@
+{
+  "id": "security_golem",
+  "name": "Security Golem",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 6,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["construct"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Card Drawn",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "applyUnitStatus",
+              "energyCost": 3,
+              "otherArgs": { "statusType": "stun", "duration": 1 }
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "useEnergy",
+            "args": {
+              "effectTemplate": "applyUnitStatus",
+              "energyCost": 3,
+              "otherArgs": { "statusType": "mezz", "duration": 2 }
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
