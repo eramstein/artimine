@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ActionDefinition, TargetDefinition } from '../../../lib/_model';
   import { CardType, TargetType } from '../../../lib/_model';
+  import { DynamicValue } from '../../../lib/battle/effects/dynamic-values';
   import { baseEffects, getBaseEffect } from '../base-effects';
   import RangeOptions from './RangeOptions.svelte';
 
@@ -36,6 +37,13 @@
   const effectOptions = $derived(
     baseEffects
       .map((effect) => ({ value: effect.effectName, label: toDisplayLabel(effect.effectName) }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  );
+
+  // Dynamic value options for selection
+  const dynamicValueOptions = $derived(
+    Object.values(DynamicValue)
+      .map((value) => ({ value, label: toDisplayLabel(value) }))
       .sort((a, b) => a.label.localeCompare(b.label))
   );
 
@@ -225,6 +233,14 @@
                 <select id={argName} bind:value={props.newAction.effectArgs[argName]}>
                   <option value="">Select an effect...</option>
                   {#each effectOptions as opt}
+                    <option value={opt.value}>{opt.label}</option>
+                  {/each}
+                </select>
+              {:else if argName === 'dynamicValue'}
+                <!-- Special handling for dynamic value argument -->
+                <select id={argName} bind:value={props.newAction.effectArgs[argName]}>
+                  <option value="">Select a dynamic value...</option>
+                  {#each dynamicValueOptions as opt}
                     <option value={opt.value}>{opt.label}</option>
                   {/each}
                 </select>

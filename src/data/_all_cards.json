@@ -415,6 +415,57 @@
     ]
   },
   {
+    "id": "banshee",
+    "name": "Banshee",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "retaliate": 3,
+      "resist": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Reach",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "daze",
+                "duration": 1,
+                "range": {
+                  "ennemies": true,
+                  "unitType": "human"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "basic_research",
     "name": "Basic Research",
     "rarity": "common",
@@ -457,6 +508,49 @@
     "keywords": {
       "retaliate": 2
     }
+  },
+  {
+    "id": "benevolent_druid",
+    "name": "Benevolent Druid",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "ennemies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damagePlayer",
+              "args": {
+                "damage": -1,
+                "opposingPlayer": false
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "benevolent_monk",
@@ -957,7 +1051,7 @@
   {
     "id": "dark_remedy",
     "name": "Dark Remedy",
-    "rarity": "rare",
+    "rarity": "uncommon",
     "type": "spell",
     "cost": 1,
     "colors": [
@@ -1386,10 +1480,7 @@
               "name": "addCounters",
               "args": {
                 "counterType": "energy",
-                "counterValue": 3,
-                "range": {
-                  "self": true
-                }
+                "counterValue": 3
               }
             }
           }
@@ -2014,6 +2105,52 @@
     ]
   },
   {
+    "id": "hans_is_back",
+    "name": "Hans is Back",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 0,
+    "maxHealth": 0,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "cleave": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterValue": 2,
+                "dynamicValue": "units in graveyards"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "harpy_huntress",
     "name": "Harpy Huntress",
     "rarity": "uncommon",
@@ -2498,6 +2635,48 @@
     ]
   },
   {
+    "id": "malevolent_druid",
+    "name": "Malevolent Druid",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 2,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "allies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damagePlayer",
+              "args": {
+                "damage": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "market_beggar",
     "name": "Market Beggar",
     "rarity": "common",
@@ -2917,9 +3096,10 @@
         "actions": [
           {
             "effect": {
-              "name": "damageEnemyPlayer",
+              "name": "damagePlayer",
               "args": {
-                "damage": 1
+                "damage": 1,
+                "opposingPlayer": true
               }
             }
           }
@@ -3263,6 +3443,10 @@
       {
         "color": "black",
         "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
       }
     ],
     "actions": [
@@ -4136,6 +4320,36 @@
     ]
   },
   {
+    "id": "to_the_gates",
+    "name": "To the gates!",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "toTheGates",
+            "keyword": "retaliate",
+            "keyWordValue": 2,
+            "range": {
+              "unitType": "human",
+              "allies": true
+            },
+            "reset": "false"
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "transfer_energy",
     "name": "Transfer Energy",
     "rarity": "common",
@@ -4312,6 +4526,37 @@
     "keywords": {
       "retaliate": 2
     }
+  },
+  {
+    "id": "what_doesnt_kill",
+    "name": "What doesn't kill",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "transformCounters",
+          "args": {
+            "fromCounterType": "decay",
+            "toCounterType": "growth",
+            "range": {
+              "all": true
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "id": "where_there_is_a_whip",

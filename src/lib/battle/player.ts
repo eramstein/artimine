@@ -1,4 +1,5 @@
-import type { CardColor, Player, UnitDeployed } from '../_model';
+import { config } from '../_config';
+import type { CardColor, Player } from '../_model';
 import { bs } from '../_state';
 import { drawCard } from './deck';
 
@@ -7,10 +8,13 @@ export function damagePlayer(player: Player, damage: number) {
   if (player.life <= 0) {
     bs.playerIdWon = player.id === 0 ? 1 : 0;
   }
+  if (player.life > config.initialLife) {
+    player.life = config.initialLife;
+  }
 }
 
-export function getOpposingPlayer(unit: UnitDeployed): Player {
-  return unit.ownerPlayerId === 0 ? bs.players[1] : bs.players[0];
+export function getOpposingPlayer(playerId: number): Player {
+  return playerId === 0 ? bs.players[1] : bs.players[0];
 }
 
 export function isHumanPlayer(playerId: number): boolean {

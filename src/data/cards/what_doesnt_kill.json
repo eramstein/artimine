@@ -1,0 +1,31 @@
+{
+  "id": "what_doesnt_kill",
+  "name": "What doesn't kill",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "transformCounters",
+        "args": {
+          "fromCounterType": "decay",
+          "toCounterType": "growth",
+          "range": {
+            "all": true
+          }
+        }
+      }
+    }
+  ]
+}

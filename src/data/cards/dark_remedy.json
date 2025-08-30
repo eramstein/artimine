@@ -1,7 +1,7 @@
 {
   "id": "dark_remedy",
   "name": "Dark Remedy",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "type": "spell",
   "cost": 1,
   "colors": [

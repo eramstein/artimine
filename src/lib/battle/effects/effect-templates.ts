@@ -40,8 +40,9 @@ import { damageLand, fortifyLand } from '../land';
 import { forceMoveUnit } from '../move';
 import { soundManager } from '../sound';
 import { getTargetLabel } from '../target';
+import { DynamicValue, DynamicValues } from './dynamic-values';
 import { DataEffectPrimers } from './effect-primers';
-import { getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unitFilters';
+import { getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unit-filters';
 
 export const DataEffectTemplates: Record<
   string,
@@ -62,11 +63,21 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Reanimate a unit to a position`,
   }),
-  damageEnemyPlayer: ({ damage }) => ({
-    fn: ({ unit }) => {
-      damagePlayer(getOpposingPlayer(unit), damage);
+  damagePlayer: ({
+    damage,
+    opposingPlayer = true,
+  }: {
+    damage: number;
+    opposingPlayer?: boolean;
+  }) => ({
+    fn: ({ unit, player }) => {
+      const targetPlayer = opposingPlayer
+        ? getOpposingPlayer(player?.id || unit.ownerPlayerId)
+        : player;
+      damagePlayer(targetPlayer, damage);
     },
-    label: () => `Deal ${damage} damage to the enemy player`,
+    label: () =>
+      `${damage > 0 ? 'Deal' : 'Heal'} ${Math.abs(damage)} damage ${opposingPlayer ? 'to your opponent' : ''}.`,
   }),
   damageLand: ({ damage }: { damage: number }) => ({
     fn: ({ targets }) => {
@@ -121,18 +132,21 @@ export const DataEffectTemplates: Record<
     counterValue = 1,
     range,
     fromTriggerParam,
+    dynamicValue,
   }: {
     counterType: CounterType;
     counterValue: number;
     range?: UnitFilterArgs;
     fromTriggerParam?: string;
+    dynamicValue?: DynamicValue;
   }) => ({
     fn: ({ unit, targets, player, triggerParams }) => {
+      const value = dynamicValue ? DynamicValues[dynamicValue]() * counterValue : counterValue;
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
-        addCounters(u, counterType, counterValue);
+        addCounters(u, counterType, value);
       });
     },
     label: (targets: TargetDefinition[]) => {
@@ -140,7 +154,8 @@ export const DataEffectTemplates: Record<
       if (fromTriggerParam) {
         targetsLabel = ` to ${fromTriggerParam}`;
       }
-      return `Add ${counterValue} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      const valueLabel = dynamicValue ? `[${dynamicValue}]` : counterValue;
+      return `Add ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   staticKeyword: ({
@@ -290,6 +305,28 @@ export const DataEffectTemplates: Record<
       }
     },
     label: () => `Transfer all ${counterType} counters from other units to this unit`,
+  }),
+  transformCounters: ({
+    fromCounterType = CounterType.Growth,
+    toCounterType = CounterType.Growth,
+    range,
+  }: {
+    fromCounterType: CounterType;
+    toCounterType: CounterType;
+    range?: UnitFilterArgs;
+  }) => ({
+    fn: ({ targets, unit, player }) => {
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        const fromCounters = u.counters[fromCounterType] || 0;
+        removeCounters(u, fromCounterType, fromCounters);
+        addCounters(u, toCounterType, fromCounters);
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Transfer all ${fromCounterType} counters into ${toCounterType} counters${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+    },
   }),
   drawCard: ({ cardCount = 1 }) => ({
     fn: ({ player }) => {

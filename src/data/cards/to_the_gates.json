@@ -1,0 +1,30 @@
+{
+  "id": "to_the_gates",
+  "name": "To the gates!",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "toTheGates",
+          "keyword": "retaliate",
+          "keyWordValue": 2,
+          "range": {
+            "unitType": "human",
+            "allies": true
+          },
+          "reset": "false"
+        }
+      }
+    }
+  ]
+}

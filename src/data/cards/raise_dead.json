@@ -8,6 +8,10 @@
     {
       "color": "black",
       "count": 2
+    },
+    {
+      "color": "green",
+      "count": 1
     }
   ],
   "actions": [

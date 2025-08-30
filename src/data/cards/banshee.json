@@ -1,0 +1,51 @@
+{
+  "id": "banshee",
+  "name": "Banshee",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 3,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "monster"
+  ],
+  "keywords": {
+    "retaliate": 3,
+    "resist": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "daze",
+              "duration": 1,
+              "range": {
+                "ennemies": true,
+                "unitType": "human"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

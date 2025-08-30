@@ -1,31 +1,28 @@
 {
-  "id": "not_a_fox",
-  "name": "Not a Fox",
-  "rarity": "rare",
+  "id": "benevolent_druid",
+  "name": "Benevolent Druid",
+  "rarity": "uncommon",
   "type": "unit",
-  "cost": 6,
+  "cost": 3,
   "power": 1,
   "maxHealth": 1,
   "colors": [
     {
-      "color": "black",
+      "color": "green",
       "count": 2
     },
     {
-      "color": "green",
+      "color": "black",
       "count": 1
     }
   ],
-  "unitTypes": ["beast"],
-  "keywords": {
-    "resist": 5
-  },
+  "unitTypes": ["human"],
   "abilities": [
     {
       "trigger": {
-        "type": "After Moving",
+        "type": "On Death",
         "range": {
-          "self": true
+          "ennemies": true
         }
       },
       "actions": [
@@ -33,8 +30,8 @@
           "effect": {
             "name": "damagePlayer",
             "args": {
-              "damage": 1,
-              "opposingPlayer": true
+              "damage": -1,
+              "opposingPlayer": false
             }
           }
         }

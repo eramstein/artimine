@@ -1,11 +1,12 @@
 <script lang="ts">
-  import type { Ability, UnitDeployed } from '../../_model/model-battle';
   import { TriggerType } from '../../_model/enums';
+  import type { Ability, UnitDeployed } from '../../_model/model-battle';
+  import { uiState } from '../../_state';
+  import { getRangeLabel } from '../../battle/effects';
+  import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import Tooltip from '../Tooltip.svelte';
   import { activateAbility } from '../_helpers/targetting';
-  import { uiState } from '../../_state';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
-  import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   let { abilities, unit }: { abilities: Ability[]; unit?: UnitDeployed } = $props();
 
   // Tooltip state
@@ -20,6 +21,9 @@
 
   function getAbilityText(ability: Ability) {
     let label = ability.trigger.type + ': ';
+    if (ability.trigger.range) {
+      label += getRangeLabel(ability.trigger.range) + ' ';
+    }
     ability.actions.forEach((action) => {
       label +=
         DataEffectTemplates[action.effect.name](action.effect.args).label(action.targets || []) +

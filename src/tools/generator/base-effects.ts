@@ -32,8 +32,8 @@ export const baseEffects: BaseEffect[] = [
     ],
   },
   {
-    effectName: 'damageEnemyPlayer',
-    argNames: ['damage'],
+    effectName: 'damagePlayer',
+    argNames: ['damage', 'opposingPlayer'],
     budget: (args, targets) => (args.damage || 1) * 10, // reach is expensive
   },
   {
@@ -68,7 +68,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'addCounters',
-    argNames: ['counterType', 'counterValue', 'range'],
+    argNames: ['counterType', 'counterValue', 'range', 'fromTriggerParam', 'dynamicValue'],
     budget: (args, targets) => {
       const baseCost =
         (args.counterValue || 1) * (counterCost[args.counterType as CounterType] || 1);
@@ -133,6 +133,11 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'transferCounters',
     argNames: ['counterType'],
     budget: (args, targets) => 12, // TBD
+  },
+  {
+    effectName: 'transformCounters',
+    argNames: ['fromCounterType', 'toCounterType', 'range'],
+    budget: (args, targets) => 24, // TBD
   },
   {
     effectName: 'drawCard',

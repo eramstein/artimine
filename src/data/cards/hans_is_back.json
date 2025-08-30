@@ -1,29 +1,29 @@
 {
-  "id": "not_a_fox",
-  "name": "Not a Fox",
+  "id": "hans_is_back",
+  "name": "Hans is Back",
   "rarity": "rare",
   "type": "unit",
-  "cost": 6,
-  "power": 1,
-  "maxHealth": 1,
+  "cost": 5,
+  "power": 0,
+  "maxHealth": 0,
   "colors": [
     {
-      "color": "black",
+      "color": "green",
       "count": 2
     },
     {
-      "color": "green",
-      "count": 1
+      "color": "black",
+      "count": 2
     }
   ],
-  "unitTypes": ["beast"],
+  "unitTypes": ["human"],
   "keywords": {
-    "resist": 5
+    "cleave": true
   },
   "abilities": [
     {
       "trigger": {
-        "type": "After Moving",
+        "type": "On Deploy",
         "range": {
           "self": true
         }
@@ -31,10 +31,10 @@
       "actions": [
         {
           "effect": {
-            "name": "damagePlayer",
+            "name": "addCounters",
             "args": {
-              "damage": 1,
-              "opposingPlayer": true
+              "counterValue": 2,
+              "dynamicValue": "units in graveyards"
             }
           }
         }
