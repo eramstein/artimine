@@ -4,7 +4,7 @@
   import { CardColor, CardType, TargetType, UnitType } from '@lib/_model/enums';
   import type { Card, SpellCard } from '@lib/_model/model-battle';
   import { uiState } from '@lib/_state';
-  import { getCardImagePath } from '@lib/_utils/asset-paths';
+  import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
   import { isPayable } from '@lib/battle/cost';
   import { activateSpell, targetCard } from '@lib/ui/_helpers/targetting';
   import Abilities from './Abilities.svelte';
@@ -51,15 +51,9 @@
     return isPayable(card) ? 'var(--color-golden)' : '#666'; // Gold if affordable, gray if not
   }
 
-  // Get color style for each color using CSS variables
-  function getColorStyle(color: CardColor) {
-    const colorMap = {
-      [CardColor.Red]: 'var(--color-red)',
-      [CardColor.Blue]: 'var(--color-blue)',
-      [CardColor.Green]: 'var(--color-green)',
-      [CardColor.Black]: 'var(--color-black)',
-    };
-    return colorMap[color] || 'var(--color-golden)';
+  // Helper function to get color image path
+  function getColorImagePath(color: CardColor): string {
+    return getAssetPath(`images/color_${color}.png`);
   }
 
   // Handle card click
@@ -169,12 +163,15 @@
     <!-- Color indicators at the top -->
     <div class="colors">
       {#each card.colors as colorInfo}
-        <div
-          class="color-indicator"
-          style="background-color: {getColorStyle(colorInfo.color)};"
-          title="{colorInfo.color} ({colorInfo.count})"
-        >
-          {colorInfo.count}
+        <div class="color-stack" title="{colorInfo.color} ({colorInfo.count})">
+          {#each Array(colorInfo.count) as _, index}
+            <div
+              class="color-indicator"
+              style="background-image: url('{getColorImagePath(
+                colorInfo.color
+              )}'); z-index: {index + 1}; top: {index * 10}px;"
+            ></div>
+          {/each}
         </div>
       {/each}
     </div>
@@ -319,7 +316,13 @@
   .colors {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 8px;
+  }
+
+  .color-stack {
+    position: relative;
+    height: 28px;
+    margin-bottom: 4px;
   }
 
   .bottom-section {
@@ -335,18 +338,20 @@
   }
 
   .color-indicator {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     border: 1px solid var(--color-golden);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .name-text {

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Card, SpellCard } from '../../_model/model-battle';
+  import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
   import { CardColor, CardType, UnitType } from '../../_model/enums';
+  import type { Card, SpellCard } from '../../_model/model-battle';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
-  import { getCardImagePath } from '@lib/_utils/asset-paths';
 
   let { card }: { card: Card } = $props();
 
@@ -26,15 +26,9 @@
     return card.type === CardType.Spell;
   }
 
-  // Get color style for each color using CSS variables
-  function getColorStyle(color: CardColor) {
-    const colorMap = {
-      [CardColor.Red]: 'var(--color-red)',
-      [CardColor.Blue]: 'var(--color-blue)',
-      [CardColor.Green]: 'var(--color-green)',
-      [CardColor.Black]: 'var(--color-black)',
-    };
-    return colorMap[color] || 'var(--color-golden)';
+  // Helper function to get color image path
+  function getColorImagePath(color: CardColor): string {
+    return getAssetPath(`images/color_${color}.png`);
   }
 
   // Get concatenated text from all actions for spells
@@ -158,12 +152,15 @@
     <!-- Color indicators at the top -->
     <div class="colors">
       {#each card.colors as colorInfo}
-        <div
-          class="color-indicator"
-          style="background-color: {getColorStyle(colorInfo.color)};"
-          title="{colorInfo.color} ({colorInfo.count})"
-        >
-          {colorInfo.count}
+        <div class="color-stack" title="{colorInfo.color} ({colorInfo.count})">
+          {#each Array(colorInfo.count) as _, index}
+            <div
+              class="color-indicator"
+              style="background-image: url('{getColorImagePath(
+                colorInfo.color
+              )}'); z-index: {index + 1}; top: {index * 10}px;"
+            ></div>
+          {/each}
         </div>
       {/each}
     </div>
@@ -323,9 +320,15 @@
   .colors {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     position: relative;
     z-index: 2;
+  }
+
+  .color-stack {
+    position: relative;
+    height: 42px;
+    margin-bottom: 4px;
   }
 
   .color-indicator {
@@ -337,9 +340,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .details-section {

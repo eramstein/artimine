@@ -4503,6 +4503,32 @@
     }
   },
   {
+    "id": "swift_drakkar",
+    "name": "Swift Drakkar",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 3,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "haste": true,
+      "retaliate": 1
+    }
+  },
+  {
     "id": "teleport",
     "name": "Teleport",
     "rarity": "common",

@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { Player } from '@lib/_model';
   import { CardColor } from '@lib/_model/enums';
+  import { uiState } from '@lib/_state';
+  import { getAssetPath, getCharacterImagePath } from '@lib/_utils/asset-paths';
+  import { attackPlayer } from '@lib/battle/combat';
+  import { isHumanPlayer, usePlayerColorAbility } from '@lib/battle/player';
+  import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
   import Deck from './Deck.svelte';
   import Graveyard from './Graveyard.svelte';
-  import { uiState } from '@lib/_state';
-  import { attackPlayer } from '@lib/battle/combat';
-  import { usePlayerColorAbility, useDrawAbility, isHumanPlayer } from '@lib/battle/player';
-  import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
-  import { getCharacterImagePath } from '@lib/_utils/asset-paths';
 
   let { player }: { player: Player } = $props();
 
@@ -17,6 +17,11 @@
   // Create the image path
   let characterImagePath = $derived(getCharacterImagePath(characterImageName));
 
+  // Helper function to get color image path
+  function getColorImagePath(color: string): string {
+    return getAssetPath(`images/color_${color}.png`);
+  }
+
   // Get available colors for the player
   let availableColors = $derived(Object.entries(player.colors || {}));
 
@@ -25,9 +30,6 @@
 
   // Check if player has used their ability
   let hasUsedAbility = $derived(player.abilityUsed === true);
-
-  // Check if player has enough mana for draw ability
-  let hasEnoughMana = $derived(player.mana >= 1);
 
   // Check if this is a human player
   let isHuman = $derived(isHumanPlayer(player.id));
@@ -48,11 +50,6 @@
     if (!isHuman || hasUsedAbility) return;
     const cardColor = color as CardColor;
     usePlayerColorAbility(player, cardColor);
-  }
-
-  function handleDrawClick() {
-    if (!isHuman || hasUsedAbility || !hasEnoughMana) return;
-    useDrawAbility(player);
   }
 </script>
 
@@ -77,22 +74,11 @@
         data-color={color}
         onclick={() => handleColorClick(color)}
       >
-        <div class="color-symbol">
+        <div class="color-symbol" style="background-image: url('{getColorImagePath(color)}')">
           <span class="color-count">{count}</span>
         </div>
       </div>
     {/each}
-    {#if isHuman}
-      <div
-        class="color-item {hasUsedAbility || !hasEnoughMana ? 'disabled' : ''}"
-        data-color="draw"
-        onclick={handleDrawClick}
-      >
-        <div class="color-symbol">
-          <span class="color-count">📄</span>
-        </div>
-      </div>
-    {/if}
   </div>
 
   <div class="deck-section">
@@ -234,8 +220,8 @@
   }
 
   .color-symbol {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
     border: 2px solid #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -243,32 +229,11 @@
     justify-content: center;
     align-items: center;
     position: relative;
-  }
-
-  .color-item[data-color='red'] .color-symbol {
-    background-color: var(--color-red);
-  }
-
-  .color-item[data-color='blue'] .color-symbol {
-    background-color: var(--color-blue);
-  }
-
-  .color-item[data-color='green'] .color-symbol {
-    background-color: var(--color-green);
-  }
-
-  .color-item[data-color='black'] .color-symbol {
-    background-color: var(--color-black);
-  }
-
-  .color-item[data-color='draw'] .color-symbol {
-    background-color: #444;
-    cursor: pointer;
-  }
-
-  .color-item[data-color='draw'] .color-symbol:hover {
-    background-color: #666;
-    transform: scale(1.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(1.2) contrast(1.3);
+    transition: all 0.2s ease;
   }
 
   .color-item .color-symbol {
@@ -278,12 +243,9 @@
       background-color 0.2s ease;
   }
 
-  .color-item .color-symbol:hover {
-    transform: scale(1.1);
-  }
-
   .color-item.disabled .color-symbol {
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   .color-item.disabled .color-symbol:hover {
@@ -291,7 +253,7 @@
   }
 
   .color-count {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
