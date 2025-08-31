@@ -10,6 +10,32 @@ export const DataEffectPrimers: Record<
   string,
   (args: any) => { fn: (p: EffectArgs) => void; label: (targets: TargetDefinition[]) => string }
 > = {
+  combine: ({
+    effectTemplates,
+  }: {
+    effectTemplates: {
+      name: keyof typeof DataEffectTemplates;
+      args: Record<string, any>;
+    }[];
+  }) => ({
+    fn: ({ unit, player, targets, triggerParams }) => {
+      effectTemplates.forEach((effectTemplate) => {
+        DataEffectTemplates[effectTemplate.name](effectTemplate.args).fn({
+          unit,
+          player,
+          targets,
+          triggerParams,
+        });
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      return effectTemplates
+        .map((effectTemplate) =>
+          DataEffectTemplates[effectTemplate.name](effectTemplate.args).label(targets)
+        )
+        .join(' and ');
+    },
+  }),
   useEnergy: ({
     effectTemplate,
     energyUsedForArgs,

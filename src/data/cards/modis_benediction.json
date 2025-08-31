@@ -1,0 +1,49 @@
+{
+  "id": "modis_benediction",
+  "name": "Modi's Benediction",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "combine",
+        "args": {
+          "effectTemplates": [
+            {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "modisBenediction",
+                "keyword": "zerk"
+              }
+            },
+            {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 3,
+                "dynamicValue": "ennemies"
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

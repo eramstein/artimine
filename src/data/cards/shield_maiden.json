@@ -1,0 +1,42 @@
+{
+  "id": "shield_maiden",
+  "name": "Shield Maiden",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "stun",
+              "duration": 1,
+              "fromTriggerParam": "defender"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "odins_chosen",
+  "name": "Odin's Chosen",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 3,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "haste": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "combine",
+            "args": {
+              "effectTemplates": [
+                {
+                  "name": "addCounters",
+                  "args": {
+                    "counterType": "growth",
+                    "counterValue": 1,
+                    "dynamicValue": "ennemies"
+                  }
+                },
+                {
+                  "name": "damageUnit",
+                  "args": {
+                    "damage": 1
+                  }
+                }
+              ]
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

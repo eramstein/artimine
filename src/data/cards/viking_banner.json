@@ -1,0 +1,49 @@
+{
+  "id": "viking_banner",
+  "name": "Viking Banner",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 6,
+  "power": 4,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "retaliate": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 1,
+              "range": {
+                "allies": true,
+                "unitType": "human",
+                "excludeSelf": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

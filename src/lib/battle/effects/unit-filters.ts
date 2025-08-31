@@ -18,6 +18,7 @@ export interface UnitFilterArgs {
   // relative to the references
   self?: boolean;
   addSelf?: boolean;
+  excludeSelf?: boolean;
   sameRow?: boolean;
   sameColumn?: boolean;
   allies?: boolean;
@@ -40,7 +41,7 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
   const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
   const closestEnnemyInRow =
     filterArgs.inFrontOf && filterArgs.unit ? getClosestEnnemyInRow(filterArgs.unit) : undefined;
-  const validUnits = bs.units.filter((u) => {
+  let validUnits = bs.units.filter((u) => {
     let valid = true;
     if (filterArgs.sameRow && u.position.row !== relativeToPosition?.row) {
       valid = false;
@@ -82,6 +83,9 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
   if (filterArgs.addSelf && filterArgs.unit) {
     validUnits.push(filterArgs.unit);
   }
+  if (filterArgs.excludeSelf && filterArgs.unit) {
+    validUnits = validUnits.filter((u) => u.instanceId !== filterArgs.unit!.instanceId);
+  }
   return validUnits;
 }
 
@@ -110,6 +114,9 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
   }
   if (filterArgs.unitType) {
     labels.push(filterArgs.unitType);
+  }
+  if (filterArgs.excludeSelf) {
+    labels.push('(others)');
   }
   return `Range: ${labels.join(' ')}.`;
 }

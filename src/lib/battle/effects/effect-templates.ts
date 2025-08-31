@@ -93,17 +93,20 @@ export const DataEffectTemplates: Record<
     damage,
     range,
     fromTriggerParam,
+    dynamicValue,
   }: {
     damage: number;
     range?: UnitFilterArgs;
     fromTriggerParam?: string;
+    dynamicValue?: DynamicValue;
   }) => ({
     fn: ({ targets, unit, player, triggerParams }) => {
+      const value = dynamicValue ? DynamicValues[dynamicValue]({ unit, player }) * damage : damage;
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
-        damageUnit(u, damage);
+        damageUnit(u, value);
       });
       soundManager.playDamageSound();
     },
@@ -141,7 +144,9 @@ export const DataEffectTemplates: Record<
     dynamicValue?: DynamicValue;
   }) => ({
     fn: ({ unit, targets, player, triggerParams }) => {
-      const value = dynamicValue ? DynamicValues[dynamicValue]() * counterValue : counterValue;
+      const value = dynamicValue
+        ? DynamicValues[dynamicValue]({ unit, player }) * counterValue
+        : counterValue;
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
@@ -154,7 +159,9 @@ export const DataEffectTemplates: Record<
       if (fromTriggerParam) {
         targetsLabel = ` to ${fromTriggerParam}`;
       }
-      const valueLabel = dynamicValue ? `[${dynamicValue}]` : counterValue;
+      const valueLabel = dynamicValue
+        ? `[${dynamicValue} ${counterValue !== 1 ? ' x ' + counterValue : ''}]`
+        : counterValue;
       return `Add ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -164,15 +171,19 @@ export const DataEffectTemplates: Record<
     keyWordValue,
     range,
     reset = true,
+    fromTriggerParam,
   }: {
     abilityName: string;
     keyword: keyof UnitKeywords;
     keyWordValue?: number;
     range?: UnitFilterArgs;
     reset?: boolean;
+    fromTriggerParam?: string;
   }) => ({
-    fn: ({ unit, targets, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ unit, targets, player, triggerParams }) => {
+      const unitsInRange = fromTriggerParam
+        ? [triggerParams[fromTriggerParam]]
+        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
       if (unit && reset) {
         clearUnitStaticAbilities(unit, abilityName);
@@ -182,7 +193,10 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      let targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      if (fromTriggerParam) {
+        targetsLabel = ` to ${fromTriggerParam}`;
+      }
       return `Give ${keyword} ${keyWordValue ? keyWordValue : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),

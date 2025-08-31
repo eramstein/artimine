@@ -134,7 +134,7 @@
 
   .gray-card {
     width: var(--card-width, 200px);
-    height: var(--card-height, 240px);
+    height: var(--card-height, 260px);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

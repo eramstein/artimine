@@ -1,13 +1,11 @@
 <script lang="ts">
   import { config } from '@lib/_config';
-  import Land from './Land.svelte';
-  import UnitDeployed from './UnitDeployed.svelte';
-  import { bs, uiState } from '@lib/_state';
-  import { deployUnit } from '@lib/battle/unit';
+  import type { Card, Position } from '@lib/_model';
   import { isUnitCard } from '@lib/_model';
-  import type { Position, Card } from '@lib/_model';
-  import { isOnPlayersSide, getPositionKey } from '@lib/battle/boards';
+  import { bs, uiState } from '@lib/_state';
+  import { getPositionKey, isOnPlayersSide } from '@lib/battle/boards';
   import { moveUnit } from '@lib/battle/move';
+  import { deployUnit } from '@lib/battle/unit';
   import {
     clearSelections,
     setUnitsTargets,
@@ -15,6 +13,8 @@
   } from '@lib/ui/_helpers/selections';
   import { targetCell } from '@lib/ui/_helpers/targetting';
   import { fly } from 'svelte/transition';
+  import Land from './Land.svelte';
+  import UnitDeployed from './UnitDeployed.svelte';
 
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
@@ -256,7 +256,7 @@
   .board-cell {
     width: 140px;
     height: 140px;
-    background: #3a3a3a;
+    background: rgba(58, 58, 58, 0.6);
     border: 2px solid #555;
     border-radius: 6px;
     display: flex;
@@ -267,7 +267,7 @@
   }
 
   .board-cell:hover {
-    background: #4a4a4a;
+    background: rgba(74, 74, 74, 0.8);
     border-color: #666;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -279,7 +279,7 @@
   }
 
   .board-cell.drag-over {
-    background: #5a5a5a;
+    background: rgba(90, 90, 90, 0.9);
     border-color: #bfa14a;
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(191, 161, 74, 0.6);

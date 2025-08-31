@@ -2173,6 +2173,56 @@
     }
   },
   {
+    "id": "havrhell",
+    "name": "Havrhell",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 8,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "dwarf"
+    ],
+    "keywords": {
+      "moveAndAttack": true,
+      "cleave": true,
+      "retaliate": 4,
+      "resist": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "dynamicValue": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "healing_salve",
     "name": "Healing Salve",
     "rarity": "common",
@@ -2296,6 +2346,50 @@
       "retaliate": 1,
       "regeneration": 1
     }
+  },
+  {
+    "id": "hungry_hermit",
+    "name": "Hungry Hermit",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Reach",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "dynamicValue": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "hungry_wolf",
@@ -2925,6 +3019,55 @@
     ]
   },
   {
+    "id": "modis_benediction",
+    "name": "Modi's Benediction",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "combine",
+          "args": {
+            "effectTemplates": [
+              {
+                "name": "staticKeyword",
+                "args": {
+                  "abilityName": "modisBenediction",
+                  "keyword": "zerk"
+                }
+              },
+              {
+                "name": "addCounters",
+                "args": {
+                  "counterType": "growth",
+                  "counterValue": 3,
+                  "dynamicValue": "ennemies"
+                }
+              }
+            ]
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "modis_chosen",
     "name": "Modi's Chosen",
     "type": "unit",
@@ -3062,6 +3205,53 @@
     ]
   },
   {
+    "id": "northern_challenger",
+    "name": "Northern Challenger",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 3,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 4
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 1,
+                "dynamicValue": "ennemies"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "not_a_fox",
     "name": "Not a Fox",
     "rarity": "rare",
@@ -3144,6 +3334,72 @@
             "adjacent": true
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "odins_chosen",
+    "name": "Odin's Chosen",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 3,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "haste": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "combine",
+              "args": {
+                "effectTemplates": [
+                  {
+                    "name": "addCounters",
+                    "args": {
+                      "counterType": "growth",
+                      "counterValue": 1,
+                      "dynamicValue": "ennemies"
+                    }
+                  },
+                  {
+                    "name": "damageUnit",
+                    "args": {
+                      "damage": 1
+                    }
+                  }
+                ]
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -3955,6 +4211,50 @@
     ]
   },
   {
+    "id": "shield_maiden",
+    "name": "Shield Maiden",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "stun",
+                "duration": 1,
+                "fromTriggerParam": "defender"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "shroomy",
     "name": "Shroomy",
     "type": "unit",
@@ -4050,6 +4350,32 @@
     ],
     "keywords": {
       "poisonous": 2
+    }
+  },
+  {
+    "id": "snow_troll",
+    "name": "Snow Troll",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "monster"
+    ],
+    "keywords": {
+      "retaliate": 2,
+      "regeneration": 2
     }
   },
   {
@@ -4507,6 +4833,57 @@
     }
   },
   {
+    "id": "viking_banner",
+    "name": "Viking Banner",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 6,
+    "power": 4,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "rage",
+                "counterValue": 1,
+                "range": {
+                  "allies": true,
+                  "unitType": "human",
+                  "excludeSelf": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "wall_of_brambles",
     "name": "Wall of brambles",
     "rarity": "common",
@@ -4649,6 +5026,28 @@
     ],
     "unitTypes": [
       "hobbit"
+    ]
+  },
+  {
+    "id": "young_viking",
+    "name": "Young Viking",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 4,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
     ]
   },
   {

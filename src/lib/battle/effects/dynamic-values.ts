@@ -1,15 +1,23 @@
-import { CardType } from '@/lib/_model';
+import { CardType, type Player, type UnitDeployed } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 
 export enum DynamicValue {
   UnitsInGraveyard = 'units in graveyards',
+  Ennemies = 'ennemies',
 }
 
-export const DynamicValues: Record<DynamicValue, () => number> = {
+export const DynamicValues: Record<
+  DynamicValue,
+  ({ unit, player }: { unit: UnitDeployed; player: Player }) => number
+> = {
   [DynamicValue.UnitsInGraveyard]: () => {
     return bs.players.reduce(
       (acc, player) => acc + player.graveyard.filter((c) => c.type === CardType.Unit).length,
       0
     );
+  },
+  [DynamicValue.Ennemies]: ({ unit, player }: { unit: UnitDeployed; player: Player }) => {
+    const playerId = player ? player.id : unit.ownerPlayerId;
+    return bs.units.filter((u) => u.ownerPlayerId !== playerId).length;
   },
 };

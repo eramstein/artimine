@@ -1,0 +1,42 @@
+{
+  "id": "hungry_hermit",
+  "name": "Hungry Hermit",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "dynamicValue": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

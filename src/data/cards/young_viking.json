@@ -1,0 +1,22 @@
+{
+  "id": "young_viking",
+  "name": "Young Viking",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 4,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ]
+}

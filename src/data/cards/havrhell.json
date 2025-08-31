@@ -1,0 +1,50 @@
+{
+  "id": "havrhell",
+  "name": "Havrhell",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    },
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "dwarf"
+  ],
+  "keywords": {
+    "moveAndAttack": true,
+    "cleave": true,
+    "retaliate": 4,
+    "resist": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "dynamicValue": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

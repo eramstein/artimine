@@ -80,7 +80,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'staticKeyword',
-    argNames: ['abilityName', 'keyword', 'keyWordValue', 'range', 'reset'],
+    argNames: ['abilityName', 'keyword', 'keyWordValue', 'range', 'reset', 'fromTriggerParam'],
     budget: (args, targets) => {
       const baseCost = keywordConfig[args.keyword as keyof UnitKeywords].baseCost; // TBD
       const targetMultiplier = getTargetCount(targets);
@@ -183,6 +183,11 @@ export const baseEffects: BaseEffect[] = [
   {
     effectName: 'useEnergy',
     argNames: ['effectTemplate', 'energyUsedForArgs', 'energyCost', 'otherArgs'],
+    budget: (args, targets) => 0, // TBD
+  },
+  {
+    effectName: 'combine',
+    argNames: ['effectTemplates'],
     budget: (args, targets) => 0, // TBD
   },
   {
