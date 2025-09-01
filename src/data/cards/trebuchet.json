@@ -1,0 +1,43 @@
+{
+  "id": "trebuchet",
+  "name": "Trebuchet",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 0,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "construct"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damagePlayer",
+            "args": {
+              "damage": 1,
+              "opposingPlayer": "true"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

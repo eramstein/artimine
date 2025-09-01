@@ -61,11 +61,11 @@ export enum UnitType {
   Elemental = 'elemental',
   Spirit = 'spirit',
   Dragon = 'dragon',
-  Angel = 'angel',
   Demon = 'demon',
   Halfing = 'halfing',
   Plant = 'plant',
   Construct = 'construct',
+  Building = 'building',
 }
 
 export enum CounterType {

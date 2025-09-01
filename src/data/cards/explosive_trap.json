@@ -1,0 +1,46 @@
+{
+  "id": "explosive_trap",
+  "name": "Explosive Trap",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "building"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 3,
+              "range": {
+                "ennemies": true,
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

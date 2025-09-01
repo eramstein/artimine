@@ -1,0 +1,25 @@
+{
+  "id": "watch_tower",
+  "name": "Watch Tower",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["building"],
+  "keywords": {
+    "immobile": true,
+    "ranged": true,
+    "retaliate": 1
+  }
+}

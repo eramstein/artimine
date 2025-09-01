@@ -22,6 +22,7 @@
     cleave: '🔪',
     lance: '🗡️',
     flying: '🐦',
+    immobile: '🏰',
   };
 
   // Tooltip content for each keyword
@@ -43,6 +44,7 @@
     cleave: 'Cleave: Attacks adjacent ennemies too.',
     lance: 'Lance: Attacks both units in the row.',
     flying: 'Flying: Can attack any unit.',
+    immobile: 'Immobile: Cannot move.',
   };
 
   function handleMouseEnter(keyword: string) {

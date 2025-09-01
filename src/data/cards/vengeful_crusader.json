@@ -1,0 +1,47 @@
+{
+  "id": "vengeful_crusader",
+  "name": "Vengeful Crusader",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach",
+        "range": {
+          "ennemies": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 1,
+              "dynamicValue": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

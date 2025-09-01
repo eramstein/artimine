@@ -129,6 +129,7 @@ export interface UnitKeywords {
   cleave?: boolean;
   lance?: boolean;
   flying?: boolean;
+  immobile?: boolean;
 }
 
 export type UnitEndOfTurnEffects = UnitKeywords & {

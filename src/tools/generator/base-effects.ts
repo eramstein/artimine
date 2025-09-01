@@ -147,6 +147,14 @@ export const baseEffects: BaseEffect[] = [
     },
   },
   {
+    effectName: 'staticStats',
+    argNames: ['power', 'maxHealth', 'range', 'dynamicValue'],
+    budget: (args, targets) => {
+      const targetMultiplier = getTargetCount(targets);
+      return (args.power * 2 + args.maxHealth) * targetMultiplier;
+    },
+  },
+  {
     effectName: 'cycleCards',
     argNames: [],
     budget: (args, targets) => {

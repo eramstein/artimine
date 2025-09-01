@@ -1,27 +1,25 @@
 {
-  "id": "teutonic_knight",
-  "name": "Teutonic Knight",
+  "id": "flammen_werfer",
+  "name": "Flammen Werfer",
   "rarity": "uncommon",
   "type": "unit",
-  "cost": 4,
-  "power": 2,
-  "maxHealth": 2,
+  "cost": 5,
+  "power": 6,
+  "maxHealth": 1,
   "colors": [
     {
       "color": "red",
-      "count": 2
+      "count": 3
     },
     {
       "color": "black",
-      "count": 2
+      "count": 1
     }
   ],
   "unitTypes": [
     "human"
   ],
   "keywords": {
-    "lance": true,
-    "retaliate": 2,
-    "armor": 2
+    "lance": true
   }
 }

@@ -1,0 +1,48 @@
+{
+  "id": "golgoth",
+  "name": "Golgoth",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 5,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "retaliate": 3,
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Before Damage",
+        "range": {
+          "addSelf": true,
+          "allies": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

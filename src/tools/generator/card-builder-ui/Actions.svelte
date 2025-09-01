@@ -62,7 +62,9 @@
           args[argName] = {};
         } else if (
           argName.toLowerCase().includes('damage') ||
-          argName.toLowerCase().includes('value') ||
+          (argName.toLowerCase().includes('value') &&
+            argName !== 'keyWordValue' &&
+            argName !== 'dynamicValue') ||
           argName.toLowerCase().includes('duration')
         ) {
           args[argName] = 0;

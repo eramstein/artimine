@@ -1,5 +1,5 @@
 import { CardRarity, type CardColor, type UnitCard, type UnitKeywords } from '../../lib/_model';
-import { getRandomFromArray, getRandomWeighted } from '../../lib/_utils/random';
+import { getRandomWeighted } from '../../lib/_utils/random';
 import { getDominantColor } from './_utils';
 import { keywordColorPreferences } from './color-pie';
 
@@ -36,6 +36,7 @@ export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   cleave: { baseCost: 7, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
   lance: { baseCost: 5, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
   flying: { baseCost: 6, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
+  immobile: { baseCost: -3, prevalence: 3 },
 };
 
 // Extract prevalence from definitions

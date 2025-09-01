@@ -10,7 +10,8 @@ export function canMove(unit: UnitDeployed) {
     !unit.hasMoved &&
     !unit.statuses.stun &&
     !unit.statuses.mezz &&
-    !unit.statuses.root
+    !unit.statuses.root &&
+    !unit.keywords?.immobile
   );
 }
 

@@ -19,6 +19,7 @@
     cleave: boolean;
     lance: boolean;
     flying: boolean;
+    immobile: boolean;
   };
 
   export let keywordCosts: any;
@@ -81,6 +82,13 @@
       <label class="checkbox-label">
         <input type="checkbox" bind:checked={state_keywords.flying} />
         Flying <span class="keyword-cost">({keywordCosts.flying} pts)</span>
+      </label>
+    </div>
+
+    <div class="keyword-group">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={state_keywords.immobile} />
+        Immobile <span class="keyword-cost">({keywordCosts.immobile} pts)</span>
       </label>
     </div>
 

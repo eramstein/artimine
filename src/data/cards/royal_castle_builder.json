@@ -1,0 +1,44 @@
+{
+  "id": "royal_castle_builder",
+  "name": "Royal Castle Builder",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 3,
+              "maxHealth": 3,
+              "range": {
+                "adjacent": true,
+                "allies": true,
+                "unitType": "building"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

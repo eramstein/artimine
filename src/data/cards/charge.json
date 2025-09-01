@@ -1,0 +1,47 @@
+{
+  "id": "charge",
+  "name": "Charge!",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 6,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "temporaryEffect",
+        "args": {
+          "effect": {
+            "power": 2
+          },
+          "range": {
+            "allies": true,
+            "unitType": "human"
+          }
+        }
+      }
+    },
+    {
+      "effect": {
+        "name": "temporaryEffect",
+        "args": {
+          "effect": {
+            "lance": true
+          },
+          "range": {
+            "allies": true,
+            "unitType": "human"
+          }
+        }
+      }
+    }
+  ]
+}

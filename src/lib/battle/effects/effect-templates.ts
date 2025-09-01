@@ -115,7 +115,10 @@ export const DataEffectTemplates: Record<
       if (fromTriggerParam) {
         targetsLabel = ` to ${fromTriggerParam}`;
       }
-      return `Deal ${damage} damage ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      const valueLabel = dynamicValue
+        ? `[${dynamicValue} ${damage !== 1 ? ' x ' + damage : ''}]`
+        : damage;
+      return `Deal ${valueLabel} damage ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   healUnit: ({ health, range }: { health: number; range?: UnitFilterArgs }) => ({
@@ -163,6 +166,40 @@ export const DataEffectTemplates: Record<
         ? `[${dynamicValue} ${counterValue !== 1 ? ' x ' + counterValue : ''}]`
         : counterValue;
       return `Add ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+    },
+  }),
+  staticStats: ({
+    power,
+    maxHealth,
+    range,
+    dynamicValue,
+  }: {
+    power?: number;
+    maxHealth?: number;
+    range?: UnitFilterArgs;
+    dynamicValue?: DynamicValue;
+  }) => ({
+    fn: ({ unit, targets, player }) => {
+      const effectivePower = dynamicValue
+        ? DynamicValues[dynamicValue]({ unit, player }) * (power ?? 0)
+        : power;
+      const effectiveMaxHealth = dynamicValue
+        ? DynamicValues[dynamicValue]({ unit, player }) * (maxHealth ?? 0)
+        : maxHealth;
+      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      unitsInRange.forEach((u) => {
+        if (effectivePower) {
+          u.power += effectivePower;
+        }
+        if (effectiveMaxHealth) {
+          u.maxHealth += effectiveMaxHealth;
+          u.health += effectiveMaxHealth;
+        }
+      });
+    },
+    label: (targets: TargetDefinition[]) => {
+      const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
+      return `Add ${power ? `power ${power}` : ''}${maxHealth ? ` health ${maxHealth}` : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   staticKeyword: ({

@@ -1,0 +1,46 @@
+{
+  "id": "frankish_castle",
+  "name": "Frankish Castle",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 5,
+  "power": 0,
+  "maxHealth": 10,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["building"],
+  "keywords": {
+    "retaliate": 5,
+    "immobile": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Static"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "frankishCastle",
+              "keyword": "ranged",
+              "range": {
+                "allies": true,
+                "adjacent": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

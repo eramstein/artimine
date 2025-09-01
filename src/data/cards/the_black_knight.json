@@ -1,0 +1,45 @@
+{
+  "id": "the_black_knight",
+  "name": "The Black Knight",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 5,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human", "demon"],
+  "keywords": {
+    "retaliate": 2,
+    "regeneration": 5
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Before Damage",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "blackKnight",
+              "keyword": "trample"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

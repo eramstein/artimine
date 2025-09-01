@@ -1,0 +1,40 @@
+{
+  "id": "vigilant_knight",
+  "name": "Vigilant Knight",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Static"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "vigilantKnight",
+              "keyword": "armor",
+              "keyWordValue": 2,
+              "range": {
+                "allies": true,
+                "adjacent": true
+              },
+              "reset": "true"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -77,6 +77,8 @@
     zerk: '💥',
     cleave: '🔪',
     lance: '🗡️',
+    flying: '🐦',
+    immobile: '🏰',
   };
 
   // Full keyword names
@@ -93,6 +95,8 @@
     zerk: 'Zerk',
     cleave: 'Cleave',
     lance: 'Lance',
+    flying: 'Flying',
+    immobile: 'Immobile',
   };
 
   // Get all active keywords with their values

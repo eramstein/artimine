@@ -1,0 +1,44 @@
+{
+  "id": "sortie_specialists",
+  "name": "Sortie Specialists",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "haste": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 3,
+              "dynamicValue": "buildings"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
