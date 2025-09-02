@@ -1,0 +1,37 @@
+{
+  "id": "snow_storm",
+  "name": "Snow storm",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 6,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "applyUnitStatus",
+        "args": {
+          "statusType": "daze",
+          "duration": 1,
+          "range": {
+            "sameColumn": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

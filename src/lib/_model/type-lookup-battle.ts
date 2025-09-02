@@ -1,14 +1,14 @@
 import { CardType } from './enums';
 import type {
+  Card,
   CardTemplate,
+  EffectTargets,
+  Land,
+  Player,
+  Position,
   SpellCardTemplate,
   UnitCardTemplate,
   UnitDeployed,
-  Land,
-  Player,
-  EffectTargets,
-  Position,
-  Card,
 } from './model-battle';
 
 export function isUnitCard(card: CardTemplate): card is UnitCardTemplate {
@@ -23,7 +23,9 @@ export function isAttackingLand(target: UnitDeployed | Land | Player): target is
 export function isAttackingPlayer(target: UnitDeployed | Land | Player): target is Player {
   return 'life' in target && 'mana' in target && 'isPlayer' in target;
 }
-export function isAttackingUnitDeployed(target: UnitDeployed | Land | Player): target is UnitDeployed {
+export function isAttackingUnitDeployed(
+  target: UnitDeployed | Land | Player
+): target is UnitDeployed {
   return 'hasAttacked' in target;
 }
 export function isDeployedUnit(target: EffectTargets): target is UnitDeployed[] {
@@ -34,4 +36,7 @@ export function isPosition(target: EffectTargets): target is Position[] {
 }
 export function isCard(target: EffectTargets): target is Card[] {
   return target.length > 0 && 'instanceId' in target[0] && !('position' in target[0]);
+}
+export function isLand(target: EffectTargets): target is Land[] {
+  return target.length > 0 && 'position' in target[0] && typeof target[0].position === 'number';
 }

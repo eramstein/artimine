@@ -8,7 +8,7 @@
     {power}
   </div>
   <div class="health">
-    {health || maxHealth}
+    {health || maxHealth || '0'}
   </div>
 </div>
 

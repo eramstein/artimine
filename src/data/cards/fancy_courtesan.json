@@ -1,0 +1,47 @@
+{
+  "id": "fancy_courtesan",
+  "name": "Fancy Courtesan",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 3,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "retaliate": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "mezz",
+              "duration": 2,
+              "range": {
+                "excludeSelf": true,
+                "unitType": "human",
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ],
+      "cost": 5
+    }
+  ]
+}

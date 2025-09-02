@@ -199,7 +199,13 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` to ${getTargetLabel(targets[0])}` : '';
-      return `Add ${power ? `power ${power}` : ''}${maxHealth ? ` health ${maxHealth}` : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      const valueLabel = dynamicValue
+        ? `[${dynamicValue} ${power !== 1 ? ' x ' + power : ''}]`
+        : power;
+      const maxHealthLabel = dynamicValue
+        ? `[${dynamicValue} ${maxHealth !== 1 ? ' x ' + maxHealth : ''}]`
+        : maxHealth;
+      return `Add ${valueLabel ? `power ${valueLabel}` : ''}${maxHealthLabel ? ` health ${maxHealthLabel}` : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   staticKeyword: ({
@@ -261,11 +267,11 @@ export const DataEffectTemplates: Record<
     },
     label: () => `Untap this player`,
   }),
-  incrementColor: (color) => ({
+  incrementColor: ({ color }) => ({
     fn: ({ player }) => {
       incrementColor(player, color, 1);
     },
-    label: () => `Add 1 ${color.color} mana`,
+    label: () => `Add 1 ${color} mana`,
   }),
   applyUnitStatus: ({
     statusType,
@@ -340,11 +346,12 @@ export const DataEffectTemplates: Record<
       `Sacrifice a unit to ${effect === 'damage' ? 'deal damage' : effect} equal to its health to another unit`,
   }),
   transferCounters: ({ counterType = CounterType.Growth }: { counterType: CounterType }) => ({
-    fn: ({ targets }) => {
-      const unit = targets[0][0] as UnitDeployed;
+    fn: ({ targets, unit }) => {
+      const targetUnit =
+        targets[0].length > 0 && targets[0][0] ? (targets[0][0] as UnitDeployed) : unit;
       let movedCounters = 0;
       bs.units.forEach((u) => {
-        if (u.instanceId === unit.instanceId) {
+        if (u.instanceId === targetUnit.instanceId) {
           return;
         }
         const counters = u.counters[counterType] || 0;
@@ -352,7 +359,7 @@ export const DataEffectTemplates: Record<
         movedCounters += counters;
       });
       if (movedCounters > 0) {
-        addCounters(unit, counterType, movedCounters);
+        addCounters(targetUnit, counterType, movedCounters);
       }
     },
     label: () => `Transfer all ${counterType} counters from other units to this unit`,
@@ -419,7 +426,7 @@ export const DataEffectTemplates: Record<
           : (bs.players[unit.ownerPlayerId].lands[unit.position.row] as Land);
       fortifyLand(land, amount);
     },
-    label: () => `Fortify land by ${amount}`,
+    label: () => `Fortify land by ${amount}.`,
   }),
   refreshUnit: ({ range }: { range?: UnitFilterArgs }) => ({
     fn: ({ targets, unit, player }) => {

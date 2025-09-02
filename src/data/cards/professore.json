@@ -1,0 +1,56 @@
+{
+  "id": "professore",
+  "name": "Professore",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "incrementColor",
+            "args": {
+              "color": "blue"
+            }
+          }
+        }
+      ],
+      "cost": 1,
+      "exhausts": true
+    },
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "incrementColor",
+            "args": {
+              "color": "black"
+            }
+          }
+        }
+      ],
+      "cost": 1,
+      "exhausts": true
+    }
+  ]
+}

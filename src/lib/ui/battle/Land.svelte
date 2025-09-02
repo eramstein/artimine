@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { Land } from '@lib/_model';
+  import { TargetType } from '@lib/_model';
   import { uiState } from '@lib/_state';
+  import { getLandImagePath } from '@lib/_utils/asset-paths';
   import { attackLand } from '@lib/battle/combat';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
-  import { getLandImagePath } from '@lib/_utils/asset-paths';
   import { targetLand } from '@lib/ui/_helpers/targetting';
-  import { TargetType } from '@lib/_model';
 
   let { land }: { land: Land } = $props();
 

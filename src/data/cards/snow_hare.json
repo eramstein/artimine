@@ -1,0 +1,48 @@
+{
+  "id": "snow_hare",
+  "name": "Snow Hare",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 1,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["beast"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "forceMoveUnit",
+            "args": {}
+          },
+          "targets": [
+            {
+              "type": "unit_ennemies",
+              "count": 1
+            },
+            {
+              "type": "cell_enemy",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

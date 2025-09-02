@@ -5,6 +5,8 @@ export enum DynamicValue {
   UnitsInGraveyard = 'units in graveyards',
   Ennemies = 'ennemies',
   Buildings = 'buildings',
+  UnitsWithStatus = 'units with status',
+  EnergyCounters = 'energy counters',
 }
 
 export const DynamicValues: Record<
@@ -23,5 +25,14 @@ export const DynamicValues: Record<
   },
   [DynamicValue.Buildings]: () => {
     return bs.units.filter((u) => u.unitTypes?.includes(UnitType.Building)).length;
+  },
+  [DynamicValue.UnitsWithStatus]: () => {
+    return bs.units.filter((u) => Object.keys(u.statuses).length > 0).length;
+  },
+  [DynamicValue.EnergyCounters]: ({ unit, player }: { unit: UnitDeployed; player: Player }) => {
+    const playerId = player ? player.id : unit.ownerPlayerId;
+    return bs.units
+      .filter((u) => u.ownerPlayerId === playerId)
+      .reduce((acc, u) => acc + (u.counters.energy || 0), 0);
   },
 };

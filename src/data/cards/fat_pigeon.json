@@ -1,0 +1,25 @@
+{
+  "id": "fat_pigeon",
+  "name": "Fat Pigeon",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "flying": true
+  }
+}

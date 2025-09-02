@@ -58,11 +58,13 @@ export function moveUnit(unit: UnitDeployed, targetPosition: Position) {
 export function forceMoveUnit(unit: UnitDeployed, targetPosition: Position) {
   const isOnPlayerSide = isHumanPlayer(unit.ownerPlayerId);
   if (!isOnPlayerSide) {
-    if (targetPosition.row < config.boardRows / 2) {
+    if (targetPosition.column < config.boardColumns / 2) {
+      console.log('Cannot move unit to column < config.boardColumns / 2', targetPosition);
       return;
     }
   } else {
-    if (targetPosition.row >= config.boardRows / 2) {
+    if (targetPosition.column >= config.boardColumns / 2) {
+      console.log('Cannot move unit to column >= config.boardColumns / 2', targetPosition);
       return;
     }
   }

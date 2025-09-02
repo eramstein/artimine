@@ -1,6 +1,7 @@
 import {
   isCard,
   isDeployedUnit,
+  isLand,
   isPosition,
   TargetType,
   type Ability,
@@ -101,7 +102,6 @@ export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, t
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
       if (!highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]))) {
-        console.log('no eligible targets');
         clearUiState();
       }
     } else {
@@ -122,12 +122,6 @@ function playTriggeredAbility(
   targets: EffectTargets[][],
   triggerParams: any
 ) {
-  console.log(
-    unit.name +
-      ' uses triggered ability on ' +
-      (targets && targets.map((t) => JSON.stringify(t)).join(', '))
-  );
-
   // Execute each effect in the ability
   ability.actions.forEach((actionDef, actionIndex) => {
     const effectTargets = [...targets[actionIndex]];
@@ -169,6 +163,11 @@ function highlightEligibleTargets(eligibleTargets: EffectTargets): boolean {
         (eligibleTargets as Position[]).forEach((position) => {
           const positionKey = getPositionKey(position);
           ui.validTargets!.cells![positionKey] = true;
+          hasEligibleTargets = true;
+        });
+      } else if (isLand(eligibleTargets)) {
+        (eligibleTargets as Land[]).forEach((land) => {
+          ui.validTargets!.lands![land.instanceId] = true;
           hasEligibleTargets = true;
         });
       } else if (isCard(eligibleTargets)) {

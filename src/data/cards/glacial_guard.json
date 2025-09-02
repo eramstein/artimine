@@ -1,0 +1,25 @@
+{
+  "id": "glacial_guard",
+  "name": "Glacial Guard",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true
+  }
+}

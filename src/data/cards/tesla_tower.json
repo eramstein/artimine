@@ -1,0 +1,46 @@
+{
+  "id": "tesla_tower",
+  "name": "Tesla Tower",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 7,
+  "power": 0,
+  "maxHealth": 0,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["construct"],
+  "keywords": {
+    "ranged": true,
+    "armor": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1,
+              "dynamicValue": "energy counters"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "necessary_sacrifice",
+  "name": "Necessary Sacrifice",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "destroyUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit_allies",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 3
+        }
+      }
+    }
+  ]
+}

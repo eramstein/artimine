@@ -1,0 +1,49 @@
+{
+  "id": "cursed_artist",
+  "name": "Cursed Artist",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "decay",
+              "counterValue": 1,
+              "dynamicValue": "units with status"
+            }
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "cost": 3,
+      "exhausts": true
+    }
+  ]
+}

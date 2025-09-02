@@ -1,0 +1,45 @@
+{
+  "id": "born_from_magic",
+  "name": "Born From Magic",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 0,
+  "maxHealth": 0,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["spirit"],
+  "keywords": {
+    "flying": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "dynamicValue": "units with status"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

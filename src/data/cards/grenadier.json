@@ -1,0 +1,25 @@
+{
+  "id": "grenadier",
+  "name": "Grenadier",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 5,
+  "power": 2,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "ranged": true,
+    "cleave": true,
+    "retaliate": 1
+  }
+}

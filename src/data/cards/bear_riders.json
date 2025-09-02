@@ -1,0 +1,27 @@
+{
+  "id": "bear_riders",
+  "name": "Bear Riders",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 7,
+  "power": 7,
+  "maxHealth": 7,
+  "colors": [
+    {
+      "color": "green",
+      "count": 3
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human",
+    "beast"
+  ],
+  "keywords": {
+    "moveAndAttack": true,
+    "trample": true
+  }
+}

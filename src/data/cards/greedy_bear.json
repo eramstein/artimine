@@ -1,0 +1,46 @@
+{
+  "id": "greedy_bear",
+  "name": "Greedy Bear",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 6,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "beast"
+  ],
+  "keywords": {
+    "trample": true,
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "transferCounters",
+            "args": {
+              "counterType": "growth"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

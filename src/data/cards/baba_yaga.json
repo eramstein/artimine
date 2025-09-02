@@ -1,0 +1,69 @@
+{
+  "id": "baba_yaga",
+  "name": "Baba Yaga",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 9,
+  "power": 3,
+  "maxHealth": 9,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "green",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["demon"],
+  "keywords": {
+    "resist": 2,
+    "poisonous": 2
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Before Moving"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "mezz",
+              "duration": 2,
+              "range": {
+                "ennemies": true,
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "root",
+              "duration": 2,
+              "range": {
+                "sameRow": true,
+                "ennemies": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

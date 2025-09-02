@@ -1,0 +1,34 @@
+{
+  "id": "improve_engine",
+  "name": "Improve Engine",
+  "rarity": "common",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "improveEngine",
+          "keyword": "moveAndAttack"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "dazing_spirit",
+  "name": "Dazing Spirit",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 2,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["spirit"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "daze",
+              "duration": 1,
+              "range": {
+                "inFrontOf": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

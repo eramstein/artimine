@@ -1,0 +1,45 @@
+{
+  "id": "steam_wall",
+  "name": "Steam Wall",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 1,
+  "power": 0,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "building"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "sameRow": true,
+          "allies": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "bounceUnit",
+            "args": {
+              "range": {
+                "self": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -415,6 +415,77 @@
     ]
   },
   {
+    "id": "baba_yaga",
+    "name": "Baba Yaga",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 9,
+    "power": 3,
+    "maxHealth": 9,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "demon"
+    ],
+    "keywords": {
+      "resist": 2,
+      "poisonous": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Before Moving"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "mezz",
+                "duration": 2,
+                "range": {
+                  "ennemies": true,
+                  "sameRow": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "root",
+                "duration": 2,
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "banshee",
     "name": "Banshee",
     "rarity": "rare",
@@ -507,6 +578,33 @@
     ],
     "keywords": {
       "retaliate": 2
+    }
+  },
+  {
+    "id": "bear_riders",
+    "name": "Bear Riders",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 7,
+    "power": 7,
+    "maxHealth": 7,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human",
+      "beast"
+    ],
+    "keywords": {
+      "moveAndAttack": true,
+      "trample": true
     }
   },
   {
@@ -750,6 +848,53 @@
     ]
   },
   {
+    "id": "born_from_magic",
+    "name": "Born From Magic",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 0,
+    "maxHealth": 0,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "keywords": {
+      "flying": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "dynamicValue": "units with status"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "buffoon",
     "name": "Buffoon",
     "rarity": "uncommon",
@@ -832,6 +977,69 @@
           "type": "Activated"
         },
         "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "carnival_of_miracles",
+    "name": "Carnival of Miracles",
+    "rarity": "rare",
+    "type": "spell",
+    "cost": 9,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 3
+      },
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "fortifyLand",
+          "args": {
+            "amount": 9
+          }
+        },
+        "targets": [
+          {
+            "type": "land",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "decay",
+            "counterValue": 9
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "addCounters",
+          "args": {
+            "counterType": "energy",
+            "counterValue": 9
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
       }
     ]
   },
@@ -1096,6 +1304,55 @@
     }
   },
   {
+    "id": "cursed_artist",
+    "name": "Cursed Artist",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "decay",
+                "counterValue": 1,
+                "dynamicValue": "units with status"
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "cost": 3,
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "dark_remedy",
     "name": "Dark Remedy",
     "rarity": "uncommon",
@@ -1166,6 +1423,52 @@
           {
             "type": "unit",
             "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dazing_spirit",
+    "name": "Dazing Spirit",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 2,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "daze",
+                "duration": 1,
+                "range": {
+                  "inFrontOf": true
+                }
+              }
+            }
           }
         ]
       }
@@ -1772,6 +2075,80 @@
     ]
   },
   {
+    "id": "fancy_courtesan",
+    "name": "Fancy Courtesan",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 3,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "retaliate": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "mezz",
+                "duration": 2,
+                "range": {
+                  "excludeSelf": true,
+                  "unitType": "human",
+                  "sameRow": true
+                }
+              }
+            }
+          }
+        ],
+        "cost": 5
+      }
+    ]
+  },
+  {
+    "id": "fat_pigeon",
+    "name": "Fat Pigeon",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "flying": true
+    }
+  },
+  {
     "id": "ferocious_badger",
     "name": "Ferocious Badger",
     "rarity": "uncommon",
@@ -2100,6 +2477,31 @@
     }
   },
   {
+    "id": "glacial_guard",
+    "name": "Glacial Guard",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 4,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true
+    }
+  },
+  {
     "id": "gnome_engineer",
     "name": "Gnome Engineer",
     "rarity": "uncommon",
@@ -2267,6 +2669,79 @@
         ]
       }
     ]
+  },
+  {
+    "id": "greedy_bear",
+    "name": "Greedy Bear",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 6,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "trample": true,
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "transferCounters",
+              "args": {
+                "counterType": "growth"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grenadier",
+    "name": "Grenadier",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 5,
+    "power": 2,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "cleave": true,
+      "retaliate": 1
+    }
   },
   {
     "id": "grim_guard",
@@ -2562,6 +3037,44 @@
     }
   },
   {
+    "id": "hold_the_line",
+    "name": "Hold the Line",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "holdTheLine",
+            "keyword": "regeneration",
+            "keyWordValue": 2,
+            "range": {
+              "sameColumn": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hungry_hermit",
     "name": "Hungry Hermit",
     "rarity": "uncommon",
@@ -2669,6 +3182,40 @@
     ]
   },
   {
+    "id": "improve_engine",
+    "name": "Improve Engine",
+    "rarity": "common",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "staticKeyword",
+          "args": {
+            "abilityName": "improveEngine",
+            "keyword": "moveAndAttack"
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "iron_golem",
     "name": "Iron Golem",
     "rarity": "uncommon",
@@ -2752,6 +3299,78 @@
             }
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "leonardo_borgio",
+    "name": "Leonardo Borgio",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 8,
+    "power": 1,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "allies": true,
+            "sameRow": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "leo1",
+                "keyword": "armor",
+                "keyWordValue": 1,
+                "fromTriggerParam": "attacker"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticStats",
+              "args": {
+                "power": 1,
+                "maxHealth": 1,
+                "range": {
+                  "sameColumn": true,
+                  "unitType": "construct"
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },
@@ -3419,6 +4038,45 @@
     ]
   },
   {
+    "id": "necessary_sacrifice",
+    "name": "Necessary Sacrifice",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "destroyUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit_allies",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "effect": {
+          "name": "drawCard",
+          "args": {
+            "cardCount": 3
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "northern_challenger",
     "name": "Northern Challenger",
     "rarity": "uncommon",
@@ -3872,6 +4530,64 @@
             }
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "professore",
+    "name": "Professore",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "incrementColor",
+              "args": {
+                "color": "blue"
+              }
+            }
+          }
+        ],
+        "cost": 1,
+        "exhausts": true
+      },
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "incrementColor",
+              "args": {
+                "color": "black"
+              }
+            }
+          }
+        ],
+        "cost": 1,
+        "exhausts": true
       }
     ]
   },
@@ -4611,6 +5327,93 @@
     }
   },
   {
+    "id": "snow_hare",
+    "name": "Snow Hare",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 1,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "forceMoveUnit",
+              "args": {}
+            },
+            "targets": [
+              {
+                "type": "unit_ennemies",
+                "count": 1
+              },
+              {
+                "type": "cell_enemy",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "snow_storm",
+    "name": "Snow storm",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 6,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "applyUnitStatus",
+          "args": {
+            "statusType": "daze",
+            "duration": 1,
+            "range": {
+              "sameColumn": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "snow_troll",
     "name": "Snow Troll",
     "rarity": "uncommon",
@@ -4786,6 +5589,51 @@
     ]
   },
   {
+    "id": "steam_wall",
+    "name": "Steam Wall",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "building"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "sameRow": true,
+            "allies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "bounceUnit",
+              "args": {
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "street_slinger",
     "name": "Street Slinger",
     "type": "unit",
@@ -4833,6 +5681,32 @@
     }
   },
   {
+    "id": "taiga_rangers",
+    "name": "Taiga Rangers",
+    "rarity": "common",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "poisonous": 1
+    }
+  },
+  {
     "id": "teleport",
     "name": "Teleport",
     "rarity": "common",
@@ -4868,6 +5742,54 @@
             "cardCount": 1
           }
         }
+      }
+    ]
+  },
+  {
+    "id": "tesla_tower",
+    "name": "Tesla Tower",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 7,
+    "power": 0,
+    "maxHealth": 0,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "keywords": {
+      "ranged": true,
+      "armor": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticStats",
+              "args": {
+                "power": 1,
+                "maxHealth": 1,
+                "dynamicValue": "energy counters"
+              }
+            }
+          }
+        ]
       }
     ]
   },

@@ -1,0 +1,26 @@
+{
+  "id": "taiga_rangers",
+  "name": "Taiga Rangers",
+  "rarity": "common",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true,
+    "poisonous": 1
+  }
+}

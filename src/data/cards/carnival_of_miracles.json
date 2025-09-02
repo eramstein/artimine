@@ -1,0 +1,63 @@
+{
+  "id": "carnival_of_miracles",
+  "name": "Carnival of Miracles",
+  "rarity": "rare",
+  "type": "spell",
+  "cost": 9,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 3
+    },
+    {
+      "color": "black",
+      "count": 3
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "fortifyLand",
+        "args": {
+          "amount": 9
+        }
+      },
+      "targets": [
+        {
+          "type": "land",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "decay",
+          "counterValue": 9
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "energy",
+          "counterValue": 9
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "hold_the_line",
+  "name": "Hold the Line",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "holdTheLine",
+          "keyword": "regeneration",
+          "keyWordValue": 2,
+          "range": {
+            "sameColumn": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

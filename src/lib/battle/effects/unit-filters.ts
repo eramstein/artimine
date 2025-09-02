@@ -118,7 +118,7 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
   if (filterArgs.excludeSelf) {
     labels.push('(others)');
   }
-  return `Range: ${labels.join(' ')}.`;
+  return labels.length > 0 ? `Range: ${labels.join(' ')}.` : '';
 }
 
 // helper function to loop units.

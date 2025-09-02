@@ -1,0 +1,72 @@
+{
+  "id": "leonardo_borgio",
+  "name": "Leonardo Borgio",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 8,
+  "power": 1,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "allies": true,
+          "sameRow": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "leo1",
+              "keyword": "armor",
+              "keyWordValue": 1,
+              "fromTriggerParam": "attacker"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1,
+              "range": {
+                "sameColumn": true,
+                "unitType": "construct"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
