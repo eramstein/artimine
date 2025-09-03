@@ -123,6 +123,95 @@
     ]
   },
   {
+    "id": "alahmar_djinn",
+    "name": "Al-ahmar Djinn",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 5,
+    "power": 6,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "keywords": {
+      "ranged": true,
+      "retaliate": 2,
+      "resist": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damagePlayer",
+              "args": {
+                "damage": 1,
+                "opposingPlayer": false
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "aladin",
+    "name": "Aladin",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 7,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 3
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "summon",
+              "args": {
+                "isRespawn": false,
+                "randomPositions": 1
+              }
+            }
+          }
+        ],
+        "exhausts": true
+      }
+    ]
+  },
+  {
     "id": "albatros",
     "name": "Albatros",
     "rarity": "common",
@@ -1526,6 +1615,112 @@
     ]
   },
   {
+    "id": "desert_sorcerer",
+    "name": "Desert Sorcerer",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 6,
+    "power": 1,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 3,
+                "range": {
+                  "adjacent": true
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "cell_empty",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "cost": 1,
+        "exhausts": true
+      }
+    ]
+  },
+  {
+    "id": "desert_storm",
+    "name": "Desert Storm",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 8,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "combine",
+          "args": {
+            "effectTemplates": [
+              {
+                "name": "applyUnitStatus",
+                "args": {
+                  "statusType": "stun",
+                  "duration": 1,
+                  "range": {
+                    "sameColumn": true
+                  }
+                }
+              },
+              {
+                "name": "damageUnit",
+                "args": {
+                  "damage": 1,
+                  "range": {
+                    "sameColumn": true
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "drake",
     "name": "Drake",
     "rarity": "common",
@@ -2247,6 +2442,56 @@
     ]
   },
   {
+    "id": "fishermans_ifrit",
+    "name": "Fisherman's Ifrit",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 4,
+    "power": 5,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "spirit"
+    ],
+    "keywords": {
+      "retaliate": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticStats",
+              "args": {
+                "power": 1,
+                "maxHealth": 1,
+                "range": {
+                  "ennemies": true,
+                  "sameRow": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "flammen_werfer",
     "name": "Flammen Werfer",
     "rarity": "uncommon",
@@ -2270,6 +2515,55 @@
     "keywords": {
       "lance": true
     }
+  },
+  {
+    "id": "flying_carpet",
+    "name": "Flying Carpet",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 4,
+    "power": 0,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "keywords": {
+      "flying": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Static",
+          "staticRecompute": [
+            "On Death",
+            "On Deploy",
+            "After Moving"
+          ]
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "flyingCarpet",
+                "keyword": "flying",
+                "range": {
+                  "sameRow": true,
+                  "allies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "fortify",
@@ -2475,6 +2769,49 @@
       "retaliate": 1,
       "poisonous": 2
     }
+  },
+  {
+    "id": "gifted_apprentice",
+    "name": "Gifted Apprentice",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 3,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Reach",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "gifted1",
+                "keyword": "moveAndAttack"
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "glacial_guard",
@@ -5185,6 +5522,69 @@
     ]
   },
   {
+    "id": "sherazad",
+    "name": "Sherazad",
+    "rarity": "rare",
+    "type": "unit",
+    "cost": 9,
+    "power": 1,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "keywords": {
+      "ranged": true,
+      "resist": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damagePlayer",
+              "args": {
+                "damage": -99,
+                "opposingPlayer": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "trigger": {
+          "type": "On Death",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "putToDeckBottom",
+              "args": {}
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "shield_maiden",
     "name": "Shield Maiden",
     "rarity": "uncommon",
@@ -5653,6 +6053,37 @@
     "keywords": {
       "ranged": true
     }
+  },
+  {
+    "id": "stroke_of_genius",
+    "name": "Stroke of Genius",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "tutorCard",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "deck_card",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "swift_drakkar",
@@ -6407,6 +6838,46 @@
     ]
   },
   {
+    "id": "whirling_dervishes",
+    "name": "Whirling Dervishes",
+    "rarity": "uncommon",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Card Drawn",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticStats",
+              "args": {
+                "power": 1,
+                "maxHealth": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "who_is_fat",
     "name": "Who is fat ???",
     "rarity": "common",
@@ -6430,6 +6901,37 @@
         "targets": [
           {
             "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wisdom_of_old",
+    "name": "Wisdom of Old",
+    "rarity": "uncommon",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "regrowCard",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "graveyard_card",
             "count": 1
           }
         ]

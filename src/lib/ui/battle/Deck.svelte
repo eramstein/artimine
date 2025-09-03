@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { Player } from '@lib/_model';
-  import Tooltip from '../Tooltip.svelte';
+  import { uiState } from '@lib/_state/state-ui.svelte';
   import { getCardBackImagePath } from '@lib/_utils/asset-paths';
+  import { isHumanPlayer } from '@lib/battle/player';
+  import Tooltip from '../Tooltip.svelte';
 
   let { player }: { player: Player } = $props();
 
@@ -10,13 +12,22 @@
 
   // Show tooltip on hover
   let isHovered = $state(false);
+
+  function handleDeckClick() {
+    // Only show modal for human players
+    if (isHumanPlayer(player.id)) {
+      uiState.battle.deckModal.visible = true;
+      uiState.battle.deckModal.playerId = player.id;
+    }
+  }
 </script>
 
 <Tooltip content="{player.deck.length} cards in deck" show={isHovered} placement="bottom">
   <div
-    class="deck-container"
+    class="deck-container {isHumanPlayer(player.id) ? 'clickable' : ''}"
     onmouseenter={() => (isHovered = true)}
     onmouseleave={() => (isHovered = false)}
+    onclick={handleDeckClick}
   >
     <div class="deck-stack">
       {#each Array(stackSize) as _, index}
@@ -35,6 +46,10 @@
   .deck-container {
     position: relative;
     display: inline-block;
+  }
+
+  .deck-container.clickable {
+    cursor: pointer;
   }
 
   .deck-stack {

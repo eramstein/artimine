@@ -1,0 +1,61 @@
+{
+  "id": "sherazad",
+  "name": "Sherazad",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 9,
+  "power": 1,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "keywords": {
+    "ranged": true,
+    "resist": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damagePlayer",
+            "args": {
+              "damage": -99,
+              "opposingPlayer": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "trigger": {
+        "type": "On Death",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "putToDeckBottom",
+            "args": {}
+          }
+        }
+      ]
+    }
+  ]
+}

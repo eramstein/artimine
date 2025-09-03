@@ -1,0 +1,31 @@
+{
+  "id": "stroke_of_genius",
+  "name": "Stroke of Genius",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "tutorCard",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "deck_card",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { getRandomUnitCardFromAll } from '@/data';
 import { CounterType, StatusType } from '@/lib/_model';
 import type {
   Card,
@@ -30,12 +31,14 @@ import {
   healUnit,
   incrementColor,
   makeUnit,
+  putToDeckBottom,
   refreshUnit,
   removeCounters,
   summonUnit,
+  tutorCard,
   untapPlayer,
 } from '@/lib/battle';
-import { reanimate } from '../graveyard';
+import { reanimate, regrowCard } from '../graveyard';
 import { damageLand, fortifyLand } from '../land';
 import { forceMoveUnit } from '../move';
 import { soundManager } from '../sound';
@@ -302,24 +305,23 @@ export const DataEffectTemplates: Record<
     isRespawn,
     randomPositions,
   }: {
-    summonedUnit: UnitCardTemplate;
+    summonedUnit?: UnitCardTemplate;
     isRespawn?: boolean;
     randomPositions?: number;
   }) => ({
     fn: ({ targets, player, unit }) => {
+      const unitTemplate = summonedUnit ?? getRandomUnitCardFromAll();
+      const createdUnit = makeUnit(player.id, unitTemplate);
       if (isRespawn) {
-        const createdUnit = makeUnit(player.id, summonedUnit);
         summonUnit(createdUnit, unit.position);
       } else {
         if (randomPositions) {
           const cells = getRandomEmptyAlliedCells(player.isPlayer, randomPositions);
           cells.forEach((cell) => {
-            const createdUnit = makeUnit(player.id, summonedUnit);
             summonUnit(createdUnit, cell);
           });
         } else {
           (targets[0] as Position[]).forEach((cell: Position) => {
-            const createdUnit = makeUnit(player.id, summonedUnit);
             summonUnit(createdUnit, cell);
           });
         }
@@ -327,8 +329,8 @@ export const DataEffectTemplates: Record<
     },
     label: () =>
       isRespawn
-        ? `Respawn ${summonedUnit.name} at this unit's position`
-        : `Summon ${summonedUnit.name} to target position`,
+        ? `Respawn ${summonedUnit ? summonedUnit.name : 'a random unit'} at this unit's position`
+        : `Summon ${summonedUnit ? summonedUnit.name : 'a random unit'} to ${randomPositions ? 'random' : 'target'} position`,
   }),
   darkRitual: ({ effect = 'damage' }: { effect: 'damage' | 'heal' }) => ({
     fn: ({ targets }) => {
@@ -461,5 +463,27 @@ export const DataEffectTemplates: Record<
       const countLabel = targets[0].count ? ` ${targets[0].count}` : '';
       return `Cycle ${countLabel} card${countLabel !== '1' ? 's' : ''}`;
     },
+  }),
+  tutorCard: () => ({
+    fn: ({ targets, player }) => {
+      const card = targets[0][0] as Card;
+      tutorCard(card.instanceId, player);
+    },
+    label: () => `Fetch a card from the deck`,
+  }),
+  regrowCard: () => ({
+    fn: ({ targets, player }) => {
+      const card = targets[0][0] as Card;
+      regrowCard(card.instanceId, player);
+    },
+    label: () => `Fetch a card from the graveyard`,
+  }),
+  putToDeckBottom: () => ({
+    fn: ({ targets, player, unit }) => {
+      const target = targets[0][0] as Card;
+      const card = target ? target : (unit as Card);
+      putToDeckBottom(card, player);
+    },
+    label: () => `Put that card on the bottom of your deck`,
   }),
 };

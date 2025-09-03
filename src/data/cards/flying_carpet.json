@@ -1,0 +1,45 @@
+{
+  "id": "flying_carpet",
+  "name": "Flying Carpet",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 4,
+  "power": 0,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "keywords": {
+    "flying": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Static",
+        "staticRecompute": ["On Death", "On Deploy", "After Moving"]
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "flyingCarpet",
+              "keyword": "flying",
+              "range": {
+                "sameRow": true,
+                "allies": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

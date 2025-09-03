@@ -1,0 +1,31 @@
+{
+  "id": "wisdom_of_old",
+  "name": "Wisdom of Old",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "regrowCard",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "graveyard_card",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

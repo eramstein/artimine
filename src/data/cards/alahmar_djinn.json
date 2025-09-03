@@ -1,0 +1,46 @@
+{
+  "id": "alahmar_djinn",
+  "name": "Al-ahmar Djinn",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 5,
+  "power": 6,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["spirit"],
+  "keywords": {
+    "ranged": true,
+    "retaliate": 2,
+    "resist": 1
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damagePlayer",
+            "args": {
+              "damage": 1,
+              "opposingPlayer": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

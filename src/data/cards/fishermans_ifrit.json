@@ -1,0 +1,48 @@
+{
+  "id": "fishermans_ifrit",
+  "name": "Fisherman's Ifrit",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 4,
+  "power": 5,
+  "maxHealth": 6,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["spirit"],
+  "keywords": {
+    "retaliate": 3
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1,
+              "range": {
+                "ennemies": true,
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

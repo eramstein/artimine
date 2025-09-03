@@ -11,6 +11,7 @@ import {
 } from '../_model';
 import { bs } from '../_state';
 import { getAllPositions, getEmptyCells, getPositionKey } from './boards';
+import { getAllDecksCards } from './deck';
 import { getAllGraveyardsCards } from './graveyard';
 import { getAllLands } from './land';
 import { getHumanPlayer } from './player';
@@ -65,7 +66,8 @@ export function checkTargets(
   if (
     targetDefinition.type.includes('unit') ||
     targetDefinition.type === TargetType.Land ||
-    targetDefinition.type === TargetType.GraveyardCard
+    targetDefinition.type === TargetType.GraveyardCard ||
+    targetDefinition.type === TargetType.DeckCard
   ) {
     const targetsValid = areAllTargetsValid(
       tentativeTargets as Card[] | UnitDeployed[] | Land[],
@@ -135,6 +137,9 @@ export function getEligibleTargets(
   if (target.type === TargetType.GraveyardCard) {
     eligibleTargets = getAllGraveyardsCards();
   }
+  if (target.type === TargetType.DeckCard) {
+    eligibleTargets = getAllDecksCards();
+  }
   return eligibleTargets;
 }
 
@@ -166,6 +171,9 @@ export function getTargetLabel(target: TargetDefinition): string {
   }
   if (target.type === TargetType.GraveyardCard) {
     return `to target graveyard card${count !== 1 ? 's' : ''}`;
+  }
+  if (target.type === TargetType.DeckCard) {
+    return `to target deck card${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Player) {
     return `to target player${count !== 1 ? 's' : ''}`;

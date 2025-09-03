@@ -1,0 +1,39 @@
+{
+  "id": "aladin",
+  "name": "Aladin",
+  "rarity": "rare",
+  "type": "unit",
+  "cost": 7,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 3
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": ["human"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "summon",
+            "args": {
+              "isRespawn": false,
+              "randomPositions": 1
+            }
+          }
+        }
+      ],
+      "exhausts": true
+    }
+  ]
+}

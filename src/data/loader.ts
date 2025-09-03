@@ -1,4 +1,11 @@
-import type { CardTemplate, LandTemplate } from '@/lib/_model';
+import {
+  CardType,
+  type CardTemplate,
+  type LandTemplate,
+  type UnitCardTemplate,
+} from '@/lib/_model';
+import { getRandomFromArray } from '@/lib/_utils/random';
+import allCards from './_all_cards.json';
 
 import decksData from './decks.json';
 
@@ -47,3 +54,10 @@ export const FOE_LANDS = () => decksData.foe.lands.map((landId) => lands[landId]
 
 export const PLAYER_NAME = decksData.player.name;
 export const FOE_NAME = decksData.foe.name;
+
+// Returns a random unit card from the full catalog in _all_cards.json
+export function getRandomUnitCardFromAll(): UnitCardTemplate {
+  return getRandomFromArray(
+    allCards.filter((card) => card.type === CardType.Unit) as UnitCardTemplate[]
+  );
+}

@@ -1,0 +1,53 @@
+{
+  "id": "desert_sorcerer",
+  "name": "Desert Sorcerer",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 6,
+  "power": 1,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 3,
+              "range": {
+                "adjacent": true
+              }
+            }
+          },
+          "targets": [
+            {
+              "type": "cell_empty",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "cost": 1,
+      "exhausts": true
+    }
+  ]
+}

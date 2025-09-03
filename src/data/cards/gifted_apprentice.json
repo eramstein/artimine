@@ -1,0 +1,43 @@
+{
+  "id": "gifted_apprentice",
+  "name": "Gifted Apprentice",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 3,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Reach",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "gifted1",
+              "keyword": "moveAndAttack"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

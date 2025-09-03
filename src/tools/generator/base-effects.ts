@@ -202,6 +202,27 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'forceMoveUnit',
     argNames: [],
     budget: (args, targets) => 30, // TBD
+    defaultTargets: [
+      { type: TargetType.Units, count: 1 },
+      { type: TargetType.EmptyCell, count: 1 },
+    ],
+  },
+  {
+    effectName: 'tutorCard',
+    argNames: [],
+    budget: (args, targets) => 50, // TBD
+    defaultTargets: [{ type: TargetType.DeckCard, count: 1 }],
+  },
+  {
+    effectName: 'regrowCard',
+    argNames: [],
+    budget: (args, targets) => 30, // TBD
+    defaultTargets: [{ type: TargetType.GraveyardCard, count: 1 }],
+  },
+  {
+    effectName: 'putToDeckBottom',
+    argNames: [],
+    budget: (args, targets) => 20, // TBD
   },
 ];
 

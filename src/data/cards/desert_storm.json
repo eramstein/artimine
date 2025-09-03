@@ -1,0 +1,53 @@
+{
+  "id": "desert_storm",
+  "name": "Desert Storm",
+  "rarity": "uncommon",
+  "type": "spell",
+  "cost": 8,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "combine",
+        "args": {
+          "effectTemplates": [
+            {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "stun",
+                "duration": 1,
+                "range": {
+                  "sameColumn": true
+                }
+              }
+            },
+            {
+              "name": "damageUnit",
+              "args": {
+                "damage": 1,
+                "range": {
+                  "sameColumn": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

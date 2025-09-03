@@ -7,72 +7,85 @@
 
   // Get the player from the battle state using the playerId from UI state
   let player = $derived(
-    uiState.battle.graveyardModal.playerId !== null
-      ? bs.players[uiState.battle.graveyardModal.playerId]
+    uiState.battle.deckModal.playerId !== null
+      ? bs.players[uiState.battle.deckModal.playerId]
       : null
   );
 
-  // Get all cards in the graveyard
-  let graveyardCards = $derived(player?.graveyard || []);
+  // Get all cards in the deck, sorted by mana cost then by name
+  let deckCards = $derived(
+    player?.deck
+      ? [...player.deck].sort((a, b) => {
+          // First sort by mana cost
+          if (a.cost !== b.cost) {
+            return a.cost - b.cost;
+          }
+          // Then sort by name
+          return a.name.localeCompare(b.name);
+        })
+      : []
+  );
 
-  // Auto-open modal when targeting graveyard cards
+  // Auto-open modal when targeting deck cards
   $effect(() => {
-    if (uiState.battle.targetBeingSelected?.type === TargetType.GraveyardCard) {
+    if (uiState.battle.targetBeingSelected?.type === TargetType.DeckCard) {
+      // Find the current player (assuming we're targeting our own deck)
       const currentPlayer = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
       if (currentPlayer) {
-        uiState.battle.graveyardModal.visible = true;
-        uiState.battle.graveyardModal.playerId = currentPlayer.id;
+        uiState.battle.deckModal.visible = true;
+        uiState.battle.deckModal.playerId = currentPlayer.id;
       }
     }
   });
 
-  // Auto-close modal when target selection completes
+  // Auto-close modal when target selection is complete
   $effect(() => {
     if (!uiState.battle.targetBeingSelected) {
-      uiState.battle.graveyardModal.visible = false;
-      uiState.battle.graveyardModal.playerId = null;
+      uiState.battle.deckModal.visible = false;
+      uiState.battle.deckModal.playerId = null;
     }
   });
 
   function handleBackdropClick(event: MouseEvent) {
     // Only close if clicking the backdrop, not the modal content
     if (event.target === event.currentTarget) {
-      uiState.battle.graveyardModal.visible = false;
-      uiState.battle.graveyardModal.playerId = null;
+      uiState.battle.deckModal.visible = false;
+      uiState.battle.deckModal.playerId = null;
     }
   }
 
   function handleCloseClick() {
-    uiState.battle.graveyardModal.visible = false;
-    uiState.battle.graveyardModal.playerId = null;
+    uiState.battle.deckModal.visible = false;
+    uiState.battle.deckModal.playerId = null;
   }
 </script>
 
-{#if uiState.battle.graveyardModal.visible && player}
+{#if uiState.battle.deckModal.visible && player}
   <div class="modal-backdrop" onclick={handleBackdropClick}>
     <div class="modal-content">
       <div class="modal-header">
         <div class="header-content">
-          <h2>{player.name}'s Graveyard</h2>
-          <span class="card-count">({graveyardCards.length} cards)</span>
+          <h2>{player.name}'s Deck</h2>
+          <span class="card-count">({deckCards.length} cards)</span>
         </div>
         <button class="close-button" onclick={handleCloseClick}>×</button>
       </div>
 
       <div class="modal-body">
-        {#if graveyardCards.length === 0}
-          <div class="empty-graveyard">
-            <p>The graveyard is empty.</p>
+        {#if deckCards.length === 0}
+          <div class="empty-deck">
+            <p>The deck is empty.</p>
           </div>
         {:else}
           <div class="cards-grid">
-            {#each graveyardCards as card}
+            {#each deckCards as card}
               <div
                 class="card-wrapper"
                 onclick={() => {
                   targetCard(card);
-                  uiState.battle.graveyardModal.visible = false;
-                  uiState.battle.graveyardModal.playerId = null;
+                  // Close the modal after selecting a card
+                  uiState.battle.deckModal.visible = false;
+                  uiState.battle.deckModal.playerId = null;
                 }}
               >
                 <Card {card} displayKeywords={true} inHand={false} />
@@ -104,13 +117,14 @@
     background: linear-gradient(135deg, #2c3e50, #34495e);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    max-width: 95vw;
+    max-width: 98vw;
     max-height: 95vh;
-    min-width: 800px;
+    min-width: 620px;
     width: 90vw;
     display: flex;
     flex-direction: column;
     border: 2px solid #bfa14a;
+    overflow: hidden;
   }
 
   .modal-header {
@@ -163,13 +177,14 @@
   }
 
   .modal-body {
-    padding: 1.5rem;
+    padding: 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
-  .empty-graveyard {
+  .empty-deck {
     text-align: center;
     color: #999;
     font-size: 1.2rem;
@@ -179,13 +194,15 @@
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.75rem;
+    gap: 1rem;
     justify-items: center;
+    justify-content: center;
     max-height: 70vh;
     overflow-y: auto;
-    padding: 0.75rem;
-    padding-right: 1rem;
-    padding-bottom: 1rem;
+    overflow-x: hidden;
+    padding: 0 45px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .card-wrapper {
@@ -208,8 +225,9 @@
 
     .cards-grid {
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 0.5rem;
+      gap: 0.75rem;
       max-height: 60vh;
+      padding: 0.75rem;
     }
 
     .modal-header h2 {

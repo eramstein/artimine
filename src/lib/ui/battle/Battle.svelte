@@ -5,6 +5,7 @@
   import { nextTurn } from '@lib/battle/turn';
   import CardFull from '../cards/CardFull.svelte';
   import Board from './Board.svelte';
+  import DeckModal from './DeckModal.svelte';
   import GameWonModal from './GameWonModal.svelte';
   import GraveyardModal from './GraveyardModal.svelte';
   import Hand from './Hand.svelte';
@@ -46,6 +47,7 @@
 {/if}
 
 <GraveyardModal />
+<DeckModal />
 
 <!-- CardFull overlay -->
 {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}

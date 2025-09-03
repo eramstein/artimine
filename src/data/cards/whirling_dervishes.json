@@ -1,0 +1,40 @@
+{
+  "id": "whirling_dervishes",
+  "name": "Whirling Dervishes",
+  "rarity": "uncommon",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Card Drawn",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

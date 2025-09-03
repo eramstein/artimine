@@ -31,6 +31,10 @@ export type UiState = {
       visible: boolean;
       playerId: number | null;
     };
+    deckModal: {
+      visible: boolean;
+      playerId: number | null;
+    };
   };
   modal: {
     visible: boolean;
