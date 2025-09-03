@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { CounterType } from '@/lib/_model/enums-battle';
   import type { UnitDeployed } from '@lib/_model';
   import Tooltip from '../Tooltip.svelte';
-  import { CounterType } from '@lib/_model/enums';
 
   let { unit }: { unit: UnitDeployed } = $props();
 

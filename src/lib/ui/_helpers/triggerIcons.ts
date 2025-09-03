@@ -1,4 +1,4 @@
-import { TriggerType } from '../../_model/enums';
+import { TriggerType } from '../../_model/enums-battle';
 
 export const TRIGGER_ICONS: Record<TriggerType, string> = {
   [TriggerType.Static]: '⚡', // Lightning bolt for static effects

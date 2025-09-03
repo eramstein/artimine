@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { TargetType } from '@/lib/_model/enums-battle';
   import type { UnitDeployed } from '@lib/_model';
-  import { TargetType } from '@lib/_model/enums';
   import { uiState } from '@lib/_state';
   import { getCardImagePath } from '@lib/_utils/asset-paths';
   import { attackUnit } from '@lib/battle/combat';

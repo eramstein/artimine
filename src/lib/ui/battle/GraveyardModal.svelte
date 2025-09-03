@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TargetType } from '@lib/_model/enums';
+  import { TargetType } from '@/lib/_model/enums-battle';
   import { bs } from '@lib/_state';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { targetCard } from '@lib/ui/_helpers/targetting';

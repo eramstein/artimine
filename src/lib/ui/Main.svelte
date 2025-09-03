@@ -1,8 +1,9 @@
 <script lang="ts">
   import { UiView } from '../_model';
-  import { uiState, bs } from '../_state';
+  import { bs, uiState } from '../_state';
   import Battle from './battle/Battle.svelte';
   import ModalHost from './ModalHost.svelte';
+  import Sim from './sim/Sim.svelte';
 </script>
 
 <ModalHost />
@@ -10,6 +11,8 @@
   <div class="scene-container">
     {#if uiState.currentView === UiView.Battle && bs.turn > 0}
       <Battle />
+    {:else if uiState.currentView === UiView.CurrentPlace}
+      <Sim />
     {/if}
   </div>
 
@@ -18,6 +21,17 @@
 </div>
 
 <style>
+  .main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .scene-container {
+    width: 100%;
+    height: 100%;
+  }
+
   .tooltip-portal {
     position: fixed;
     top: 0;

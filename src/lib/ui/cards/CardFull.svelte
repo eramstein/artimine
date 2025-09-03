@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
-  import { CardColor, CardType, UnitType } from '../../_model/enums';
+  import { CardColor, CardType, UnitType } from '../../_model/enums-battle';
   import type { Card, SpellCard } from '../../_model/model-battle';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';

@@ -50,6 +50,7 @@ export type UiState = {
 };
 
 export enum UiView {
+  CurrentPlace = 'CurrentPlace',
   Battle = 'Battle',
   CardBuilder = 'CardBuilder',
   Analytics = 'Analytics',

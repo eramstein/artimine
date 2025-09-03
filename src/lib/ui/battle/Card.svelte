@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { CardColor, CardType, TargetType, UnitType } from '@/lib/_model/enums-battle';
   import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
   import { CARD_HEIGHT, CARD_WIDTH } from '@lib/_config/ui-config';
-  import { CardColor, CardType, TargetType, UnitType } from '@lib/_model/enums';
   import type { Card, SpellCard } from '@lib/_model/model-battle';
   import { uiState } from '@lib/_state';
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';

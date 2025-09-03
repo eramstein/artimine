@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { CardColor } from '@/lib/_model/enums-battle';
   import type { Player } from '@lib/_model';
-  import { CardColor } from '@lib/_model/enums';
   import { uiState } from '@lib/_state';
   import { getAssetPath, getCharacterImagePath } from '@lib/_utils/asset-paths';
   import { attackPlayer } from '@lib/battle/combat';

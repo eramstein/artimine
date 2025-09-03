@@ -1,4 +1,4 @@
-import { CardType } from './enums';
+import { CardType } from './enums-battle';
 import type {
   Card,
   CardTemplate,

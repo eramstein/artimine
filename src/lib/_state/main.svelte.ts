@@ -1,12 +1,8 @@
-import { cards } from '@/data';
-import {
-  isSpellCard,
-  isUnitCard,
-  type BattleState,
-  type GameState,
-  type SpellCardTemplate,
-  type UnitCardTemplate,
-} from '../_model';
+import { CHARACTERS } from '@/data/characters/main';
+import { CHARACTER_PLAYER } from '@/data/characters/player';
+import { PLACES } from '@/data/places/places';
+import { type BattleState, type GameState } from '../_model';
+import { DayPeriod } from '../_model/enums-sim';
 
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
@@ -19,7 +15,17 @@ const defaultBattleState: BattleState = {
   units: [],
 };
 
-export const gs: GameState = $state({});
+const defaultGameState: GameState = {
+  time: {
+    day: 0,
+    period: DayPeriod.Morning,
+  },
+  characters: CHARACTERS,
+  player: CHARACTER_PLAYER,
+  places: PLACES,
+};
+
+export const gs: GameState = $state(defaultGameState);
 export const bs: BattleState = $state(defaultBattleState);
 
 export const saveStateToLocalStorage = (): void => {
@@ -37,7 +43,6 @@ export const loadGameStateFromLocalStorage = async () => {
     if (!savedState) return {};
 
     const parsedState: GameState = JSON.parse(savedState);
-    // Update the current state with the loaded data in a way that triggers reactivity
     Object.assign(gs, parsedState);
 
     const savedBattleState = localStorage.getItem(LOCAL_STORAGE_KEY_BATTLE);

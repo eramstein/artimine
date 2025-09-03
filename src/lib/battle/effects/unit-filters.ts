@@ -5,7 +5,7 @@ import {
   type UnitDeployed,
   type UnitKeywords,
 } from '@/lib/_model';
-import { UnitType } from '@/lib/_model/enums';
+import { UnitType } from '@/lib/_model/enums-battle';
 import { bs } from '@/lib/_state';
 import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 

@@ -1,5 +1,11 @@
+import { DayPeriod } from '../_model/enums-sim';
+
 export const config = {
-  initialMana: 10,
+  // sim
+  startDate: '1993-04-01',
+  startDayPeriod: DayPeriod.Afternoon,
+  // battle
+  initialMana: 2,
   initialHandSize: 7,
   initialLife: 10,
   boardRows: 4,

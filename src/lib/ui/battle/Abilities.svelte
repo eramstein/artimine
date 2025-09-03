@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TriggerType } from '../../_model/enums';
+  import { TriggerType } from '../../_model/enums-battle';
   import type { Ability, UnitDeployed } from '../../_model/model-battle';
   import { uiState } from '../../_state';
   import { getRangeLabel } from '../../battle/effects';

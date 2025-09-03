@@ -7,7 +7,7 @@ import {
   TargetType,
   TriggerType,
   UnitType,
-} from './enums';
+} from './enums-battle';
 
 export interface BattleState {
   turn: number;

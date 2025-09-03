@@ -1,13 +1,12 @@
 <script lang="ts">
-  import Main from './lib/ui/Main.svelte';
-  import CardBuilder from './tools/generator/card-builder-ui/CardBuilder.svelte';
-  import Navigation from './lib/ui/Navigation.svelte';
-  import { onMount, onDestroy } from 'svelte';
-  import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
-  import { loadGameStateFromLocalStorage, bs, uiState } from './lib/_state';
+  import { onDestroy, onMount } from 'svelte';
   import { UiView } from './lib/_model';
-  import { initBattle } from './lib/battle/init';
+  import { bs, loadGameStateFromLocalStorage, uiState } from './lib/_state';
+  import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
+  import Main from './lib/ui/Main.svelte';
+  import Navigation from './lib/ui/Navigation.svelte';
   import Analytics from './tools/analytics/Analytics.svelte';
+  import CardBuilder from './tools/generator/card-builder-ui/CardBuilder.svelte';
 
   let isLoading = $state(true);
 
@@ -22,9 +21,7 @@
       if (bs.turn > 0) {
         uiState.currentView = UiView.Battle;
       } else {
-        // for now we only have battle, so init one
-        await initBattle();
-        uiState.currentView = UiView.Battle;
+        uiState.currentView = UiView.CurrentPlace;
       }
     } catch (error) {
       console.error('Failed to initialize game:', error);
@@ -45,12 +42,12 @@
   </div>
 {:else}
   {#key uiState.currentView}
-    {#if uiState.currentView === UiView.Battle}
-      <Main />
-    {:else if uiState.currentView === UiView.CardBuilder}
+    {#if uiState.currentView === UiView.CardBuilder}
       <CardBuilder />
     {:else if uiState.currentView === UiView.Analytics}
       <Analytics />
+    {:else}
+      <Main />
     {/if}
   {/key}
 
