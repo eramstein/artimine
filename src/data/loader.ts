@@ -2,6 +2,7 @@ import {
   CardType,
   type CardTemplate,
   type LandTemplate,
+  type SpellCardTemplate,
   type UnitCardTemplate,
 } from '@/lib/_model';
 import { getRandomFromArray } from '@/lib/_utils/random';
@@ -38,7 +39,7 @@ export async function loadGameData() {
   // Load individual land files
   for (const landId of allLandIds) {
     try {
-      const landModule = await import(`./lands/${landId}.json`);
+      const landModule = await import(`./cards/${landId}.json`);
       lands[landId] = landModule.default as LandTemplate;
     } catch (error) {
       console.error(`Failed to load land: ${landId}`, error);
@@ -47,9 +48,21 @@ export async function loadGameData() {
 }
 
 // These functions will return the deck data after loading
-export const PLAYER_DECK = () => decksData.player.cards.map((cardId) => cards[cardId]);
+export const PLAYER_DECK = (): (UnitCardTemplate | SpellCardTemplate)[] =>
+  decksData.player.cards
+    .map((cardId) => cards[cardId])
+    .filter(
+      (c): c is UnitCardTemplate | SpellCardTemplate =>
+        c.type === CardType.Unit || c.type === CardType.Spell
+    );
 export const PLAYER_LANDS = () => decksData.player.lands.map((landId) => lands[landId]);
-export const FOE_DECK = () => decksData.foe.cards.map((cardId) => cards[cardId]);
+export const FOE_DECK = (): (UnitCardTemplate | SpellCardTemplate)[] =>
+  decksData.foe.cards
+    .map((cardId) => cards[cardId])
+    .filter(
+      (c): c is UnitCardTemplate | SpellCardTemplate =>
+        c.type === CardType.Unit || c.type === CardType.Spell
+    );
 export const FOE_LANDS = () => decksData.foe.lands.map((landId) => lands[landId]);
 
 export const PLAYER_NAME = decksData.player.name;

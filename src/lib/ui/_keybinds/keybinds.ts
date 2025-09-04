@@ -1,9 +1,10 @@
+import { UiView } from '@/lib/_model';
+import { initBattle } from '@/lib/battle';
 import {
-  loadGameStateFromLocalStorage,
-  saveStateToLocalStorage,
-  resetBattleState,
   getCurrentBattleState,
-  bs,
+  loadGameStateFromLocalStorage,
+  resetBattleState,
+  saveStateToLocalStorage,
 } from '../../_state';
 import { uiState } from '../../_state/state-ui.svelte';
 
@@ -32,6 +33,11 @@ export function handleKeybinds(event: KeyboardEvent) {
     event.preventDefault();
     resetBattleState();
     console.log('Battle state reset');
+  } else if (event.key === 'b') {
+    event.preventDefault();
+    initBattle();
+    uiState.currentView = UiView.Battle;
+    console.log('Battle initialized');
   } else if (event.key === 'l') {
     console.log('Current battle state:', getCurrentBattleState());
   } else if (event.key === 'Escape') {

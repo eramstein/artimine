@@ -53,7 +53,12 @@ export interface UnitCardTemplate extends BaseCardTemplate {
 export interface SpellCardTemplate extends BaseCardTemplate {
   actions: ActionDefinition[];
 }
-export type CardTemplate = UnitCardTemplate | SpellCardTemplate;
+
+export interface LandTemplate extends BaseCardTemplate {
+  health: number;
+}
+
+export type CardTemplate = UnitCardTemplate | SpellCardTemplate | LandTemplate;
 
 // CARD INTERFACES (once the game started, drawn or in deck)
 export interface BaseCard extends BaseCardTemplate {
@@ -96,13 +101,6 @@ export interface SpellCardDeployed extends SpellCard, BaseCardDeployed {
 }
 
 export type CardDeployed = UnitDeployed | SpellCardDeployed;
-
-export interface LandTemplate {
-  id: string;
-  name: string;
-  colors: { color: CardColor; count: number }[];
-  health: number;
-}
 
 export interface Land extends LandTemplate {
   instanceId: string;

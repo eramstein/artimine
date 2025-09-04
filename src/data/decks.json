@@ -182,7 +182,7 @@
     "lands": ["forest", "mountain", "island", "city"]
   },
   "foe": {
-    "name": "The Dude",
+    "name": "the-dude",
     "cards": [
       "lion",
       "lion",

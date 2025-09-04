@@ -16,7 +16,7 @@ export function getCardImagePath(cardId: string): string {
 }
 
 export function getLandImagePath(landId: string): string {
-  return getAssetPath(`images/lands/${landId}.jpg`);
+  return getAssetPath(`images/cards/${landId}.jpg`);
 }
 
 export function getCharacterImagePath(characterName: string): string {

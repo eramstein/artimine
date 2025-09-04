@@ -10,7 +10,6 @@ import sharp from 'sharp';
 // Settings
 const rootDirs = [
   './public/assets/images/cards', // cards folder
-  './public/assets/images/lands', // lands folder
 ]; // starting folders
 const overwriteOriginals = true; // true = replace PNGs with JPGs
 const targetWidth = 512; // desired width

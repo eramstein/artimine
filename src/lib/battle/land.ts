@@ -5,7 +5,7 @@ import { bs } from '../_state';
 export function initColorsFromLands(player: Player) {
   player.lands.forEach((land) => {
     land.colors.forEach((color) => {
-      player.colors[color.color] = 9;
+      player.colors[color.color] = 0;
     });
   });
 }

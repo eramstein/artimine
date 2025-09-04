@@ -2566,6 +2566,18 @@
     ]
   },
   {
+    "id": "forest",
+    "name": "Forest",
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "health": 10,
+    "cost": 0
+  },
+  {
     "id": "fortify",
     "name": "Fortify",
     "rarity": "uncommon",
@@ -3575,6 +3587,18 @@
     }
   },
   {
+    "id": "island",
+    "name": "Island",
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "health": 10,
+    "cost": 0
+  },
+  {
     "id": "jumping_hare",
     "name": "Jumping Hare",
     "rarity": "uncommon",
@@ -4295,6 +4319,18 @@
         }
       }
     ]
+  },
+  {
+    "id": "mountain",
+    "name": "Mountain",
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      }
+    ],
+    "health": 10,
+    "cost": 0
   },
   {
     "id": "mountain_giant",
@@ -6084,6 +6120,18 @@
         ]
       }
     ]
+  },
+  {
+    "id": "city",
+    "name": "Swamp",
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "health": 10,
+    "cost": 0
   },
   {
     "id": "swift_drakkar",
