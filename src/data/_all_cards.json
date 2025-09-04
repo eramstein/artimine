@@ -2575,7 +2575,9 @@
       }
     ],
     "health": 10,
-    "cost": 0
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
   },
   {
     "id": "fortify",
@@ -3596,7 +3598,9 @@
       }
     ],
     "health": 10,
-    "cost": 0
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
   },
   {
     "id": "jumping_hare",
@@ -4330,7 +4334,9 @@
       }
     ],
     "health": 10,
-    "cost": 0
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
   },
   {
     "id": "mountain_giant",
@@ -6131,7 +6137,9 @@
       }
     ],
     "health": 10,
-    "cost": 0
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
   },
   {
     "id": "swift_drakkar",

@@ -30,12 +30,19 @@
       }
     }
   }
+
+  function handleContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    uiState.cardFullOverlay.visible = true;
+    uiState.cardFullOverlay.card = land;
+  }
 </script>
 
 <div
   class="land {isValidTarget ? 'valid-target' : ''}"
   style="background-image: url('{imagePath}')"
   onclick={handleLandClick}
+  oncontextmenu={handleContextMenu}
 >
   <div class="health">
     {land.health}

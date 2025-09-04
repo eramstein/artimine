@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Color, Card, Filters } from './types';
+  import type { Card, Filters } from './types';
 
   let {
     allCards,
@@ -253,7 +253,7 @@
           class:active={filters.cardType === item.type}
           onclick={() => handleCardTypeClick(item.type)}
         >
-          <div class="bar-label">{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</div>
+          <div class="bar-label">{item.type?.charAt(0).toUpperCase() + item.type?.slice(1)}</div>
           <div class="bar-container">
             <div
               class="bar"
@@ -322,7 +322,9 @@
           class:active={filters.rarity === item.rarity}
           onclick={() => handleRarityClick(item.rarity)}
         >
-          <div class="bar-label">{item.rarity.charAt(0).toUpperCase() + item.rarity.slice(1)}</div>
+          <div class="bar-label">
+            {item.rarity?.charAt(0).toUpperCase() + item.rarity?.slice(1)}
+          </div>
           <div class="bar-container">
             <div
               class="bar"

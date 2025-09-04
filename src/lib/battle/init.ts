@@ -1,25 +1,10 @@
-import { bs } from '../_state';
-import {
-  FOE_DECK,
-  FOE_LANDS,
-  PLAYER_DECK,
-  PLAYER_LANDS,
-  PLAYER_NAME,
-  FOE_NAME,
-  loadGameData,
-} from '@/data';
-import { drawCard, shuffleDeck } from './deck';
+import { FOE_DECK, FOE_LANDS, FOE_NAME, PLAYER_DECK, PLAYER_LANDS, PLAYER_NAME } from '@/data';
 import { config } from '../_config';
+import { bs } from '../_state';
+import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
 
 export const initBattle = async () => {
-  console.log('initBattle - loading game data...');
-
-  // Wait for game data to load before proceeding
-  await loadGameData();
-
-  console.log('initBattle - game data loaded, initializing battle...');
-
   bs.turn = 1;
   bs.players = [
     {

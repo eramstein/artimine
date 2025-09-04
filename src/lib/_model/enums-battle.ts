@@ -1,6 +1,7 @@
 export enum CardType {
   Unit = 'unit',
   Spell = 'spell',
+  Land = 'land',
 }
 
 export enum CardRarity {

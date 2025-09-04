@@ -23,6 +23,9 @@ export const uiState: UiState = $state({
     },
     currentEffectIndex: 0,
   },
+  collection: {
+    editedDeckKey: null,
+  },
   modal: {
     visible: false,
     title: '',

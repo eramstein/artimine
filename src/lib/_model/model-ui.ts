@@ -1,6 +1,6 @@
 import type {
   Ability,
-  Card,
+  CardTemplate,
   EffectTargets,
   SpellCard,
   TargetDefinition,
@@ -36,6 +36,9 @@ export type UiState = {
       playerId: number | null;
     };
   };
+  collection: {
+    editedDeckKey: string | null;
+  };
   modal: {
     visible: boolean;
     title: string;
@@ -45,7 +48,7 @@ export type UiState = {
   };
   cardFullOverlay: {
     visible: boolean;
-    card: Card | null;
+    card: CardTemplate | null;
   };
 };
 
@@ -54,4 +57,7 @@ export enum UiView {
   Battle = 'Battle',
   CardBuilder = 'CardBuilder',
   Analytics = 'Analytics',
+  Collection = 'Collection',
+  Decks = 'Decks',
+  DeckEditor = 'DeckEditor',
 }

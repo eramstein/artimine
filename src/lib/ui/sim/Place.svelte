@@ -2,6 +2,7 @@
   import type { Place } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import CharacterPortrait from './CharacterPortrait.svelte';
+  import TimeDisplay from './TimeDisplay.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -20,6 +21,7 @@
 </script>
 
 <div class="place-container" style="--bg-image: url('{imagePath}')">
+  <TimeDisplay />
   <div class="characters-overlay">
     {#each charactersInPlace as character (character.key)}
       <div class="character-portrait-container">

@@ -8,6 +8,11 @@ export interface GameState {
   characters: Record<string, Character>;
   player: Character;
   places: Place[];
+  collection: {
+    cardTemplateId: string;
+    count: number;
+  }[];
+  decks: Deck[];
 }
 
 export interface Character {
@@ -21,4 +26,14 @@ export interface Place {
   key: string;
   name: string;
   description: string;
+}
+
+export interface Deck {
+  key: string;
+  name: string;
+  cards: {
+    cardTemplateId: string;
+    count: number;
+  }[];
+  lands: string[];
 }

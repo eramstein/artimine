@@ -11,7 +11,7 @@
   <div class="scene-container">
     {#if uiState.currentView === UiView.Battle && bs.turn > 0}
       <Battle />
-    {:else if uiState.currentView === UiView.CurrentPlace}
+    {:else}
       <Sim />
     {/if}
   </div>

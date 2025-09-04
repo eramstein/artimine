@@ -1,17 +1,17 @@
 <script lang="ts">
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
   import { CardColor, CardType, UnitType } from '../../_model/enums-battle';
-  import type { Card, SpellCard } from '../../_model/model-battle';
+  import type { CardTemplate, SpellCard } from '../../_model/model-battle';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
 
-  let { card }: { card: Card } = $props();
+  let { card }: { card: CardTemplate } = $props();
 
   // Create the background image path using the card id
   let cardImagePath = $derived(getCardImagePath(card.id));
 
-  // Check if card is a unit card (works with Card type)
-  function isUnitCard(card: Card): card is Card & {
+  // Check if card is a unit card (works with CardTemplate type)
+  function isUnitCard(card: CardTemplate): card is CardTemplate & {
     power: number;
     maxHealth: number;
     keywords?: any;
@@ -22,7 +22,7 @@
   }
 
   // Check if card is a spell card
-  function isSpellCard(card: Card): card is SpellCard {
+  function isSpellCard(card: CardTemplate): card is SpellCard {
     return card.type === CardType.Spell;
   }
 
@@ -54,13 +54,6 @@
         '\n';
     });
     return label;
-  }
-
-  // Get tooltip content for abilities
-  function getTooltipContent(text: string, cost?: number, exhausts?: boolean): string {
-    const costText = cost ? `(${cost}): ` : '';
-    const exhaustText = exhausts ? '↻ ' : '';
-    return `${exhaustText}${costText}${text}`;
   }
 
   // Icon lookup object for keywords

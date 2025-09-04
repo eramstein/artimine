@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
+  import { loadGameData } from './data/loader';
   import { UiView } from './lib/_model';
   import { bs, loadGameStateFromLocalStorage, uiState } from './lib/_state';
   import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
@@ -12,6 +13,7 @@
 
   onMount(async () => {
     window.addEventListener('keydown', handleKeybinds);
+    await loadGameData();
 
     try {
       // Load saved game state if it exists

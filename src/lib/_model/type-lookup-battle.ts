@@ -17,6 +17,9 @@ export function isUnitCard(card: CardTemplate): card is UnitCardTemplate {
 export function isSpellCard(card: CardTemplate): card is SpellCardTemplate {
   return card.type === CardType.Spell;
 }
+export function isLandCard(card: CardTemplate): card is Land {
+  return card.type === CardType.Land;
+}
 export function isAttackingLand(target: UnitDeployed | Land | Player): target is Land {
   return 'position' in target && 'health' in target;
 }

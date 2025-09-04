@@ -3,6 +3,7 @@ import { CHARACTER_PLAYER } from '@/data/characters/player';
 import { PLACES } from '@/data/places/places';
 import { type BattleState, type GameState } from '../_model';
 import { DayPeriod } from '../_model/enums-sim';
+import { initSim } from '../sim/init';
 
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
@@ -23,6 +24,8 @@ const defaultGameState: GameState = {
   characters: CHARACTERS,
   player: CHARACTER_PLAYER,
   places: PLACES,
+  collection: [],
+  decks: [],
 };
 
 export const gs: GameState = $state(defaultGameState);
@@ -40,10 +43,12 @@ export const saveStateToLocalStorage = (): void => {
 export const loadGameStateFromLocalStorage = async () => {
   try {
     const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!savedState) return {};
-
-    const parsedState: GameState = JSON.parse(savedState);
-    Object.assign(gs, parsedState);
+    if (savedState) {
+      const parsedState: GameState = JSON.parse(savedState);
+      Object.assign(gs, parsedState);
+    } else {
+      initSim();
+    }
 
     const savedBattleState = localStorage.getItem(LOCAL_STORAGE_KEY_BATTLE);
     if (!savedBattleState) return {};
