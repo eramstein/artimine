@@ -15,7 +15,6 @@
 
   // Handle edit deck - navigate to deck editor
   function handleEditDeck(deck: any): void {
-    console.log('Editing deck:', deck.key);
     uiState.currentView = UiView.DeckEditor;
     uiState.collection.editedDeckKey = deck.key;
   }

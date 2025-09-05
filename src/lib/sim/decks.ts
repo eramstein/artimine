@@ -1,25 +1,5 @@
 import type { Deck } from '../_model';
 
-export const BASE_DECK: Deck = {
-  key: 'base',
-  name: 'Base',
-  cards: [
-    {
-      cardTemplateId: 'hobbit_gardener',
-      count: 10,
-    },
-    {
-      cardTemplateId: 'hobbit_villager',
-      count: 10,
-    },
-    {
-      cardTemplateId: 'young_hobbit',
-      count: 10,
-    },
-  ],
-  lands: ['forest', 'mountain', 'island', 'city'],
-};
-
 export function addCardToDeck(deck: Deck, cardTemplateId: string) {
   const card = deck.cards.find((card) => card.cardTemplateId === cardTemplateId);
   if (card) {
@@ -37,4 +17,15 @@ export function removeCardFromDeck(deck: Deck, cardTemplateId: string) {
   } else {
     card.count--;
   }
+}
+
+export function addLandToDeck(deck: Deck, landId: string) {
+  if (deck.lands.includes(landId)) {
+    return;
+  }
+  deck.lands.push(landId);
+}
+
+export function removeLandFromDeck(deck: Deck, landId: string) {
+  deck.lands = deck.lands.filter((land) => land !== landId);
 }

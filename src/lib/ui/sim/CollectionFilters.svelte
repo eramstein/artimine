@@ -11,10 +11,12 @@
     filters: {
       cardType: string | undefined;
       colorCombination: string | undefined;
+      manaCost: string | undefined;
     };
     onFiltersChange: (filters: {
       cardType: string | undefined;
       colorCombination: string | undefined;
+      manaCost: string | undefined;
     }) => void;
   } = $props();
 
@@ -73,6 +75,14 @@
     }
   }
 
+  function handleManaCostFilter(cost: string) {
+    if (filters.manaCost === cost) {
+      onFiltersChange({ ...filters, manaCost: undefined });
+    } else {
+      onFiltersChange({ ...filters, manaCost: cost });
+    }
+  }
+
   // Helper function to get color image path
   function getColorImagePath(color: CardColor): string {
     return getAssetPath(`images/color_${color}.png`);
@@ -81,11 +91,11 @@
 
 <div class="filters-section">
   <!-- Card Type Filter -->
-  <div class="filter-group">
-    <div class="filter-options">
+  <div class="filter-group card-type-tabs">
+    <div class="tab-container">
       {#each availableCardTypes() as type}
         <button
-          class="filter-option"
+          class="tab"
           class:active={filters.cardType === type}
           onclick={() => handleCardTypeFilter(type)}
         >
@@ -123,17 +133,30 @@
       {/each}
     </div>
   </div>
+
+  <!-- Mana Cost Filter -->
+  <div class="filter-group">
+    <div class="filter-options">
+      {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, '+'] as cost}
+        <button
+          class="filter-option mana-cost-option"
+          class:active={filters.manaCost === cost.toString()}
+          onclick={() => handleManaCostFilter(cost.toString())}
+        >
+          {cost}
+        </button>
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
   .filters-section {
-    padding: 15px;
     display: flex;
     gap: 25px;
   }
 
   .filter-group {
-    margin-bottom: 15px;
     padding-right: 25px;
     border-right: 1px solid #606060;
   }
@@ -246,5 +269,49 @@
 
   .color-symbols.filter-option.active .color-symbol {
     filter: brightness(2) saturate(1.5);
+  }
+
+  .mana-cost-option {
+    min-width: 32px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* Card Type Tabs */
+  .card-type-tabs {
+    padding-right: 25px;
+    border-right: 1px solid #606060;
+  }
+
+  .tab-container {
+    display: flex;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    padding: 4px;
+    gap: 2px;
+  }
+
+  .tab {
+    background-color: transparent;
+    color: #aaa;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-width: auto;
+  }
+
+  .tab:hover {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+  }
+
+  .tab.active {
+    background-color: #007bff;
+    color: #fff;
   }
 </style>

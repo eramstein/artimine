@@ -13,6 +13,19 @@
     uiState.currentView = UiView.Decks;
     uiState.collection.editedDeckKey = null;
   }
+
+  async function copyDeckToClipboard() {
+    if (!selectedDeck) return;
+
+    try {
+      const deckJson = JSON.stringify(selectedDeck, null, 2);
+      await navigator.clipboard.writeText(deckJson);
+      // You could add a toast notification here if you have one
+      console.log('Deck copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy deck to clipboard:', err);
+    }
+  }
 </script>
 
 <div class="deck-editor-container">
@@ -35,14 +48,15 @@
 
   <div class="editor-content">
     <div class="collection-panel">
-      <h3 class="panel-title">Collection</h3>
       <Collection />
     </div>
 
     <div class="deck-panel">
-      <h3 class="panel-title">Deck Contents</h3>
       {#if selectedDeck}
         <DeckList deck={selectedDeck} />
+        <div class="deck-actions">
+          <button class="copy-button" onclick={copyDeckToClipboard}> 📋 Copy JSON </button>
+        </div>
       {:else}
         <div class="no-deck-message">
           <p>Select a deck to edit from the Decks view</p>
@@ -129,31 +143,24 @@
     display: flex;
     flex: 1;
     gap: 2rem;
-    padding: 2rem;
+    padding: 5px 2rem;
     overflow: hidden;
   }
 
   .collection-panel {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .deck-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-width: 0;
   }
 
-  .panel-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0 0 1rem 0;
-    color: #e0e0e0;
-    border-bottom: 1px solid #555;
-    padding-bottom: 0.5rem;
+  .deck-panel {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin-top: 1rem;
+    width: fit-content;
   }
 
   .no-deck-message {
@@ -165,6 +172,35 @@
   .no-deck-message p {
     margin: 0;
     font-size: 1rem;
+  }
+
+  .deck-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .copy-button {
+    background: #4a5568;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .copy-button:hover {
+    background: #2d3748;
+  }
+
+  .copy-button:active {
+    background: #1a202c;
   }
 
   @media (max-width: 1024px) {
@@ -198,6 +234,11 @@
 
     .editor-title {
       font-size: 1.5rem;
+    }
+
+    .copy-button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
     }
   }
 </style>
