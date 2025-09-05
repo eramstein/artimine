@@ -1,58 +1,44 @@
-import { FOE_DECK, FOE_LANDS, FOE_NAME, PLAYER_DECK, PLAYER_LANDS, PLAYER_NAME } from '@/data';
+import { cards, lands } from '@/data';
+import { BASE_DECK } from '@/data/base-deck';
 import { config } from '../_config';
-import { bs } from '../_state';
+import type { Card, Deck, Land } from '../_model';
+import { bs, gs } from '../_state';
 import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
 
-export const initBattle = () => {
+export const initBattle = (
+  foeKey: string = 'the-dude',
+  playerDeck: Deck = BASE_DECK,
+  foeDeck: Deck = BASE_DECK
+) => {
   bs.turn = 1;
   bs.players = [
     {
       id: 0,
-      name: PLAYER_NAME,
+      name: gs.player.key,
       isPlayer: true,
       mana: config.initialMana,
       maxMana: config.initialMana,
       life: config.initialLife,
       hand: [],
-      deck: PLAYER_DECK().map((card) => ({
-        ...card,
-        ownerPlayerId: 0,
-        instanceId: crypto.randomUUID(),
-      })),
+      deck: shuffleDeck(loadDeckCards(playerDeck, 0)),
       graveyard: [],
       colors: {},
-      lands: PLAYER_LANDS().map((land, index) => ({
-        ...land,
-        ownerPlayerId: 0,
-        instanceId: crypto.randomUUID(),
-        position: index,
-      })),
+      lands: loadDeckLands(playerDeck, 0),
       abilityUsed: false,
     },
     {
       id: 1,
-      name: FOE_NAME,
+      name: foeKey,
       isPlayer: false,
       mana: config.initialMana,
       maxMana: config.initialMana,
       life: config.initialLife,
       hand: [],
-      deck: shuffleDeck(
-        FOE_DECK().map((card) => ({
-          ...card,
-          ownerPlayerId: 1,
-          instanceId: crypto.randomUUID(),
-        }))
-      ),
+      deck: shuffleDeck(loadDeckCards(foeDeck, 1)),
       graveyard: [],
       colors: {},
-      lands: FOE_LANDS().map((land, index) => ({
-        ...land,
-        ownerPlayerId: 1,
-        instanceId: crypto.randomUUID(),
-        position: index,
-      })),
+      lands: loadDeckLands(foeDeck, 1),
       abilityUsed: false,
     },
   ];
@@ -65,3 +51,31 @@ export const initBattle = () => {
 
   console.log('initBattle - battle initialized successfully');
 };
+
+function loadDeckCards(deck: Deck, ownerPlayerId: number): Card[] {
+  const deckCards: Card[] = [];
+  for (const card of deck.cards) {
+    for (let i = 0; i < card.count; i++) {
+      const cardTemplate = cards[card.cardTemplateId];
+      deckCards.push({
+        ...cardTemplate,
+        ownerPlayerId: ownerPlayerId,
+        instanceId: crypto.randomUUID(),
+      } as Card);
+    }
+  }
+  return deckCards;
+}
+
+function loadDeckLands(deck: Deck, ownerPlayerId: number): Land[] {
+  const deckLands: Land[] = [];
+  for (const [index, land] of deck.lands.entries()) {
+    deckLands.push({
+      ...lands[land],
+      ownerPlayerId: ownerPlayerId,
+      instanceId: crypto.randomUUID(),
+      position: index,
+    } as Land);
+  }
+  return deckLands;
+}

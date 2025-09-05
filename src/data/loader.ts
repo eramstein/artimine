@@ -2,7 +2,6 @@ import {
   CardType,
   type CardTemplate,
   type LandTemplate,
-  type SpellCardTemplate,
   type UnitCardTemplate,
 } from '@/lib/_model';
 import { getRandomFromArray } from '@/lib/_utils/random';
@@ -46,27 +45,6 @@ export async function loadGameData() {
     }
   }
 }
-
-// These functions will return the deck data after loading
-export const PLAYER_DECK = (): (UnitCardTemplate | SpellCardTemplate)[] =>
-  decksData.player.cards
-    .map((cardId) => cards[cardId])
-    .filter(
-      (c): c is UnitCardTemplate | SpellCardTemplate =>
-        c.type === CardType.Unit || c.type === CardType.Spell
-    );
-export const PLAYER_LANDS = () => decksData.player.lands.map((landId) => lands[landId]);
-export const FOE_DECK = (): (UnitCardTemplate | SpellCardTemplate)[] =>
-  decksData.foe.cards
-    .map((cardId) => cards[cardId])
-    .filter(
-      (c): c is UnitCardTemplate | SpellCardTemplate =>
-        c.type === CardType.Unit || c.type === CardType.Spell
-    );
-export const FOE_LANDS = () => decksData.foe.lands.map((landId) => lands[landId]);
-
-export const PLAYER_NAME = decksData.player.name;
-export const FOE_NAME = decksData.foe.name;
 
 // Returns a random unit card from the full catalog in _all_cards.json
 export function getRandomUnitCardFromAll(): UnitCardTemplate {

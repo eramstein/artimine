@@ -9,14 +9,10 @@
 
 <style>
   .time-display {
-    position: absolute;
-    top: 20px;
-    left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
     font-family: 'Arial', sans-serif;
-    z-index: 10;
+    padding-left: 30px;
   }
 
   .day {

@@ -50,6 +50,10 @@ export type UiState = {
     visible: boolean;
     card: CardTemplate | null;
   };
+  deckSelectionModal: {
+    visible: boolean;
+    foeKey: string | null;
+  };
 };
 
 export enum UiView {

@@ -4,6 +4,7 @@
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import Collection from './Collection.svelte';
   import DeckEditor from './DeckEditor.svelte';
+  import DeckSelectionModal from './DeckSelectionModal.svelte';
   import Decks from './Decks.svelte';
   import Menu from './Menu.svelte';
   import Place from './Place.svelte';
@@ -25,6 +26,9 @@
       <DeckEditor />
     {/if}
   </div>
+
+  <!-- Deck Selection Modal -->
+  <DeckSelectionModal />
 </div>
 
 <style>

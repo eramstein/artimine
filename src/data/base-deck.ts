@@ -1,4 +1,6 @@
-export const BASE_DECK = {
+import type { Deck } from '@/lib/_model';
+
+export const BASE_DECK: Deck = {
   key: 'base',
   name: 'Base',
   cards: [

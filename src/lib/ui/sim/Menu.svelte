@@ -1,9 +1,11 @@
 <script lang="ts">
   import { UiView } from '@/lib/_model';
   import { uiState } from '@/lib/_state/state-ui.svelte';
+  import TimeDisplay from './TimeDisplay.svelte';
 </script>
 
 <div class="menu-overlay">
+  <TimeDisplay />
   <div class="controls">
     <button
       class="tab-button"

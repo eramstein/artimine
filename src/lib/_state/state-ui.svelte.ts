@@ -37,4 +37,8 @@ export const uiState: UiState = $state({
     visible: false,
     card: null,
   },
+  deckSelectionModal: {
+    visible: false,
+    foeKey: null,
+  },
 });
