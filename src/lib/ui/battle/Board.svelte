@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { usePlayerColorAbility } from '@/lib/battle';
+  import { isPayableAfterColorIncrementation } from '@/lib/battle/cost';
   import { config } from '@lib/_config';
   import type { Card, Position } from '@lib/_model';
   import { isUnitCard } from '@lib/_model';
@@ -92,7 +94,15 @@
       if (!cardData) return;
       const position: Position = { row, column };
       const card: Card = JSON.parse(cardData);
-      if (isUnitCard(card) && isOnPlayersSide(position, card.ownerPlayerId)) {
+      const colorRequirementMet = isPayableAfterColorIncrementation(card);
+      if (
+        isUnitCard(card) &&
+        isOnPlayersSide(position, card.ownerPlayerId) &&
+        colorRequirementMet !== false
+      ) {
+        if (colorRequirementMet !== true) {
+          usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet);
+        }
         deployUnit(card, position);
         if (card.keywords?.haste) {
           toggleUnitSelection(bs.units[bs.units.length - 1]);
@@ -124,7 +134,6 @@
   // Click handler for board cells
   function handleCellClick(row: number, column: number) {
     const selectedUnit = uiState.battle.selectedUnit;
-    const positionKey = getPositionKey({ row, column });
     // If an ability is pending and this cell is a valid target, use targetCell
     if (uiState.battle.targetBeingSelected) {
       targetCell({ row, column });

@@ -1,7 +1,6 @@
 import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
 import { bs } from '../_state';
-import { drawCard } from './deck';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
@@ -38,14 +37,5 @@ export function usePlayerColorAbility(player: Player, color: CardColor) {
     return;
   }
   incrementColor(player, color, 1);
-  player.abilityUsed = true;
-}
-
-export function useDrawAbility(player: Player) {
-  if (player.mana < 1 || player.abilityUsed) {
-    return;
-  }
-  player.mana -= 1;
-  drawCard(player);
   player.abilityUsed = true;
 }

@@ -3,9 +3,10 @@
   import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
   import { CARD_HEIGHT, CARD_WIDTH } from '@lib/_config/ui-config';
   import type { Card, SpellCard } from '@lib/_model/model-battle';
-  import { uiState } from '@lib/_state';
+  import { bs, uiState } from '@lib/_state';
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
-  import { isPayable } from '@lib/battle/cost';
+  import { isPayableAfterColorIncrementation } from '@lib/battle/cost';
+  import { usePlayerColorAbility } from '@lib/battle/player';
   import { activateSpell, targetCard } from '@lib/ui/_helpers/targetting';
   import Abilities from './Abilities.svelte';
   import Keywords from './Keywords.svelte';
@@ -48,7 +49,7 @@
 
   // Determine border color based on whether the card is payable
   function getBorderColor() {
-    return isPayable(card) ? 'var(--color-golden)' : '#666'; // Gold if affordable, gray if not
+    return isPayableAfterColorIncrementation(card) !== false ? 'var(--color-golden)' : '#666'; // Gold if affordable, gray if not
   }
 
   // Helper function to get color image path
@@ -68,7 +69,11 @@
       return;
     }
 
-    if (inHand && isSpellCard(card) && isPayable(card)) {
+    const colorRequirementMet = isPayableAfterColorIncrementation(card);
+    if (inHand && isSpellCard(card) && colorRequirementMet !== false) {
+      if (colorRequirementMet !== true) {
+        usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet as CardColor);
+      }
       // Check if any effect in the spell has targets
       const hasTargets = card.actions.some((action) => action.targets && action.targets.length > 0);
 
@@ -100,7 +105,7 @@
 
   // Drag event handlers
   function handleDragStart(event: DragEvent) {
-    if (!isUnitCard(card) || !isPayable(card)) {
+    if (!isUnitCard(card) || isPayableAfterColorIncrementation(card) === false) {
       event.preventDefault();
       return;
     }
@@ -130,7 +135,7 @@
   class="card {isPendingSpell ? 'pending-spell' : ''}"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
     40}px; border-color: {getBorderColor()}; --name-font-size: {nameFontSize()}rem;"
-  draggable={isUnitCard(card) && isPayable(card)}
+  draggable={isUnitCard(card) && isPayableAfterColorIncrementation(card) !== false}
   ondragstart={handleDragStart}
   ondrag={handleDrag}
   onclick={handleClick}

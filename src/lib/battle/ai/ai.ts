@@ -1,14 +1,14 @@
+import { config } from '@/lib/_config';
+import { isUnitCard, type Player, type UnitCard } from '@/lib/_model';
 import { bs } from '@/lib/_state';
+import { isBoardSizeFull } from '../boards';
+import { canAttack } from '../combat';
+import { isPayable } from '../cost';
+import { canMove } from '../move';
+import { usePlayerColorAbility } from '../player';
+import { nextTurn } from '../turn';
 import { ActionType, PersonaType, type AiPersona, type PossibleActions } from './model';
 import { AiPersonaAggro } from './personas/aggro';
-import { canMove } from '../move';
-import { isBoardSizeFull } from '../boards';
-import { isUnitCard, type Player, type UnitCard } from '@/lib/_model';
-import { canAttack } from '../combat';
-import { config } from '@/lib/_config';
-import { nextTurn } from '../turn';
-import { isPayable } from '../cost';
-import { usePlayerColorAbility, useDrawAbility } from '../player';
 
 const AI_PERSONA = PersonaType.Aggro;
 const MAX_ACTIONS_SAFETY_NET = 100;
@@ -85,8 +85,6 @@ function usePlayerAbility(persona: AiPersona, player: Player) {
   // TODO: only increment based on AI deck's needs
   if (minColor.value < 5) {
     usePlayerColorAbility(player, minColor.color);
-  } else if (player.mana >= 1) {
-    useDrawAbility(player);
   } else {
     player.abilityUsed = true;
   }

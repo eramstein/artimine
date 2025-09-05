@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Land } from '@lib/_model';
   import { TargetType } from '@lib/_model';
-  import { uiState } from '@lib/_state';
+  import { bs, uiState } from '@lib/_state';
   import { getLandImagePath } from '@lib/_utils/asset-paths';
   import { attackLand } from '@lib/battle/combat';
+  import { isHumanPlayer, usePlayerColorAbility } from '@lib/battle/player';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
   import { targetLand } from '@lib/ui/_helpers/targetting';
 
@@ -28,6 +29,10 @@
       } else {
         clearSelections();
       }
+      return;
+    }
+    if (land.colors[0] && isHumanPlayer(land.ownerPlayerId)) {
+      usePlayerColorAbility(bs.players[land.ownerPlayerId], land.colors[0].color);
     }
   }
 
