@@ -127,6 +127,17 @@
       });
     }
 
+    // Sort by mana cost ascending
+    filtered = filtered.sort((a, b) => {
+      const templateA = templates.get(a.cardTemplateId);
+      const templateB = templates.get(b.cardTemplateId);
+
+      const costA = templateA?.cost ?? 0;
+      const costB = templateB?.cost ?? 0;
+
+      return costA - costB;
+    });
+
     return filtered;
   });
 

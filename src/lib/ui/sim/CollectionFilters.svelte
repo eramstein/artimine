@@ -109,7 +109,13 @@
   <div class="filter-group">
     <div class="filter-options">
       {#each availableColorCombinations() as colors}
-        {#if colors.split('-').length === 1}
+        {#if colors === ''}
+          <div
+            class="color-symbol filter-option colorless"
+            class:active={filters.colorCombination === colors}
+            onclick={() => handleColorFilter(colors)}
+          ></div>
+        {:else if colors.split('-').length === 1}
           <div
             class="color-symbol filter-option"
             class:active={filters.colorCombination === colors}
@@ -269,6 +275,23 @@
 
   .color-symbols.filter-option.active .color-symbol {
     filter: brightness(2) saturate(1.5);
+  }
+
+  .color-symbol.filter-option.colorless {
+    background-color: transparent;
+    border: 1px solid #444;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+  }
+
+  .color-symbol.filter-option.colorless:hover {
+    border-color: #999;
+  }
+
+  .color-symbol.filter-option.colorless.active {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
   }
 
   .mana-cost-option {

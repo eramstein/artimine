@@ -1,0 +1,9 @@
+{
+  "id": "plains",
+  "name": "Plains",
+  "colors": [],
+  "health": 20,
+  "cost": 0,
+  "type": "land",
+  "rarity": "common"
+}

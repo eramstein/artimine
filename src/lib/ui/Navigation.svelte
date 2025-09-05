@@ -1,12 +1,19 @@
 <script lang="ts">
   import { UiView } from '../_model';
   import { uiState } from '../_state';
+  import { resetBattleState } from '../_state/main.svelte';
 
   const navItems = [
     { view: UiView.Battle, label: 'Game', icon: '🎮' },
     { view: UiView.Analytics, label: 'Analytics', icon: '📊' },
     { view: UiView.CardBuilder, label: 'Card Builder', icon: '🃏' },
   ];
+
+  const stopBattle = () => {
+    resetBattleState();
+    uiState.currentView = UiView.CurrentPlace;
+    uiState.navigationVisible = false;
+  };
 </script>
 
 <div class="navigation-overlay" onclick={() => (uiState.navigationVisible = false)}>
@@ -24,6 +31,13 @@
         <span class="label">{item.label}</span>
       </button>
     {/each}
+
+    {#if uiState.currentView === UiView.Battle}
+      <button class="nav-item stop-battle" onclick={stopBattle}>
+        <span class="icon">⏹️</span>
+        <span class="label">Stop Battle</span>
+      </button>
+    {/if}
   </nav>
 </div>
 
@@ -86,5 +100,16 @@
 
   .label {
     font-weight: 500;
+  }
+
+  .stop-battle {
+    background: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.3);
+    color: #fca5a5;
+  }
+
+  .stop-battle:hover {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: rgba(220, 38, 38, 0.4);
   }
 </style>

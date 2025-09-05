@@ -3,14 +3,12 @@ import { BASE_DECK } from '@/data/base-deck';
 import { config } from '../_config';
 import type { Card, Deck, Land } from '../_model';
 import { bs, gs } from '../_state';
+import { pickNpcDeck } from '../sim/decks';
 import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
 
-export const initBattle = (
-  foeKey: string = 'the-dude',
-  playerDeck: Deck = BASE_DECK,
-  foeDeck: Deck = BASE_DECK
-) => {
+export const initBattle = (foeKey: string = 'the-dude', playerDeck: Deck = BASE_DECK) => {
+  const foeDeck = pickNpcDeck(foeKey);
   bs.turn = 1;
   bs.players = [
     {

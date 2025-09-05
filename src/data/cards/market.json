@@ -1,0 +1,9 @@
+{
+  "id": "market",
+  "name": "Market",
+  "colors": [],
+  "health": 20,
+  "cost": 0,
+  "type": "land",
+  "rarity": "common"
+}

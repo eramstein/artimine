@@ -1,5 +1,6 @@
 import type { Deck } from '../_model';
 import { gs } from '../_state';
+import { getRandomFromArray } from '../_utils/random';
 
 export function createNewDeck(name: string): Deck {
   const deck = {
@@ -44,4 +45,8 @@ export function addLandToDeck(deck: Deck, landId: string) {
 
 export function removeLandFromDeck(deck: Deck, landId: string) {
   deck.lands = deck.lands.filter((land) => land !== landId);
+}
+
+export function pickNpcDeck(npcKey: string): Deck {
+  return getRandomFromArray(gs.characters[npcKey].decks);
 }

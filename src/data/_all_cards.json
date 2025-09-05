@@ -1180,6 +1180,20 @@
     ]
   },
   {
+    "id": "city",
+    "name": "City",
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "health": 10,
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
+  },
+  {
     "id": "city_guard",
     "name": "City Guard",
     "rarity": "common",
@@ -3969,6 +3983,15 @@
     ]
   },
   {
+    "id": "market",
+    "name": "Market",
+    "colors": [],
+    "health": 20,
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
+  },
+  {
     "id": "market_beggar",
     "name": "Market Beggar",
     "rarity": "common",
@@ -4911,6 +4934,15 @@
         ]
       }
     ]
+  },
+  {
+    "id": "plains",
+    "name": "Plains",
+    "colors": [],
+    "health": 20,
+    "cost": 0,
+    "type": "land",
+    "rarity": "common"
   },
   {
     "id": "professore",
@@ -6126,20 +6158,6 @@
         ]
       }
     ]
-  },
-  {
-    "id": "city",
-    "name": "Swamp",
-    "colors": [
-      {
-        "color": "black",
-        "count": 1
-      }
-    ],
-    "health": 10,
-    "cost": 0,
-    "type": "land",
-    "rarity": "common"
   },
   {
     "id": "swift_drakkar",

@@ -17,6 +17,5 @@ function addDefaultCollectionAndDecks(character: any): Character {
   return {
     ...character,
     collection: [],
-    decks: [],
   };
 }

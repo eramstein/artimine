@@ -1,6 +1,6 @@
 {
   "id": "city",
-  "name": "Swamp",
+  "name": "City",
   "colors": [{ "color": "black", "count": 1 }],
   "health": 10,
   "cost": 0,
