@@ -4,7 +4,7 @@ import { bs } from '../_state';
 import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
 
-export const initBattle = async () => {
+export const initBattle = () => {
   bs.turn = 1;
   bs.players = [
     {

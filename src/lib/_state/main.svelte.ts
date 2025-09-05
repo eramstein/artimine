@@ -22,10 +22,8 @@ const defaultGameState: GameState = {
     period: DayPeriod.Morning,
   },
   characters: CHARACTERS,
-  player: CHARACTER_PLAYER,
+  player: { ...CHARACTER_PLAYER, collection: [], decks: [] },
   places: PLACES,
-  collection: [],
-  decks: [],
 };
 
 export const gs: GameState = $state(defaultGameState);

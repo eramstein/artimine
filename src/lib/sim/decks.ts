@@ -1,4 +1,20 @@
 import type { Deck } from '../_model';
+import { gs } from '../_state';
+
+export function createNewDeck(name: string): Deck {
+  const deck = {
+    key: crypto.randomUUID(),
+    name,
+    cards: [],
+    lands: [],
+  };
+  gs.player.decks.push(deck);
+  return deck;
+}
+
+export function deleteDeck(deck: Deck) {
+  gs.player.decks = gs.player.decks.filter((d) => d.key !== deck.key);
+}
 
 export function addCardToDeck(deck: Deck, cardTemplateId: string) {
   const card = deck.cards.find((card) => card.cardTemplateId === cardTemplateId);

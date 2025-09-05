@@ -3,6 +3,7 @@
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
+  import { createNewDeck } from '@/lib/sim/decks';
 
   // Get the first card from a deck to display its image
   function getFirstCardImage(deck: any): string {
@@ -18,19 +19,29 @@
     uiState.currentView = UiView.DeckEditor;
     uiState.collection.editedDeckKey = deck.key;
   }
+
+  // Handle create new deck
+  function handleCreateNewDeck(): void {
+    const name = prompt('Enter deck name:');
+    if (name && name.trim()) {
+      const newDeck = createNewDeck(name.trim());
+      uiState.currentView = UiView.DeckEditor;
+      uiState.collection.editedDeckKey = newDeck.key;
+    }
+  }
 </script>
 
 <div class="decks-container">
   <h2 class="decks-title">My Decks</h2>
 
-  {#if gs.decks.length === 0}
+  {#if gs.player.decks.length === 0}
     <div class="no-decks">
       <p>No decks created yet.</p>
       <p>Create your first deck to get started!</p>
     </div>
   {:else}
     <div class="decks-grid">
-      {#each gs.decks as deck}
+      {#each gs.player.decks as deck}
         <div class="deck-box" onclick={() => handleEditDeck(deck)}>
           <div class="deck-image">
             <img src={getFirstCardImage(deck)} alt="Deck preview" />
@@ -41,6 +52,15 @@
           </div>
         </div>
       {/each}
+
+      <!-- New Deck Button -->
+      <div class="deck-box new-deck-box" onclick={handleCreateNewDeck}>
+        <div class="deck-image new-deck-image">
+          <div class="new-deck-icon">+</div>
+        </div>
+        <div class="deck-name">New Deck</div>
+        <div class="deck-count">Create new</div>
+      </div>
     </div>
   {/if}
 </div>
@@ -128,6 +148,34 @@
   .deck-count {
     font-size: 0.9rem;
     color: #888;
+  }
+
+  .new-deck-box {
+    border-style: dashed;
+    border-color: #666;
+    background: #1f1f1f;
+  }
+
+  .new-deck-box:hover {
+    border-color: #888;
+    background: #252525;
+  }
+
+  .new-deck-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #333;
+  }
+
+  .new-deck-icon {
+    font-size: 3rem;
+    color: #888;
+    font-weight: bold;
+  }
+
+  .new-deck-box:hover .new-deck-icon {
+    color: #aaa;
   }
 
   @media (max-width: 768px) {

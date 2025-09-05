@@ -15,7 +15,7 @@
   import LandFull from '../cards/LandFull.svelte';
   import CollectionFilters from './CollectionFilters.svelte';
 
-  const collection = $derived(gs.collection);
+  const collection = $derived(gs.player.collection);
 
   // Filter state
   let filters = $state({
@@ -55,7 +55,7 @@
       }));
     }
 
-    const deck = gs.decks.find((d) => d.key === editedKey);
+    const deck = gs.player.decks.find((d) => d.key === editedKey);
     if (!deck) {
       return collection.map((entry) => ({
         cardTemplateId: entry.cardTemplateId,
@@ -143,7 +143,7 @@
     const remainingCard = remainingCards.find((card) => card.cardTemplateId === cardTemplateId);
     if (!remainingCard || remainingCard.count <= 0) return;
 
-    const deck = gs.decks.find((d) => d.key === editedKey);
+    const deck = gs.player.decks.find((d) => d.key === editedKey);
     if (!deck) return;
     const template = getCardTemplate(cardTemplateId);
     if (template && template.type === 'land') {
@@ -162,7 +162,7 @@
     // If we're in deck edition mode, remove the card from the deck
     const editedKey = uiState.collection.editedDeckKey;
     if (editedKey) {
-      const deck = gs.decks.find((d) => d.key === editedKey);
+      const deck = gs.player.decks.find((d) => d.key === editedKey);
       if (deck) {
         const template = getCardTemplate(cardTemplateId);
         if (template && template.type === 'land') {

@@ -2,12 +2,16 @@
   import { UiView } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
+  import { deleteDeck } from '@/lib/sim/decks';
   import Collection from './Collection.svelte';
   import DeckList from './DeckList.svelte';
 
-  // For now, we'll use the first deck as a default
-  // In the future, this could be passed as a prop or selected from a dropdown
-  let selectedDeck = $derived(gs.decks[0] || null);
+  // Get the deck being edited from the editedDeckKey
+  let selectedDeck = $derived(
+    uiState.collection.editedDeckKey
+      ? gs.player.decks.find((deck) => deck.key === uiState.collection.editedDeckKey) || null
+      : null
+  );
 
   function goBack() {
     uiState.currentView = UiView.Decks;
@@ -24,6 +28,20 @@
       console.log('Deck copied to clipboard');
     } catch (err) {
       console.error('Failed to copy deck to clipboard:', err);
+    }
+  }
+
+  function handleDeleteDeck() {
+    if (!selectedDeck) return;
+
+    const confirmed = confirm(
+      `Are you sure you want to delete the deck "${selectedDeck.name}"? This action cannot be undone.`
+    );
+    if (confirmed) {
+      deleteDeck(selectedDeck);
+      // Navigate back to decks view after deletion
+      uiState.currentView = UiView.Decks;
+      uiState.collection.editedDeckKey = null;
     }
   }
 </script>
@@ -56,6 +74,7 @@
         <DeckList deck={selectedDeck} />
         <div class="deck-actions">
           <button class="copy-button" onclick={copyDeckToClipboard}> 📋 Copy JSON </button>
+          <button class="delete-button" onclick={handleDeleteDeck}> 🗑️ Delete Deck </button>
         </div>
       {:else}
         <div class="no-deck-message">
@@ -203,6 +222,30 @@
     background: #1a202c;
   }
 
+  .delete-button {
+    background: #4a5568;
+    color: #ccc;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .delete-button:hover {
+    background: #2d3748;
+    color: #e0e0e0;
+  }
+
+  .delete-button:active {
+    background: #1a202c;
+  }
+
   @media (max-width: 1024px) {
     .editor-content {
       flex-direction: column;
@@ -239,6 +282,12 @@
     .copy-button {
       padding: 0.4rem 0.8rem;
       font-size: 0.8rem;
+    }
+
+    .delete-button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      margin-left: 0.25rem;
     }
   }
 </style>
