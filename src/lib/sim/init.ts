@@ -10,7 +10,7 @@ export const initSim = async () => {
   const goblinCave = gs.places.find((p) => p.key === 'goblin_counter');
   goblinCave!.shopInventory = [
     {
-      key: 'booster',
+      key: 'booster_alpha',
       name: 'Booster',
       type: ItemType.Booster,
       price: 10,

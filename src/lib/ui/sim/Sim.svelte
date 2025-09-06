@@ -6,6 +6,7 @@
   import DeckEditor from './DeckEditor.svelte';
   import DeckSelectionModal from './DeckSelectionModal.svelte';
   import Decks from './Decks.svelte';
+  import Inventory from './Inventory.svelte';
   import Menu from './Menu.svelte';
   import Place from './Place.svelte';
 </script>
@@ -22,6 +23,8 @@
       <Collection />
     {:else if uiState.currentView === UiView.Decks}
       <Decks />
+    {:else if uiState.currentView === UiView.Inventory}
+      <Inventory />
     {:else if uiState.currentView === UiView.DeckEditor}
       <DeckEditor />
     {/if}

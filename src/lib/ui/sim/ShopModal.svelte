@@ -9,14 +9,10 @@
       : null
   );
 
-  function closeModal() {
-    uiState.shopModal.visible = false;
-    uiState.shopModal.placeKey = null;
-  }
-
   function handleBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
-      closeModal();
+      uiState.shopModal.visible = false;
+      uiState.shopModal.placeKey = null;
     }
   }
 </script>
@@ -25,8 +21,7 @@
   <div class="modal-backdrop" onclick={handleBackdropClick}>
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Shop</h2>
-        <button class="close-button" onclick={closeModal}>×</button>
+        <h2>{currentPlace.name}</h2>
       </div>
 
       <div class="modal-body">
@@ -51,16 +46,6 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    animation: fadeIn 0.2s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
   }
 
   .modal-content {
@@ -73,23 +58,11 @@
     max-width: 90vw;
     max-height: 90vh;
     overflow: hidden;
-    animation: slideIn 0.3s ease-out;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
   }
 
   .modal-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -101,24 +74,6 @@
     color: #ffffff;
     font-size: 1.5em;
     font-weight: 600;
-  }
-
-  .close-button {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    line-height: 1;
-  }
-
-  .close-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.1);
   }
 
   .modal-body {

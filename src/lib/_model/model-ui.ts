@@ -70,4 +70,5 @@ export enum UiView {
   Collection = 'Collection',
   Decks = 'Decks',
   DeckEditor = 'DeckEditor',
+  Inventory = 'Inventory',
 }

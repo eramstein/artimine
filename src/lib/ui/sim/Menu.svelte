@@ -35,6 +35,13 @@
     >
       Decks
     </button>
+    <button
+      class="tab-button"
+      class:active={uiState.currentView === UiView.Inventory}
+      onclick={() => (uiState.currentView = UiView.Inventory)}
+    >
+      Inventory
+    </button>
   </div>
 </div>
 
