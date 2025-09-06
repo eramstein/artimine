@@ -3,6 +3,7 @@
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import CharacterPortrait from './CharacterPortrait.svelte';
+  import ShopModal from './ShopModal.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -58,9 +59,23 @@
   function handleBackgroundClick() {
     selectedCharacter = null;
   }
+
+  // Handle shop button click
+  function handleShopClick() {
+    uiState.shopModal.placeKey = place.key;
+    uiState.shopModal.visible = true;
+  }
 </script>
 
 <div class="place-container" style="--bg-image: url('{imagePath}')" onclick={handleBackgroundClick}>
+  <!-- Shop Button -->
+  {#if place.shopInventory && place.shopInventory.length > 0}
+    <button class="shop-button" onclick={handleShopClick}>
+      <span class="shop-icon">🛒</span>
+      <span class="shop-label">Shop</span>
+    </button>
+  {/if}
+
   <div class="characters-overlay">
     {#each charactersInPlace as character (character.key)}
       <div
@@ -88,6 +103,9 @@
       </div>
     </div>
   {/if}
+
+  <!-- Shop Modal -->
+  <ShopModal />
 </div>
 
 <style>
@@ -99,6 +117,51 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+  }
+
+  /* Shop Button Styles */
+  .shop-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.4),
+      0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .shop-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 16px rgba(0, 0, 0, 0.5),
+      0 3px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .shop-button:active {
+    transform: translateY(0);
+  }
+
+  .shop-icon {
+    font-size: 16px;
+  }
+
+  .shop-label {
+    white-space: nowrap;
   }
 
   .characters-overlay {

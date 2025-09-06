@@ -1,11 +1,18 @@
 <script lang="ts">
   import { UiView } from '@/lib/_model';
+  import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import TimeDisplay from './TimeDisplay.svelte';
 </script>
 
 <div class="menu-overlay">
-  <TimeDisplay />
+  <div class="left-info">
+    <TimeDisplay />
+    <div class="separator"></div>
+    <div class="cash-display">
+      <span class="cash-amount">${gs.player.cash}</span>
+    </div>
+  </div>
   <div class="controls">
     <button
       class="tab-button"
@@ -43,6 +50,33 @@
     align-items: center;
     justify-content: space-between;
     z-index: 5;
+  }
+
+  .left-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-left: 30px;
+  }
+
+  .separator {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 8px;
+  }
+
+  .cash-display {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+    padding: 8px 0;
+  }
+
+  .cash-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
   }
 
   .controls {

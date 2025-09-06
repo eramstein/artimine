@@ -34,3 +34,7 @@ export function getTableImagePath(): string {
 export function getCardBackImagePath(): string {
   return getAssetPath('images/card_back.jpg');
 }
+
+export function getItemImagePath(itemKey: string): string {
+  return getAssetPath(`images/items/${itemKey}.jpg`);
+}

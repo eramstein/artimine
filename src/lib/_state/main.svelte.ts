@@ -22,7 +22,7 @@ const defaultGameState: GameState = {
     period: DayPeriod.Morning,
   },
   characters: CHARACTERS,
-  player: { ...CHARACTER_PLAYER, collection: [], decks: [] },
+  player: { ...CHARACTER_PLAYER, collection: [], decks: [], cash: 0, items: [] },
   places: PLACES,
 };
 

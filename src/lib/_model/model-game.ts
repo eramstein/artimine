@@ -1,4 +1,4 @@
-import type { DayPeriod } from './enums-sim';
+import type { DayPeriod, ItemType } from './enums-sim';
 
 export interface GameState {
   time: {
@@ -19,6 +19,8 @@ export interface Character {
     count: number;
   }[];
   decks: Deck[];
+  cash: number;
+  items: Item[];
 }
 
 export interface Place {
@@ -26,6 +28,7 @@ export interface Place {
   key: string;
   name: string;
   description: string;
+  shopInventory?: ItemDefinition[];
 }
 
 export interface Deck {
@@ -36,4 +39,17 @@ export interface Deck {
     count: number;
   }[];
   lands: string[];
+}
+
+export interface ItemDefinition {
+  key: string;
+  name: string;
+  type: ItemType;
+  variant: any;
+  price: number;
+}
+
+export interface Item extends ItemDefinition {
+  instanceId: string;
+  ownerId: string; // Character key
 }

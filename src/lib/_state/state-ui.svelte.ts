@@ -13,6 +13,7 @@ export const uiState: UiState = $state({
     currentTargetIndex: 0,
     targetBeingSelected: null,
     attackingUnitId: null,
+    colorBeingIncremented: null,
     graveyardModal: {
       visible: false,
       playerId: null,
@@ -40,5 +41,9 @@ export const uiState: UiState = $state({
   deckSelectionModal: {
     visible: false,
     foeKey: null,
+  },
+  shopModal: {
+    visible: false,
+    placeKey: null,
   },
 });

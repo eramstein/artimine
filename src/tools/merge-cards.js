@@ -29,6 +29,8 @@ function mergeCards() {
 
       try {
         const card = JSON.parse(content);
+        // Add CardSet Alpha to all cards
+        card.CardSet = 'Alpha';
         allCards.push(card);
         console.log(`✓ Loaded: ${card.name || card.id} (${file})`);
       } catch (parseError) {

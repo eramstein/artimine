@@ -2,6 +2,7 @@ import type { UnitFilterArgs } from '../battle/effects';
 import {
   CardColor,
   CardRarity,
+  CardSet,
   CardType,
   CounterType,
   TargetType,
@@ -37,6 +38,7 @@ export interface BaseCardTemplate {
   id: string;
   name: string;
   rarity: CardRarity;
+  cardSet: CardSet;
   type: CardType;
   cost: number;
   colors: { color: CardColor; count: number }[];

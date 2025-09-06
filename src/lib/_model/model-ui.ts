@@ -1,3 +1,4 @@
+import type { CardColor } from './enums-battle';
 import type {
   Ability,
   CardTemplate,
@@ -27,6 +28,7 @@ export type UiState = {
     currentTargetIndex: number;
     targetBeingSelected: TargetDefinition | null;
     attackingUnitId: string | null;
+    colorBeingIncremented: CardColor | null;
     graveyardModal: {
       visible: boolean;
       playerId: number | null;
@@ -53,6 +55,10 @@ export type UiState = {
   deckSelectionModal: {
     visible: boolean;
     foeKey: string | null;
+  };
+  shopModal: {
+    visible: boolean;
+    placeKey: string | null;
   };
 };
 

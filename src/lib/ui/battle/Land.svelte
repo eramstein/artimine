@@ -13,6 +13,28 @@
   let imagePath = $derived(getLandImagePath(land.id));
   let isValidTarget = $derived(uiState.battle.validTargets?.lands?.[land.instanceId] === true);
 
+  // Check if this land should show the color increment animation
+  let showColorAnimation = $derived(() => {
+    const colorBeingIncremented = uiState.battle.colorBeingIncremented;
+    if (!colorBeingIncremented) return false;
+
+    // Only show animation if the land owner is the current player
+    if (
+      (bs.isPlayersTurn && land.ownerPlayerId !== bs.players[0].id) ||
+      (!bs.isPlayersTurn && land.ownerPlayerId !== bs.players[1].id)
+    )
+      return false;
+
+    // Check if this land has the color that's being incremented
+    return land.colors.some((c) => c.color === colorBeingIncremented);
+  });
+
+  // Check if this land should show the golden border (ability available)
+  let showGoldenBorder = $derived(() => {
+    // Only show for player's lands when ability is not used
+    return land.ownerPlayerId === 0 && !bs.players[0].abilityUsed;
+  });
+
   function handleLandClick() {
     const selectedUnit = uiState.battle.selectedUnit;
     if (
@@ -44,7 +66,9 @@
 </script>
 
 <div
-  class="land {isValidTarget ? 'valid-target' : ''}"
+  class="land {isValidTarget ? 'valid-target' : ''} {showColorAnimation()
+    ? 'color-increment'
+    : ''} {showGoldenBorder() ? 'ability-available' : ''}"
   style="background-image: url('{imagePath}')"
   onclick={handleLandClick}
   oncontextmenu={handleContextMenu}
@@ -86,5 +110,29 @@
     font-weight: bold;
     min-width: 20px;
     text-align: center;
+  }
+
+  .land.ability-available {
+    border: 2px solid var(--color-golden);
+    box-shadow: 0 0 8px rgba(191, 161, 74, 0.3);
+  }
+
+  .land.color-increment {
+    animation: colorIncrementPulse 0.3s ease-in-out;
+  }
+
+  @keyframes colorIncrementPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
   }
 </style>

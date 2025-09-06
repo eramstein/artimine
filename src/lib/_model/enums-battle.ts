@@ -10,6 +10,11 @@ export enum CardRarity {
   Rare = 'rare',
   Legendary = 'legendary',
 }
+
+export enum CardSet {
+  Alpha = 'alpha',
+}
+
 export enum CardColor {
   Red = 'red',
   Blue = 'blue',

@@ -1,6 +1,6 @@
 import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
-import { bs } from '../_state';
+import { bs, uiState } from '../_state';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
@@ -30,6 +30,12 @@ export function untapPlayer(player: Player) {
 
 export function incrementColor(player: Player, color: CardColor, value: number) {
   player.colors[color] = (player.colors[color] || 0) + value;
+  // Trigger animation
+  uiState.battle.colorBeingIncremented = color;
+  // Reset animation after a short delay
+  setTimeout(() => {
+    uiState.battle.colorBeingIncremented = null;
+  }, 500);
 }
 
 export function usePlayerColorAbility(player: Player, color: CardColor) {
