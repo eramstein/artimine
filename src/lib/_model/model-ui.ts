@@ -60,6 +60,10 @@ export type UiState = {
     visible: boolean;
     placeKey: string | null;
   };
+  boosterModal: {
+    visible: boolean;
+    cards: CardTemplate[] | null;
+  };
 };
 
 export enum UiView {

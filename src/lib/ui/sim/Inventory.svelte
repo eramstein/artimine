@@ -1,9 +1,20 @@
 <script lang="ts">
   import { ItemType } from '@/lib/_model/enums-sim';
+  import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { getItemImagePath } from '@/lib/_utils/asset-paths';
+  import { openBooster } from '@/lib/sim/booster';
+  import Booster from './Booster.svelte';
 
   const playerItems = $derived(gs.player.items);
+
+  function handleItemClick(item: any) {
+    if (item.type === ItemType.Booster) {
+      const boosterPack = openBooster(item);
+      uiState.boosterModal.cards = boosterPack;
+      uiState.boosterModal.visible = true;
+    }
+  }
 </script>
 
 {#if playerItems.length === 0}
@@ -15,7 +26,7 @@
 {:else}
   <div class="inventory-grid">
     {#each playerItems as item (item.instanceId)}
-      <div class="inventory-item">
+      <div class="inventory-item" onclick={() => handleItemClick(item)}>
         <div
           class="item-image"
           class:booster={item.type === ItemType.Booster}
@@ -31,6 +42,9 @@
     {/each}
   </div>
 {/if}
+
+<!-- Booster Modal -->
+<Booster cards={uiState.boosterModal.cards || []} />
 
 <style>
   .empty-inventory {
@@ -74,6 +88,7 @@
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
+    cursor: pointer;
   }
 
   .inventory-item:hover {

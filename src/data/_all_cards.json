@@ -63,7 +63,8 @@
         ],
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "agent_of_chaos",
@@ -120,7 +121,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "alahmar_djinn",
@@ -168,7 +170,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "aladin",
@@ -209,7 +212,8 @@
         ],
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "albatros",
@@ -230,7 +234,8 @@
     ],
     "keywords": {
       "flying": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "ammunition_cart",
@@ -278,7 +283,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "angry_lizard",
@@ -319,7 +325,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "angry_mob",
@@ -364,7 +371,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "arc_lightning_specialist",
@@ -410,7 +418,8 @@
         "cost": 3,
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "arcane_sniper",
@@ -432,7 +441,8 @@
     "keywords": {
       "ranged": true,
       "moveAndAttack": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "artificial_plague",
@@ -459,7 +469,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "assassin",
@@ -501,7 +512,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "baba_yaga",
@@ -572,7 +584,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "banshee",
@@ -623,7 +636,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "basic_research",
@@ -646,7 +660,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "bear_minimum",
@@ -667,7 +682,8 @@
     ],
     "keywords": {
       "retaliate": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "bear_riders",
@@ -694,7 +710,8 @@
     "keywords": {
       "moveAndAttack": true,
       "trample": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "benevolent_druid",
@@ -737,7 +754,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "benevolent_monk",
@@ -782,7 +800,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "big_bertha",
@@ -806,7 +825,8 @@
       "cleave": true,
       "lance": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "bison",
@@ -828,7 +848,8 @@
     "keywords": {
       "trample": true,
       "retaliate": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "blacksmith",
@@ -877,7 +898,8 @@
         ],
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "bob_the_blob",
@@ -916,7 +938,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "boring_boar",
@@ -934,7 +957,8 @@
         "color": "green",
         "count": 1
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "born_from_magic",
@@ -981,7 +1005,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "buffoon",
@@ -1025,7 +1050,8 @@
         "cost": 1,
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "caring_druidess",
@@ -1067,7 +1093,8 @@
         },
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "carnival_of_miracles",
@@ -1130,7 +1157,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "charge",
@@ -1177,7 +1205,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "city",
@@ -1191,7 +1220,8 @@
     "health": 10,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "city_guard",
@@ -1213,7 +1243,8 @@
     "keywords": {
       "lance": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "clunky_golem",
@@ -1254,7 +1285,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "clunky_helicopter",
@@ -1320,7 +1352,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "coal_demon",
@@ -1383,7 +1416,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "cowardly_mage",
@@ -1404,7 +1438,8 @@
     ],
     "keywords": {
       "ranged": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "cursed_artist",
@@ -1453,7 +1488,8 @@
         "cost": 3,
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "dark_remedy",
@@ -1498,7 +1534,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "dark_ritual",
@@ -1529,7 +1566,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "dazing_spirit",
@@ -1575,7 +1613,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "decaying_ray",
@@ -1608,7 +1647,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "deer",
@@ -1626,7 +1666,8 @@
         "color": "green",
         "count": 2
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "desert_sorcerer",
@@ -1679,7 +1720,8 @@
         "cost": 1,
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "desert_storm",
@@ -1732,7 +1774,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "drake",
@@ -1752,7 +1795,8 @@
       "lance": true,
       "flying": true,
       "retaliate": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "dryad",
@@ -1773,7 +1817,8 @@
     ],
     "keywords": {
       "regeneration": 4
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "dwarf_berserker",
@@ -1794,7 +1839,8 @@
     ],
     "keywords": {
       "zerk": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "dwarf_cadencer",
@@ -1829,7 +1875,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "dwarven_punisher",
@@ -1871,7 +1918,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "eagle_mounted_archers",
@@ -1891,7 +1939,8 @@
       "ranged": true,
       "flying": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "earthquake",
@@ -1917,7 +1966,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "ebonheart",
@@ -1981,7 +2031,8 @@
         },
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "elite_crossbowmen",
@@ -2003,7 +2054,8 @@
     "keywords": {
       "ranged": true,
       "retaliate": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "energy_monster",
@@ -2067,7 +2119,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "energyze",
@@ -2088,7 +2141,8 @@
           "args": {}
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "enraged_goblin",
@@ -2106,7 +2160,8 @@
     ],
     "unitTypes": [
       "monster"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "ent",
@@ -2128,7 +2183,8 @@
     "keywords": {
       "retaliate": 3,
       "armor": 4
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "execution",
@@ -2155,7 +2211,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "expendable_recruit",
@@ -2193,7 +2250,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "explosive_trap",
@@ -2239,7 +2297,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "fair_trader",
@@ -2281,7 +2340,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "fancy_courtesan",
@@ -2330,7 +2390,8 @@
         ],
         "cost": 5
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "fat_pigeon",
@@ -2355,7 +2416,8 @@
     ],
     "keywords": {
       "flying": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "ferocious_badger",
@@ -2376,7 +2438,8 @@
     ],
     "keywords": {
       "retaliate": 5
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "fire_elemental",
@@ -2420,7 +2483,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "fireball",
@@ -2453,7 +2517,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "fishermans_ifrit",
@@ -2503,7 +2568,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "flammen_werfer",
@@ -2528,7 +2594,8 @@
     ],
     "keywords": {
       "lance": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "flying_carpet",
@@ -2577,7 +2644,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "forest",
@@ -2591,7 +2659,8 @@
     "health": 10,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "fortify",
@@ -2620,7 +2689,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "frankish_castle",
@@ -2668,7 +2738,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "frenzied_shaman",
@@ -2704,7 +2775,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "gate_keepers",
@@ -2725,7 +2797,8 @@
     ],
     "keywords": {
       "retaliate": 4
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "gaul_brawler",
@@ -2747,7 +2820,8 @@
     "keywords": {
       "cleave": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "giant_growth",
@@ -2777,7 +2851,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "giant_spider",
@@ -2796,7 +2871,8 @@
     "keywords": {
       "retaliate": 1,
       "poisonous": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "gifted_apprentice",
@@ -2839,7 +2915,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "glacial_guard",
@@ -2864,7 +2941,8 @@
     ],
     "keywords": {
       "ranged": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "gnome_engineer",
@@ -2904,7 +2982,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "gnome_mechanic",
@@ -2944,7 +3023,8 @@
         ],
         "cost": 3
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "goblin_engineer",
@@ -2985,7 +3065,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "golgoth",
@@ -3033,7 +3114,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "greedy_bear",
@@ -3079,7 +3161,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "grenadier",
@@ -3106,7 +3189,8 @@
       "ranged": true,
       "cleave": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "grim_guard",
@@ -3127,7 +3211,8 @@
     ],
     "keywords": {
       "ranged": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "guinea_pig",
@@ -3156,7 +3241,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hans_is_back",
@@ -3202,7 +3288,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "harpy_huntress",
@@ -3224,7 +3311,8 @@
     "keywords": {
       "flying": true,
       "retaliate": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "havrhell",
@@ -3274,7 +3362,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "healing_salve",
@@ -3303,7 +3392,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hill_troll",
@@ -3321,7 +3411,8 @@
     ],
     "unitTypes": [
       "monster"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hobbit_gardener",
@@ -3377,7 +3468,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hobbit_villager",
@@ -3399,7 +3491,8 @@
     "keywords": {
       "retaliate": 1,
       "regeneration": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "hold_the_line",
@@ -3437,7 +3530,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hungry_hermit",
@@ -3481,7 +3575,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hungry_wolf",
@@ -3502,7 +3597,8 @@
     ],
     "unitTypes": [
       "beast"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "hype_goblin",
@@ -3544,7 +3640,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "improve_engine",
@@ -3578,7 +3675,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "iron_golem",
@@ -3600,7 +3698,8 @@
     "keywords": {
       "retaliate": 3,
       "armor": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "island",
@@ -3614,7 +3713,8 @@
     "health": 10,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "jumping_hare",
@@ -3633,7 +3733,8 @@
     "keywords": {
       "haste": true,
       "moveAndAttack": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "kobold_slinger",
@@ -3654,7 +3755,8 @@
     ],
     "keywords": {
       "ranged": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "kolossal_mistake",
@@ -3679,7 +3781,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "leonardo_borgio",
@@ -3751,7 +3854,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "lightning_bolt",
@@ -3779,7 +3883,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "lightning_explosion",
@@ -3811,7 +3916,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "lunging_cougar",
@@ -3832,7 +3938,8 @@
     ],
     "keywords": {
       "haste": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "luring_enchantress",
@@ -3878,7 +3985,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "luxurious_growth",
@@ -3901,7 +4009,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mad_ballooner",
@@ -3938,7 +4047,8 @@
         ],
         "cost": 1
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "malevolent_druid",
@@ -3980,7 +4090,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "market",
@@ -3989,7 +4100,8 @@
     "health": 20,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "market_beggar",
@@ -4010,7 +4122,8 @@
     ],
     "keywords": {
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "mason_guilder",
@@ -4051,7 +4164,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mass_enrage",
@@ -4087,7 +4201,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mass_root",
@@ -4122,7 +4237,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mass_sleep",
@@ -4149,7 +4265,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "master_of_chains",
@@ -4191,7 +4308,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mega_moss_monster",
@@ -4209,7 +4327,8 @@
     ],
     "unitTypes": [
       "plant"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "melting_spree",
@@ -4237,7 +4356,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "modis_benediction",
@@ -4286,7 +4406,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "modis_chosen",
@@ -4305,7 +4426,8 @@
     "keywords": {
       "haste": true,
       "zerk": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "mosquito",
@@ -4345,7 +4467,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "mountain",
@@ -4359,7 +4482,8 @@
     "health": 10,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "mountain_giant",
@@ -4377,7 +4501,8 @@
     ],
     "keywords": {
       "retaliate": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "mycosed_bear",
@@ -4437,7 +4562,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "necessary_sacrifice",
@@ -4476,7 +4602,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "northern_challenger",
@@ -4523,7 +4650,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "not_a_fox",
@@ -4569,7 +4697,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "not_so_little_pig",
@@ -4609,7 +4738,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "odins_chosen",
@@ -4675,7 +4805,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "opera_singer",
@@ -4720,7 +4851,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "orc_miner",
@@ -4742,7 +4874,8 @@
     "keywords": {
       "retaliate": 1,
       "armor": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "pandy_panda",
@@ -4784,7 +4917,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "panicked_student",
@@ -4826,7 +4960,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "peaceful_faerie",
@@ -4866,7 +5001,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "peasants_be_gone",
@@ -4893,7 +5029,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "plague_spreader",
@@ -4933,7 +5070,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "plains",
@@ -4942,7 +5080,8 @@
     "health": 20,
     "cost": 0,
     "type": "land",
-    "rarity": "common"
+    "rarity": "common",
+    "cardSet": "alpha"
   },
   {
     "id": "professore",
@@ -5000,7 +5139,8 @@
         "cost": 1,
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "promising_prototype",
@@ -5028,7 +5168,8 @@
       "retaliate": 5,
       "armor": 3,
       "resist": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "raise_dead",
@@ -5063,7 +5204,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "red_dragon",
@@ -5109,7 +5251,8 @@
         ],
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "red_haired_bard",
@@ -5153,7 +5296,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "rock_drop",
@@ -5182,7 +5326,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "rock_elemental",
@@ -5203,7 +5348,8 @@
     ],
     "keywords": {
       "resist": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "royal_castle_builder",
@@ -5247,7 +5393,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "royal_halberdier",
@@ -5270,7 +5417,8 @@
       "lance": true,
       "retaliate": 4,
       "armor": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "lion",
@@ -5288,7 +5436,8 @@
         "color": "red",
         "count": 1
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "schnell",
@@ -5327,7 +5476,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "security_golem",
@@ -5418,7 +5568,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "self_building_tank",
@@ -5512,7 +5663,8 @@
         ],
         "cost": 1
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "sewer_rat",
@@ -5555,7 +5707,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "shameless_imitator",
@@ -5593,7 +5746,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "sherazad",
@@ -5656,7 +5810,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "shield_maiden",
@@ -5700,7 +5855,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "shroomy",
@@ -5739,7 +5895,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "shroomy_protecs",
@@ -5780,7 +5937,8 @@
           "type": "Static"
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "snek",
@@ -5798,7 +5956,8 @@
     ],
     "keywords": {
       "poisonous": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "snow_hare",
@@ -5848,7 +6007,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "snow_storm",
@@ -5885,7 +6045,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "snow_troll",
@@ -5911,7 +6072,8 @@
     "keywords": {
       "retaliate": 2,
       "regeneration": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "sortie_specialists",
@@ -5957,7 +6119,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "spirit_of_speed_and_fury",
@@ -5994,7 +6157,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "spirited_train",
@@ -6019,7 +6183,8 @@
       "retaliate": 2,
       "armor": 3,
       "resist": 3
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "stampede",
@@ -6060,7 +6225,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "steam_wall",
@@ -6105,7 +6271,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "street_slinger",
@@ -6126,7 +6293,8 @@
     ],
     "keywords": {
       "ranged": true
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "stroke_of_genius",
@@ -6157,7 +6325,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "swift_drakkar",
@@ -6183,7 +6352,8 @@
     "keywords": {
       "haste": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "taiga_rangers",
@@ -6209,7 +6379,8 @@
     "keywords": {
       "ranged": true,
       "poisonous": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "teleport",
@@ -6248,7 +6419,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "tesla_tower",
@@ -6296,7 +6468,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "teutonic_knight",
@@ -6323,7 +6496,8 @@
       "lance": true,
       "retaliate": 2,
       "armor": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "the_beast",
@@ -6346,7 +6520,8 @@
     "keywords": {
       "trample": true,
       "retaliate": 6
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "the_black_knight",
@@ -6394,7 +6569,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "tim",
@@ -6433,7 +6609,8 @@
         },
         "exhausts": true
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "to_the_gates",
@@ -6463,7 +6640,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "transfer_energy",
@@ -6500,7 +6678,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "trebuchet",
@@ -6543,7 +6722,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "trident",
@@ -6572,7 +6752,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "try_again",
@@ -6607,7 +6788,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "tsunami",
@@ -6640,7 +6822,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "unicorn",
@@ -6663,7 +6846,8 @@
       "trample": true,
       "retaliate": 3,
       "resist": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "vengeful_crusader",
@@ -6710,7 +6894,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "vigilant_knight",
@@ -6752,7 +6937,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "viking_banner",
@@ -6803,7 +6989,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "wall_of_brambles",
@@ -6824,7 +7011,8 @@
     ],
     "keywords": {
       "retaliate": 2
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "watch_tower",
@@ -6851,7 +7039,8 @@
       "immobile": true,
       "ranged": true,
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "what_doesnt_kill",
@@ -6882,7 +7071,8 @@
           }
         }
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "where_there_is_a_whip",
@@ -6909,7 +7099,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "whirling_dervishes",
@@ -6949,7 +7140,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "who_is_fat",
@@ -6979,7 +7171,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "wisdom_of_old",
@@ -7010,7 +7203,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "wolf",
@@ -7028,7 +7222,8 @@
     ],
     "keywords": {
       "retaliate": 1
-    }
+    },
+    "cardSet": "alpha"
   },
   {
     "id": "young_hobbit",
@@ -7046,7 +7241,8 @@
     ],
     "unitTypes": [
       "hobbit"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "young_viking",
@@ -7068,7 +7264,8 @@
     ],
     "unitTypes": [
       "human"
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "zeppelin",
@@ -7113,7 +7310,8 @@
           }
         ]
       }
-    ]
+    ],
+    "cardSet": "alpha"
   },
   {
     "id": "zombie",
@@ -7131,6 +7329,7 @@
     ],
     "unitTypes": [
       "monster"
-    ]
+    ],
+    "cardSet": "alpha"
   }
 ]

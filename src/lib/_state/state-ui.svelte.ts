@@ -46,4 +46,8 @@ export const uiState: UiState = $state({
     visible: false,
     placeKey: null,
   },
+  boosterModal: {
+    visible: false,
+    cards: null,
+  },
 });
