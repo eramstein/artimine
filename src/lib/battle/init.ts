@@ -1,11 +1,19 @@
 import { cards, lands } from '@/data';
 import { BASE_DECK } from '@/data/base-deck';
 import { config } from '../_config';
-import type { Card, Deck, Land } from '../_model';
+import type { BattleState, Card, Deck, Land } from '../_model';
 import { bs, gs } from '../_state';
 import { pickNpcDeck } from '../sim/decks';
 import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
+
+export const defaultBattleState: BattleState = {
+  turn: 0,
+  isPlayersTurn: true,
+  playerIdWon: null,
+  players: [],
+  units: [],
+};
 
 export const initBattle = (foeKey: string = 'the-dude', playerDeck: Deck = BASE_DECK) => {
   const foeDeck = pickNpcDeck(foeKey);
@@ -44,6 +52,7 @@ export const initBattle = (foeKey: string = 'the-dude', playerDeck: Deck = BASE_
     drawCard(bs.players[0]);
     drawCard(bs.players[1]);
   }
+  bs.players[0].hand.sort((a, b) => a.cost - b.cost);
   initColorsFromLands(bs.players[0]);
   initColorsFromLands(bs.players[1]);
 

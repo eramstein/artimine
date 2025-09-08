@@ -9,6 +9,8 @@
   import Inventory from './Inventory.svelte';
   import Menu from './Menu.svelte';
   import Place from './Place.svelte';
+  import Player from './Player.svelte';
+  import Schedule from './Schedule.svelte';
 </script>
 
 <div class="sim-container">
@@ -25,6 +27,10 @@
       <Decks />
     {:else if uiState.currentView === UiView.Inventory}
       <Inventory />
+    {:else if uiState.currentView === UiView.Schedule}
+      <Schedule />
+    {:else if uiState.currentView === UiView.Player}
+      <Player />
     {:else if uiState.currentView === UiView.DeckEditor}
       <DeckEditor />
     {/if}

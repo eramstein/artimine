@@ -1,30 +1,9 @@
-import { CHARACTERS } from '@/data/characters/main';
-import { CHARACTER_PLAYER } from '@/data/characters/player';
-import { PLACES } from '@/data/places/places';
 import { type BattleState, type GameState } from '../_model';
-import { DayPeriod } from '../_model/enums-sim';
-import { initSim } from '../sim/init';
+import { defaultBattleState } from '../battle';
+import { defaultGameState, initSim } from '../sim/init';
 
 const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
-
-const defaultBattleState: BattleState = {
-  turn: 0,
-  isPlayersTurn: true,
-  playerIdWon: null,
-  players: [],
-  units: [],
-};
-
-const defaultGameState: GameState = {
-  time: {
-    day: 0,
-    period: DayPeriod.Morning,
-  },
-  characters: CHARACTERS,
-  player: { ...CHARACTER_PLAYER, collection: [], decks: [], cash: 0, items: [] },
-  places: PLACES,
-};
 
 export const gs: GameState = $state(defaultGameState);
 export const bs: BattleState = $state(defaultBattleState);

@@ -38,3 +38,7 @@ export function getCardBackImagePath(): string {
 export function getItemImagePath(itemKey: string): string {
   return getAssetPath(`images/items/${itemKey}.jpg`);
 }
+
+export function getPlaceImagePath(placeKey: string): string {
+  return getAssetPath(`images/places/${placeKey}.jpg`);
+}

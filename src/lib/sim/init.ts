@@ -1,12 +1,35 @@
 import { BASE_DECK } from '@/data/base-deck';
+import { CHARACTERS } from '@/data/characters/main';
+import { CHARACTER_PLAYER } from '@/data/characters/player';
+import { PLACES } from '@/data/places/places';
+import type { GameState } from '../_model';
 import { CardSet } from '../_model/enums-battle';
-import { ItemType } from '../_model/enums-sim';
+import { ActivityType, DayPeriod, ItemType } from '../_model/enums-sim';
 import { gs } from '../_state/main.svelte';
 import { getFullCollection } from './collection';
+import { fillDefaultActivities } from './schedule';
+
+export const defaultGameState: GameState = {
+  time: {
+    day: 0,
+    period: DayPeriod.Afternoon,
+  },
+  characters: CHARACTERS,
+  player: { ...CHARACTER_PLAYER, collection: [], decks: [], cash: 0, items: [], studyPoints: 0 },
+  places: PLACES,
+  activity: {
+    activityType: ActivityType.Chill,
+    participants: [],
+  },
+  activities: [],
+};
 
 export const initSim = async () => {
+  // CARD COLLECTION
   gs.player.collection = getFullCollection();
   gs.player.decks = [BASE_DECK];
+
+  // SHOPS
   const goblinCave = gs.places.find((p) => p.key === 'goblin_counter');
   goblinCave!.shopInventory = [
     {
@@ -18,4 +41,15 @@ export const initSim = async () => {
     },
   ];
   gs.player.cash = 100;
+
+  // ACTIVITIES
+  gs.player.place = goblinCave!.index;
+  const othersAtCave = Object.values(gs.characters).filter(
+    (c) => c.key !== gs.player.key && c.place === goblinCave!.index
+  );
+  gs.activity = {
+    activityType: ActivityType.Gaming,
+    participants: [gs.player.key, ...othersAtCave.map((c) => c.key)],
+  };
+  fillDefaultActivities();
 };

@@ -3,8 +3,8 @@
   "name": "Mycosed Bear",
   "type": "unit",
   "cost": 3,
-  "power": 3,
-  "maxHealth": 4,
+  "power": 2,
+  "maxHealth": 2,
   "colors": [
     { "color": "green", "count": 1 },
     { "color": "black", "count": 1 }

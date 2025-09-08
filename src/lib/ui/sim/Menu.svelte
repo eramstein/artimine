@@ -9,8 +9,8 @@
   <div class="left-info">
     <TimeDisplay />
     <div class="separator"></div>
-    <div class="cash-display">
-      <span class="cash-amount">${gs.player.cash}</span>
+    <div class="activity-display">
+      {gs.activity.activityType}
     </div>
   </div>
   <div class="controls">
@@ -20,6 +20,13 @@
       onclick={() => (uiState.currentView = UiView.CurrentPlace)}
     >
       Place
+    </button>
+    <button
+      class="tab-button"
+      class:active={uiState.currentView === UiView.Schedule}
+      onclick={() => (uiState.currentView = UiView.Schedule)}
+    >
+      Schedule
     </button>
     <button
       class="tab-button"
@@ -41,6 +48,13 @@
       onclick={() => (uiState.currentView = UiView.Inventory)}
     >
       Inventory
+    </button>
+    <button
+      class="tab-button"
+      class:active={uiState.currentView === UiView.Player}
+      onclick={() => (uiState.currentView = UiView.Player)}
+    >
+      Player
     </button>
   </div>
 </div>
@@ -73,17 +87,13 @@
     margin: 0 8px;
   }
 
-  .cash-display {
+  .activity-display {
     display: flex;
     flex-direction: column;
     font-family: 'Arial', sans-serif;
     padding: 8px 0;
-  }
-
-  .cash-amount {
     font-size: 18px;
     font-weight: bold;
-    color: #ffd700;
   }
 
   .controls {

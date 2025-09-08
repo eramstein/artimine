@@ -1,4 +1,4 @@
-import type { DayPeriod, ItemType } from './enums-sim';
+import type { ActivityType, DayPeriod, ItemType } from './enums-sim';
 
 export interface GameState {
   time: {
@@ -6,8 +6,14 @@ export interface GameState {
     period: DayPeriod;
   };
   characters: Record<string, Character>;
-  player: Character;
+  player: Player;
   places: Place[];
+  activity: Activity; // current activity
+  activities: ActivityPlan[][]; // plan for future activities by days in future and day period
+}
+
+export interface Player extends Character {
+  studyPoints: number;
 }
 
 export interface Character {
@@ -52,4 +58,16 @@ export interface ItemDefinition {
 export interface Item extends ItemDefinition {
   instanceId: string;
   ownerId: string; // Character key
+}
+
+export interface Activity {
+  activityType: ActivityType;
+  participants: string[]; // Character keys
+}
+
+export interface ActivityPlan {
+  day: number;
+  dayPeriod: DayPeriod;
+  activity: Activity;
+  place: number; // Place index
 }

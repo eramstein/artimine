@@ -1,9 +1,10 @@
 <script lang="ts">
   import { gs } from '@/lib/_state/main.svelte';
+  import { dayNames } from '@/lib/sim/schedule';
 </script>
 
 <div class="time-display">
-  <span class="day">Day {gs.time.day}</span>
+  <span class="day">{dayNames[gs.time.day % 7]}</span>
   <span class="period">{gs.time.period}</span>
 </div>
 
@@ -13,6 +14,8 @@
     flex-direction: column;
     font-family: 'Arial', sans-serif;
     padding-left: 30px;
+    justify-content: center;
+    align-items: center;
   }
 
   .day {

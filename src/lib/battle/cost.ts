@@ -27,7 +27,7 @@ export function isPayableAfterColorIncrementation(card: Card): CardColor | boole
   let colorsAlreadyMet = 0;
   let colorsToIncrement: CardColor[] = [];
   card.colors.forEach((color) => {
-    if (player.colors[color.color] === color.count) {
+    if ((player.colors[color.color] || 0) >= color.count) {
       colorsAlreadyMet++;
     } else if (player.colors[color.color] === color.count - 1) {
       colorsToIncrement.push(color.color);

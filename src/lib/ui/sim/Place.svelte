@@ -72,7 +72,7 @@
   {#if place.shopInventory && place.shopInventory.length > 0}
     <button class="shop-button" onclick={handleShopClick}>
       <span class="shop-icon">🛒</span>
-      <span class="shop-label">Shop</span>
+      <span class="shop-label">Shop | {gs.player.cash}$</span>
     </button>
   {/if}
 

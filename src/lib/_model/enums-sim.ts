@@ -8,3 +8,10 @@ export enum ItemType {
   Booster = 'booster',
   BoardGame = 'board game',
 }
+
+export enum ActivityType {
+  Chill = 'Chilling',
+  Gaming = 'Gaming',
+  Work = 'Working',
+  Study = 'Studying',
+}
