@@ -5,7 +5,7 @@ export interface GameState {
     day: number;
     period: DayPeriod;
   };
-  characters: Record<string, Character>;
+  characters: Record<string, Npc>;
   player: Player;
   places: Place[];
   activity: Activity; // current activity
@@ -15,6 +15,10 @@ export interface GameState {
 
 export interface Player extends Character {
   studyPoints: number;
+}
+
+export interface Npc extends Character {
+  relationSummary: string;
 }
 
 export interface Character {
@@ -75,14 +79,31 @@ export interface ActivityPlan {
 }
 
 export interface ChatState {
-  characters: Character[];
+  characters: Npc[];
   history: ChatMessage[];
   summary: string;
   lastSummaryMessageIndex: number;
+  memories: string;
 }
 
 export interface ChatMessage {
   role: string;
   content: string;
   displayLabel?: string; // just the raw message, without additional info intended for the LLM
+}
+
+export interface GroupActivityLog {
+  id: string;
+  activityType: ActivityType;
+  participants: string[];
+  location: string;
+  day: number;
+  summary: string;
+}
+
+export interface RelationshipSummaryUpdate {
+  id: string;
+  npc: string;
+  description: string;
+  day: number;
 }

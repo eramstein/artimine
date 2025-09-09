@@ -5,6 +5,7 @@
 
   let inputValue = $state('');
   let inputRef = $state<HTMLInputElement>();
+  let messagesContainer = $state<HTMLDivElement>();
 
   // Reactive state for chat messages
   let chatMessages: Array<{ role: string; content: string; displayLabel: string }> = $state([]);
@@ -83,20 +84,32 @@
     }
     return 'message npc-message';
   }
+
+  function scrollToBottom(smooth: boolean = true) {
+    if (!messagesContainer) return;
+    const top = messagesContainer.scrollHeight;
+    try {
+      messagesContainer.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
+    } catch (_) {
+      messagesContainer.scrollTop = top;
+    }
+  }
+
+  // Auto-scroll when messages update or streaming content changes
+  $effect(() => {
+    // Touch dependencies
+    const _len = chatMessages.length;
+    const _streaming = uiState.chat.isStreaming;
+    const _streamText = uiState.chat.streamingContent;
+
+    // Defer until DOM paints
+    requestAnimationFrame(() => scrollToBottom(!_streaming));
+  });
 </script>
 
 {#if gs.chat}
   <div class="chat-container">
-    <div class="chat-header">
-      <h3>Chat</h3>
-      <div class="chat-participants">
-        {#each chatCharacters as character}
-          <span class="participant">{character.name}</span>
-        {/each}
-      </div>
-    </div>
-
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-messages" id="chat-messages" bind:this={messagesContainer}>
       {#each chatMessages as message}
         <div class={getMessageClass(message.role)}>
           <div class="message-header">
@@ -126,13 +139,6 @@
             disabled={uiState.chat.isStreaming}
             class="chat-input"
           />
-          <button
-            type="submit"
-            disabled={!inputValue.trim() || uiState.chat.isStreaming}
-            class="send-button"
-          >
-            Send
-          </button>
         </div>
       </form>
     </div>
@@ -148,25 +154,21 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    max-height: 600px;
-    border: 1px solid #ddd;
+    min-height: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: white;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .chat-header {
     padding: 12px 16px;
-    border-bottom: 1px solid #eee;
-    background: #f8f9fa;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 8px 8px 0 0;
-  }
-
-  .chat-header h3 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
   }
 
   .chat-participants {
@@ -176,23 +178,23 @@
   }
 
   .participant {
-    background: #e3f2fd;
-    color: #1976d2;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-golden);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .chat-messages {
-    flex: 1;
+    flex: 1 1 auto;
     overflow-y: auto;
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-height: 200px;
-    max-height: 400px;
+    min-height: 0;
   }
 
   .message {
@@ -202,7 +204,7 @@
   }
 
   .user-message {
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   .npc-message {
@@ -212,41 +214,45 @@
   .message-header {
     font-size: 12px;
     font-weight: 600;
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .user-message .message-header {
-    color: #1976d2;
+    color: var(--color-blue);
   }
 
   .npc-message .message-header {
-    color: #d32f2f;
+    color: var(--color-golden);
   }
 
   .message-content {
-    background: #f5f5f5;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 8px 12px;
     border-radius: 12px;
     max-width: 80%;
     word-wrap: break-word;
     line-height: 1.4;
+    color: white;
   }
 
   .user-message .message-content {
-    background: #e3f2fd;
-    color: #1976d2;
+    background: rgba(52, 152, 219, 0.2);
+    border-color: rgba(52, 152, 219, 0.3);
+    color: #ffffff;
   }
 
   .npc-message .message-content {
-    background: #fff3e0;
-    color: #333;
+    background: rgba(191, 161, 74, 0.2);
+    border-color: rgba(191, 161, 74, 0.3);
+    color: #ffffff;
   }
 
   .streaming-indicator {
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.6);
     font-style: italic;
   }
 
@@ -266,9 +272,10 @@
   }
 
   .chat-input-container {
+    flex: 0 0 auto;
     padding: 16px;
-    border-top: 1px solid #eee;
-    background: #f8f9fa;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 0 0 8px 8px;
   }
 
@@ -281,49 +288,38 @@
   .chat-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .chat-input:focus {
-    border-color: #1976d2;
+    border-color: var(--color-golden);
+    background: rgba(255, 255, 255, 0.15);
   }
 
   .chat-input:disabled {
-    background: #f5f5f5;
-    color: #999;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 
-  .send-button {
-    padding: 8px 16px;
-    background: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .send-button:hover:not(:disabled) {
-    background: #1565c0;
-  }
-
-  .send-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
+  /* Removed send-button styles as the button is no longer used */
 
   .no-chat {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 200px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.6);
     font-style: italic;
   }
 
@@ -333,16 +329,16 @@
   }
 
   .chat-messages::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
   }
 
   .chat-messages::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 3px;
   }
 
   .chat-messages::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: rgba(255, 255, 255, 0.5);
   }
 </style>

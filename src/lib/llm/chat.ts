@@ -1,9 +1,16 @@
-import type { Character } from '../_model';
+import type { Npc } from '../_model';
 import { gs } from '../_state';
 import { uiState } from '../_state/state-ui.svelte';
+import { generateUniqueId } from '../_utils/random';
 import { getGroupDescription } from './chat-helpers';
-import { playerChatSystemPrompt, summarySystemPrompt } from './chat-system-prompts';
+import {
+  getOpinionUpdatePrompt,
+  playerChatSystemPrompt,
+  summarySystemPrompt,
+} from './chat-system-prompts';
 import { llmService } from './llm-service';
+import { getSystemPromptMemories } from './memories';
+import { saveChat, saveRelationshipSummaryUpdate } from './memories-db';
 
 async function generateSummary(transcript: string): Promise<string> {
   const systemPrompt = {
@@ -18,13 +25,10 @@ async function generateSummary(transcript: string): Promise<string> {
 
   const response = await llmService.chat({
     messages: [systemPrompt, userPrompt],
-    responseFormat: { type: 'json_object' },
   });
 
   const formattedResponse = llmService.getMessage(response);
-  const parsed = JSON.parse(formattedResponse);
-
-  return parsed;
+  return formattedResponse;
 }
 
 export async function playerSendChat(message: string): Promise<string> {
@@ -44,13 +48,16 @@ export async function playerSendChat(message: string): Promise<string> {
   const currentSummary = gs.chat.summary
     ? 'Previous Conversation Summary:\n' + gs.chat.summary
     : '';
+  const memoriesPrompt = gs.chat.memories
+    ? `- Relevant Memory:\nThe characters remember a past event that may influence today's conversation:\n"${gs.chat.memories}"`
+    : '';
 
   const systemPrompt = {
     role: 'system',
     content: `${playerChatSystemPrompt.intro}
 
     Player Character:
-      - The player controls ${playerName}.
+      - The player controls ${gs.player.bio}.
       - Do not write any dialogue, actions, body language, thoughts, or emotions for ${playerName}.
       - The player will describe ${playerName}'s dialogue and actions.
 
@@ -74,6 +81,8 @@ export async function playerSendChat(message: string): Promise<string> {
     ${charactersDescription}
 
     ${currentSummary}
+
+    ${memoriesPrompt}
 
     ${playerChatSystemPrompt.instruction}
     
@@ -147,12 +156,20 @@ export async function playerSendChat(message: string): Promise<string> {
   return transcript;
 }
 
-export function initPlayerChat(characters: Character[]) {
+export async function initPlayerChat(characters: Npc[]) {
+  // get last memory involving at least one of these characters
+  const relevantMemories = await getSystemPromptMemories(
+    gs.time.day,
+    characters,
+    gs.places[gs.player.place],
+    gs.activity.activityType
+  );
   gs.chat = {
     characters,
     history: [],
     summary: '',
     lastSummaryMessageIndex: 0,
+    memories: relevantMemories,
   };
 }
 
@@ -169,6 +186,38 @@ export async function endPlayerChat() {
     : messagesToSummarize;
   const summary = await generateSummary(summayPrompt);
   console.log('summary', summary);
-  // TODO: store memories
+  // update NPC opinions
+  for (const npc of gs.chat!.characters) {
+    const oldOpinion = npc.relationSummary;
+    const interactionSummary = summary;
+    const newOpinion = await updateOpinion(npc.name, oldOpinion, interactionSummary);
+    // save old opinion in DB
+    await saveRelationshipSummaryUpdate(npc.key, npc.name, oldOpinion, gs.time.day);
+    npc.relationSummary = newOpinion;
+  }
+  // save memory in DB
+  await saveChat(
+    generateUniqueId(),
+    gs.time.day,
+    gs.chat!.characters.map((c) => c.key),
+    gs.places[gs.player.place].name,
+    gs.activity.activityType,
+    summary
+  );
   gs.chat = null;
+}
+
+async function updateOpinion(npcName: string, oldOpinion: string, interactionSummary: string) {
+  const prompt = getOpinionUpdatePrompt(npcName, oldOpinion, interactionSummary);
+  const opinion = await llmService.chat({
+    messages: [
+      {
+        role: 'system',
+        content: prompt,
+      },
+    ],
+  });
+  const formattedOpinion = llmService.getMessage(opinion);
+  console.log('new opinion', formattedOpinion);
+  return formattedOpinion;
 }

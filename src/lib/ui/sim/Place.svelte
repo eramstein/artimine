@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { UiView, type Character, type Place } from '@/lib/_model';
+  import { UiView, type Npc, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
@@ -22,13 +22,23 @@
   );
 
   // Menu state
-  let selectedCharacter = $state<Character | null>(null);
+  let selectedCharacters = $state<Npc[]>([]);
   let menuPosition = $state({ x: 0, y: 0 });
-  let showMenu = $derived(selectedCharacter !== null);
+  let showMenu = $derived(selectedCharacters.length > 0);
 
   // Handle character portrait click
-  function handleCharacterClick(event: MouseEvent, character: Character) {
+  function handleCharacterClick(event: MouseEvent, character: Npc) {
     event.stopPropagation();
+
+    // Toggle character selection
+    const isSelected = selectedCharacters.some((c) => c.key === character.key);
+    if (isSelected) {
+      // Remove from selection
+      selectedCharacters = selectedCharacters.filter((c) => c.key !== character.key);
+    } else {
+      // Add to selection
+      selectedCharacters = [...selectedCharacters, character];
+    }
 
     // Calculate menu position relative to the clicked portrait
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
@@ -36,31 +46,29 @@
       x: rect.left + rect.width / 2,
       y: rect.top - 200, // Position on top of the portrait
     };
-
-    selectedCharacter = character;
   }
 
   // Handle menu option click
   function handleMenuOption(option: string) {
-    if (selectedCharacter) {
-      if (option === 'play game') {
-        // Show deck selection modal
-        uiState.deckSelectionModal.foeKey = selectedCharacter.key;
+    if (selectedCharacters.length > 0) {
+      if (option === 'play game' && selectedCharacters.length === 1) {
+        // Show deck selection modal (only for single character)
+        uiState.deckSelectionModal.foeKey = selectedCharacters[0].key;
         uiState.deckSelectionModal.visible = true;
-      } else if (option === 'trade') {
-        // TODO: Implement actual game logic for trade
+      } else if (option === 'trade' && selectedCharacters.length === 1) {
+        // TODO: Implement actual game logic for trade (only for single character)
       } else if (option === 'chat') {
-        // Initialize chat with the selected character
-        initPlayerChat([selectedCharacter]);
+        // Initialize chat with the selected characters
+        initPlayerChat(selectedCharacters);
         uiState.currentView = UiView.Chat;
       }
     }
-    selectedCharacter = null;
+    selectedCharacters = [];
   }
 
   // Close menu when clicking outside
   function handleBackgroundClick() {
-    selectedCharacter = null;
+    selectedCharacters = [];
   }
 
   // Handle shop button click
@@ -83,7 +91,7 @@
     {#each charactersInPlace as character (character.key)}
       <div
         class="character-portrait-container"
-        class:selected={selectedCharacter?.key === character.key}
+        class:selected={selectedCharacters.some((c) => c.key === character.key)}
         onclick={(e) => handleCharacterClick(e, character)}
       >
         <CharacterPortrait {character} />
@@ -92,16 +100,24 @@
   </div>
 
   <!-- Character Menu -->
-  {#if showMenu && selectedCharacter}
+  {#if showMenu && selectedCharacters.length > 0}
     <div class="character-menu" style="left: {menuPosition.x}px; top: {menuPosition.y}px;">
       <div class="menu-header">
-        <span class="character-name">{selectedCharacter.name}</span>
+        <span class="character-name">
+          {#if selectedCharacters.length === 1}
+            {selectedCharacters[0].name}
+          {:else}
+            {selectedCharacters.length} characters selected
+          {/if}
+        </span>
       </div>
       <div class="menu-options">
-        <button class="menu-option" onclick={() => handleMenuOption('play game')}>
-          Play Game
-        </button>
-        <button class="menu-option" onclick={() => handleMenuOption('trade')}> Trade </button>
+        {#if selectedCharacters.length === 1}
+          <button class="menu-option" onclick={() => handleMenuOption('play game')}>
+            Play Game
+          </button>
+          <button class="menu-option" onclick={() => handleMenuOption('trade')}> Trade </button>
+        {/if}
         <button class="menu-option" onclick={() => handleMenuOption('chat')}> Chat </button>
       </div>
     </div>
