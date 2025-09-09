@@ -4,10 +4,10 @@ import { CHARACTER_PLAYER } from '../characters/player';
 export const PLACES: Place[] = [
   {
     key: 'goblin_counter',
-    name: 'The goblin cave',
+    name: "The Goblin's Den",
     description: `
       The town's favorite place to buy and play board games, card games and role playing games.
-      Situated in the city center. Cozy and welcoming. Owned by The Dude. 
+      Situated in the city center. Cozy and welcoming.
       `,
   },
   {

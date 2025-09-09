@@ -64,6 +64,10 @@ export type UiState = {
     visible: boolean;
     cards: CardTemplate[] | null;
   };
+  chat: {
+    isStreaming: boolean;
+    streamingContent: string;
+  };
 };
 
 export enum UiView {
@@ -77,4 +81,5 @@ export enum UiView {
   Inventory = 'Inventory',
   Schedule = 'Schedule',
   Player = 'Player',
+  Chat = 'Chat',
 }

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { Character, Place } from '@/lib/_model';
+  import { UiView, type Character, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
+  import { initPlayerChat } from '@/lib/llm/chat';
   import CharacterPortrait from './CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
 
@@ -49,7 +50,9 @@
       } else if (option === 'trade') {
         // TODO: Implement actual game logic for trade
       } else if (option === 'chat') {
-        // TODO: Implement actual game logic for chat
+        // Initialize chat with the selected character
+        initPlayerChat([selectedCharacter]);
+        uiState.currentView = UiView.Chat;
       }
     }
     selectedCharacter = null;

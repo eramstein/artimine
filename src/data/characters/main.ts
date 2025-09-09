@@ -18,6 +18,5 @@ function addDefaultCollectionAndDecks(character: any): Character {
     ...character,
     collection: [],
     items: [],
-    cash: 0,
   };
 }

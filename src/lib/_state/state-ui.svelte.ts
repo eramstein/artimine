@@ -50,4 +50,8 @@ export const uiState: UiState = $state({
     visible: false,
     cards: null,
   },
+  chat: {
+    isStreaming: false,
+    streamingContent: '',
+  },
 });

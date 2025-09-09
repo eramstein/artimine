@@ -10,6 +10,7 @@ export interface GameState {
   places: Place[];
   activity: Activity; // current activity
   activities: ActivityPlan[][]; // plan for future activities by days in future and day period
+  chat: ChatState | null;
 }
 
 export interface Player extends Character {
@@ -19,6 +20,7 @@ export interface Player extends Character {
 export interface Character {
   key: string;
   name: string;
+  bio: string;
   place: number;
   collection: {
     cardTemplateId: string;
@@ -70,4 +72,17 @@ export interface ActivityPlan {
   dayPeriod: DayPeriod;
   activity: Activity;
   place: number; // Place index
+}
+
+export interface ChatState {
+  characters: Character[];
+  history: ChatMessage[];
+  summary: string;
+  lastSummaryMessageIndex: number;
+}
+
+export interface ChatMessage {
+  role: string;
+  content: string;
+  displayLabel?: string; // just the raw message, without additional info intended for the LLM
 }

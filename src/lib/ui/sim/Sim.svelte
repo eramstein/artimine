@@ -2,6 +2,7 @@
   import { UiView } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
+  import Chat from './Chat.svelte';
   import Collection from './Collection.svelte';
   import DeckEditor from './DeckEditor.svelte';
   import DeckSelectionModal from './DeckSelectionModal.svelte';
@@ -33,6 +34,8 @@
       <Player />
     {:else if uiState.currentView === UiView.DeckEditor}
       <DeckEditor />
+    {:else if uiState.currentView === UiView.Chat}
+      <Chat />
     {/if}
   </div>
 

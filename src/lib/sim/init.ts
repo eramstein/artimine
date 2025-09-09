@@ -22,6 +22,7 @@ export const defaultGameState: GameState = {
     participants: [],
   },
   activities: [],
+  chat: null,
 };
 
 export const initSim = async () => {
