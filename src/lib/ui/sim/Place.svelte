@@ -49,7 +49,7 @@
   }
 
   // Handle menu option click
-  function handleMenuOption(option: string) {
+  async function handleMenuOption(option: string) {
     if (selectedCharacters.length > 0) {
       if (option === 'play game' && selectedCharacters.length === 1) {
         // Show deck selection modal (only for single character)
@@ -59,7 +59,7 @@
         // TODO: Implement actual game logic for trade (only for single character)
       } else if (option === 'chat') {
         // Initialize chat with the selected characters
-        initPlayerChat(selectedCharacters);
+        await initPlayerChat(selectedCharacters);
         uiState.currentView = UiView.Chat;
       }
     }

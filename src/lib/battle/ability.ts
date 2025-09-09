@@ -17,6 +17,10 @@ export function playAbility(unit: UnitDeployed, ability: Ability, targets: Effec
 
   // CHECKS + COSTS
   // ----------------------------------------------------------------------
+  if (unit.statuses.stun || unit.statuses.mezz) {
+    console.log('UNIT IS STUNNED OR MEZZED');
+    return;
+  }
   if (checkExhaustion(unit, ability) === false) {
     console.log('EXHAUSTED');
     return;

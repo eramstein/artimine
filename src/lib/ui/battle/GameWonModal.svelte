@@ -1,5 +1,8 @@
 <script lang="ts">
   import type { Player } from '@lib/_model';
+  import { UiView } from '@lib/_model';
+  import { uiState } from '@lib/_state';
+  import { resetBattleState } from '@lib/_state/main.svelte';
   import { getCharacterImagePath } from '@lib/_utils/asset-paths';
 
   let { winningPlayer }: { winningPlayer: Player } = $props();
@@ -7,10 +10,15 @@
   // Convert player name to filename format (lowercase with underscores)
   let characterImageName = $derived(winningPlayer.name.toLowerCase().replace(/\s+/g, '_'));
   let characterImagePath = $derived(getCharacterImagePath(characterImageName));
+
+  const closeModal = () => {
+    resetBattleState();
+    uiState.currentView = UiView.CurrentPlace;
+  };
 </script>
 
-<div class="game-won-overlay">
-  <div class="game-won-modal">
+<div class="game-won-overlay" onclick={closeModal}>
+  <div class="game-won-modal" onclick={(e) => e.stopPropagation()}>
     <div class="victory-text">
       <h1>Victory!</h1>
       <p>{winningPlayer.name} has won the game!</p>
@@ -21,6 +29,9 @@
         <h2>{winningPlayer.name}</h2>
         <p>Final Life: {winningPlayer.life}</p>
       </div>
+    </div>
+    <div class="modal-actions">
+      <button class="back-button" onclick={closeModal}>Back</button>
     </div>
   </div>
 </div>
@@ -100,6 +111,36 @@
     margin: 0;
     font-size: 1rem;
     color: #bdc3c7;
+  }
+
+  .modal-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .back-button {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+  }
+
+  .back-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  }
+
+  .back-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
   }
 
   @keyframes fadeIn {
