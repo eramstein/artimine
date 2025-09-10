@@ -1,5 +1,5 @@
 import { cards, lands } from '@/data/loader';
-import type { Character } from '../_model';
+import type { CardTuple, Character, Deck } from '../_model';
 import { gs } from '../_state/main.svelte';
 
 export function getFullCollection() {
@@ -20,4 +20,30 @@ export function addCardToCollection(cardTemplateId: string, character?: Characte
       count: 1,
     });
   }
+}
+
+export function getCollectionFromDeck(deck: Deck) {
+  const cards = deck.cards.map((card: CardTuple) => ({
+    cardTemplateId: card.cardTemplateId,
+    count: card.count,
+  }));
+  return [
+    ...cards,
+    ...deck.lands.map((land: string) => ({
+      cardTemplateId: land,
+      count: 1,
+    })),
+  ];
+}
+
+// all cards from collection that are not in any deck
+export function getAvailableCardsFromCollection(character: Character) {
+  return character.collection.filter(
+    (c) =>
+      !character.decks.some(
+        (d) =>
+          d.cards.some((card) => card.cardTemplateId === c.cardTemplateId) ||
+          d.lands.some((land) => land === c.cardTemplateId)
+      )
+  );
 }

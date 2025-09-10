@@ -54,4 +54,5 @@ export const uiState: UiState = $state({
     isStreaming: false,
     streamingContent: '',
   },
+  tradingWith: null,
 });

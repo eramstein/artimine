@@ -26,13 +26,15 @@ export interface Character {
   name: string;
   bio: string;
   place: number;
-  collection: {
-    cardTemplateId: string;
-    count: number;
-  }[];
+  collection: CardTuple[];
   decks: Deck[];
   cash: number;
   items: Item[];
+}
+
+export interface CardTuple {
+  cardTemplateId: string;
+  count: number;
 }
 
 export interface Place {
@@ -46,10 +48,7 @@ export interface Place {
 export interface Deck {
   key: string;
   name: string;
-  cards: {
-    cardTemplateId: string;
-    count: number;
-  }[];
+  cards: CardTuple[];
   lands: string[];
 }
 

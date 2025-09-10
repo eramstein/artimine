@@ -56,7 +56,9 @@
         uiState.deckSelectionModal.foeKey = selectedCharacters[0].key;
         uiState.deckSelectionModal.visible = true;
       } else if (option === 'trade' && selectedCharacters.length === 1) {
-        // TODO: Implement actual game logic for trade (only for single character)
+        uiState.tradingWith = selectedCharacters[0].key;
+        await initPlayerChat(selectedCharacters);
+        uiState.currentView = UiView.Trade;
       } else if (option === 'chat') {
         // Initialize chat with the selected characters
         await initPlayerChat(selectedCharacters);

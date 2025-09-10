@@ -12,6 +12,7 @@
   import Place from './Place.svelte';
   import Player from './Player.svelte';
   import Schedule from './Schedule.svelte';
+  import Trade from './Trade.svelte';
 </script>
 
 <div class="sim-container">
@@ -36,6 +37,8 @@
       <DeckEditor />
     {:else if uiState.currentView === UiView.Chat}
       <CharacterInteraction />
+    {:else if uiState.currentView === UiView.Trade}
+      <Trade />
     {/if}
   </div>
 

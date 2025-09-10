@@ -1,5 +1,5 @@
 import { cards } from '@/data';
-import type { CardTemplate, Item } from '../_model';
+import type { CardTemplate, Character, Item } from '../_model';
 import { CardRarity, CardSet } from '../_model/enums-battle';
 import { gs } from '../_state/main.svelte';
 import { getRandomFromArray } from '../_utils/random';
@@ -37,4 +37,11 @@ export function openBooster(item: Item): CardTemplate[] {
   }
 
   return boosterPack;
+}
+
+export function openBoosterForCharacter(character: Character, cardSet: CardSet) {
+  const boosterPack = generateBooster(cardSet);
+  boosterPack.forEach((card) => {
+    addCardToCollection(card.id, character);
+  });
 }

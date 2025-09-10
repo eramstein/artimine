@@ -68,6 +68,7 @@ export type UiState = {
     isStreaming: boolean;
     streamingContent: string;
   };
+  tradingWith: string | null;
 };
 
 export enum UiView {
@@ -82,4 +83,5 @@ export enum UiView {
   Schedule = 'Schedule',
   Player = 'Player',
   Chat = 'Chat',
+  Trade = 'Trade',
 }

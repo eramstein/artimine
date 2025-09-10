@@ -6,7 +6,8 @@ import type { GameState } from '../_model';
 import { CardSet } from '../_model/enums-battle';
 import { ActivityType, DayPeriod, ItemType } from '../_model/enums-sim';
 import { gs } from '../_state/main.svelte';
-import { getFullCollection } from './collection';
+import { openBoosterForCharacter } from './booster';
+import { getCollectionFromDeck, getFullCollection } from './collection';
 import { fillDefaultActivities } from './schedule';
 
 export const defaultGameState: GameState = {
@@ -29,6 +30,13 @@ export const initSim = async () => {
   // CARD COLLECTION
   gs.player.collection = getFullCollection();
   gs.player.decks = [BASE_DECK];
+
+  for (const character of Object.values(gs.characters)) {
+    character.collection = getCollectionFromDeck(character.decks[0]);
+    openBoosterForCharacter(character, CardSet.Alpha);
+    openBoosterForCharacter(character, CardSet.Alpha);
+    openBoosterForCharacter(character, CardSet.Alpha);
+  }
 
   // SHOPS
   const goblinCave = gs.places.find((p) => p.key === 'goblin_counter');
