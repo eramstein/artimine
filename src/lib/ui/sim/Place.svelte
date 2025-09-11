@@ -2,6 +2,7 @@
   import { UiView, type Npc, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
+  import { initTrade, startGame } from '@/lib/_state/state-ui.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
   import CharacterPortrait from './CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
@@ -52,15 +53,10 @@
   async function handleMenuOption(option: string) {
     if (selectedCharacters.length > 0) {
       if (option === 'play game' && selectedCharacters.length === 1) {
-        // Show deck selection modal (only for single character)
-        uiState.deckSelectionModal.foeKey = selectedCharacters[0].key;
-        uiState.deckSelectionModal.visible = true;
+        await startGame(selectedCharacters[0]);
       } else if (option === 'trade' && selectedCharacters.length === 1) {
-        uiState.tradingWith = selectedCharacters[0].key;
-        await initPlayerChat(selectedCharacters);
-        uiState.currentView = UiView.Trade;
+        await initTrade(selectedCharacters[0]);
       } else if (option === 'chat') {
-        // Initialize chat with the selected characters
         await initPlayerChat(selectedCharacters);
         uiState.currentView = UiView.Chat;
       }

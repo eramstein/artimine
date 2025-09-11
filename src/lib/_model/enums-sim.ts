@@ -9,9 +9,18 @@ export enum ItemType {
   BoardGame = 'board game',
 }
 
+// activities are long, they last for one time period
 export enum ActivityType {
   Chill = 'Chilling',
   Gaming = 'Gaming',
   Work = 'Working',
   Study = 'Studying',
+}
+
+// actions are punctual. they are mapped to LLM tools and Sim functions
+export enum ActionType {
+  None = 'none',
+  GoTo = 'goTo',
+  StartGame = 'startGame',
+  StartTrade = 'startTrade',
 }

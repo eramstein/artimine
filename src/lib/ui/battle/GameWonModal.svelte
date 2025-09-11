@@ -4,6 +4,7 @@
   import { uiState } from '@lib/_state';
   import { resetBattleState } from '@lib/_state/main.svelte';
   import { getCharacterImagePath } from '@lib/_utils/asset-paths';
+  import { recordActionInChat } from '@lib/llm/action';
 
   let { winningPlayer }: { winningPlayer: Player } = $props();
 
@@ -12,6 +13,7 @@
   let characterImagePath = $derived(getCharacterImagePath(characterImageName));
 
   const closeModal = () => {
+    recordActionInChat(`${winningPlayer.name} has won the game!`);
     resetBattleState();
     uiState.currentView = UiView.CurrentPlace;
   };

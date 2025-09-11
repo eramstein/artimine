@@ -1,4 +1,4 @@
-import type { ActivityType, DayPeriod, ItemType } from './enums-sim';
+import type { ActionType, ActivityType, DayPeriod, ItemType } from './enums-sim';
 
 export interface GameState {
   time: {
@@ -83,6 +83,7 @@ export interface ChatState {
   summary: string;
   lastSummaryMessageIndex: number;
   memories: string;
+  attemptedActionsResults: string;
 }
 
 export interface ChatMessage {
@@ -105,4 +106,16 @@ export interface RelationshipSummaryUpdate {
   npc: string;
   description: string;
   day: number;
+}
+
+export interface ActionTypeDefinition {
+  onSuccess: (args: any) => void;
+  checkSuccess: (args: any) => { success: boolean; description: string };
+  getLabel: (args: any) => string;
+  description: string;
+}
+
+export interface ActionAttempt {
+  actionType: ActionType;
+  args: Record<string, any>;
 }

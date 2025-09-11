@@ -2,6 +2,7 @@
   import { cards, lands } from '@/data/loader';
   import { CardRarity } from '@/lib/_model/enums-battle';
   import type { CardTuple } from '@/lib/_model/model-game';
+  import { UiView } from '@/lib/_model/model-ui';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
@@ -236,6 +237,12 @@
         <button class="trade-button" onclick={executeTrade} disabled={!canExecuteTrade()}>
           Propose Trade
         </button>
+        <button
+          class="trade-button trade-button--secondary"
+          onclick={() => (uiState.currentView = UiView.Chat)}
+        >
+          Close
+        </button>
       </div>
       <div class="character-name">
         <h2>{character()!.name}</h2>
@@ -445,6 +452,7 @@
   .trade-actions {
     display: flex;
     justify-content: center;
+    gap: 8px;
   }
 
   .rarity-filter {
@@ -496,6 +504,18 @@
   .trade-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .trade-button--secondary {
+    background: transparent;
+    color: #bfa14a;
+    border-color: #bfa14a;
+    opacity: 0.7;
+  }
+
+  .trade-button--secondary:hover {
+    opacity: 1;
+    background: rgba(191, 161, 74, 0.1);
   }
 
   .trade-content {

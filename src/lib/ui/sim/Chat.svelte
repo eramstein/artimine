@@ -1,15 +1,45 @@
 <script lang="ts">
+  import { playerSendChat } from '@/lib/llm';
+  import type { ActionAttempt } from '../../_model/model-game';
   import { gs } from '../../_state/main.svelte';
   import { uiState } from '../../_state/state-ui.svelte';
-  import { playerSendChat } from '../../llm/chat';
+  import { getPlaceImagePath } from '../../_utils/asset-paths';
+  import { getActionsFromText } from '../../llm/action';
+  import { attemptAction } from '../../sim/actions';
+  import { ACTIONS } from '../../sim/actions-map';
 
   let inputValue = $state('');
   let inputRef = $state<HTMLInputElement>();
   let messagesContainer = $state<HTMLDivElement>();
+  let messageText = $state('');
+  const backgroundStyle = $derived(() => {
+    const place = gs.places[gs.player.place];
+    if (!place) return '';
+    const url = getPlaceImagePath(place.key);
+    return `background-image: url('${url}');`;
+  });
 
   // Reactive state for chat messages
   let chatMessages: Array<{ role: string; content: string; displayLabel: string }> = $state([]);
   let chatCharacters: Array<{ name: string }> = $state([]);
+
+  // Actions surfaced from the LLM for user selection (single or none)
+  let pendingActions: ActionAttempt[] = $state([]);
+
+  function skipActions() {
+    pendingActions = [];
+    playerSendChat(messageText);
+  }
+
+  async function confirmSelectedAction(action: ActionAttempt) {
+    const outcomePositive = attemptAction(action);
+    pendingActions = [];
+    await playerSendChat(messageText);
+    if (outcomePositive) {
+      const actionDef = ACTIONS[action.actionType];
+      actionDef.onSuccess(action.args);
+    }
+  }
 
   // Update chat messages when chat state changes
   $effect(() => {
@@ -42,12 +72,15 @@
 
   async function handleSubmit() {
     if (!inputValue.trim() || uiState.chat.isStreaming) return;
-
-    const message = inputValue.trim();
+    messageText = inputValue.trim();
     inputValue = '';
 
     try {
-      await playerSendChat(message);
+      const actions = await getActionsFromText(messageText);
+      pendingActions = actions as ActionAttempt[];
+      if (pendingActions.length === 0) {
+        await playerSendChat(messageText);
+      }
     } catch (error) {
       console.error('Error sending chat message:', error);
     }
@@ -108,7 +141,7 @@
 </script>
 
 {#if gs.chat}
-  <div class="chat-container">
+  <div class="chat-container" style={backgroundStyle()}>
     <div class="chat-messages" id="chat-messages" bind:this={messagesContainer}>
       {#each chatMessages as message}
         <div class={getMessageClass(message.role)}>
@@ -127,6 +160,24 @@
         </div>
       {/if}
     </div>
+
+    {#if pendingActions.length > 0}
+      <div class="actions-panel">
+        <div class="actions-header">Suggested actions</div>
+        <div class="actions-list">
+          {#each pendingActions as act, i}
+            <button
+              class="action-button"
+              onclick={() => confirmSelectedAction(act)}
+              title={JSON.stringify(act.args)}
+            >
+              {ACTIONS[act.actionType]?.getLabel?.(act.args) ?? act.actionType}
+            </button>
+          {/each}
+          <button class="action-button skip-button" onclick={skipActions}>Skip</button>
+        </div>
+      </div>
+    {/if}
 
     <div class="chat-input-container">
       <form onsubmit={handleSubmit}>
@@ -162,6 +213,9 @@
     color: white;
     box-sizing: border-box;
     overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .chat-header {
@@ -226,8 +280,8 @@
   }
 
   .message-content {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     padding: 8px 12px;
     border-radius: 12px;
     max-width: 80%;
@@ -237,15 +291,15 @@
   }
 
   .user-message .message-content {
-    background: rgba(52, 152, 219, 0.2);
-    border-color: rgba(52, 152, 219, 0.3);
-    color: #ffffff;
+    background: rgba(30, 45, 60, 0.85);
+    border-color: rgba(120, 150, 180, 0.35);
+    color: #f3f3f3;
   }
 
   .npc-message .message-content {
-    background: rgba(191, 161, 74, 0.2);
+    background: rgba(60, 50, 30, 0.9);
     border-color: rgba(191, 161, 74, 0.3);
-    color: #ffffff;
+    color: #f3f3f3;
   }
 
   .streaming-indicator {
@@ -274,9 +328,84 @@
   .chat-input-container {
     flex: 0 0 auto;
     padding: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 0 0 8px 8px;
+  }
+
+  .actions-panel {
+    margin: 0 16px 8px 16px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .actions-header {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .actions-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .action-button {
+    padding: 6px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--color-golden);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s ease;
+  }
+
+  .action-button:hover {
+    background: rgba(191, 161, 74, 0.15);
+    border-color: rgba(191, 161, 74, 0.4);
+  }
+
+  .action-button.selected {
+    background: rgba(191, 161, 74, 0.25);
+    border-color: rgba(191, 161, 74, 0.7);
+    color: #fff;
+  }
+
+  .actions-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .skip-button {
+    padding: 6px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .confirm-button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--color-golden);
+    background: var(--color-golden);
+    color: #1a1a1a;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .confirm-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   .input-wrapper {
@@ -288,22 +417,22 @@
   .chat-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 20px;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    color: #f5f5f5;
   }
 
   .chat-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .chat-input:focus {
-    border-color: var(--color-golden);
-    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(191, 161, 74, 0.4);
+    background: rgba(0, 0, 0, 0.76);
   }
 
   .chat-input:disabled {

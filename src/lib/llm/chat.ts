@@ -43,6 +43,9 @@ export async function playerSendChat(message: string): Promise<string> {
   const place = gs.places[gs.player.place];
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
+  const actionOutcomes = gs.chat.attemptedActionsResults
+    ? `\n\nAction Outcomes: ${gs.chat.attemptedActionsResults}`
+    : '';
   const locationDescription = place.name + ', ' + place.description || '';
   const charactersDescription = getGroupDescription(gs.chat.characters);
   const currentSummary = gs.chat.summary
@@ -85,15 +88,11 @@ export async function playerSendChat(message: string): Promise<string> {
     ${memoriesPrompt}
 
     ${playerChatSystemPrompt.instruction}
-    
-    Example Output Style (NPC-only):
-    Lise's eyes darted nervously toward ${playerName}. She took a shaky breath, her voice trembling.
-    "I... I really hope I'm not imposing," she whispered, twisting her fingers anxiously.
 
-    She glanced down at the tiled floor, her cheeks flushed with embarrassment, awaiting ${playerName}'s response.
+    ${actionOutcomes}
     `,
   };
-  console.log('systemPrompt', systemPrompt);
+  console.log('systemPrompt', systemPrompt.content);
 
   // reset initial system prompt
   gs.chat.history[0] = systemPrompt;
@@ -105,6 +104,7 @@ export async function playerSendChat(message: string): Promise<string> {
   };
 
   gs.chat.history.push(userPrompt);
+  gs.chat.attemptedActionsResults = '';
 
   // Start streaming
   uiState.chat.isStreaming = true;
@@ -157,6 +157,14 @@ export async function playerSendChat(message: string): Promise<string> {
 }
 
 export async function initPlayerChat(characters: Npc[]) {
+  // if the characters are the same, do not end the previous chat
+  const currentCharacters = gs.chat?.characters.map((c) => c.key).join();
+  const newCharacters = characters.map((c) => c.key).join();
+  if (currentCharacters === newCharacters) {
+    return;
+  } else {
+    endPlayerChat();
+  }
   // get last memory involving at least one of these characters
   const relevantMemories = await getSystemPromptMemories(
     gs.time.day,
@@ -170,10 +178,15 @@ export async function initPlayerChat(characters: Npc[]) {
     summary: '',
     lastSummaryMessageIndex: 0,
     memories: relevantMemories,
+    attemptedActionsResults: '',
   };
 }
 
 export async function endPlayerChat() {
+  if (!gs.chat?.history || gs.chat?.history.length < 3) {
+    gs.chat = null;
+    return;
+  }
   // complete the summary with last messages
   const currentSummary = gs.chat!.summary;
   const messagesToSummarize = gs

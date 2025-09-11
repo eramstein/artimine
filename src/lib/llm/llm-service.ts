@@ -12,7 +12,7 @@ interface Message {
   tool_calls?: ToolCall[];
 }
 
-interface ToolCall {
+export interface ToolCall {
   function: {
     name: string;
     arguments: {
@@ -21,7 +21,7 @@ interface ToolCall {
   };
 }
 
-interface Tool {
+export interface Tool {
   type: string;
   function: {
     name?: string;
@@ -60,6 +60,7 @@ export interface ChatRequest {
   responseFormat?: {
     type: string;
   };
+  model?: string;
 }
 
 export interface ChatResponse {
@@ -96,7 +97,7 @@ export class MistralService implements LLMService {
   async chat(request: ChatRequest): Promise<ChatResponse | AsyncIterable<StreamChunk>> {
     if (request.stream) {
       return mistralClient.chat.stream({
-        model: LLM_API_MODEL,
+        model: request.model || LLM_API_MODEL,
         messages: request.messages,
         tools: request.tools,
         stream: true,
@@ -111,7 +112,7 @@ export class MistralService implements LLMService {
       }) as Promise<AsyncIterable<StreamChunk>>;
     }
     return mistralClient.chat.complete({
-      model: LLM_API_MODEL,
+      model: request.model || LLM_API_MODEL,
       messages: request.messages,
       tools: request.tools,
       toolChoice: request.tools ? 'any' : 'none',
