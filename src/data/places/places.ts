@@ -21,6 +21,17 @@ export const PLACES: Place[] = [
     description:
       'An old university specialized in cognitive sciences studies. Beautiful buildings from the early 1900s with a germanic style architecture.',
   },
+  {
+    key: 'uni_cafeteria',
+    name: "University's Cafeteria",
+    description:
+      'A cafeteria located in the university. It serves food and drinks to the students and staff.',
+  },
+  {
+    key: 'le_chat_noir',
+    name: 'Le Chat Noir',
+    description: 'A restaurant located in the city center. It serves French cuisine and wines.',
+  },
 ].map((p, i) => ({
   index: i,
   key: p.key,

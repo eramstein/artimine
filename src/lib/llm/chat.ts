@@ -163,7 +163,7 @@ export async function initPlayerChat(characters: Npc[]) {
   if (currentCharacters === newCharacters) {
     return;
   } else {
-    endPlayerChat();
+    await endPlayerChat();
   }
   // get last memory involving at least one of these characters
   const relevantMemories = await getSystemPromptMemories(
@@ -198,7 +198,6 @@ export async function endPlayerChat() {
     ? 'Summary of previous events: ' + currentSummary + '\n\n New events:' + messagesToSummarize
     : messagesToSummarize;
   const summary = await generateSummary(summayPrompt);
-  console.log('summary', summary);
   // update NPC opinions
   for (const npc of gs.chat!.characters) {
     const oldOpinion = npc.relationSummary;
@@ -206,7 +205,7 @@ export async function endPlayerChat() {
     const newOpinion = await updateOpinion(npc.name, oldOpinion, interactionSummary);
     // save old opinion in DB
     await saveRelationshipSummaryUpdate(npc.key, npc.name, oldOpinion, gs.time.day);
-    npc.relationSummary = newOpinion;
+    gs.characters[npc.key].relationSummary = newOpinion;
   }
   // save memory in DB
   await saveChat(

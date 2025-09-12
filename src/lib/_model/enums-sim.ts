@@ -15,6 +15,8 @@ export enum ActivityType {
   Gaming = 'Gaming',
   Work = 'Working',
   Study = 'Studying',
+  Social = 'Socializing',
+  Date = 'Going on a date',
 }
 
 // actions are punctual. they are mapped to LLM tools and Sim functions
@@ -23,4 +25,5 @@ export enum ActionType {
   GoTo = 'goTo',
   StartGame = 'startGame',
   StartTrade = 'startTrade',
+  ScheduleActivity = 'scheduleActivity',
 }

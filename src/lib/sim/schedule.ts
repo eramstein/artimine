@@ -1,5 +1,6 @@
-import { type Activity, ActivityType, DayPeriod } from '../_model';
+import { type Activity, ActivityType, DayPeriod, type Place } from '../_model';
 import { gs } from '../_state/main.svelte';
+import { endPlayerChat } from '../llm';
 import { autoResolveActivity } from './activity';
 
 const dayPeriodIndexes = {
@@ -24,18 +25,20 @@ export function scheduleActivity(
   activity: Activity,
   day: number,
   dayPeriod: DayPeriod,
-  place: number
+  place: Place
 ) {
   const dayPeriodIndex = dayPeriodIndexes[dayPeriod];
   gs.activities[day][dayPeriodIndex] = {
     activity: activity,
     day: day,
     dayPeriod: dayPeriod,
-    place: place,
+    place: place.index,
   };
 }
 
-export function skipTo(day: number, dayPeriod: DayPeriod) {
+export async function skipTo(day: number, dayPeriod: DayPeriod) {
+  const activityPlan = gs.activities[day][dayPeriodIndexes[dayPeriod]];
+  await endPlayerChat();
   // auto-resolve activities
   gs.activities
     .filter((_, d) => d <= day)
@@ -46,15 +49,17 @@ export function skipTo(day: number, dayPeriod: DayPeriod) {
       });
     });
   // fill schedule for next days
-  gs.time.day = day;
+  gs.time.day += day;
   gs.time.period = dayPeriod;
   gs.activities = gs.activities.slice(day);
   fillDefaultActivities();
   // update activity, time and schedule
-  const activityPlan = gs.activities[day][dayPeriodIndexes[dayPeriod]];
   if (!activityPlan) return;
   gs.activity = activityPlan.activity;
   gs.player.place = activityPlan.place;
+  activityPlan.activity.participants.forEach((participant) => {
+    gs.characters[participant].place = activityPlan.place;
+  });
 }
 
 export function fillDefaultActivities() {

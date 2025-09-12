@@ -70,15 +70,19 @@
     chatCharacters = gs.chat.characters || [];
   });
 
-  async function handleSubmit() {
+  async function handleSubmit(shouldCheckActions: boolean = false) {
     if (!inputValue.trim() || uiState.chat.isStreaming) return;
     messageText = inputValue.trim();
     inputValue = '';
 
     try {
-      const actions = await getActionsFromText(messageText);
-      pendingActions = actions as ActionAttempt[];
-      if (pendingActions.length === 0) {
+      if (shouldCheckActions) {
+        const actions = await getActionsFromText(messageText);
+        pendingActions = actions as ActionAttempt[];
+        if (pendingActions.length === 0) {
+          await playerSendChat(messageText);
+        }
+      } else {
         await playerSendChat(messageText);
       }
     } catch (error) {
@@ -89,7 +93,10 @@
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      handleSubmit();
+      handleSubmit(false); // Regular Enter - skip action checking
+    } else if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(true); // Shift+Enter - check for actions
     }
   }
 
@@ -180,7 +187,7 @@
     {/if}
 
     <div class="chat-input-container">
-      <form onsubmit={handleSubmit}>
+      <form onsubmit={() => handleSubmit(false)}>
         <div class="input-wrapper">
           <input
             bind:this={inputRef}

@@ -391,6 +391,8 @@
     gap: 10px;
     width: calc(100% - 30px);
     padding: 0 15px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
   }
 
   .collection-grid.full-card-view {
