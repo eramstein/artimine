@@ -3,14 +3,11 @@ import { gs } from '../_state';
 import { uiState } from '../_state/state-ui.svelte';
 import { generateUniqueId } from '../_utils/random';
 import { getGroupDescription } from './chat-helpers';
-import {
-  getOpinionUpdatePrompt,
-  playerChatSystemPrompt,
-  summarySystemPrompt,
-} from './chat-system-prompts';
+import { playerChatSystemPrompt, summarySystemPrompt } from './chat-system-prompts';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
 import { saveChat, saveRelationshipSummaryUpdate } from './memories-db';
+import { updateOpinion } from './opinion';
 
 async function generateSummary(transcript: string): Promise<string> {
   const systemPrompt = {
@@ -200,12 +197,10 @@ export async function endPlayerChat() {
   const summary = await generateSummary(summayPrompt);
   // update NPC opinions
   for (const npc of gs.chat!.characters) {
-    const oldOpinion = npc.relationSummary;
-    const interactionSummary = summary;
-    const newOpinion = await updateOpinion(npc.name, oldOpinion, interactionSummary);
     // save old opinion in DB
-    await saveRelationshipSummaryUpdate(npc.key, npc.name, oldOpinion, gs.time.day);
-    gs.characters[npc.key].relationSummary = newOpinion;
+    await saveRelationshipSummaryUpdate(npc.key, npc.name, npc.relationSummary, gs.time.day);
+    // update opinion
+    updateOpinion(npc.key, npc.name, npc.relationSummary, summary);
   }
   // save memory in DB
   await saveChat(
@@ -217,19 +212,4 @@ export async function endPlayerChat() {
     summary
   );
   gs.chat = null;
-}
-
-async function updateOpinion(npcName: string, oldOpinion: string, interactionSummary: string) {
-  const prompt = getOpinionUpdatePrompt(npcName, oldOpinion, interactionSummary);
-  const opinion = await llmService.chat({
-    messages: [
-      {
-        role: 'system',
-        content: prompt,
-      },
-    ],
-  });
-  const formattedOpinion = llmService.getMessage(opinion);
-  console.log('new opinion', formattedOpinion);
-  return formattedOpinion;
 }

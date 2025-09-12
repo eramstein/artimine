@@ -1,3 +1,4 @@
 export * from './chat';
 export * from './config';
 export * from './llm-service';
+export * from './opinion';

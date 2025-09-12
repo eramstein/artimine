@@ -19,6 +19,13 @@ export interface Player extends Character {
 
 export interface Npc extends Character {
   relationSummary: string;
+  relationValues: RelationValues;
+}
+
+export interface RelationValues {
+  friendship: number; // -10 to 10
+  love: number;
+  respect: number;
 }
 
 export interface Character {
