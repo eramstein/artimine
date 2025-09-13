@@ -10,6 +10,16 @@ export function attemptAction(action: ActionAttempt): boolean {
   }
   gs.chat.attemptedActionsResults = '';
   const outcome = ACTIONS[action.actionType].checkSuccess(action.args);
-  gs.chat.attemptedActionsResults += outcome.description + '\n';
+  if (outcome.success) {
+    gs.chat.attemptedActionsResults += outcome.descriptionSuccess + '\n';
+    if (outcome.isCritical) {
+      gs.chat.attemptedActionsResults += 'Critical success!\n';
+    }
+  } else {
+    gs.chat.attemptedActionsResults += outcome.descriptionFailure + '\n';
+    if (outcome.isCritical) {
+      gs.chat.attemptedActionsResults += 'Critical failure!\n';
+    }
+  }
   return outcome.success;
 }

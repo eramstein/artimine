@@ -16,7 +16,20 @@ export const defaultGameState: GameState = {
     period: DayPeriod.Afternoon,
   },
   characters: CHARACTERS,
-  player: { ...CHARACTER_PLAYER, collection: [], decks: [], cash: 0, items: [], studyPoints: 0 },
+  player: {
+    ...CHARACTER_PLAYER,
+    collection: [],
+    decks: [],
+    cash: 0,
+    items: [],
+    studyPoints: 0,
+    attributes: {
+      intelligence: 7,
+      charisma: 5,
+      vitality: 3,
+      dexterity: 5,
+    },
+  },
   places: PLACES,
   activity: {
     activityType: ActivityType.Chill,

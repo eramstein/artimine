@@ -14,6 +14,7 @@ export interface GameState {
 }
 
 export interface Player extends Character {
+  attributes: CharacterAttributes;
   studyPoints: number;
 }
 
@@ -24,8 +25,15 @@ export interface Npc extends Character {
 
 export interface RelationValues {
   friendship: number; // -10 to 10
-  love: number;
-  respect: number;
+  love: number; // -10 to 10
+  respect: number; // -10 to 10
+}
+
+export interface CharacterAttributes {
+  intelligence: number; // 0 to 10
+  charisma: number; // 0 to 10
+  vitality: number; // 0 to 10
+  dexterity: number; // 0 to 10
 }
 
 export interface Character {
@@ -117,7 +125,12 @@ export interface RelationshipSummaryUpdate {
 
 export interface ActionTypeDefinition {
   onSuccess: (args: any) => void;
-  checkSuccess: (args: any) => { success: boolean; description: string };
+  checkSuccess: (args: any) => {
+    success: boolean;
+    isCritical: boolean;
+    descriptionSuccess: string;
+    descriptionFailure: string;
+  };
   getLabel: (args: any) => string;
   description: string;
 }

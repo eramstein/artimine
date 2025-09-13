@@ -26,15 +26,33 @@
   // Actions surfaced from the LLM for user selection (single or none)
   let pendingActions: ActionAttempt[] = $state([]);
 
+  // Track if we should show roll results
+  let showRollResults = $state(false);
+
   function skipActions() {
     pendingActions = [];
+    showRollResults = false;
     playerSendChat(messageText);
   }
 
   async function confirmSelectedAction(action: ActionAttempt) {
+    // Clear any previous roll results
+    uiState.rollResults = [];
+    showRollResults = false;
+
+    // attemptAction will set some additional info in gs to be added to the prompt (e.g. "NPC accepts")
+    // the success is decided by the simulation, not the LLM
     const outcomePositive = attemptAction(action);
     pendingActions = [];
+
+    // Show roll results if any were generated
+    if (uiState.rollResults.length > 0) {
+      showRollResults = true;
+    }
+
+    // so here for example we ask the LLM to describe what happened, we tell it to describe a success or failure state
     await playerSendChat(messageText);
+    // if it was a success, upadte the game state accordingly
     if (outcomePositive) {
       const actionDef = ACTIONS[action.actionType];
       actionDef.onSuccess(action.args);
@@ -168,21 +186,40 @@
       {/if}
     </div>
 
-    {#if pendingActions.length > 0}
+    {#if pendingActions.length > 0 || showRollResults}
       <div class="actions-panel">
-        <div class="actions-header">Suggested actions</div>
-        <div class="actions-list">
-          {#each pendingActions as act, i}
-            <button
-              class="action-button"
-              onclick={() => confirmSelectedAction(act)}
-              title={JSON.stringify(act.args)}
-            >
-              {ACTIONS[act.actionType]?.getLabel?.(act.args) ?? act.actionType}
-            </button>
-          {/each}
-          <button class="action-button skip-button" onclick={skipActions}>Skip</button>
-        </div>
+        {#if pendingActions.length > 0}
+          <div class="actions-header">Suggested actions</div>
+          <div class="actions-list">
+            {#each pendingActions as act, i}
+              <button
+                class="action-button"
+                onclick={() => confirmSelectedAction(act)}
+                title={JSON.stringify(act.args)}
+              >
+                {ACTIONS[act.actionType]?.getLabel?.(act.args) ?? act.actionType}
+              </button>
+            {/each}
+            <button class="action-button skip-button" onclick={skipActions}>Skip</button>
+          </div>
+        {/if}
+
+        {#if showRollResults && uiState.rollResults.length > 0}
+          <div class="roll-results">
+            {#each uiState.rollResults as result}
+              <div class="roll-result">
+                <span
+                  class="roll-outcome {result.success ? 'success' : 'failure'} {result.isCritical
+                    ? 'critical'
+                    : ''}">{result.success ? 'Success!' : 'Failure!'}</span
+                >
+                Test {result.attribute} ({gs.player.attributes[
+                  result.attribute as keyof typeof gs.player.attributes
+                ]}). Difficulty {result.difficulty}. Roll: {result.roll}.
+              </div>
+            {/each}
+          </div>
+        {/if}
       </div>
     {/if}
 
@@ -388,6 +425,42 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
+  }
+
+  .roll-results {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .roll-results-header {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .roll-result {
+    padding: 4px 0;
+    margin-bottom: 2px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .roll-outcome {
+    font-weight: 600;
+  }
+
+  .roll-outcome.success {
+    color: #22c55e;
+  }
+
+  .roll-outcome.failure {
+    color: #ef4444;
+  }
+
+  .roll-outcome.critical {
+    color: #a855f7;
   }
 
   .skip-button {

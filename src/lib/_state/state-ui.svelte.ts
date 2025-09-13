@@ -59,7 +59,19 @@ export const uiState: UiState = $state({
     streamingContent: '',
   },
   tradingWith: null,
+  rollResults: [],
 });
+
+export function addRollResult(result: {
+  success: boolean;
+  isCritical: boolean;
+  roll: number;
+  attribute: string;
+  difficulty: number;
+}) {
+  console.log('addRollResult', result);
+  uiState.rollResults.push(result);
+}
 
 export async function initTrade(partner: Npc) {
   uiState.tradingWith = partner.key;

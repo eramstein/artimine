@@ -69,6 +69,13 @@ export type UiState = {
     streamingContent: string;
   };
   tradingWith: string | null;
+  rollResults: {
+    success: boolean;
+    isCritical: boolean;
+    roll: number;
+    attribute: string;
+    difficulty: number;
+  }[];
 };
 
 export enum UiView {
