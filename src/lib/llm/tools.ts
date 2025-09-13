@@ -1,8 +1,38 @@
 import { gs } from '@/lib/_state/main.svelte';
-import { ActionType, ActivityType, DayPeriod } from '../_model/enums-sim';
+import { ActionType, ActivityType, DayPeriod, Difficulty } from '../_model/enums-sim';
 import { ACTIONS } from '../sim/actions-map';
 import { dayNames } from '../sim/schedule';
 import type { Tool } from './llm-service';
+
+const generalChallenge: () => Tool = () => {
+  return {
+    type: 'function',
+    function: {
+      name: ActionType.GeneralChallenge,
+      description: ACTIONS[ActionType.GeneralChallenge].description,
+      parameters: {
+        type: 'object',
+        required: ['attribute', 'challengeDescription', 'difficulty'],
+        properties: {
+          attribute: {
+            type: 'string',
+            description: 'The attribute to check',
+            enum: ['intelligence', 'charisma', 'vitality', 'dexterity'],
+          },
+          challengeDescription: {
+            type: 'string',
+            description: 'The description of the challenge',
+          },
+          difficulty: {
+            type: 'string',
+            description: 'The difficulty of the challenge',
+            enum: Object.values(Difficulty),
+          },
+        },
+      },
+    },
+  };
+};
 
 const goTo: () => Tool = () => {
   return {
@@ -122,5 +152,5 @@ const startTrade: () => Tool = () => {
 };
 
 export function getTools(): Tool[] {
-  return [goTo, startGame, startTrade, scheduleActivity].map((f) => f());
+  return [goTo, startGame, startTrade, scheduleActivity, generalChallenge].map((f) => f());
 }

@@ -124,7 +124,8 @@ export interface RelationshipSummaryUpdate {
 }
 
 export interface ActionTypeDefinition {
-  onSuccess: (args: any) => void;
+  onSuccess?: (args: any, isCritical?: boolean) => void;
+  onFailure?: (args: any, isCritical?: boolean) => void;
   checkSuccess: (args: any) => {
     success: boolean;
     isCritical: boolean;

@@ -21,9 +21,22 @@ export enum ActivityType {
 
 // actions are punctual. they are mapped to LLM tools and Sim functions
 export enum ActionType {
+  GeneralChallenge = 'generalChallenge',
   None = 'none',
   GoTo = 'goTo',
   StartGame = 'startGame',
   StartTrade = 'startTrade',
   ScheduleActivity = 'scheduleActivity',
+}
+
+export enum Difficulty {
+  AutomaticSuccess = 'automaticSuccess',
+  ExtremelyEasy = 'extremelyEasy',
+  VeryEasy = 'veryEasy',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
+  VeryHard = 'veryHard',
+  ExtremelyHard = 'extremelyHard',
+  Impossible = 'impossible',
 }

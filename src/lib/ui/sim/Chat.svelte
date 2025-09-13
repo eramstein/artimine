@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { ActionType } from '@/lib/_model';
   import { playerSendChat } from '@/lib/llm';
   import type { ActionAttempt } from '../../_model/model-game';
   import { gs } from '../../_state/main.svelte';
   import { uiState } from '../../_state/state-ui.svelte';
   import { getPlaceImagePath } from '../../_utils/asset-paths';
   import { getActionsFromText } from '../../llm/action';
+  import { rewriteMessageAfterFail } from '../../llm/re-write';
   import { attemptAction } from '../../sim/actions';
   import { ACTIONS } from '../../sim/actions-map';
 
@@ -26,36 +28,35 @@
   // Actions surfaced from the LLM for user selection (single or none)
   let pendingActions: ActionAttempt[] = $state([]);
 
-  // Track if we should show roll results
-  let showRollResults = $state(false);
-
   function skipActions() {
     pendingActions = [];
-    showRollResults = false;
+    uiState.rollResults = [];
     playerSendChat(messageText);
   }
 
   async function confirmSelectedAction(action: ActionAttempt) {
     // Clear any previous roll results
     uiState.rollResults = [];
-    showRollResults = false;
 
     // attemptAction will set some additional info in gs to be added to the prompt (e.g. "NPC accepts")
     // the success is decided by the simulation, not the LLM
-    const outcomePositive = attemptAction(action);
+    const outcome = attemptAction(action);
     pendingActions = [];
 
-    // Show roll results if any were generated
-    if (uiState.rollResults.length > 0) {
-      showRollResults = true;
+    // if it's a failed general challenge check (e.g. the player says he does a backflip), we re-write the user prompt in case of failure
+    if (action.actionType === ActionType.GeneralChallenge && !outcome.success) {
+      messageText = await rewriteMessageAfterFail(messageText);
     }
 
-    // so here for example we ask the LLM to describe what happened, we tell it to describe a success or failure state
+    // here we ask the LLM to describe what happened, we tell it to describe a success or failure state
     await playerSendChat(messageText);
-    // if it was a success, upadte the game state accordingly
-    if (outcomePositive) {
-      const actionDef = ACTIONS[action.actionType];
-      actionDef.onSuccess(action.args);
+    // upadte the game state accordingly
+    const actionDef = ACTIONS[action.actionType];
+    if (outcome.success && actionDef.onSuccess) {
+      actionDef.onSuccess(action.args, outcome.isCritical);
+    }
+    if (!outcome.success && actionDef.onFailure) {
+      actionDef.onFailure(action.args, outcome.isCritical);
     }
   }
 
@@ -186,7 +187,7 @@
       {/if}
     </div>
 
-    {#if pendingActions.length > 0 || showRollResults}
+    {#if pendingActions.length > 0 || uiState.rollResults.length}
       <div class="actions-panel">
         {#if pendingActions.length > 0}
           <div class="actions-header">Suggested actions</div>
@@ -204,7 +205,7 @@
           </div>
         {/if}
 
-        {#if showRollResults && uiState.rollResults.length > 0}
+        {#if uiState.rollResults.length && uiState.rollResults.length > 0}
           <div class="roll-results">
             {#each uiState.rollResults as result}
               <div class="roll-result">
@@ -425,12 +426,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-  }
-
-  .roll-results {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .roll-results-header {

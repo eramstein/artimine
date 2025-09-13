@@ -3,11 +3,12 @@ import type { ActionTypeDefinition } from '@/lib/_model/model-game';
 import { gs } from '../_state/main.svelte';
 import { initTrade, startGame } from '../_state/state-ui.svelte';
 import { recordActionInChat } from '../llm/action';
-import { scheduleActivityAction } from './actions/index';
+import { generalChallengeAction, scheduleActivityAction } from './actions/index';
 import { moveCharacters } from './move';
 
 export const ACTIONS: Record<string, ActionTypeDefinition> = {
   [ActionType.ScheduleActivity]: scheduleActivityAction,
+  [ActionType.GeneralChallenge]: generalChallengeAction,
   [ActionType.GoTo]: {
     onSuccess: ({ people, destination }: { people: string[]; destination: string }) => {
       const peopleNpcs = people
@@ -64,7 +65,6 @@ export const ACTIONS: Record<string, ActionTypeDefinition> = {
     },
   },
   [ActionType.None]: {
-    onSuccess: () => {},
     checkSuccess: () => ({
       success: true,
       isCritical: false,

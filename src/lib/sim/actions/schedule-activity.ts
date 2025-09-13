@@ -107,7 +107,7 @@ function rollCheckSuccess(
   return {
     success:
       acceptedCount === people.length || (people.length > 3 && acceptedCount >= people.length - 1),
-    isCritical: isCritical,
+    isCritical,
     descriptionSuccess: `${people.join(', ')} agreed to ${activityType} at ${destination} at ${time ?? defaultTime} on ${day ?? defaultDay}`,
     descriptionFailure: `${people.join(', ')} did NOT agree to ${activityType} at ${destination} at ${time ?? defaultTime} on ${day ?? defaultDay}`,
   };
