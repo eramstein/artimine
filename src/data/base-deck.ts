@@ -97,7 +97,7 @@ export const BASE_DECK: Deck = {
       count: 1,
     },
   ],
-  lands: ['island', 'city', 'mountain', 'forest'],
+  lands: ['market', 'city', 'mountain', 'forest'],
 };
 
 export const BASE_DECK_ITALIA: Deck = {

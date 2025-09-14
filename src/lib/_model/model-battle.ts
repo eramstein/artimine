@@ -58,6 +58,7 @@ export interface SpellCardTemplate extends BaseCardTemplate {
 
 export interface LandTemplate extends BaseCardTemplate {
   health: number;
+  abilities?: Ability[];
 }
 
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate | LandTemplate;

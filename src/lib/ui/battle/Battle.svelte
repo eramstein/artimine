@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { isLandCard } from '@lib/_model/type-lookup-battle';
   import { bs } from '@lib/_state';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { getTableImagePath } from '@lib/_utils/asset-paths';
   import { nextTurn } from '@lib/battle/turn';
   import CardFull from '../cards/CardFull.svelte';
-  import LandFull from '../cards/LandFull.svelte';
   import Board from './Board.svelte';
   import DeckModal from './DeckModal.svelte';
   import GameWonModal from './GameWonModal.svelte';
@@ -51,15 +49,11 @@
 <GraveyardModal />
 <DeckModal />
 
-<!-- CardFull/LandFull overlay -->
+<!-- CardFull overlay -->
 {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
   <div class="card-full-overlay" onclick={() => (uiState.cardFullOverlay.visible = false)}>
     <div class="card-full-container" onclick={(e) => e.stopPropagation()}>
-      {#if isLandCard(uiState.cardFullOverlay.card)}
-        <LandFull land={uiState.cardFullOverlay.card} />
-      {:else}
-        <CardFull card={uiState.cardFullOverlay.card} />
-      {/if}
+      <CardFull card={uiState.cardFullOverlay.card} />
       <button class="close-button" onclick={() => (uiState.cardFullOverlay.visible = false)}
         >×</button
       >

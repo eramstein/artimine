@@ -4101,6 +4101,24 @@
     "cost": 0,
     "type": "land",
     "rarity": "common",
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "drawCard",
+              "args": {
+                "count": 1
+              }
+            }
+          }
+        ],
+        "exhausts": true
+      }
+    ],
     "cardSet": "alpha"
   },
   {

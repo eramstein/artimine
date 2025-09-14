@@ -20,20 +20,30 @@ import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
 import { playSpell } from '@/lib/battle/spell';
 import { getEligibleTargets } from '@/lib/battle/target';
 
-export function activateAbility(unit: UnitDeployed, ability: Ability) {
-  if (isActivityPayable(unit, ability) === false) {
+export function activateAbility(source: UnitDeployed | Land, ability: Ability) {
+  if (isActivityPayable(source, ability) === false) {
     return;
   }
   const ui = uiState.battle;
   if (
     ui.abilityPending &&
-    ui.abilityPending.unit.instanceId === unit.instanceId &&
+    ((ui.abilityPending.unit && ui.abilityPending.unit.instanceId === source.instanceId) ||
+      (ui.abilityPending.land && ui.abilityPending.land.instanceId === source.instanceId)) &&
     ui.abilityPending.ability === ability
   ) {
     clearUiState();
     return;
   }
-  ui.abilityPending = { unit, ability };
+
+  // Set the appropriate source type
+  if ('position' in source) {
+    // It's a UnitDeployed
+    ui.abilityPending = { unit: source as UnitDeployed, ability };
+  } else {
+    // It's a Land
+    ui.abilityPending = { land: source as Land, ability };
+  }
+
   ui.currentEffectIndex = 0;
   ui.currentTargetIndex = 0;
   ui.selectedTargets = [];
@@ -43,17 +53,17 @@ export function activateAbility(unit: UnitDeployed, ability: Ability) {
     const firstEffect = actions[0];
     if (firstEffect.targets && firstEffect.targets.length > 0) {
       ui.targetBeingSelected = firstEffect.targets[0];
-      if (!highlightEligibleTargets(getEligibleTargets(unit, firstEffect.targets[0]))) {
+      if (!highlightEligibleTargets(getEligibleTargets(source, firstEffect.targets[0]))) {
         clearUiState();
       }
     } else {
       ui.targetBeingSelected = null;
-      playAbility(unit, ability, []);
+      playAbility(source, ability, []);
       clearUiState();
     }
   } else {
     ui.targetBeingSelected = null;
-    playAbility(unit, ability, []);
+    playAbility(source, ability, []);
     clearUiState();
   }
 }
@@ -226,7 +236,10 @@ function advanceTargetStep() {
   if (actions.length === 0) {
     // No actions, play immediately
     if (ui.abilityPending) {
-      playAbility(ui.abilityPending.unit, ui.abilityPending.ability, []);
+      const source = ui.abilityPending.unit || ui.abilityPending.land;
+      if (source) {
+        playAbility(source, ui.abilityPending.ability, []);
+      }
     } else if (ui.spellPending) {
       playSpell(ui.spellPending, []);
     } else if (ui.triggeredAbilityPending) {
@@ -249,9 +262,12 @@ function advanceTargetStep() {
     ui.targetBeingSelected = targets[ui.currentTargetIndex];
     let hasEligibleTargets = false;
     if (ui.abilityPending) {
-      hasEligibleTargets = highlightEligibleTargets(
-        getEligibleTargets(ui.abilityPending.unit, targets[ui.currentTargetIndex])
-      );
+      const source = ui.abilityPending.unit || ui.abilityPending.land;
+      if (source) {
+        hasEligibleTargets = highlightEligibleTargets(
+          getEligibleTargets(source, targets[ui.currentTargetIndex])
+        );
+      }
     } else if (ui.spellPending) {
       hasEligibleTargets = highlightEligibleTargets(
         getEligibleSpellTargetsForIndex(
@@ -282,9 +298,12 @@ function advanceTargetStep() {
         ui.targetBeingSelected = nextEffect.targets[0];
         let hasEligibleTargets = false;
         if (ui.abilityPending) {
-          hasEligibleTargets = highlightEligibleTargets(
-            getEligibleTargets(ui.abilityPending.unit, nextEffect.targets[0])
-          );
+          const source = ui.abilityPending.unit || ui.abilityPending.land;
+          if (source) {
+            hasEligibleTargets = highlightEligibleTargets(
+              getEligibleTargets(source, nextEffect.targets[0])
+            );
+          }
         } else if (ui.spellPending) {
           hasEligibleTargets = highlightEligibleTargets(
             getEligibleSpellTargetsForIndex(ui.spellPending, ui.currentEffectIndex, 0)
@@ -307,7 +326,10 @@ function advanceTargetStep() {
     } else {
       // All actions completed, play
       if (ui.abilityPending) {
-        playAbility(ui.abilityPending.unit, ui.abilityPending.ability, ui.selectedTargets);
+        const source = ui.abilityPending.unit || ui.abilityPending.land;
+        if (source) {
+          playAbility(source, ui.abilityPending.ability, ui.selectedTargets);
+        }
       } else if (ui.spellPending) {
         playSpell(ui.spellPending, ui.selectedTargets);
       } else if (ui.triggeredAbilityPending) {

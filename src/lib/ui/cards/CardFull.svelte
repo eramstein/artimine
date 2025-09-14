@@ -1,17 +1,17 @@
 <script lang="ts">
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
   import { CardColor, CardType, UnitType } from '../../_model/enums-battle';
-  import type { CardTemplate, SpellCard } from '../../_model/model-battle';
+  import type { CardTemplate, Land, SpellCard } from '../../_model/model-battle';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
 
-  let { card }: { card: CardTemplate } = $props();
+  let { card }: { card: CardTemplate | Land } = $props();
 
   // Create the background image path using the card id
   let cardImagePath = $derived(getCardImagePath(card.id));
 
   // Check if card is a unit card (works with CardTemplate type)
-  function isUnitCard(card: CardTemplate): card is CardTemplate & {
+  function isUnitCard(card: CardTemplate | Land): card is CardTemplate & {
     power: number;
     maxHealth: number;
     keywords?: any;
@@ -22,8 +22,16 @@
   }
 
   // Check if card is a spell card
-  function isSpellCard(card: CardTemplate): card is SpellCard {
+  function isSpellCard(card: CardTemplate | Land): card is SpellCard {
     return card.type === CardType.Spell;
+  }
+
+  // Check if card is a land card
+  function isLandCard(card: CardTemplate | Land): card is (CardTemplate | Land) & {
+    health: number;
+    abilities?: any;
+  } {
+    return card.type === CardType.Land;
   }
 
   // Helper function to get color image path
@@ -128,9 +136,11 @@
       ? 'has-unit-types'
       : ''}"
   >
-    <div class="cost">
-      {card.cost}
-    </div>
+    {#if !isLandCard(card)}
+      <div class="cost">
+        {card.cost}
+      </div>
+    {/if}
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
@@ -179,11 +189,10 @@
       {/if}
     </div>
   </div>
-
   <!-- Abilities and Keywords section below the image -->
   <div class="details-section">
-    <!-- Abilities display - only for Unit cards with abilities -->
-    {#if isUnitCard(card) && card.abilities && card.abilities.length > 0}
+    <!-- Abilities display - only for Unit and Land cards with abilities -->
+    {#if (isUnitCard(card) || isLandCard(card)) && card.abilities && card.abilities.length > 0}
       {#each card.abilities as ability}
         <div class="ability-item">
           <div class="ability-header">

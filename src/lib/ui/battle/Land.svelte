@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cards, lands } from '@data/loader';
   import type { Land } from '@lib/_model';
   import { TargetType } from '@lib/_model';
   import { bs, uiState } from '@lib/_state';
@@ -6,7 +7,8 @@
   import { attackLand } from '@lib/battle/combat';
   import { isHumanPlayer, usePlayerColorAbility } from '@lib/battle/player';
   import { clearSelections, setUnitsTargets } from '@lib/ui/_helpers/selections';
-  import { targetLand } from '@lib/ui/_helpers/targetting';
+  import { activateAbility, targetLand } from '@lib/ui/_helpers/targetting';
+  import Abilities from './Abilities.svelte';
 
   let { land }: { land: Land } = $props();
 
@@ -37,6 +39,7 @@
 
   function handleLandClick() {
     const selectedUnit = uiState.battle.selectedUnit;
+    // case targetting land
     if (
       uiState.battle.targetBeingSelected &&
       uiState.battle.targetBeingSelected.type === TargetType.Land
@@ -44,6 +47,7 @@
       targetLand(land);
       return;
     }
+    // case attacking land
     if (selectedUnit && isValidTarget) {
       attackLand(selectedUnit, land);
       if (selectedUnit.keywords?.moveAndAttack && !selectedUnit.hasMoved) {
@@ -53,15 +57,27 @@
       }
       return;
     }
+    // case activating land
+    if (land.abilities?.length) {
+      activateAbility(land, land.abilities[0]);
+    }
+    // case using color ability
     if (land.colors[0] && isHumanPlayer(land.ownerPlayerId)) {
       usePlayerColorAbility(bs.players[land.ownerPlayerId], land.colors[0].color);
     }
   }
 
+  function getCardTemplate(cardTemplateId: string) {
+    return cards[cardTemplateId] || lands[cardTemplateId];
+  }
+
   function handleContextMenu(event: MouseEvent) {
     event.preventDefault();
-    uiState.cardFullOverlay.visible = true;
-    uiState.cardFullOverlay.card = land;
+    const cardTemplate = getCardTemplate(land.id);
+    if (cardTemplate) {
+      uiState.cardFullOverlay.visible = true;
+      uiState.cardFullOverlay.card = cardTemplate;
+    }
   }
 </script>
 
@@ -76,6 +92,12 @@
   <div class="health">
     {land.health}
   </div>
+
+  {#if land.abilities && land.abilities.length > 0}
+    <div class="abilities-container">
+      <Abilities abilities={land.abilities} />
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -134,5 +156,18 @@
       transform: scale(1);
       box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
     }
+  }
+
+  .abilities-container {
+    position: absolute;
+    top: 8px;
+    right: 4px;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .land:hover .abilities-container {
+    opacity: 1;
   }
 </style>

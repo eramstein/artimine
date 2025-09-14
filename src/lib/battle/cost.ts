@@ -1,4 +1,4 @@
-import type { Ability, Card, CardColor, UnitDeployed } from '../_model';
+import type { Ability, Card, CardColor, Land, UnitDeployed } from '../_model';
 import { bs } from '../_state';
 
 export function isPayable(card: Card) {
@@ -42,11 +42,11 @@ export function isPayableAfterColorIncrementation(card: Card): CardColor | boole
   return colorsToIncrement[0];
 }
 
-export function isActivityPayable(unit: UnitDeployed, ability: Ability) {
+export function isActivityPayable(source: UnitDeployed | Land, ability: Ability) {
   if (!ability.cost) {
     return true;
   }
-  const player = bs.players[unit.ownerPlayerId];
+  const player = bs.players[source.ownerPlayerId];
   if (player.mana < ability.cost) {
     return false;
   }

@@ -40,7 +40,7 @@
       isActivated: ability.trigger.type === TriggerType.Activated,
       ability: ability,
       isPending:
-        uiState.battle.abilityPending?.unit.instanceId === unit?.instanceId &&
+        uiState.battle.abilityPending?.unit?.instanceId === unit?.instanceId &&
         uiState.battle.abilityPending?.ability === ability,
       cost: ability.cost,
       exhausts: ability.exhausts,

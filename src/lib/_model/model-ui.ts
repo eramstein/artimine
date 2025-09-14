@@ -3,6 +3,7 @@ import type {
   Ability,
   CardTemplate,
   EffectTargets,
+  Land,
   SpellCard,
   TargetDefinition,
   UnitDeployed,
@@ -20,7 +21,7 @@ export type UiState = {
       cells?: Record<string, boolean>;
       cards?: Record<string, boolean>;
     } | null;
-    abilityPending: { unit: UnitDeployed; ability: Ability } | null;
+    abilityPending: { unit?: UnitDeployed; land?: Land; ability: Ability } | null;
     spellPending: SpellCard | null;
     triggeredAbilityPending: { unit: UnitDeployed; ability: Ability; triggerParams: any } | null;
     selectedTargets: EffectTargets[][];

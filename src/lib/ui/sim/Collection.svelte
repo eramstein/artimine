@@ -1,6 +1,5 @@
 <script lang="ts">
   import { cards, lands } from '@/data/loader';
-  import { isLandCard } from '@/lib/_model/type-lookup-battle';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
@@ -12,7 +11,6 @@
   } from '@/lib/sim/decks';
   import CardCompact from '../cards/CardCompact.svelte';
   import CardFull from '../cards/CardFull.svelte';
-  import LandFull from '../cards/LandFull.svelte';
   import CollectionFilters from './CollectionFilters.svelte';
 
   const collection = $derived(gs.player.collection);
@@ -301,15 +299,11 @@
   {/if}
 </div>
 
-<!-- CardFull/LandFull overlay -->
+<!-- CardFull overlay -->
 {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
   <div class="card-full-overlay" onclick={() => (uiState.cardFullOverlay.visible = false)}>
     <div class="card-full-container" onclick={(e) => e.stopPropagation()}>
-      {#if isLandCard(uiState.cardFullOverlay.card)}
-        <LandFull land={uiState.cardFullOverlay.card} />
-      {:else}
-        <CardFull card={uiState.cardFullOverlay.card} />
-      {/if}
+      <CardFull card={uiState.cardFullOverlay.card} />
     </div>
   </div>
 {/if}

@@ -50,7 +50,7 @@ export function areAllCellsValid(tentativeTargets: Position[], validTargets: Pos
 }
 
 export function checkTargets(
-  card: UnitDeployed | SpellCard,
+  source: UnitDeployed | SpellCard | Land,
   targetDefinition: TargetDefinition,
   tentativeTargets: EffectTargets
 ): boolean {
@@ -61,7 +61,7 @@ export function checkTargets(
     console.log('WRONG NUMBER OF TARGETS', targetDefinition, tentativeTargets);
     return false;
   }
-  const eligibleTargets = getEligibleTargets(card, targetDefinition);
+  const eligibleTargets = getEligibleTargets(source, targetDefinition);
   // target has an instanceId
   if (
     targetDefinition.type.includes('unit') ||
@@ -94,24 +94,24 @@ export function checkTargets(
 }
 
 export function getEligibleTargets(
-  card: UnitDeployed | SpellCard,
+  source: UnitDeployed | SpellCard | Land,
   target: TargetDefinition
 ): EffectTargets {
   if (!target) {
     return [];
   }
-  if (isUnitCard(card) && target.type === TargetType.Self) {
-    return [card];
+  if (isUnitCard(source) && target.type === TargetType.Self) {
+    return [source];
   }
   let eligibleTargets: EffectTargets = [];
   if (target.type === TargetType.Units) {
     eligibleTargets = bs.units;
   }
   if (target.type === TargetType.Ennemies) {
-    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId !== card.ownerPlayerId);
+    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId !== source.ownerPlayerId);
   }
   if (target.type === TargetType.Allies) {
-    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId === card.ownerPlayerId);
+    eligibleTargets = bs.units.filter((u) => u.ownerPlayerId === source.ownerPlayerId);
   }
   if (target.type === TargetType.Cell) {
     eligibleTargets = getAllPositions();
