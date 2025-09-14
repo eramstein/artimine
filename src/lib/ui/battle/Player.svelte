@@ -85,6 +85,10 @@
     <Deck {player} />
     <Graveyard {player} />
   </div>
+
+  <div class="hand-count">
+    Hand: {player.hand?.length || 0}
+  </div>
 </div>
 
 <style>
@@ -264,5 +268,16 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
+  }
+
+  .hand-count {
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
   }
 </style>

@@ -4,6 +4,7 @@
   import { getTableImagePath } from '@lib/_utils/asset-paths';
   import { nextTurn } from '@lib/battle/turn';
   import CardFull from '../cards/CardFull.svelte';
+  import Chat from '../sim/Chat.svelte';
   import Board from './Board.svelte';
   import DeckModal from './DeckModal.svelte';
   import GameWonModal from './GameWonModal.svelte';
@@ -18,11 +19,6 @@
 </script>
 
 <div class="battle" style="background-image: url('{getTableImagePath()}');">
-  <div class="top-section">
-    <Player player={bs.players[0]} />
-    <Board />
-    <Player player={bs.players[1]} />
-  </div>
   <div class="turn-section">
     <button
       class="end-turn-btn"
@@ -34,13 +30,22 @@
       <img src="/assets/images/pass_turn.png" alt="End Turn" />
     </button>
   </div>
+  <div class="top-section">
+    <Player player={bs.players[0]} />
+    <Board />
+    <Player player={bs.players[1]} />
+  </div>
   <div class="bottom-section">
     <Hand player={bs.players[0]} />
-    <Hand player={bs.players[1]} />
   </div>
 </div>
 
 <TargetPrompt />
+
+<!-- Chat component positioned in bottom right -->
+<div class="battle-chat-container">
+  <Chat />
+</div>
 
 {#if gameWon && winningPlayer}
   <GameWonModal {winningPlayer} />
@@ -84,7 +89,7 @@
 
   .turn-section {
     position: absolute;
-    bottom: 20px;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -180,5 +185,15 @@
   .close-button:hover {
     background: #555;
     transform: scale(1.1);
+  }
+
+  .battle-chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 820px;
+    height: 430px;
+    z-index: 1000;
+    pointer-events: auto;
   }
 </style>
