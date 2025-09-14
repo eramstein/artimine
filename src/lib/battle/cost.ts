@@ -25,21 +25,24 @@ export function isPayableAfterColorIncrementation(card: Card): CardColor | boole
     return false;
   }
   let colorsAlreadyMet = 0;
-  let colorsToIncrement: CardColor[] = [];
+  let colorsOutOfReach = 0;
+  let colorsInReachAfterIncrement: CardColor[] = [];
   card.colors.forEach((color) => {
     if ((player.colors[color.color] || 0) >= color.count) {
       colorsAlreadyMet++;
     } else if (player.colors[color.color] === color.count - 1) {
-      colorsToIncrement.push(color.color);
+      colorsInReachAfterIncrement.push(color.color);
+    } else if ((player.colors[color.color] || 0) < color.count - 1) {
+      colorsOutOfReach++;
     }
   });
   if (colorsAlreadyMet === card.colors.length) {
     return true;
   }
-  if (colorsToIncrement.length > 1 || colorsToIncrement.length === 0) {
+  if (colorsInReachAfterIncrement.length > 1 || colorsOutOfReach > 0) {
     return false;
   }
-  return colorsToIncrement[0];
+  return colorsInReachAfterIncrement[0];
 }
 
 export function isActivityPayable(source: UnitDeployed | Land, ability: Ability) {

@@ -28,7 +28,12 @@ export function scheduleActivity(
   place: Place
 ) {
   const dayPeriodIndex = dayPeriodIndexes[dayPeriod];
-  gs.activities[day][dayPeriodIndex] = {
+  const dayIndex = getScheduleIndexOfDay(day);
+  if (!gs.activities[dayIndex]) {
+    console.log('day not found, adding planning', day);
+    fillDefaultActivities(day);
+  }
+  gs.activities[dayIndex][dayPeriodIndex] = {
     activity: activity,
     day: day,
     dayPeriod: dayPeriod,
@@ -36,7 +41,7 @@ export function scheduleActivity(
   };
 }
 
-export async function skipTo(day: number, dayPeriod: DayPeriod) {
+export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   const activityPlan = gs.activities[day][dayPeriodIndexes[dayPeriod]];
   await endPlayerChat();
   // auto-resolve activities
@@ -48,11 +53,14 @@ export async function skipTo(day: number, dayPeriod: DayPeriod) {
         if (activityPlan.day === day && activityPlan.dayPeriod === dayPeriod) return;
       });
     });
+  // clean up passed schedule
+  gs.activities = gs.activities.slice(day);
   // fill schedule for next days
   gs.time.day += day;
   gs.time.period = dayPeriod;
-  gs.activities = gs.activities.slice(day);
-  fillDefaultActivities();
+  console.log('passTimeUntil day', gs.time.day, JSON.stringify(gs.activities, null, 2));
+
+  fillDefaultActivities(gs.time.day + 14);
   // update activity, time and schedule
   if (!activityPlan) return;
   gs.activity = activityPlan.activity;
@@ -62,18 +70,19 @@ export async function skipTo(day: number, dayPeriod: DayPeriod) {
   });
 }
 
-export function fillDefaultActivities() {
+export function fillDefaultActivities(untilDay: number) {
+  const fromDay = getLastScheduledDay() + 1;
+  const toDay = untilDay || fromDay + 7;
   const goblinCaveIndex = gs.places.find((p) => p.key === 'goblin_counter')!.index;
   const bedroomIndex = gs.places.find((p) => p.key === 'bedroom')!.index;
   const uniCourtyardIndex = gs.places.find((p) => p.key === 'uni_courtyard')!.index;
   let weekDay = 0;
-  for (let day = 0; day < 7; day++) {
-    weekDay = (gs.time.day + day) % 7;
-    if (!gs.activities[day]) {
-      gs.activities[day] = [];
-    }
+  console.log('fillDefaultActivities', fromDay, toDay);
+  for (let day = fromDay; day < toDay; day++) {
+    weekDay = day % 7;
+    console.log('day', day, dayNames[weekDay]);
+    gs.activities.push([]);
     for (let dayPeriod = 0; dayPeriod < 3; dayPeriod++) {
-      if (gs.activities[day][dayPeriod]) continue;
       let activityType: ActivityType = ActivityType.Chill;
       let participants: string[] = [];
       let place: number = bedroomIndex;
@@ -94,7 +103,7 @@ export function fillDefaultActivities() {
         participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
         place = goblinCaveIndex;
       }
-      gs.activities[day][dayPeriod] = {
+      gs.activities[gs.activities.length - 1][dayPeriod] = {
         activity: {
           activityType: activityType,
           participants: participants,
@@ -105,4 +114,13 @@ export function fillDefaultActivities() {
       };
     }
   }
+}
+
+function getLastScheduledDay() {
+  if (gs.activities.length === 0 || gs.activities[0].length === 0) return -1;
+  return gs.activities[gs.activities.length - 1][0].day;
+}
+
+function getScheduleIndexOfDay(day: number) {
+  return gs.activities.findIndex((d) => d[0].day === day);
 }

@@ -73,5 +73,5 @@ export const initSim = async () => {
     activityType: ActivityType.Gaming,
     participants: [gs.player.key, ...othersAtCave.map((c) => c.key)],
   };
-  fillDefaultActivities();
+  fillDefaultActivities(8);
 };

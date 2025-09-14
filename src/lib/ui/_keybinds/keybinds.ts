@@ -1,6 +1,6 @@
 import { PLACES } from '@/data/places/places';
 import { UiView } from '@/lib/_model';
-import { initBattle } from '@/lib/battle';
+import { initBattle, nextTurn } from '@/lib/battle';
 import {
   getCurrentBattleState,
   gs,
@@ -46,7 +46,9 @@ export function handleKeybinds(event: KeyboardEvent) {
     gs.places = PLACES;
   } else if (event.key === 'Escape') {
     event.preventDefault();
-    // Toggle navigation visibility
     uiState.navigationVisible = !uiState.navigationVisible;
+  } else if (event.key === ' ') {
+    event.preventDefault();
+    nextTurn();
   }
 }

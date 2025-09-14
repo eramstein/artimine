@@ -3,7 +3,7 @@
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getPlaceImagePath } from '@/lib/_utils/asset-paths';
-  import { dayNames, skipTo } from '@/lib/sim/schedule';
+  import { dayNames, passTimeUntil } from '@/lib/sim/schedule';
 
   const periods = [DayPeriod.Morning, DayPeriod.Afternoon, DayPeriod.Evening];
 
@@ -64,7 +64,7 @@
 
     isSkipping = false;
     // Perform actual state change
-    skipTo(targetDayOffset, periods[targetPeriodIndex]);
+    passTimeUntil(targetDayOffset, periods[targetPeriodIndex]);
     uiState.currentView = UiView.CurrentPlace;
   }
 </script>
