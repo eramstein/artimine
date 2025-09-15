@@ -1,19 +1,11 @@
-import type { BattleState, UnitCard, UnitDeployed } from '@/lib/_model';
+import type { UnitCard, UnitDeployed } from '@/lib/_model';
 
 export interface AiPersona {
-  selectActionType(state: BattleState, possibleActions: PossibleActions): ActionType | null;
-  deploy(state: BattleState, deployableUnits: UnitCard[]): void;
-  move(state: BattleState, unitsWhoCanMove: UnitDeployed[]): void;
-  attack(state: BattleState, unitsWhoCanAttack: UnitDeployed[]): void;
-}
-
-export enum ActionType {
-  Deploy = 'Deploy',
-  Attack = 'Attack',
-  Move = 'Move',
+  executeAction(possibleActions: PossibleActions): void;
 }
 
 export enum PersonaType {
+  Normal = 'Normal',
   Aggro = 'Aggro',
 }
 

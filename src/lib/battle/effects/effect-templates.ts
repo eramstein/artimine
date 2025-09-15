@@ -292,7 +292,9 @@ export const DataEffectTemplates: Record<
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
       unitsInRange.forEach((u) => {
-        applyUnitStatus(u, statusType, duration);
+        if (u.statuses) {
+          applyUnitStatus(u, statusType, duration);
+        }
       });
     },
     label: (targets: TargetDefinition[]) => {

@@ -1,42 +1,33 @@
-import { type BattleState, type UnitDeployed, type UnitCard } from '@/lib/_model';
-import { getEmptyCells } from '../../boards';
-import { deployUnit } from '../../unit';
-import { ActionType, type AiPersona } from '../model';
 import { getRandomFromArray } from '../../../_utils/random';
-import { moveUnit } from '../../move';
-import type { PossibleActions } from '../model';
+import { getEmptyCells } from '../../boards';
 import { autoAttack } from '../../combat';
+import { moveUnit } from '../../move';
+import { deployUnit } from '../../unit';
+import type { PossibleActions } from '../model';
+import { type AiPersona } from '../model';
 
 export const AiPersonaAggro: AiPersona = {
-  selectActionType(state: BattleState, possibleActions: PossibleActions): ActionType | null {
-    const actionTypes = [];
+  executeAction(possibleActions: PossibleActions) {
     if (possibleActions.unitsWhoCanAttack?.length > 0) {
-      actionTypes.push(ActionType.Attack);
-      return getRandomFromArray(actionTypes);
+      const attacker = getRandomFromArray(possibleActions.unitsWhoCanAttack);
+      autoAttack(attacker);
+      return;
     }
     if (possibleActions.deployableUnits?.length > 0) {
-      actionTypes.push(ActionType.Deploy);
-      return getRandomFromArray(actionTypes);
+      const possiblePositions = getEmptyCells(false);
+      if (possiblePositions.length === 0) return;
+      deployUnit(
+        getRandomFromArray(possibleActions.deployableUnits),
+        getRandomFromArray(possiblePositions)
+      );
+      return;
     }
     if (possibleActions.unitsWhoCanMove?.length > 0) {
-      actionTypes.push(ActionType.Move);
-      return getRandomFromArray(actionTypes);
+      const mover = getRandomFromArray(possibleActions.unitsWhoCanMove);
+      const possiblePositions = getEmptyCells(false);
+      if (possiblePositions.length === 0) return;
+      moveUnit(mover, getRandomFromArray(possiblePositions));
     }
-    return null;
-  },
-  deploy(state: BattleState, deployableUnits: UnitCard[]) {
-    const possiblePositions = getEmptyCells(false);
-    if (possiblePositions.length === 0) return;
-    deployUnit(getRandomFromArray(deployableUnits), getRandomFromArray(possiblePositions));
-  },
-  move(state: BattleState, unitsWhoCanMove: UnitDeployed[]) {
-    const mover = getRandomFromArray(unitsWhoCanMove);
-    const possiblePositions = getEmptyCells(false);
-    if (possiblePositions.length === 0) return;
-    moveUnit(mover, getRandomFromArray(possiblePositions));
-  },
-  attack(state: BattleState, unitsWhoCanAttack: UnitDeployed[]) {
-    const attacker = getRandomFromArray(unitsWhoCanAttack);
-    autoAttack(attacker);
+    return;
   },
 };

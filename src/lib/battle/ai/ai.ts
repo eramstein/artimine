@@ -9,10 +9,11 @@ import { usePlayerColorAbility } from '../player';
 import { nextTurn } from '../turn';
 import { getColorToIncrement, incrementRandomColor } from './colors';
 import { usePlayerLandAbility } from './lands';
-import { ActionType, PersonaType, type AiPersona, type PossibleActions } from './model';
+import { PersonaType, type AiPersona, type PossibleActions } from './model';
 import { AiPersonaAggro } from './personas/aggro';
+import { AiPersonaNormal } from './personas/normal';
 
-const AI_PERSONA = PersonaType.Aggro;
+const AI_PERSONA: PersonaType = PersonaType.Normal;
 const MAX_ACTIONS_SAFETY_NET = 100;
 let actionsPlayedthisTurn = 0;
 
@@ -24,8 +25,9 @@ export function playAiTurn() {
     case PersonaType.Aggro:
       persona = AiPersonaAggro;
       break;
+    case PersonaType.Normal:
     default:
-      persona = AiPersonaAggro;
+      persona = AiPersonaNormal;
       break;
   }
 
@@ -49,19 +51,7 @@ function loopAiActions(persona: AiPersona) {
   if (possibleActions.playerAbility) {
     usePlayerAbility(persona, player);
   } else {
-    const actionType = persona.selectActionType(bs, possibleActions);
-
-    switch (actionType) {
-      case ActionType.Deploy:
-        persona.deploy(bs, possibleActions.deployableUnits);
-        break;
-      case ActionType.Move:
-        persona.move(bs, possibleActions.unitsWhoCanMove);
-        break;
-      case ActionType.Attack:
-        persona.attack(bs, possibleActions.unitsWhoCanAttack);
-        break;
-    }
+    persona.executeAction(possibleActions);
   }
 
   setTimeout(() => {

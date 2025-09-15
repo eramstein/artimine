@@ -146,6 +146,12 @@ export function getEnnemyUnits(playerId: number): UnitDeployed[] {
   return bs.units.filter((u) => u.ownerPlayerId !== playerId);
 }
 
+export function getEnnemyUnitsInRow(unit: UnitDeployed): UnitDeployed[] {
+  return bs.units.filter(
+    (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+  );
+}
+
 export function applyUnitStatus(unit: UnitDeployed, status: StatusType, duration: number) {
   if (!unit.statuses[status]) {
     unit.statuses[status] = 0;
