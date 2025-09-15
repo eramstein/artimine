@@ -1,6 +1,7 @@
-import type { Card } from '../_model';
-import { bs } from '../_state';
+import type { Card, Land } from '../_model';
+import { bs, gs } from '../_state';
 import { sendBattleEvent } from '../llm/battle-events';
+import { isHumanPlayer } from './player';
 
 export function onLargeCardPlayed(card: Card) {
   sendBattleEvent(
@@ -8,7 +9,16 @@ export function onLargeCardPlayed(card: Card) {
   );
 }
 
+export function onLandDestroyed(land: Land) {
+  const playerName = isHumanPlayer(land.ownerPlayerId)
+    ? gs.player.name
+    : gs.chat?.characters[0]?.name;
+  sendBattleEvent(`${playerName} land ${land.name} was destroyed. Their hero is now exposed!`);
+}
+
 export function onBattleEnd() {
-  const winningPlayer = bs.players[bs.playerIdWon!];
-  sendBattleEvent(`${winningPlayer.name} has won the battle!`);
+  const winningPlayer = isHumanPlayer(bs.playerIdWon!)
+    ? gs.player.name
+    : gs.chat?.characters[0]?.name;
+  sendBattleEvent(`${winningPlayer} has won the game!`);
 }

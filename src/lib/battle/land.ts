@@ -1,5 +1,6 @@
 import type { Land, Player } from '../_model';
 import { bs } from '../_state';
+import { onLandDestroyed } from './chat';
 
 // lands open a color by setting it to 0, the player then has to increase it otherwise
 export function initColorsFromLands(player: Player) {
@@ -21,6 +22,7 @@ export function destroyLand(land: Land) {
   bs.players[land.ownerPlayerId].lands = bs.players[land.ownerPlayerId].lands.filter(
     (l) => l.instanceId !== land.instanceId
   );
+  onLandDestroyed(land);
 }
 
 export function getAllLands(): Land[] {

@@ -2,7 +2,7 @@
   "id": "market",
   "name": "Market",
   "colors": [],
-  "health": 20,
+  "health": 10,
   "cost": 0,
   "type": "land",
   "rarity": "common",
@@ -21,6 +21,7 @@
           }
         }
       ],
+      "cost": 1,
       "exhausts": true
     }
   ]

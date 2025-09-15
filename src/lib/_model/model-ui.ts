@@ -38,6 +38,7 @@ export type UiState = {
       visible: boolean;
       playerId: number | null;
     };
+    displayChat: boolean;
   };
   collection: {
     editedDeckKey: string | null;

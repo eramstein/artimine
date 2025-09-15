@@ -7,24 +7,31 @@
   let { player }: { player: Player } = $props();
 
   // Track previous hand size to detect new cards
-  let enableAnimations = $state(false);
-  let previousHandSize = $state(0);
+  let previousHandIds = $state<string[]>([]);
   let newCardIds = $state<string[]>([]);
+
+  function arraysShallowEqual(a: string[], b: string[]) {
+    if (a === b) return true;
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
 
   // Effect to detect new cards when hand changes
   $effect(() => {
-    if (enableAnimations && player.hand.length > previousHandSize) {
-      // New card was added - find the newest card
-      // For simplicity, assume the last card is new
-      const newCard = player.hand[player.hand.length - 1];
-      newCardIds = [...newCardIds, newCard.instanceId];
-      // Remove the highlight after animation
+    const currentHandIds = player.hand.map((c) => c.instanceId);
+    const addedIds = currentHandIds.filter((id) => !previousHandIds.includes(id));
+    if (addedIds.length > 0) {
+      newCardIds = [...new Set([...newCardIds, ...addedIds])];
       setTimeout(() => {
-        newCardIds = newCardIds.filter((id) => id !== newCard.instanceId);
+        newCardIds = newCardIds.filter((id) => !addedIds.includes(id));
       }, 750);
     }
-    enableAnimations = true;
-    previousHandSize = player.hand.length;
+    if (!arraysShallowEqual(previousHandIds, currentHandIds)) {
+      previousHandIds = currentHandIds;
+    }
   });
 
   // Calculate overlap based on number of cards

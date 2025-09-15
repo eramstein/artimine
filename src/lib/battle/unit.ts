@@ -24,7 +24,7 @@ export function deployUnit(unit: UnitCard, position: Position) {
   // Trigger activated abilities
   onDeployUnit(bs.units[bs.units.length - 1]);
   // Hint to LLM that a unit was deployed
-  if (unit.cost >= 1) {
+  if (unit.cost >= 7) {
     onLargeCardPlayed(unit);
   }
 }

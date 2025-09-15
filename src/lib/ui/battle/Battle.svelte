@@ -37,15 +37,30 @@
   </div>
   <div class="bottom-section">
     <Hand player={bs.players[0]} />
+    {#if !uiState.battle.displayChat}
+      <Hand player={bs.players[1]} />
+    {/if}
   </div>
 </div>
 
 <TargetPrompt />
 
 <!-- Chat component positioned in bottom right -->
-<div class="battle-chat-container">
-  <Chat />
-</div>
+{#if uiState.battle.displayChat}
+  <div class="battle-chat-container">
+    <Chat />
+  </div>
+{/if}
+
+<!-- Floating chat bubble toggle -->
+<button
+  class="chat-fab"
+  onclick={() => (uiState.battle.displayChat = !uiState.battle.displayChat)}
+  aria-label={uiState.battle.displayChat ? 'Hide Chat' : 'Show Chat'}
+  title={uiState.battle.displayChat ? 'Hide Chat' : 'Show Chat'}
+>
+  💬
+</button>
 
 {#if gameWon && winningPlayer}
   <GameWonModal {winningPlayer} />
@@ -130,6 +145,32 @@
       0 4px 15px rgba(0, 0, 0, 0.3),
       0 2px 8px rgba(0, 0, 0, 0.2),
       inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .chat-fab {
+    position: fixed;
+    top: 8%;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-golden);
+    background: rgba(20, 20, 20, 0.9);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    transition:
+      transform 0.15s ease,
+      background 0.2s ease;
+  }
+
+  .chat-fab:hover {
+    background: rgba(40, 40, 40, 0.95);
+    transform: scale(1.06);
   }
 
   .bottom-section {

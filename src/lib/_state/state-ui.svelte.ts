@@ -27,6 +27,7 @@ export const uiState: UiState = $state({
       playerId: null,
     },
     currentEffectIndex: 0,
+    displayChat: false,
   },
   collection: {
     editedDeckKey: null,

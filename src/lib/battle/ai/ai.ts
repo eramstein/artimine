@@ -7,6 +7,8 @@ import { isPayable } from '../cost';
 import { canMove } from '../move';
 import { usePlayerColorAbility } from '../player';
 import { nextTurn } from '../turn';
+import { getColorToIncrement, incrementRandomColor } from './colors';
+import { usePlayerLandAbility } from './lands';
 import { ActionType, PersonaType, type AiPersona, type PossibleActions } from './model';
 import { AiPersonaAggro } from './personas/aggro';
 
@@ -68,25 +70,14 @@ function loopAiActions(persona: AiPersona) {
 }
 
 function usePlayerAbility(persona: AiPersona, player: Player) {
-  // Get all available colors (keys in player.colors with a defined value)
-  const availableColors = Object.entries(player.colors)
-    .filter(([color, value]) => value !== undefined)
-    .map(([color, value]) => ({ color: color as any, value: value as number }));
-
-  if (availableColors.length === 0) {
-    player.abilityUsed = true;
-    return;
-  }
-
-  // Find the color with the lowest value
-  const minColor = availableColors.reduce((min, curr) => (curr.value < min.value ? curr : min));
-
-  // increment colors until 5 in each ,then draw
-  // TODO: only increment based on AI deck's needs
-  if (minColor.value < 5) {
-    usePlayerColorAbility(player, minColor.color);
+  const neededColor = getColorToIncrement(player);
+  if (neededColor) {
+    usePlayerColorAbility(player, neededColor);
   } else {
-    player.abilityUsed = true;
+    const playedAbility = usePlayerLandAbility(player);
+    if (!playedAbility) {
+      incrementRandomColor(player);
+    }
   }
 }
 

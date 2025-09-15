@@ -58,8 +58,6 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   // fill schedule for next days
   gs.time.day += day;
   gs.time.period = dayPeriod;
-  console.log('passTimeUntil day', gs.time.day, JSON.stringify(gs.activities, null, 2));
-
   fillDefaultActivities(gs.time.day + 14);
   // update activity, time and schedule
   if (!activityPlan) return;
@@ -77,10 +75,8 @@ export function fillDefaultActivities(untilDay: number) {
   const bedroomIndex = gs.places.find((p) => p.key === 'bedroom')!.index;
   const uniCourtyardIndex = gs.places.find((p) => p.key === 'uni_courtyard')!.index;
   let weekDay = 0;
-  console.log('fillDefaultActivities', fromDay, toDay);
   for (let day = fromDay; day < toDay; day++) {
     weekDay = day % 7;
-    console.log('day', day, dayNames[weekDay]);
     gs.activities.push([]);
     for (let dayPeriod = 0; dayPeriod < 3; dayPeriod++) {
       let activityType: ActivityType = ActivityType.Chill;

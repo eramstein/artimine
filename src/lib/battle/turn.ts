@@ -1,12 +1,12 @@
 import type { Player, UnitDeployed } from '../_model';
-import { bs } from '../_state';
+import { bs, saveStateToLocalStorage } from '../_state';
 import { clearSelections } from '../ui/_helpers/selections';
 import { playAiTurn } from './ai/ai';
-import { drawCard } from './deck';
-import { damageUnit, healUnit } from './unit';
-import { onTurnStart } from './listeners';
 import { autoAttack } from './combat';
+import { drawCard } from './deck';
+import { onTurnStart } from './listeners';
 import { removeTemporaryEffects } from './temporary-effects';
+import { damageUnit, healUnit } from './unit';
 
 export function nextTurn() {
   console.log('next turn', bs.turn, bs.isPlayersTurn);
@@ -22,6 +22,7 @@ export function nextTurn() {
   if (!bs.isPlayersTurn) {
     playAiTurn();
   }
+  saveStateToLocalStorage();
 }
 
 function initPlayerTurn(player: Player) {
