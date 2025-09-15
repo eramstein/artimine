@@ -15,6 +15,24 @@ export function getOpponentPowerPerRow(): Record<number, number> {
   return powerPerRow;
 }
 
+// this one takes poison and cleave into account
+export function getOpponentUnitDamagePerRow(): Record<number, number> {
+  const units = bs.units.filter((u) => isHumanPlayer(u.ownerPlayerId));
+  const powerPerRow = units.reduce(
+    (acc, u) => {
+      const damage = u.power + (u.keywords?.poisonous || 0);
+      acc[u.position.row] = (acc[u.position.row] || 0) + damage;
+      if (u.keywords?.cleave) {
+        acc[u.position.row - 1] = (acc[u.position.row - 1] || 0) + damage;
+        acc[u.position.row + 1] = (acc[u.position.row + 1] || 0) + damage;
+      }
+      return acc;
+    },
+    {} as Record<number, number>
+  );
+  return powerPerRow;
+}
+
 export function getOpponentCountPerRow(): Record<number, number> {
   const units = bs.units.filter((u) => isHumanPlayer(u.ownerPlayerId));
   const countPerRow = units.reduce(

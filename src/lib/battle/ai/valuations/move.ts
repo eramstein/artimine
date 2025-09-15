@@ -1,6 +1,6 @@
 import type { Position, UnitDeployed } from '@/lib/_model';
 import { getEmptyCells } from '../../boards';
-import { getDangerLevelPerRow, getOpponentCountPerRow, getOpponentPowerPerRow } from '../rows';
+import { getDangerLevelPerRow, getOpponentCountPerRow, getOpponentUnitDamagePerRow } from '../rows';
 import { landDestructionValue } from './config';
 import { valueUnit } from './unit';
 
@@ -8,7 +8,7 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   value: number;
   cell: Position;
 } {
-  const ennemyPowerPerRow = getOpponentPowerPerRow();
+  const ennemyPowerPerRow = getOpponentUnitDamagePerRow();
   const dangerLevelPerRow = getDangerLevelPerRow();
   const ennemyCountPerRow = getOpponentCountPerRow();
   const cells = getEmptyCells(false);
@@ -31,8 +31,8 @@ const getMoveValue = (
   const dangerLevel = dangerLevelPerRow[cell.row];
   const ennemyPower = ennemyPowerPerRow[cell.row];
   const ennemyCount = ennemyCountPerRow[cell.row];
-  const wouldBeDestroyed = unit.health + (unit.keywords?.armor || 0) * ennemyCount <= ennemyPower;
-
+  const wouldBeDestroyed =
+    (unit.health ?? unit.maxHealth) + (unit.keywords?.armor || 0) * ennemyCount <= ennemyPower;
   // If in danger of losing, blocking is mandatory
   if (dangerLevel === Infinity) {
     return Infinity;

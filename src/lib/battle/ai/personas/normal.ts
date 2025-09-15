@@ -26,17 +26,15 @@ export const AiPersonaNormal: AiPersona = {
     if (possibleActions.deployableUnits?.length > 0) {
       const possiblePositions = getEmptyCells(false);
       if (possiblePositions.length === 0) return;
-      // TODO: deploy to the best position
-      deployUnit(
-        getRandomFromArray(possibleActions.deployableUnits),
-        getRandomFromArray(possiblePositions)
-      );
+      const unitToDeploy = getRandomFromArray(possibleActions.deployableUnits);
+      const bestMove = getHighestMoveValue(unitToDeploy);
+      deployUnit(unitToDeploy, bestMove.cell);
       return;
     }
     if (possibleActions.unitsWhoCanMove?.length > 0) {
-      const mover = getRandomFromArray(possibleActions.unitsWhoCanMove);
       const possiblePositions = getEmptyCells(false);
       if (possiblePositions.length === 0) return;
+      const mover = getRandomFromArray(possibleActions.unitsWhoCanMove);
       const bestMove = getHighestMoveValue(mover);
       moveUnit(mover, bestMove.cell);
     }
