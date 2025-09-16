@@ -1,5 +1,6 @@
 import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '../_model';
 import { bs } from '../_state';
+import { clearUnitStaticAbilities } from './ability-static';
 import { isCellFree, isOnPlayersSide } from './boards';
 import { onLargeCardPlayed } from './chat';
 import { isPayable, payCost } from './cost';
@@ -54,6 +55,7 @@ export function makeDeployedUnit(unit: UnitCard, position: Position) {
     untilEndOfTurn: {},
     staticModifiers: [],
     counters: {},
+    isDying: false,
   };
 }
 
@@ -93,6 +95,7 @@ export function destroyUnit(unit: UnitDeployed) {
   unit.isDying = true;
   bs.players[unit.ownerPlayerId].graveyard.push(unit);
   onUnitDeath(unit);
+  clearUnitStaticAbilities(unit);
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
 }
 
@@ -175,6 +178,7 @@ export function refreshUnit(unit: UnitDeployed) {
 }
 
 export function bounceUnit(unit: UnitDeployed) {
+  clearUnitStaticAbilities(unit);
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
   bs.players[unit.ownerPlayerId].hand.push(unit);
 }

@@ -1,4 +1,4 @@
-import { type Land, type UnitDeployed } from '@/lib/_model';
+import { type Land, type Player, type UnitDeployed } from '@/lib/_model';
 import { getRandomFromArray } from '../../../_utils/random';
 import { getEmptyCells } from '../../boards';
 import { attackLand, attackPlayer, attackUnit } from '../../combat';
@@ -14,12 +14,11 @@ import { valueUnit, wouldBeDestroyed } from '../valuations/unit';
 
 export const AiPersonaNormal: AiPersona = {
   executeAction(possibleActions: PossibleActions) {
-    // TODO: merge unitsWhoCanAttack and unitsWhoCanMove ane evaluate attack values vs move values jointly
-
     if (possibleActions.unitsWhoCanAttack?.length > 0) {
       // for now we don't try to order the attacks
       const unit = getRandomFromArray(possibleActions.unitsWhoCanAttack);
-      const canAlsoMove = possibleActions.unitsWhoCanMove?.findIndex((u) => u.id === unit.id) !== 1;
+      const canAlsoMove =
+        possibleActions.unitsWhoCanMove?.findIndex((u) => u.id === unit.id) !== -1;
       attackOrMove(unit, canAlsoMove);
       return;
     }
@@ -58,13 +57,13 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
     counterAttackValue = getCounterAttackValue(unit, bestAttack.target as UnitDeployed);
   }
   const attackValue = bestAttackValue - counterAttackValue;
-  if (attackValue > 0 && bestAttack.target) {
-    if (isAttackTargetUnit(bestAttack.target)) {
+  if (!canAlsoMove || attackValue > 0) {
+    if (isAttackTargetUnit(bestAttack.target as UnitDeployed)) {
       attackUnit(unit, bestAttack.target as UnitDeployed);
-    } else if (isAttackTargetLand(bestAttack.target)) {
+    } else if (isAttackTargetLand(bestAttack.target as Land)) {
       attackLand(unit, bestAttack.target as Land);
-    } else if (isAttackTargetPlayer(bestAttack.target)) {
-      attackPlayer(unit, bestAttack.target.id);
+    } else if (isAttackTargetPlayer(bestAttack.target as Player)) {
+      attackPlayer(unit, bestAttack.target!.id as number);
     }
   } else if (canAlsoMove) {
     const bestMove = getHighestMoveValue(unit);

@@ -1,6 +1,8 @@
 import { cards } from '@/data';
 import { CardRarity } from '../_model/enums-battle';
 import type { CardTuple, Character } from '../_model/model-game';
+import { gs } from '../_state';
+import { sendTradeEvent } from '../llm/trade-events';
 
 export function proposeTrade(
   character: Character,
@@ -14,6 +16,12 @@ export function proposeTrade(
   if (accepted) {
     performTrade(character, offers, wants);
   }
+  const offerCards = offers.map((o) => cards[o.cardTemplateId].name).join(' and ');
+  const wantCards = wants.map((w) => cards[w.cardTemplateId].name).join(' and ');
+  sendTradeEvent(
+    `${gs.player.name} proposed to trade his ${offerCards} to ${character.name} in exchange of ${wantCards}.`,
+    accepted
+  );
   return accepted;
 }
 

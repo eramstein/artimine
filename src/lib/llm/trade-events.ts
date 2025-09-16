@@ -3,21 +3,22 @@ import { gs } from '../_state/main.svelte';
 import { getGroupDescription } from './chat-helpers';
 import { llmService } from './llm-service';
 
-export async function sendBattleEvent(message: string): Promise<string> {
+export async function sendTradeEvent(message: string, accepted: boolean): Promise<string> {
   if (!gs.chat) {
     return '';
   }
 
   const playerName = gs.player.name;
-  const opponentName = gs.chat.characters[0]?.name;
+  const partnerName = gs.chat.characters[0]?.name;
   const charactersDescription = getGroupDescription(gs.chat.characters);
 
   const systemPrompt = {
     role: 'system',
-    content: `${playerName} and ${opponentName} are playing a card game called Horde.
+    content: `${playerName} and ${partnerName} are trading TCG cards.
     The user plays the role of ${playerName}.
-    You play the role of ${opponentName}.
-    Some just event happened in the game, describe how ${opponentName} reacts to it.
+    You play the role of ${partnerName}.
+    ${playerName} just proposed a deal to ${partnerName}, you write how ${partnerName} reacts to it.
+    The user message will include whether yoru character shoudl accept the trade or not.
 
     Instructions:
     - Use immersive third-person narration for the NPCs you control.
@@ -37,7 +38,12 @@ export async function sendBattleEvent(message: string): Promise<string> {
 
   const userPrompt = {
     role: 'user',
-    content: 'This just happened in the game: ' + message,
+    content:
+      'This was the trade proposal: ' +
+      message +
+      '. ${partnerName} ' +
+      (accepted ? 'accepted' : 'rejected') +
+      ' the trade.',
     displayLabel: message,
   };
 

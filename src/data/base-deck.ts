@@ -1,5 +1,21 @@
 import type { Deck } from '@/lib/_model';
 
+export const TEST_DECK: Deck = {
+  key: 'test',
+  name: 'Test',
+  cards: [
+    {
+      cardTemplateId: 'benevolent_monk',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'hobbit_gardener',
+      count: 20,
+    },
+  ],
+  lands: ['forest', 'market', 'city', 'mountain'],
+};
+
 export const BASE_DECK: Deck = {
   key: 'base',
   name: 'Base',

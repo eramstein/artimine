@@ -121,6 +121,9 @@ export const DataEffectTemplates: Record<
       const valueLabel = dynamicValue
         ? `[${dynamicValue} ${damage !== 1 ? ' x ' + damage : ''}]`
         : damage;
+      if (targets.length === 0 && (!range || range?.self)) {
+        return `Takes ${valueLabel} damage.`;
+      }
       return `Deal ${valueLabel} damage ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -168,7 +171,8 @@ export const DataEffectTemplates: Record<
       const valueLabel = dynamicValue
         ? `[${dynamicValue} ${counterValue !== 1 ? ' x ' + counterValue : ''}]`
         : counterValue;
-      return `Add ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
+      const verb = targets.length === 0 && (!range || range?.self) ? 'Gets' : 'Add';
+      return `${verb} ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   staticStats: ({
@@ -331,7 +335,7 @@ export const DataEffectTemplates: Record<
     },
     label: () =>
       isRespawn
-        ? `Respawn ${summonedUnit ? summonedUnit.name : 'a random unit'} at this unit's position`
+        ? `Spawn ${summonedUnit ? summonedUnit.name : 'a random unit'} at this unit's position`
         : `Summon ${summonedUnit ? summonedUnit.name : 'a random unit'} to ${randomPositions ? 'random' : 'target'} position`,
   }),
   darkRitual: ({ effect = 'damage' }: { effect: 'damage' | 'heal' }) => ({
@@ -396,7 +400,7 @@ export const DataEffectTemplates: Record<
         drawCard(player);
       }
     },
-    label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}`,
+    label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}.`,
   }),
   destroyUnit: ({ range }: { range?: UnitFilterArgs }) => ({
     fn: ({ targets, unit, player }) => {

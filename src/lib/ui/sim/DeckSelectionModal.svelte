@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { TEST_DECK } from '@/data/base-deck';
   import type { Deck } from '@/lib/_model';
   import { UiView } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
@@ -7,7 +8,7 @@
   import { initBattle } from '@/lib/battle';
 
   // Get player's decks
-  let playerDecks = $derived(gs.player.decks);
+  let playerDecks = $derived([TEST_DECK, ...gs.player.decks]);
 
   // Get the first card from a deck to display its image
   function getFirstCardImage(deck: Deck): string {

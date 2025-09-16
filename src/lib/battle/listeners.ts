@@ -49,6 +49,7 @@ function checkTriggerType(ability: Ability, triggerType: TriggerType): boolean {
   // for permanent buffs they have to clean up and re-apply them
   return (
     (ability.trigger.type === TriggerType.Static &&
+      triggerType === TriggerType.OnDeath &&
       (!ability.trigger.staticRecompute ||
         ability.trigger.staticRecompute.includes(triggerType))) ||
     ability.trigger.type === triggerType

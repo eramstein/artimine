@@ -792,7 +792,6 @@
                 "keyword": "resist",
                 "keyWordValue": 2,
                 "range": {
-                  "addSelf": true,
                   "allies": true
                 }
               }

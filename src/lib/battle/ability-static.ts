@@ -95,5 +95,4 @@ export function addStaticKeyword(
     permanent,
     keyword,
   });
-  console.log('added static keyword', keyword, JSON.stringify(targetUnit.keywords));
 }
