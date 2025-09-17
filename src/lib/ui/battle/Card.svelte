@@ -194,7 +194,12 @@
       <div class="bottom-row">
         <!-- Stats display - only for Unit cards -->
         {#if isUnitCard(card)}
-          <Stats power={card.power} health={card.maxHealth} />
+          <Stats
+            power={card.power}
+            health={card.maxHealth}
+            armor={card.keywords?.armor}
+            retaliate={card.keywords?.retaliate}
+          />
         {/if}
 
         <!-- Keywords display - only for Unit cards with keywords -->

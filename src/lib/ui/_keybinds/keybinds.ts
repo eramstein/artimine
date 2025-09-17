@@ -1,6 +1,6 @@
 import { PLACES } from '@/data/places/places';
 import { UiView } from '@/lib/_model';
-import { initBattle, nextTurn } from '@/lib/battle';
+import { initBattle } from '@/lib/battle';
 import {
   getCurrentBattleState,
   gs,
@@ -9,6 +9,7 @@ import {
   saveStateToLocalStorage,
 } from '../../_state';
 import { uiState } from '../../_state/state-ui.svelte';
+import { handleEndTurn } from '../_helpers/end-turn';
 
 export function handleKeybinds(event: KeyboardEvent) {
   // Skip keybinds if user is typing in an input field
@@ -49,6 +50,6 @@ export function handleKeybinds(event: KeyboardEvent) {
     uiState.navigationVisible = !uiState.navigationVisible;
   } else if (event.key === ' ') {
     event.preventDefault();
-    nextTurn();
+    handleEndTurn();
   }
 }

@@ -411,7 +411,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
-      return `Destroy ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
+      return `Destroy ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   bounceUnit: ({ range }: { range?: UnitFilterArgs }) => ({

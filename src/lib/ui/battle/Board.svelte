@@ -203,6 +203,7 @@
       class="unit-container"
       style="left: {position.left}px; top: {position.top}px;"
       in:fly={isAiUnit ? { y: 0, x: 200, duration: 600 } : undefined}
+      out:fly={{ y: 0, x: isAiUnit ? 200 : -200, duration: 350 }}
     >
       <UnitDeployed {unit} />
     </div>

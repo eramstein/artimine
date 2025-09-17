@@ -5,7 +5,7 @@ export const TEST_DECK: Deck = {
   name: 'Test',
   cards: [
     {
-      cardTemplateId: 'benevolent_monk',
+      cardTemplateId: 'orc_miner',
       count: 20,
     },
     {

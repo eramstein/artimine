@@ -2,8 +2,9 @@
   import { bs } from '@lib/_state';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { getTableImagePath } from '@lib/_utils/asset-paths';
-  import { nextTurn } from '@lib/battle/turn';
+  import { handleEndTurn } from '@lib/ui/_helpers/end-turn';
   import CardFull from '../cards/CardFull.svelte';
+  import ModalHost from '../ModalHost.svelte';
   import Chat from '../sim/Chat.svelte';
   import Board from './Board.svelte';
   import DeckModal from './DeckModal.svelte';
@@ -23,7 +24,7 @@
     <button
       class="end-turn-btn"
       class:disabled={!bs.isPlayersTurn}
-      onclick={nextTurn}
+      onclick={handleEndTurn}
       disabled={!bs.isPlayersTurn}
       aria-label="End Turn"
     >
@@ -68,6 +69,7 @@
 
 <GraveyardModal />
 <DeckModal />
+<ModalHost />
 
 <!-- CardFull overlay -->
 {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
@@ -112,12 +114,31 @@
   .end-turn-btn {
     background: transparent;
     border: none;
-    padding: 0;
+    border-radius: 50%;
+    padding: 0px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.3),
+      0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .end-turn-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.4),
+      0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .end-turn-btn:active {
+    transform: translateY(0);
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      0 1px 4px rgba(0, 0, 0, 0.2);
   }
 
   .end-turn-btn img {
@@ -128,23 +149,19 @@
     display: block;
   }
 
-  /* No hover/active visual effects; image only */
-
   .end-turn-btn.disabled {
     cursor: not-allowed;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .end-turn-btn.disabled img {
     filter: grayscale(60%);
-    opacity: 0.85;
+    opacity: 0.6;
   }
 
   .end-turn-btn.disabled:hover {
     transform: none;
-    box-shadow:
-      0 4px 15px rgba(0, 0, 0, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .chat-fab {

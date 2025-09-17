@@ -9,7 +9,6 @@ import { removeTemporaryEffects } from './temporary-effects';
 import { damageUnit, healUnit } from './unit';
 
 export function nextTurn() {
-  console.log('next turn', bs.turn, bs.isPlayersTurn);
   clearSelections();
   const previousPlayer = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
   updateStatuses(previousPlayer);

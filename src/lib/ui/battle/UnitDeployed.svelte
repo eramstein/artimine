@@ -11,6 +11,7 @@
     toggleUnitSelection,
   } from '@lib/ui/_helpers/selections';
   import { targetUnit } from '@lib/ui/_helpers/targetting';
+  import { fade } from 'svelte/transition';
   import Abilities from './Abilities.svelte';
   import Counters from './Counters.svelte';
   import Keywords from './Keywords.svelte';
@@ -105,6 +106,7 @@
   style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
   onclick={handleUnitClick}
   oncontextmenu={handleContextMenu}
+  out:fade={{ duration: 250 }}
 >
   {#if unit.statuses}
     <div class="statuses-container">
@@ -113,7 +115,12 @@
   {/if}
 
   <div class="stats-container">
-    <Stats power={unit.power} health={unit.health} />
+    <Stats
+      power={unit.power}
+      health={unit.health}
+      armor={unit.keywords?.armor}
+      retaliate={unit.keywords?.retaliate}
+    />
   </div>
 
   {#if unit.keywords}
