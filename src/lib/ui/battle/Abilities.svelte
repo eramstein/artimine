@@ -2,6 +2,7 @@
   import { TriggerType } from '../../_model/enums-battle';
   import type { Ability, UnitDeployed } from '../../_model/model-battle';
   import { uiState } from '../../_state';
+  import { getAssetPath } from '../../_utils/asset-paths';
   import { getRangeLabel } from '../../battle/effects';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import Tooltip from '../Tooltip.svelte';
@@ -69,6 +70,10 @@
     const exhaustText = exhausts ? '↻ ' : '';
     return `${exhaustText}${costText}${text}`;
   }
+
+  function getAbilityIconPath(exhausts?: boolean): string {
+    return getAssetPath(exhausts ? 'images/tap.png' : 'images/activate.png');
+  }
 </script>
 
 <div class="abilities">
@@ -82,7 +87,7 @@
         onmouseleave={handleMouseLeave}
         onclick={(e) => isActivated && onAbilityClick(ability, e)}
       >
-        <span class="ability-icon">{icon}</span>
+        <img class="ability-icon" src={getAbilityIconPath(exhausts)} alt="ability" />
         {#if cost !== undefined && cost > 0}
           <span class="ability-cost">{cost}</span>
         {/if}
@@ -94,7 +99,7 @@
 <style>
   .abilities {
     display: flex;
-    gap: 2px;
+    gap: 8px;
     flex-wrap: wrap;
     justify-content: flex-end;
   }
@@ -102,7 +107,6 @@
   .ability {
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 2px 4px;
     width: 20px;
     border-radius: 4px;
     font-size: 0.8rem;
@@ -143,8 +147,9 @@
   }
 
   .ability-icon {
-    font-weight: bold;
-    font-size: 0.9rem;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
   }
 
   .ability-cost {

@@ -1,51 +1,12 @@
 <script lang="ts">
   import type { UnitKeywords } from '@lib/_model';
   import Tooltip from '../Tooltip.svelte';
+  import { KEYWORD_TOOLTIPS } from '../_helpers/keywordTooltips';
 
   let { keywords }: { keywords: UnitKeywords } = $props();
 
   // Tooltip state
   let hoveredKeyword = $state<string | null>(null);
-
-  // Icon lookup object
-  const keywordIcons = {
-    ranged: '🏹',
-    haste: '⚡',
-    moveAndAttack: '🔄',
-    retaliate: '⚔️',
-    armor: '🛡️',
-    resist: '🌀',
-    poisonous: '☠️',
-    regeneration: '💚',
-    trample: '🐘',
-    zerk: '💥',
-    cleave: '🔪',
-    lance: '🗡️',
-    flying: '🐦',
-    immobile: '🏰',
-  };
-
-  // Tooltip content for each keyword
-  const tooltipContent = {
-    ranged: 'Ranged: Can attack any unit on the row.',
-    haste: 'Haste: Can attack immediately when deployed.',
-    moveAndAttack: 'Move and Attack: Can move and then attack in the same turn.',
-    zerk: 'Zerk: Attacks automatically on turn start.',
-    retaliate: (value: number) =>
-      `Retaliate ${value}: When this unit is attacked, it deals ${value} damage back to the attacker.`,
-    armor: (value: number) => `Armor ${value}: This unit takes ${value} less damage from attacks.`,
-    resist: (value: number) =>
-      `Resist ${value}: This unit takes ${value} less damage from spells and abilities.`,
-    poisonous:
-      'Poisonous: When this unit deals damage, the target is poisoned and takes 1 damage at the start of each turn.',
-    regeneration: (value: number) =>
-      `Regeneration ${value}: This unit heals ${value} health at the start of each turn.`,
-    trample: 'Trample: Excess damage is dealt to the unit, land or player behind.',
-    cleave: 'Cleave: Attacks adjacent ennemies too.',
-    lance: 'Lance: Attacks both units in the row.',
-    flying: 'Flying: Can attack any unit.',
-    immobile: 'Immobile: Cannot move.',
-  };
 
   function handleMouseEnter(keyword: string) {
     hoveredKeyword = keyword;
@@ -60,11 +21,12 @@
     const result: Array<{ key: string; value?: number; icon: string }> = [];
 
     Object.entries(keywords).forEach(([key, value]) => {
-      if (value && key in keywordIcons) {
+      if (value) {
+        const icon = `/assets/images/keywords/${key}.png`;
         if (typeof value === 'number') {
-          result.push({ key, value, icon: keywordIcons[key as keyof typeof keywordIcons] });
+          result.push({ key, value, icon });
         } else if (value === true) {
-          result.push({ key, icon: keywordIcons[key as keyof typeof keywordIcons] });
+          result.push({ key, icon });
         }
       }
     });
@@ -76,9 +38,9 @@
 <div class="keywords">
   {#each activeKeywords() as { key, value, icon }}
     <Tooltip
-      content={typeof tooltipContent[key as keyof typeof tooltipContent] === 'function'
-        ? (tooltipContent[key as keyof typeof tooltipContent] as Function)(value)
-        : tooltipContent[key as keyof typeof tooltipContent]}
+      content={typeof KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS] === 'function'
+        ? (KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS] as Function)(value)
+        : KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS]}
       show={hoveredKeyword === key}
     >
       <div
@@ -86,7 +48,7 @@
         onmouseenter={() => handleMouseEnter(key)}
         onmouseleave={handleMouseLeave}
       >
-        <span class="keyword-icon">{icon}</span>
+        <img src={icon} alt={key} class="keyword-icon" />
         {#if value !== undefined}
           <span class="keyword-value">{value}</span>
         {/if}
@@ -106,7 +68,6 @@
   .keyword {
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 2px 4px;
     border-radius: 4px;
     font-size: 0.8rem;
     display: flex;
@@ -119,6 +80,9 @@
 
   .keyword-icon {
     font-size: 0.9rem;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
   }
 
   .keyword-value {

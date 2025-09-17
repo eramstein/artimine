@@ -3,9 +3,22 @@
   import { CardColor, CardType, UnitType } from '../../_model/enums-battle';
   import type { CardTemplate, Land, SpellCard } from '../../_model/model-battle';
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
+  import { KEYWORD_TOOLTIPS } from '../_helpers/keywordTooltips';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
+  import Tooltip from '../Tooltip.svelte';
 
   let { card }: { card: CardTemplate | Land } = $props();
+
+  // Tooltip state
+  let hoveredKeyword = $state<string | null>(null);
+
+  function handleMouseEnter(keyword: string) {
+    hoveredKeyword = keyword;
+  }
+
+  function handleMouseLeave() {
+    hoveredKeyword = null;
+  }
 
   // Create the background image path using the card id
   let cardImagePath = $derived(getCardImagePath(card.id));
@@ -64,24 +77,6 @@
     return label;
   }
 
-  // Icon lookup object for keywords
-  const keywordIcons = {
-    ranged: '🏹',
-    haste: '⚡',
-    moveAndAttack: '🔄',
-    retaliate: '⚔️',
-    armor: '🛡️',
-    resist: '🌀',
-    poisonous: '☠️',
-    regeneration: '💚',
-    trample: '🐘',
-    zerk: '💥',
-    cleave: '🔪',
-    lance: '🗡️',
-    flying: '🐦',
-    immobile: '🏰',
-  };
-
   // Full keyword names
   const keywordNames = {
     ranged: 'Ranged',
@@ -107,18 +102,19 @@
     const result: Array<{ key: string; value?: number; icon: string; name: string }> = [];
 
     Object.entries(card.keywords).forEach(([key, value]) => {
-      if (value && key in keywordIcons) {
+      if (value && key in keywordNames) {
+        const icon = `/assets/images/keywords/${key}.png`;
         if (typeof value === 'number') {
           result.push({
             key,
             value,
-            icon: keywordIcons[key as keyof typeof keywordIcons],
+            icon,
             name: keywordNames[key as keyof typeof keywordNames],
           });
         } else if (value === true) {
           result.push({
             key,
-            icon: keywordIcons[key as keyof typeof keywordIcons],
+            icon,
             name: keywordNames[key as keyof typeof keywordNames],
           });
         }
@@ -215,10 +211,21 @@
     <!-- Keywords display - only for Unit cards with keywords -->
     {#if isUnitCard(card) && card.keywords && activeKeywords().length > 0}
       {#each activeKeywords() as { key, value, icon, name }}
-        <div class="keyword-item">
-          <span class="keyword-icon">{icon}</span>
-          <span class="keyword-name">{name} {value}</span>
-        </div>
+        <Tooltip
+          content={typeof KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS] === 'function'
+            ? (KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS] as Function)(value)
+            : KEYWORD_TOOLTIPS[key as keyof typeof KEYWORD_TOOLTIPS]}
+          show={hoveredKeyword === key}
+        >
+          <div
+            class="keyword-item"
+            onmouseenter={() => handleMouseEnter(key)}
+            onmouseleave={handleMouseLeave}
+          >
+            <img src={icon} alt={name} class="keyword-icon" />
+            <span class="keyword-name">{name} {value}</span>
+          </div>
+        </Tooltip>
       {/each}
     {/if}
 
@@ -418,7 +425,9 @@
   }
 
   .keyword-icon {
-    font-size: 1.2rem;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
   }
 
   .keyword-name {
