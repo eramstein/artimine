@@ -50,7 +50,18 @@
     if (!isHuman || hasUsedAbility) return;
     const cardColor = color as CardColor;
     usePlayerColorAbility(player, cardColor);
+    // Trigger lightweight UI animation on click only
+    clickIncrementActive = { ...clickIncrementActive, [color]: true };
+    const localColor = color;
+    clearTimeout(clickIncrementTimers[localColor]);
+    clickIncrementTimers[localColor] = setTimeout(() => {
+      clickIncrementActive = { ...clickIncrementActive, [localColor]: false };
+    }, 800);
   }
+
+  // Click-only animation state (avoids reactive effects)
+  let clickIncrementActive = $state<Record<string, boolean>>({});
+  let clickIncrementTimers: Record<string, ReturnType<typeof setTimeout>> = {};
 </script>
 
 <div class="player-container">
@@ -74,8 +85,14 @@
         data-color={color}
         onclick={() => handleColorClick(color)}
       >
-        <div class="color-symbol" style="background-image: url('{getColorImagePath(color)}')">
+        <div
+          class="color-symbol {clickIncrementActive[color] ? 'increment' : ''}"
+          style="background-image: url('{getColorImagePath(color)}')"
+        >
           <span class="color-count">{count}</span>
+          {#if clickIncrementActive[color]}
+            <span class="float-plus">+1</span>
+          {/if}
         </div>
       </div>
     {/each}
@@ -162,7 +179,7 @@
     position: absolute;
     bottom: 0.5rem;
     left: 0.5rem;
-    background: #8b0000;
+    background: url('/assets/images/health-icon.png') center/cover no-repeat;
     color: white;
     padding: 0.5rem;
     border-radius: 8px;
@@ -240,6 +257,14 @@
     transition: all 0.2s ease;
   }
 
+  .color-symbol.increment {
+    box-shadow:
+      0 0 0 2px rgba(255, 255, 255, 0.4) inset,
+      0 0 10px rgba(255, 255, 255, 0.6),
+      0 2px 6px rgba(0, 0, 0, 0.4);
+    transform: scale(1.08);
+  }
+
   .color-item .color-symbol {
     cursor: pointer;
     transition:
@@ -248,7 +273,7 @@
   }
 
   .color-item.disabled .color-symbol {
-    cursor: not-allowed;
+    cursor: default;
     opacity: 0.5;
   }
 
@@ -261,6 +286,33 @@
     font-weight: bold;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .float-plus {
+    position: absolute;
+    top: -0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-weight: 900;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    animation: float-up 0.8s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes float-up {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 0) scale(0.9);
+    }
+    20% {
+      opacity: 1;
+      transform: translate(-50%, -4px) scale(1.02);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -18px) scale(1.08);
+    }
   }
 
   .deck-section {

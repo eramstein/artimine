@@ -69,7 +69,7 @@
       ? 'has-unit-types'
       : ''}"
   >
-    <div class="cost">
+    <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
       {card.cost}
     </div>
     <div class="name-content">
@@ -184,10 +184,6 @@
     border-radius: 10px 10px 0 0;
   }
 
-  .name.has-unit-types {
-    padding: 4px 12px;
-  }
-
   .name.has-unit-types .name-text {
     font-size: 0.85rem;
   }
@@ -217,16 +213,11 @@
   }
 
   .cost {
-    background: radial-gradient(ellipse at 60% 40%, #444 60%, #222 100%);
     color: white;
-    border: 1px solid #bfa14a;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-    padding: 2px 4px;
-    border-radius: 50%;
     font-weight: bold;
     font-size: 0.9rem;
-    min-width: 1rem;
-    height: 1rem;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -234,6 +225,9 @@
     flex-shrink: 0;
     top: 8px;
     left: var(--left-margin);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   .colors {

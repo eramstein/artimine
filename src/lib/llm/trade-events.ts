@@ -17,14 +17,12 @@ export async function sendTradeEvent(message: string, accepted: boolean): Promis
     content: `${playerName} and ${partnerName} are trading TCG cards.
     The user plays the role of ${playerName}.
     You play the role of ${partnerName}.
-    ${playerName} just proposed a deal to ${partnerName}, you write how ${partnerName} reacts to it.
+    ${playerName} just proposed a deal to ${partnerName}, you write in one sentence how ${partnerName} reacts to it.
     The user message will include whether yoru character shoudl accept the trade or not.
 
     Instructions:
-    - Use immersive third-person narration for the NPCs you control.
-    - Include their body language, tone of voice, emotions, and internal thoughts.
-    - Remain consistent with scene context and characters' personalities.
-    - Use emotional nuance: subtext, body language, hesitation, indirect tension when appropriate.
+    - Use immersive third-person narration for ${partnerName}.
+    - Do not include any narrative prose describing ${playerName}.
     - Keep it short, one sentence.
 
     Characters:

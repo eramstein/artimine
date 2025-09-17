@@ -124,14 +124,20 @@
     position: absolute;
     bottom: 4px;
     left: 4px;
-    background: rgba(0, 0, 0, 0.7);
+    background: url('/assets/images/health-icon.png') center/cover no-repeat;
     color: white;
-    padding: 2px 6px;
+    padding: 0;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
-    min-width: 20px;
+    min-width: 0;
+    width: 28px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding-bottom: 3px;
   }
 
   .land.ability-available {

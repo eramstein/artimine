@@ -2,6 +2,7 @@ import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
 import { bs, uiState } from '../_state';
 import { onBattleEnd } from './chat';
+import { soundManager } from './sound';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
@@ -44,6 +45,7 @@ export function usePlayerColorAbility(player: Player, color: CardColor) {
   if (player.colors[color] === undefined || player.abilityUsed) {
     return;
   }
+  soundManager.playSound('button2');
   incrementColor(player, color, 1);
   player.abilityUsed = true;
 }

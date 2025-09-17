@@ -5,6 +5,7 @@ import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
 import { drawCard } from './deck';
 import { onTurnStart } from './listeners';
+import { soundManager } from './sound';
 import { removeTemporaryEffects } from './temporary-effects';
 import { damageUnit, healUnit } from './unit';
 
@@ -19,6 +20,7 @@ export function nextTurn() {
   onTurnStart(player);
   console.log('isPlayersTurn', bs.isPlayersTurn);
   if (!bs.isPlayersTurn) {
+    soundManager.playSound('button');
     playAiTurn();
   }
   //saveStateToLocalStorage();

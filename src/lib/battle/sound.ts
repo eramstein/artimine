@@ -14,6 +14,9 @@ class SoundManager {
       'power-punch': getSoundPath('power-punch'),
       jumpland: getSoundPath('jumpland'),
       lightning: getSoundPath('lightning'),
+      draw: getSoundPath('draw'),
+      button: getSoundPath('button'),
+      button2: getSoundPath('button2'),
     };
 
     for (const [name, path] of Object.entries(soundFiles)) {

@@ -17,13 +17,11 @@ export async function sendBattleEvent(message: string): Promise<string> {
     content: `${playerName} and ${opponentName} are playing a card game called Horde.
     The user plays the role of ${playerName}.
     You play the role of ${opponentName}.
-    Some just event happened in the game, describe how ${opponentName} reacts to it.
+    Some just event happened in the game, describe in one sentence how ${opponentName} reacts to it.
 
     Instructions:
-    - Use immersive third-person narration for the NPCs you control.
-    - Include their body language, tone of voice, emotions, and internal thoughts.
-    - Remain consistent with scene context and characters' personalities.
-    - Use emotional nuance: subtext, body language, hesitation, indirect tension when appropriate.
+    - Use immersive third-person narration for ${opponentName}.
+    - Do not include any narrative prose describing ${playerName}.
     - Keep it short, one sentence.
 
     Characters:

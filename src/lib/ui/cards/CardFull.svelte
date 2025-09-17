@@ -137,7 +137,7 @@
       : ''}"
   >
     {#if !isLandCard(card)}
-      <div class="cost">
+      <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
         {card.cost}
       </div>
     {/if}
@@ -306,21 +306,20 @@
   }
 
   .cost {
-    background: radial-gradient(ellipse at 60% 40%, #444 60%, #222 100%);
     color: white;
-    border: 2px solid #bfa14a;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-    padding: 8px 12px;
-    border-radius: 50%;
     font-weight: bold;
     font-size: 1.2rem;
-    min-width: 2rem;
-    height: 2rem;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-shadow: 0 2px 4px #000;
     flex-shrink: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-bottom: 3px;
   }
 
   .colors {

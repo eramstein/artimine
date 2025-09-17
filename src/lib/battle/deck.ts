@@ -1,6 +1,7 @@
 import type { Card, Player } from '../_model';
 import { bs } from '../_state';
 import { onCardDrawn } from './listeners';
+import { soundManager } from './sound';
 
 export function shuffleDeck(deck: Card[]): Card[] {
   return deck.sort(() => Math.random() - 0.5);
@@ -11,6 +12,9 @@ export function drawCard(player: Player) {
   if (!card) return;
   player.hand.push(card);
   onCardDrawn(player, card);
+  if (player.isPlayer) {
+    soundManager.playSound('draw');
+  }
 }
 
 export function getAllDecksCards(): Card[] {
