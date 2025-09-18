@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CardType, TriggerType } from '../../../lib/_model';
   import type { Ability, ActionDefinition } from '../../../lib/_model';
+  import { CardType, TriggerType } from '../../../lib/_model';
   import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import { getRangeLabel } from '../../../lib/battle/effects';
   import Actions from './Actions.svelte';
@@ -115,7 +115,7 @@
   }
 </script>
 
-<div class="form-section" class:hidden={props.state.type !== CardType.Unit}>
+<div class="form-section" class:hidden={props.state.type === CardType.Spell}>
   <h3>Abilities</h3>
 
   {#if props.state.abilities && props.state.abilities.length > 0}

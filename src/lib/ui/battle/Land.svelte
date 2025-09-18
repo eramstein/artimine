@@ -90,8 +90,11 @@
   oncontextmenu={handleContextMenu}
 >
   {#if !land.isRuined}
-    <div class="health">
-      {land.health}
+    <div class="land-stats">
+      {#if land.retaliate && land.retaliate > 0}
+        <div class="retaliate retaliate-bg">{land.retaliate}</div>
+      {/if}
+      <div class="health">{land.health}</div>
     </div>
   {/if}
   {#if land.abilities && land.abilities.length > 0}
@@ -122,9 +125,6 @@
   }
 
   .health {
-    position: absolute;
-    bottom: 4px;
-    left: 4px;
     background: url('/assets/images/health-icon.png') center/cover no-repeat;
     color: white;
     padding: 0;
@@ -139,6 +139,41 @@
     justify-content: center;
     text-align: center;
     padding-bottom: 3px;
+  }
+
+  .land-stats {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .retaliate {
+    background: rgba(19, 16, 16, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #bfa14a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    padding-bottom: 2px;
+  }
+
+  .retaliate.retaliate-bg {
+    background: url('/assets/images/retaliate-icon2.png') center/contain no-repeat;
+    border: none;
+    box-shadow: none;
+    width: 34px;
+    height: 32px;
+    transform: translateX(-3px);
   }
 
   .land.ability-available {

@@ -15,7 +15,9 @@ export function damageLand(land: Land, damage: number) {
   land.health -= damage;
   if (land.health <= 0) {
     destroyLand(land);
+    return true;
   }
+  return false;
 }
 
 export function destroyLand(land: Land) {

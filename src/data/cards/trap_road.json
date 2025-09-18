@@ -1,0 +1,11 @@
+{
+  "id": "trap_road",
+  "name": "Trap Road",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "retaliate": 1
+}

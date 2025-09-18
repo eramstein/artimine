@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CardType, CardRarity, CardColor } from '../../../lib/_model';
+  import { CardColor, CardRarity, CardType } from '../../../lib/_model';
 
   export let state: {
     name: string;
@@ -8,6 +8,7 @@
     cost: number;
     power: number;
     maxHealth: number;
+    retaliate: number;
     colors: { color: CardColor; count: number }[];
   };
 
@@ -54,6 +55,18 @@
     </div>
   </div>
 
+  <!-- Land stats -->
+  <div class="stats-row" class:hidden={state.type !== CardType.Land}>
+    <div class="form-group">
+      <label for="landHealth">Health:</label>
+      <input id="landHealth" type="number" bind:value={state.maxHealth} min="1" max="50" />
+    </div>
+    <div class="form-group">
+      <label for="landRetaliate">Retaliate:</label>
+      <input id="landRetaliate" type="number" bind:value={state.retaliate} min="0" max="10" />
+    </div>
+  </div>
+
   <div class="form-group">
     <label for="rarity">Rarity:</label>
     <select id="rarity" bind:value={state.rarity}>
@@ -63,10 +76,12 @@
     </select>
   </div>
 
-  <div class="form-group">
-    <label for="cost">Cost:</label>
-    <input id="cost" type="number" bind:value={state.cost} min="0" max="10" />
-  </div>
+  {#if state.type !== CardType.Land}
+    <div class="form-group">
+      <label for="cost">Cost:</label>
+      <input id="cost" type="number" bind:value={state.cost} min="0" max="10" />
+    </div>
+  {/if}
 
   <div class="form-group">
     <label>Colors:</label>

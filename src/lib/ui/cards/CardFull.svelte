@@ -43,6 +43,7 @@
   function isLandCard(card: CardTemplate | Land): card is (CardTemplate | Land) & {
     health: number;
     abilities?: any;
+    retaliate?: number;
   } {
     return card.type === CardType.Land;
   }
@@ -170,7 +171,7 @@
 
     <!-- Bottom section with stats -->
     <div class="bottom-section">
-      <!-- Stats display - only for Unit cards -->
+      <!-- Stats display - Unit cards -->
       {#if isUnitCard(card)}
         <div class="stats-container">
           <div class="stat">
@@ -180,6 +181,17 @@
           <div class="stat">
             <span class="stat-label">Health:</span>
             <span class="stat-value">{card.maxHealth}</span>
+          </div>
+        </div>
+      {:else if isLandCard(card)}
+        <div class="stats-container">
+          <div class="stat">
+            <span class="stat-label">Retaliate:</span>
+            <span class="stat-value">{card.retaliate || 0}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Health:</span>
+            <span class="stat-value">{card.health}</span>
           </div>
         </div>
       {/if}

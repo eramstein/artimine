@@ -14,7 +14,7 @@ export const TEST_DECK: Deck = {
     },
   ],
   //lands: ['forest', 'market', 'city', 'mountain'],
-  lands: ['sewers', 'sewers', 'sewers', 'sewers'],
+  lands: ['trap_road', 'trap_road', 'trap_road', 'trap_road'],
 };
 
 export const BASE_DECK: Deck = {

@@ -8,27 +8,34 @@
   declare const $derived: any;
   // @ts-ignore - Svelte 5 rune provided at runtime
   declare const $effect: any;
-  import { CardType, CardRarity, CardColor, UnitType, TriggerType } from '../../../lib/_model';
-  import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import type {
-    UnitCardTemplate,
-    SpellCardTemplate,
-    UnitKeywords,
-    ActionDefinition,
-    TargetDefinition,
     Ability,
+    ActionDefinition,
+    LandTemplate,
+    SpellCardTemplate,
+    TargetDefinition,
+    UnitCardTemplate,
+    UnitKeywords,
   } from '../../../lib/_model';
-  import { baseStatsCost, getBudgetForUnit, getBudgetForSpell, getActionsBudget } from '../budgets';
+  import {
+    CardColor,
+    CardRarity,
+    CardSet,
+    CardType,
+    TriggerType,
+    UnitType,
+  } from '../../../lib/_model';
+  import type { UnitFilterArgs } from '../../../lib/battle/effects';
+  import { baseStatsCost, getActionsBudget, getBudgetForSpell, getBudgetForUnit } from '../budgets';
   import { costPerKeywordForUnit } from '../keywords';
-
   // Import components
+  import Abilities from './Abilities.svelte';
+  import Actions from './Actions.svelte';
   import BasicInfo from './BasicInfo.svelte';
   import BudgetSection from './BudgetSection.svelte';
-  import UnitTypes from './UnitTypes.svelte';
-  import Keywords from './Keywords.svelte';
-  import Actions from './Actions.svelte';
-  import Abilities from './Abilities.svelte';
   import JsonOutput from './JsonOutput.svelte';
+  import Keywords from './Keywords.svelte';
+  import UnitTypes from './UnitTypes.svelte';
 
   // Filter out empty arguments for clean JSON output
   function getCleanArgs(args: Record<string, any>): Record<string, any> {
@@ -62,6 +69,7 @@
     cost: number;
     power: number;
     maxHealth: number;
+    retaliate: number;
     colors: { color: CardColor; count: number }[];
     unitTypes: UnitType[];
     keywords: UnitKeywords | undefined;
@@ -76,6 +84,7 @@
     cost: 1,
     power: 1,
     maxHealth: 1,
+    retaliate: 0,
     colors: [{ color: CardColor.Red, count: 1 }],
     unitTypes: [] as UnitType[],
     keywords: undefined as UnitKeywords | undefined,
@@ -248,6 +257,7 @@
         id: derivedId,
         name: state.name,
         rarity: state.rarity,
+        cardSet: CardSet.Alpha,
         type: state.type,
         cost: state.cost,
         power: state.power,
@@ -258,15 +268,30 @@
         abilities: state.abilities.length > 0 ? state.abilities : undefined,
       };
       return JSON.stringify(cardData, null, 2);
-    } else {
+    } else if (state.type === CardType.Spell) {
       const cardData: SpellCardTemplate = {
         id: derivedId,
         name: state.name,
         rarity: state.rarity,
+        cardSet: CardSet.Alpha,
         type: state.type,
         cost: state.cost,
         colors: state.colors,
         actions: state.actions,
+      };
+      return JSON.stringify(cardData, null, 2);
+    } else {
+      const cardData: LandTemplate = {
+        id: derivedId,
+        name: state.name,
+        rarity: state.rarity,
+        cardSet: CardSet.Alpha,
+        type: state.type,
+        cost: 0,
+        colors: state.colors,
+        health: state.maxHealth,
+        abilities: state.abilities.length > 0 ? state.abilities : undefined,
+        ...(state.retaliate > 0 ? { retaliate: state.retaliate } : {}),
       };
       return JSON.stringify(cardData, null, 2);
     }
@@ -348,6 +373,7 @@
     state.cost = 1;
     state.power = 1;
     state.maxHealth = 1;
+    state.retaliate = 0;
     state.unitTypes = [];
     state.actions = [];
     state.abilities = [];

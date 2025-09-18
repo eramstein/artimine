@@ -118,7 +118,10 @@ export function attackLand(unit: UnitDeployed, target: Land) {
   }
 
   useRage(unit);
-  damageLand(target, unit.power);
+  const wasDestroyed = damageLand(target, unit.power);
+  if (!wasDestroyed && target.retaliate) {
+    damageUnit(unit, target.retaliate);
+  }
   const excessDamage = unit.power - target.health;
   if (excessDamage && unit.keywords?.trample) {
     damagePlayer(bs.players[target.ownerPlayerId], excessDamage);

@@ -58,6 +58,7 @@ export interface SpellCardTemplate extends BaseCardTemplate {
 
 export interface LandTemplate extends BaseCardTemplate {
   health: number;
+  retaliate?: number;
   abilities?: Ability[];
   ruinsAbilities?: Ability[];
 }
@@ -111,6 +112,7 @@ export interface Land extends LandTemplate {
   ownerPlayerId: number;
   position: number;
   isRuined: boolean;
+  retaliate?: number;
 }
 
 export type UnitKeywordDefinition = {
