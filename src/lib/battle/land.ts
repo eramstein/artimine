@@ -19,9 +19,8 @@ export function damageLand(land: Land, damage: number) {
 }
 
 export function destroyLand(land: Land) {
-  bs.players[land.ownerPlayerId].lands = bs.players[land.ownerPlayerId].lands.filter(
-    (l) => l.instanceId !== land.instanceId
-  );
+  land.isRuined = true;
+  land.abilities = land.ruinsAbilities;
   onLandDestroyed(land);
 }
 

@@ -45,7 +45,7 @@ export function validAttackTargets(unit: UnitDeployed): (UnitDeployed | Land | P
     return blockers;
   }
   const opponent = getOpposingPlayer(unit.ownerPlayerId);
-  const landBlocker = opponent.lands.find((l) => l.position === unit.position.row);
+  const landBlocker = opponent.lands.find((l) => l.position === unit.position.row && !l.isRuined);
   let targets: (UnitDeployed | Land | Player)[] = [];
   if (landBlocker) {
     targets.push(landBlocker);

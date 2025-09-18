@@ -82,6 +82,7 @@ function loadDeckLands(deck: Deck, ownerPlayerId: number): Land[] {
       ownerPlayerId: ownerPlayerId,
       instanceId: crypto.randomUUID(),
       position: index,
+      isRuined: false,
     } as Land);
   }
   return deckLands;

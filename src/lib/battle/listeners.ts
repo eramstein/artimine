@@ -1,7 +1,9 @@
 import {
+  CardType,
   TriggerType,
   type Ability,
   type Card,
+  type EffectArgs,
   type EffectTargets,
   type Land,
   type Player,
@@ -13,10 +15,18 @@ import { activateTriggeredAbility } from '@/lib/ui/_helpers/targetting';
 import { DataEffectTemplates, filterUnits } from './effects';
 
 function triggerAbilities(type: TriggerType, { ...rest }) {
-  bs.units.forEach((u) => {
-    u.abilities
+  const permanents = [
+    ...bs.units,
+    ...bs.players
+      .flatMap((p) => p.lands)
+      .filter(
+        (l) => (!l.isRuined && l.abilities?.length) || (l.isRuined && l.ruinsAbilities?.length)
+      ),
+  ];
+  permanents.forEach((p) => {
+    p.abilities
       ?.filter((a) => checkTriggerType(a, type))
-      .filter((a) => checkTriggerCondition(a, u, { ...rest }))
+      .filter((a) => checkTriggerCondition(a, p, { ...rest }))
       .forEach((a) => {
         const triggerParams: any = { ...rest };
 
@@ -27,17 +37,23 @@ function triggerAbilities(type: TriggerType, { ...rest }) {
 
         if (hasTargets) {
           // If targeting is required, set up the UI state for user selection
-          activateTriggeredAbility(u, a, triggerParams);
+          // no supported for Lands for now
+          activateTriggeredAbility(p as UnitDeployed, a, triggerParams);
         } else {
           // If no targeting is required, execute immediately
           a.actions.forEach((actionDef) => {
             let targets: EffectTargets = [];
-            DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
-              unit: u,
+            const params: EffectArgs = {
               targets: [targets],
               triggerParams,
-              player: bs.players[u.ownerPlayerId],
-            });
+              player: bs.players[p.ownerPlayerId],
+            };
+            if (p.type === CardType.Unit) {
+              params.unit = p as UnitDeployed;
+            } else if (p.type === CardType.Land) {
+              params.land = p as Land;
+            }
+            DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn(params);
           });
         }
       });
@@ -60,7 +76,7 @@ function checkTriggerType(ability: Ability, triggerType: TriggerType): boolean {
 // For example, an ability with trigger type "After Moving" and range { allies: true } will trigger if the moving unit in triggerArgs is an ally
 function checkTriggerCondition(
   ability: Ability,
-  unitWithAbility: UnitDeployed,
+  permanentWithAbility: UnitDeployed | Land,
   triggerArgs: any
 ): boolean {
   // if no range is specified, the ability is always triggered
@@ -73,7 +89,7 @@ function checkTriggerCondition(
     [TriggerType.OnCardDrawn, TriggerType.OnTurnStart].includes(ability.trigger.type) &&
     ability.trigger.range.self
   ) {
-    return triggerArgs.player.id === unitWithAbility.ownerPlayerId;
+    return triggerArgs.player.id === permanentWithAbility.ownerPlayerId;
   }
 
   // all others check if the unit causing the trigger is in the range
@@ -98,9 +114,19 @@ function checkTriggerCondition(
     unitCausingTrigger = triggerArgs.attacker;
   }
 
-  const validTriggeringUnits = filterUnits({ ...ability.trigger.range, unit: unitWithAbility }).map(
-    (u) => u.instanceId
-  );
+  const params = {
+    ...ability.trigger.range,
+  };
+
+  if (permanentWithAbility.type === CardType.Land) {
+    params.land = permanentWithAbility as Land;
+  }
+
+  if (permanentWithAbility.type === CardType.Unit) {
+    params.unit = permanentWithAbility as UnitDeployed;
+  }
+
+  const validTriggeringUnits = filterUnits(params).map((u) => u.instanceId);
   return validTriggeringUnits
     ? validTriggeringUnits.includes(unitCausingTrigger.instanceId)
     : false;

@@ -11,7 +11,7 @@ export enum DynamicValue {
 
 export const DynamicValues: Record<
   DynamicValue,
-  ({ unit, player }: { unit: UnitDeployed; player: Player }) => number
+  ({ unit, player }: { unit?: UnitDeployed; player?: Player }) => number
 > = {
   [DynamicValue.UnitsInGraveyard]: () => {
     return bs.players.reduce(
@@ -19,8 +19,8 @@ export const DynamicValues: Record<
       0
     );
   },
-  [DynamicValue.Ennemies]: ({ unit, player }: { unit: UnitDeployed; player: Player }) => {
-    const playerId = player ? player.id : unit.ownerPlayerId;
+  [DynamicValue.Ennemies]: ({ unit, player }: { unit?: UnitDeployed; player?: Player }) => {
+    const playerId = player ? player.id : unit?.ownerPlayerId;
     return bs.units.filter((u) => u.ownerPlayerId !== playerId).length;
   },
   [DynamicValue.Buildings]: () => {
@@ -29,8 +29,8 @@ export const DynamicValues: Record<
   [DynamicValue.UnitsWithStatus]: () => {
     return bs.units.filter((u) => Object.keys(u.statuses).length > 0).length;
   },
-  [DynamicValue.EnergyCounters]: ({ unit, player }: { unit: UnitDeployed; player: Player }) => {
-    const playerId = player ? player.id : unit.ownerPlayerId;
+  [DynamicValue.EnergyCounters]: ({ unit, player }: { unit?: UnitDeployed; player?: Player }) => {
+    const playerId = player ? player.id : unit?.ownerPlayerId;
     return bs.units
       .filter((u) => u.ownerPlayerId === playerId)
       .reduce((acc, u) => acc + (u.counters.energy || 0), 0);

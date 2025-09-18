@@ -1,7 +1,9 @@
 import {
+  CardType,
   TargetType,
   type Ability,
   type ActionDefinition,
+  type EffectArgs,
   type EffectTargets,
   type Land,
   type TargetDefinition,
@@ -53,12 +55,17 @@ export function playAbility(
         }
       });
     }
-    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
-      unit: source as any, // Type assertion needed since effect system expects UnitDeployed but we support Land too
+    const params: EffectArgs = {
       targets: effectTargets,
       triggerParams: {},
       player: bs.players[source.ownerPlayerId],
-    });
+    };
+    if (source.type === CardType.Unit) {
+      params.unit = source as UnitDeployed;
+    } else if (source.type === CardType.Land) {
+      params.land = source as Land;
+    }
+    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn(params);
   });
 }
 

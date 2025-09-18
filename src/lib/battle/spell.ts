@@ -1,6 +1,5 @@
 import {
   type ActionDefinition,
-  type EffectArgs,
   type EffectTargets,
   type SpellCard,
   type TargetDefinition,
@@ -34,7 +33,7 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
       targets: targets[actionIndex],
       triggerParams: {},
       player,
-    } as EffectArgs);
+    });
   });
 
   // DISCARD

@@ -84,15 +84,16 @@
 <div
   class="land {isValidTarget ? 'valid-target' : ''} {showColorAnimation()
     ? 'color-increment'
-    : ''} {showGoldenBorder() ? 'ability-available' : ''}"
+    : ''} {showGoldenBorder() ? 'ability-available' : ''} {land.isRuined ? 'ruined' : ''}"
   style="background-image: url('{imagePath}')"
   onclick={handleLandClick}
   oncontextmenu={handleContextMenu}
 >
-  <div class="health">
-    {land.health}
-  </div>
-
+  {#if !land.isRuined}
+    <div class="health">
+      {land.health}
+    </div>
+  {/if}
   {#if land.abilities && land.abilities.length > 0}
     <div class="abilities-container">
       <Abilities abilities={land.abilities} />
@@ -147,6 +148,10 @@
 
   .land.color-increment {
     animation: colorIncrementPulse 0.3s ease-in-out;
+  }
+
+  .land.ruined {
+    filter: grayscale(1);
   }
 
   @keyframes colorIncrementPulse {

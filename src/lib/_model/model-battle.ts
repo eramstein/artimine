@@ -59,6 +59,7 @@ export interface SpellCardTemplate extends BaseCardTemplate {
 export interface LandTemplate extends BaseCardTemplate {
   health: number;
   abilities?: Ability[];
+  ruinsAbilities?: Ability[];
 }
 
 export type CardTemplate = UnitCardTemplate | SpellCardTemplate | LandTemplate;
@@ -109,6 +110,7 @@ export interface Land extends LandTemplate {
   instanceId: string;
   ownerPlayerId: number;
   position: number;
+  isRuined: boolean;
 }
 
 export type UnitKeywordDefinition = {
@@ -153,10 +155,11 @@ export interface Ability {
 }
 
 export interface EffectArgs {
-  unit: UnitDeployed;
   targets: EffectTargets[];
   triggerParams: any;
   player: Player;
+  unit?: UnitDeployed;
+  land?: Land;
 }
 
 export interface Trigger {

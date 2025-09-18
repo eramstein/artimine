@@ -5729,6 +5729,42 @@
     "cardSet": "alpha"
   },
   {
+    "id": "sewers",
+    "name": "Sewers",
+    "rarity": "uncommon",
+    "type": "land",
+    "colors": [],
+    "health": 1,
+    "cost": 0,
+    "ruinsAbilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "sameRow": true,
+            "ennemies": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "poison",
+                "duration": 1,
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "cardSet": "alpha"
+  },
+  {
     "id": "shameless_imitator",
     "name": "Shameless Imitator",
     "rarity": "uncommon",

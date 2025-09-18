@@ -1,5 +1,7 @@
 import {
+  CardType,
   isDeployedUnit,
+  type Land,
   type Player,
   type Position,
   type UnitDeployed,
@@ -12,6 +14,7 @@ import { getAdjacentUnits, getClosestEnnemyInRow } from '../unit';
 export interface UnitFilterArgs {
   // references
   unit?: UnitDeployed;
+  land?: Land;
   position?: Position;
   player?: Player;
   all?: boolean;
@@ -37,8 +40,10 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
   if (filterArgs.self && filterArgs.unit) {
     return [filterArgs.unit];
   }
-  const relativeToPlayerId = filterArgs.player?.id ?? filterArgs.unit?.ownerPlayerId;
-  const relativeToPosition = filterArgs.position ?? filterArgs.unit?.position;
+  const relativeToPlayerId =
+    filterArgs.player?.id ?? filterArgs.unit?.ownerPlayerId ?? filterArgs.land?.ownerPlayerId;
+  const relativeToPosition = filterArgs.position ??
+    filterArgs.unit?.position ?? { row: filterArgs.land?.position ?? 0, column: 0 };
   const closestEnnemyInRow =
     filterArgs.inFrontOf && filterArgs.unit ? getClosestEnnemyInRow(filterArgs.unit) : undefined;
   let validUnits = bs.units.filter((u) => {
@@ -127,7 +132,7 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
 export function getUnitsInRange(
   targets: UnitDeployed[][] | Position[][] | undefined, // assumption: 1st one is units
   range: UnitFilterArgs | undefined,
-  unit: UnitDeployed,
+  sourcePermanent: UnitDeployed | Land,
   player: Player
 ): UnitDeployed[] {
   let unitsInRange: UnitDeployed[] = [];
@@ -143,9 +148,15 @@ export function getUnitsInRange(
       });
     }
   } else if (range) {
-    unitsInRange = filterUnits({ unit, player, ...range });
-  } else if (unit) {
-    unitsInRange = [unit];
+    const params = { player, ...range };
+    if (sourcePermanent.type === CardType.Unit) {
+      params.unit = sourcePermanent as UnitDeployed;
+    } else if (sourcePermanent.type === CardType.Land) {
+      params.land = sourcePermanent as Land;
+    }
+    unitsInRange = filterUnits(params);
+  } else if (sourcePermanent && sourcePermanent.type === CardType.Unit) {
+    unitsInRange = [sourcePermanent as UnitDeployed];
   }
   return unitsInRange;
 }

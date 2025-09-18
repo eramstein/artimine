@@ -13,7 +13,8 @@ export const TEST_DECK: Deck = {
       count: 20,
     },
   ],
-  lands: ['forest', 'market', 'city', 'mountain'],
+  //lands: ['forest', 'market', 'city', 'mountain'],
+  lands: ['sewers', 'sewers', 'sewers', 'sewers'],
 };
 
 export const BASE_DECK: Deck = {
@@ -286,18 +287,14 @@ export const BASE_DECK_ARABIA: Deck = {
     },
     {
       cardTemplateId: 'clunky_golem',
-      count: 2,
+      count: 3,
     },
     {
       cardTemplateId: 'cowardly_mage',
-      count: 2,
+      count: 3,
     },
     {
       cardTemplateId: 'arc_lightning_specialist',
-      count: 2,
-    },
-    {
-      cardTemplateId: 'panicked_student',
       count: 2,
     },
     {

@@ -1,5 +1,5 @@
 import { getRandomUnitCardFromAll } from '@/data';
-import { CounterType, StatusType } from '@/lib/_model';
+import { CardType, CounterType, StatusType } from '@/lib/_model';
 import type {
   Card,
   EffectArgs,
@@ -75,7 +75,7 @@ export const DataEffectTemplates: Record<
   }) => ({
     fn: ({ unit, player }) => {
       const targetPlayer = opposingPlayer
-        ? getOpposingPlayer(player?.id || unit.ownerPlayerId)
+        ? getOpposingPlayer(player?.id || unit?.ownerPlayerId || 1)
         : player;
       damagePlayer(targetPlayer, damage);
     },
@@ -103,11 +103,12 @@ export const DataEffectTemplates: Record<
     fromTriggerParam?: string;
     dynamicValue?: DynamicValue;
   }) => ({
-    fn: ({ targets, unit, player, triggerParams }) => {
+    fn: ({ targets, unit, land, player, triggerParams }) => {
       const value = dynamicValue ? DynamicValues[dynamicValue]({ unit, player }) * damage : damage;
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
-        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+        : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         damageUnit(u, value);
       });
@@ -128,8 +129,14 @@ export const DataEffectTemplates: Record<
     },
   }),
   healUnit: ({ health, range }: { health: number; range?: UnitFilterArgs }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, unit, land, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         healUnit(u, health);
       });
@@ -152,13 +159,14 @@ export const DataEffectTemplates: Record<
     fromTriggerParam?: string;
     dynamicValue?: DynamicValue;
   }) => ({
-    fn: ({ unit, targets, player, triggerParams }) => {
+    fn: ({ unit, land, targets, player, triggerParams }) => {
       const value = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * counterValue
         : counterValue;
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
-        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+        : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         addCounters(u, counterType, value);
       });
@@ -186,14 +194,20 @@ export const DataEffectTemplates: Record<
     range?: UnitFilterArgs;
     dynamicValue?: DynamicValue;
   }) => ({
-    fn: ({ unit, targets, player }) => {
+    fn: ({ unit, land, targets, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const effectivePower = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * (power ?? 0)
         : power;
       const effectiveMaxHealth = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * (maxHealth ?? 0)
         : maxHealth;
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         if (effectivePower) {
           u.power += effectivePower;
@@ -230,10 +244,11 @@ export const DataEffectTemplates: Record<
     reset?: boolean;
     fromTriggerParam?: string;
   }) => ({
-    fn: ({ unit, targets, player, triggerParams }) => {
+    fn: ({ unit, land, targets, player, triggerParams }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
-        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+        : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
       if (unit && reset) {
         clearUnitStaticAbilities(unit, abilityName);
@@ -257,8 +272,14 @@ export const DataEffectTemplates: Record<
     effect: UnitEndOfTurnEffects;
     range?: UnitFilterArgs;
   }) => ({
-    fn: ({ unit, targets, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ unit, land, targets, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         applyTemporaryEffect(u, effect);
       });
@@ -291,10 +312,11 @@ export const DataEffectTemplates: Record<
     range?: UnitFilterArgs;
     fromTriggerParam?: string;
   }) => ({
-    fn: ({ targets, player, unit, triggerParams }) => {
+    fn: ({ targets, player, unit, land, triggerParams }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
-        : getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+        : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         if (u.statuses) {
           applyUnitStatus(u, statusType, duration);
@@ -318,7 +340,7 @@ export const DataEffectTemplates: Record<
     fn: ({ targets, player, unit }) => {
       const unitTemplate = summonedUnit ?? getRandomUnitCardFromAll();
       const createdUnit = makeUnit(player.id, unitTemplate);
-      if (isRespawn) {
+      if (isRespawn && unit) {
         summonUnit(createdUnit, unit.position);
       } else {
         if (randomPositions) {
@@ -357,6 +379,9 @@ export const DataEffectTemplates: Record<
     fn: ({ targets, unit }) => {
       const targetUnit =
         targets[0].length > 0 && targets[0][0] ? (targets[0][0] as UnitDeployed) : unit;
+      if (!targetUnit) {
+        return;
+      }
       let movedCounters = 0;
       bs.units.forEach((u) => {
         if (u.instanceId === targetUnit.instanceId) {
@@ -381,8 +406,14 @@ export const DataEffectTemplates: Record<
     toCounterType: CounterType;
     range?: UnitFilterArgs;
   }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, unit, land, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         const fromCounters = u.counters[fromCounterType] || 0;
         removeCounters(u, fromCounterType, fromCounters);
@@ -403,8 +434,14 @@ export const DataEffectTemplates: Record<
     label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}.`,
   }),
   destroyUnit: ({ range }: { range?: UnitFilterArgs }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, unit, land, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         destroyUnit(u);
       });
@@ -415,8 +452,14 @@ export const DataEffectTemplates: Record<
     },
   }),
   bounceUnit: ({ range }: { range?: UnitFilterArgs }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, unit, land, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         bounceUnit(u);
       });
@@ -427,18 +470,27 @@ export const DataEffectTemplates: Record<
     },
   }),
   fortifyLand: ({ amount }: { amount: number }) => ({
-    fn: ({ targets, unit }) => {
-      const land =
+    fn: ({ targets, unit, land }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const row =
+        sourcePermanent.type === CardType.Unit ? (sourcePermanent.position as Position).row : 0;
+      const targetLand =
         targets[0] && targets[0].length > 0
           ? (targets[0][0] as Land)
-          : (bs.players[unit.ownerPlayerId].lands[unit.position.row] as Land);
-      fortifyLand(land, amount);
+          : (bs.players[sourcePermanent.ownerPlayerId].lands[row] as Land);
+      fortifyLand(targetLand, amount);
     },
     label: () => `Fortify land by ${amount}.`,
   }),
   refreshUnit: ({ range }: { range?: UnitFilterArgs }) => ({
-    fn: ({ targets, unit, player }) => {
-      const unitsInRange = getUnitsInRange(targets as UnitDeployed[][], range, unit, player);
+    fn: ({ targets, unit, land, player }) => {
+      const sourcePermanent = unit ?? (land as UnitDeployed | Land);
+      const unitsInRange = getUnitsInRange(
+        targets as UnitDeployed[][],
+        range,
+        sourcePermanent,
+        player
+      );
       unitsInRange.forEach((u) => {
         refreshUnit(u);
       });
