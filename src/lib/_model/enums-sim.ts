@@ -6,6 +6,7 @@ export enum DayPeriod {
 
 export enum ItemType {
   Booster = 'booster',
+  StarterDeck = 'starter deck',
   BoardGame = 'board game',
 }
 

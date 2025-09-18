@@ -36,7 +36,7 @@
   // Get the icon for each ability based on trigger type
   let abilityIcons = $derived(() => {
     return abilities.map((ability) => ({
-      icon: TRIGGER_ICONS[ability.trigger.type],
+      triggerIcon: TRIGGER_ICONS[ability.trigger.type],
       text: getAbilityText(ability),
       isActivated: ability.trigger.type === TriggerType.Activated,
       ability: ability,
@@ -77,17 +77,21 @@
 </script>
 
 <div class="abilities">
-  {#each abilityIcons() as { icon, text, isActivated, ability, isPending, cost, exhausts }}
+  {#each abilityIcons() as { triggerIcon, text, isActivated, ability, isPending, cost, exhausts }}
     <Tooltip content={getTooltipContent(text, cost, exhausts)} show={hoveredAbility === text}>
       <div
         class="ability"
         class:activated={isActivated}
         class:pending={isPending}
+        class:has-trigger-icon={triggerIcon}
+        style={triggerIcon ? `background-image: url('${triggerIcon}')` : ''}
         onmouseenter={() => handleMouseEnter(text)}
         onmouseleave={handleMouseLeave}
         onclick={(e) => isActivated && onAbilityClick(ability, e)}
       >
-        <img class="ability-icon" src={getAbilityIconPath(exhausts)} alt="ability" />
+        {#if !triggerIcon}
+          <img class="ability-icon" src={getAbilityIconPath(exhausts)} alt="ability" />
+        {/if}
         {#if cost !== undefined && cost > 0}
           <span class="ability-cost">{cost}</span>
         {/if}
@@ -108,6 +112,7 @@
     background: rgba(0, 0, 0, 0.8);
     color: white;
     width: 20px;
+    height: 20px;
     border-radius: 4px;
     font-size: 0.8rem;
     display: flex;
@@ -117,6 +122,17 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     position: relative;
     transition: all 0.2s ease;
+  }
+
+  .ability.has-trigger-icon {
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+    border-radius: 50%;
+    padding: 2px;
+    border: 1px solid black;
+    box-shadow: 0 0 0 1px var(--color-golden);
   }
 
   .ability.activated {

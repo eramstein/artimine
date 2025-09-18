@@ -3,7 +3,7 @@
   import { ItemType } from '@/lib/_model/enums-sim';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
-  import { openBooster } from '@/lib/sim/booster';
+  import { openCardPack } from '@/lib/sim/booster';
   import type { CardTemplate } from '@lib/_model/model-battle';
   import CardCompact from '../cards/CardCompact.svelte';
 
@@ -44,7 +44,7 @@
   function handleOpenNext() {
     const nextBooster = gs.player.items.find((item) => item.type === ItemType.Booster);
     if (nextBooster) {
-      const boosterPack = openBooster(nextBooster);
+      const boosterPack = openCardPack(nextBooster);
       uiState.boosterModal.cards = boosterPack;
 
       // Reset animation by temporarily disabling and re-enabling
@@ -129,6 +129,7 @@
     max-height: 95vh;
     animation: slideIn 0.25s ease-out;
     padding-top: 20px;
+    overflow: hidden;
   }
 
   @keyframes slideIn {
@@ -144,11 +145,34 @@
 
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     justify-items: center;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     min-height: 0;
+    max-height: calc(95vh - 120px); /* Reserve space for buttons */
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(191, 161, 74, 0.5) transparent;
+  }
+
+  .cards-grid::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .cards-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .cards-grid::-webkit-scrollbar-thumb {
+    background: rgba(191, 161, 74, 0.5);
+    border-radius: 4px;
+  }
+
+  .cards-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(191, 161, 74, 0.7);
   }
 
   .card-wrapper {
@@ -312,7 +336,22 @@
   /* Responsive adjustments */
   @media (max-width: 1200px) {
     .cards-grid {
+      grid-template-columns: repeat(3, 1fr);
+      max-height: calc(95vh - 100px);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-height: calc(95vh - 100px);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cards-grid {
       grid-template-columns: 1fr;
+      max-height: calc(95vh - 100px);
     }
   }
 

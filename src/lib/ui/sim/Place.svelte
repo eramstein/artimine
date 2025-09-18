@@ -93,6 +93,9 @@
         onclick={(e) => handleCharacterClick(e, character)}
       >
         <CharacterPortrait {character} />
+        {#if character.chatInitiation}
+          <div class="chat-icon">💬</div>
+        {/if}
       </div>
     {/each}
   </div>
@@ -226,6 +229,37 @@
       0 8px 24px rgba(74, 222, 128, 0.4),
       0 4px 12px rgba(74, 222, 128, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .chat-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    animation: chatPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes chatPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
   }
 
   /* Character Menu Styles */

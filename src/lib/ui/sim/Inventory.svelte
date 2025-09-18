@@ -3,15 +3,15 @@
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { getItemImagePath } from '@/lib/_utils/asset-paths';
-  import { openBooster } from '@/lib/sim/booster';
+  import { openCardPack } from '@/lib/sim/booster';
   import Booster from './Booster.svelte';
 
   const playerItems = $derived(gs.player.items);
 
   function handleItemClick(item: any) {
-    if (item.type === ItemType.Booster) {
-      const boosterPack = openBooster(item);
-      uiState.boosterModal.cards = boosterPack;
+    if (item.type === ItemType.Booster || item.type === ItemType.StarterDeck) {
+      const cards = openCardPack(item);
+      uiState.boosterModal.cards = cards;
       uiState.boosterModal.visible = true;
     }
   }
@@ -29,7 +29,7 @@
       <div class="inventory-item" onclick={() => handleItemClick(item)}>
         <div
           class="item-image"
-          class:booster={item.type === ItemType.Booster}
+          class:booster={item.type === ItemType.Booster || item.type === ItemType.StarterDeck}
           style="background-image: url({getItemImagePath(item.key)})"
         ></div>
         <div class="item-details">

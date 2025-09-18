@@ -21,6 +21,7 @@ export interface Player extends Character {
 export interface Npc extends Character {
   relationSummary: string;
   relationValues: RelationValues;
+  chatInitiation?: string; // the NPC has something to say
 }
 
 export interface RelationValues {

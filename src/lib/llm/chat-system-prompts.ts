@@ -13,7 +13,7 @@ export const playerChatSystemPrompt = {
     - Remain consistent with scene context and characters' personalities.
     - Let NPCs respond naturally to the player’s input.
     - Use emotional nuance: subtext, body language, hesitation, indirect tension when appropriate.
-    - Keep responses to 1–3 paragraphs unless strong narrative development calls for more.
+    - Keep responses short, maximum 1–3 sentences unless strong narrative development calls for more.
     - Do not summarize prior events. Focus on progressing the scene.
   `,
 };

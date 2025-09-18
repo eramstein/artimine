@@ -56,7 +56,7 @@
             class="shop-item"
             class:affordable={playerCash >= item.price}
             class:disabled={playerCash < item.price}
-            class:booster={item.type === ItemType.Booster}
+            class:booster={item.type === ItemType.Booster || item.type === ItemType.StarterDeck}
             class:purchased={purchasedItems.has(item.key)}
             onclick={(event) => handlePurchase(item, event)}
             style="background-image: url({getItemImagePath(item.key)})"
@@ -89,7 +89,7 @@
     padding: 20px;
     margin: 20px;
     color: white;
-    max-width: 600px;
+    max-width: 1000px;
   }
 
   .empty-shop {
@@ -99,14 +99,17 @@
   }
 
   .shop-inventory {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 80px;
+    justify-content: flex-start;
   }
 
   .shop-item-container {
     display: flex;
     flex-direction: column;
+    width: 200px;
+    flex-shrink: 0;
   }
 
   .shop-item {

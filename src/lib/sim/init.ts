@@ -1,4 +1,3 @@
-import { BASE_DECK } from '@/data/base-deck';
 import { CHARACTERS } from '@/data/characters/main';
 import { CHARACTER_PLAYER } from '@/data/characters/player';
 import { PLACES } from '@/data/places/places';
@@ -7,7 +6,7 @@ import { CardSet } from '../_model/enums-battle';
 import { ActivityType, DayPeriod, ItemType } from '../_model/enums-sim';
 import { gs } from '../_state/main.svelte';
 import { openBoosterForCharacter } from './booster';
-import { getCollectionFromDeck, getFullCollection } from './collection';
+import { getCollectionFromDeck } from './collection';
 import { fillDefaultActivities } from './schedule';
 
 export const defaultGameState: GameState = {
@@ -40,10 +39,7 @@ export const defaultGameState: GameState = {
 };
 
 export const initSim = async () => {
-  // CARD COLLECTION
-  gs.player.collection = getFullCollection();
-  gs.player.decks = [BASE_DECK];
-
+  // CARD COLLECTIONS
   for (const character of Object.values(gs.characters)) {
     character.collection = getCollectionFromDeck(character.decks[0]);
     openBoosterForCharacter(character, CardSet.Alpha);
@@ -61,8 +57,19 @@ export const initSim = async () => {
       price: 10,
       variant: CardSet.Alpha,
     },
+    {
+      key: 'starter_alpha',
+      name: 'Starter',
+      type: ItemType.StarterDeck,
+      price: 40,
+      variant: CardSet.Alpha,
+    },
   ];
   gs.player.cash = 100;
+
+  // CHAT INITIATION
+  const dude = gs.characters['the-dude'];
+  dude!.chatInitiation = `The Dude: whoa, it's the master of ceremonies himself, ${gs.player.name}! You should try this new game I have in store. It's called Hordes, and it's good stuff, man.`;
 
   // ACTIVITIES
   gs.player.place = goblinCave!.index;

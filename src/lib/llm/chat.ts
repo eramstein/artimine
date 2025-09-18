@@ -171,12 +171,29 @@ export async function initPlayerChat(characters: Npc[]) {
   );
   gs.chat = {
     characters,
-    history: [],
+    history: [
+      {
+        role: 'system',
+        content: 'Empty prompt, will be set on first player chat.',
+      },
+    ],
     summary: '',
     lastSummaryMessageIndex: 0,
     memories: relevantMemories,
     attemptedActionsResults: '',
   };
+
+  // add chat initiation
+  characters.forEach((c) => {
+    if (c.chatInitiation) {
+      gs.chat!.history.push({
+        role: 'assistant',
+        content: c.chatInitiation,
+        displayLabel: c.chatInitiation,
+      });
+      delete c.chatInitiation;
+    }
+  });
 }
 
 export async function endPlayerChat() {

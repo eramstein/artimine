@@ -204,9 +204,15 @@
       {#each card.abilities as ability}
         <div class="ability-item">
           <div class="ability-header">
-            <span class="ability-icon"
-              >{TRIGGER_ICONS[ability.trigger.type as keyof typeof TRIGGER_ICONS]}</span
-            >
+            <span
+              class="ability-icon"
+              class:has-trigger-icon={TRIGGER_ICONS[
+                ability.trigger.type as keyof typeof TRIGGER_ICONS
+              ]}
+              style={TRIGGER_ICONS[ability.trigger.type as keyof typeof TRIGGER_ICONS]
+                ? `background-image: url('${TRIGGER_ICONS[ability.trigger.type as keyof typeof TRIGGER_ICONS]}')`
+                : ''}
+            ></span>
             <span class="ability-trigger">{ability.trigger.type}</span>
             {#if ability.cost !== undefined && ability.cost > 0}
               <span class="ability-cost">({ability.cost})</span>
@@ -399,6 +405,20 @@
 
   .ability-icon {
     font-size: 1.2rem;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .ability-icon.has-trigger-icon {
+    background-color: white;
+    border-radius: 50%;
+    border: 2px solid black;
+    box-shadow: 0 0 0 1px var(--color-golden);
+    background-size: 20px;
   }
 
   .ability-trigger {

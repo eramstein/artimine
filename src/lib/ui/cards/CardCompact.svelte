@@ -55,12 +55,58 @@
     uiState.cardFullOverlay.visible = true;
     uiState.cardFullOverlay.card = card;
   }
+
+  // Get the primary color for the card background
+  function getCardBackgroundColor(): string {
+    if (card.colors.length === 0) {
+      return '#2a2a2a'; // Default gray color
+    }
+
+    // Map card colors to very dark background colors
+    const colorMap: Record<CardColor, string> = {
+      [CardColor.Red]: '#2a0f0f', // Very dark red
+      [CardColor.Blue]: '#0f1a2a', // Very dark blue
+      [CardColor.Green]: '#0f2a0f', // Very dark green
+      [CardColor.Black]: '#1a1a1a', // Very dark gray/black
+    };
+
+    // Map card colors to more contrasting colors for gradients
+    const gradientColorMap: Record<CardColor, string> = {
+      [CardColor.Red]: '#3a1515', // Dark red with more contrast
+      [CardColor.Blue]: '#151f3a', // Dark blue with more contrast
+      [CardColor.Green]: '#153a15', // Dark green with more contrast
+      [CardColor.Black]: '#1f1f1f', // Dark gray/black with more contrast
+    };
+
+    // If single color, return solid color
+    if (card.colors.length === 1) {
+      const primaryColor = card.colors[0].color;
+      return colorMap[primaryColor] || '#2a2a2a';
+    }
+
+    // For multicolor cards, create a gradient with more contrasting colors
+    const gradientColors = card.colors.map(
+      (colorInfo) => gradientColorMap[colorInfo.color] || '#2a2a2a'
+    );
+    const gradient = `linear-gradient(90deg, ${gradientColors.join(', ')})`;
+    return gradient;
+  }
+
+  // Get the background style (either color or gradient)
+  function getCardBackgroundStyle(): string {
+    const background = getCardBackgroundColor();
+    if (background.includes('gradient')) {
+      return `background: ${background};`;
+    } else {
+      return `background-color: ${background};`;
+    }
+  }
 </script>
 
 <div
   class="card"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
-    40}px; --name-font-size: {nameFontSize()}rem;"
+    40}px; --name-font-size: {nameFontSize()}rem; {getCardBackgroundStyle()}"
   oncontextmenu={handleContextMenu}
 >
   <!-- Card name bar with integrated cost -->
@@ -172,7 +218,6 @@
   }
 
   .name {
-    background: #000;
     color: white;
     padding: 8px 12px;
     font-weight: bold;
