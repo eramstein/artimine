@@ -62,6 +62,7 @@ export function recordActionInChat(actionDescription: string, triggerNpcReaction
     gs.chat?.history.push({
       role: 'user',
       content: actionDescription,
+      fromEngine: true,
     });
   }
 }

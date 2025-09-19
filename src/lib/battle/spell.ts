@@ -5,7 +5,7 @@ import {
   type TargetDefinition,
 } from '../_model';
 import { bs } from '../_state';
-import { onLargeCardPlayed } from './chat';
+import { chatOnLargeCardPlayed } from './chat';
 import { isPayable } from './cost';
 import { DataEffectTemplates } from './effects/effect-templates';
 import { discard } from './hand';
@@ -42,7 +42,7 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
 
   // Hint to LLM that a unit was deployed
   if (spell.cost >= 7) {
-    onLargeCardPlayed(spell);
+    chatOnLargeCardPlayed(spell);
   }
 }
 

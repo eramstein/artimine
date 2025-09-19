@@ -84,12 +84,17 @@ function checkTriggerCondition(
     return true;
   }
 
-  // special case for turn start, here Self means the player
+  // case triggerer is a player, here Self means the player
   if (
     [TriggerType.OnCardDrawn, TriggerType.OnTurnStart].includes(ability.trigger.type) &&
     ability.trigger.range.self
   ) {
     return triggerArgs.player.id === permanentWithAbility.ownerPlayerId;
+  }
+
+  // case triggerer is a land, here Self means the land
+  if ([TriggerType.OnLandDestroyed].includes(ability.trigger.type) && ability.trigger.range.self) {
+    return triggerArgs.land.instanceId === permanentWithAbility.instanceId;
   }
 
   // all others check if the unit causing the trigger is in the range
@@ -169,4 +174,8 @@ export function onTurnStart(player: Player) {
 
 export function onCardDrawn(player: Player, card: Card) {
   triggerAbilities(TriggerType.OnCardDrawn, { player, card });
+}
+
+export function onLandDestroyed(land: Land) {
+  triggerAbilities(TriggerType.OnLandDestroyed, { land });
 }

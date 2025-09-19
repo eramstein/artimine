@@ -37,6 +37,7 @@ export async function sendBattleEvent(message: string): Promise<string> {
     role: 'user',
     content: 'This just happened in the game: ' + message,
     displayLabel: message,
+    fromEngine: true,
   };
 
   gs.chat.history.push(userPrompt);

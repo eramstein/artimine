@@ -12,4 +12,5 @@ export const TRIGGER_ICONS: Record<TriggerType, string> = {
   [TriggerType.OnTurnStart]: '/assets/images/keywords/on_turn_start.png',
   [TriggerType.OnReach]: '/assets/images/keywords/on_reach.png',
   [TriggerType.OnCardDrawn]: '/assets/images/keywords/on_draw.png',
+  [TriggerType.OnLandDestroyed]: '/assets/images/keywords/on_death.png',
 };

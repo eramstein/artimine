@@ -447,7 +447,7 @@ export const DataEffectTemplates: Record<
       });
     },
     label: (targets: TargetDefinition[]) => {
-      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
+      const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : 'units';
       return `Destroy ${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),

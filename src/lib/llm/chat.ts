@@ -197,7 +197,9 @@ export async function initPlayerChat(characters: Npc[]) {
 }
 
 export async function endPlayerChat() {
-  if (!gs.chat?.history || gs.chat?.history.length < 3) {
+  const userGeneratedMessages =
+    gs.chat?.history.filter((m) => !m.fromEngine && m.role === 'user') || [];
+  if (!gs.chat?.history || userGeneratedMessages.length < 2) {
     gs.chat = null;
     return;
   }

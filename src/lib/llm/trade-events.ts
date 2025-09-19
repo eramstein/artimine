@@ -43,6 +43,7 @@ export async function sendTradeEvent(message: string, accepted: boolean): Promis
       (accepted ? 'accepted' : 'rejected') +
       ' the trade.',
     displayLabel: message,
+    fromEngine: true,
   };
 
   gs.chat.history.push(userPrompt);

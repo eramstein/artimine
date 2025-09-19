@@ -1,14 +1,14 @@
 import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
 import { bs, uiState } from '../_state';
-import { onBattleEnd } from './chat';
+import { chatOnBattleEnd } from './chat';
 import { soundManager } from './sound';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
   if (player.life <= 0) {
     bs.playerIdWon = player.id === 0 ? 1 : 0;
-    onBattleEnd();
+    chatOnBattleEnd();
   }
   if (player.life > config.initialLife) {
     player.life = config.initialLife;

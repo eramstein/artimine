@@ -106,6 +106,7 @@ export interface ChatMessage {
   role: string;
   content: string;
   displayLabel?: string; // just the raw message, without additional info intended for the LLM
+  fromEngine?: boolean; // distinguishes auto generated messages from player messages
 }
 
 export interface GroupActivityLog {

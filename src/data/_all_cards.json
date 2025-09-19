@@ -6915,6 +6915,38 @@
     "cardSet": "alpha"
   },
   {
+    "id": "unstable_lab",
+    "name": "Unstable Lab",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "land",
+    "cost": 0,
+    "colors": [],
+    "health": 10,
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Land Destroyed",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "destroyUnit",
+              "args": {
+                "range": {
+                  "sameRow": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "vengeful_crusader",
     "name": "Vengeful Crusader",
     "rarity": "uncommon",
