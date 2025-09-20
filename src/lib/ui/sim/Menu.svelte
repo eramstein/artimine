@@ -1,8 +1,14 @@
 <script lang="ts">
   import { UiView } from '@/lib/_model';
+  import { ActivityType } from '@/lib/_model/enums-sim';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import TimeDisplay from './TimeDisplay.svelte';
+
+  // Check if current activity is a tournament
+  const isTournamentActivity = $derived(
+    gs.activity.activityType === ActivityType.Tournament && gs.activity.tournament
+  );
 </script>
 
 <div class="menu-overlay">
@@ -56,6 +62,15 @@
     >
       Player
     </button>
+    {#if isTournamentActivity}
+      <button
+        class="tab-button tournament-tab"
+        class:active={uiState.currentView === UiView.Tournament}
+        onclick={() => (uiState.currentView = UiView.Tournament)}
+      >
+        🏆 Tournament
+      </button>
+    {/if}
   </div>
 </div>
 
@@ -121,5 +136,22 @@
   .tab-button.active {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
+  }
+
+  .tournament-tab {
+    background: rgba(255, 215, 0, 0.2);
+    color: rgba(255, 215, 0, 0.9);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+  }
+
+  .tournament-tab:hover {
+    background: rgba(255, 215, 0, 0.3);
+    color: rgba(255, 215, 0, 1);
+  }
+
+  .tournament-tab.active {
+    background: rgba(255, 215, 0, 0.4);
+    color: #fff;
+    border-color: rgba(255, 215, 0, 0.6);
   }
 </style>

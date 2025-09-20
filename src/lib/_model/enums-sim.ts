@@ -18,6 +18,19 @@ export enum ActivityType {
   Study = 'Studying',
   Social = 'Socializing',
   Date = 'Going on a date',
+  Tournament = 'Tournament',
+}
+
+export enum TournamentType {
+  Mini = 'Mini', // every player plays against every other player
+  Swiss = 'Swiss',
+}
+
+export enum TournamentStatus {
+  Planned = 'Planned',
+  PairingsPublished = 'PairingsPublished',
+  RoundOngoing = 'RoundOngoing',
+  Finished = 'Finished',
 }
 
 // actions are punctual. they are mapped to LLM tools and Sim functions

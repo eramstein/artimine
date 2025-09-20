@@ -1,7 +1,8 @@
 <script lang="ts">
   import { UiView } from '../_model';
   import { uiState } from '../_state';
-  import { resetBattleState } from '../_state/main.svelte';
+  import { gs, resetBattleState } from '../_state/main.svelte';
+  import { recordTournamentResult } from '../sim/tournament';
 
   const navItems = [
     { view: UiView.Battle, label: 'Game', icon: '🎮' },
@@ -11,7 +12,12 @@
 
   const stopBattle = () => {
     resetBattleState();
-    uiState.currentView = UiView.CurrentPlace;
+    if (gs.activity.tournament) {
+      recordTournamentResult(false);
+      uiState.currentView = UiView.Tournament;
+    } else {
+      uiState.currentView = UiView.CurrentPlace;
+    }
     uiState.navigationVisible = false;
   };
 </script>
@@ -35,7 +41,7 @@
     {#if uiState.currentView === UiView.Battle}
       <button class="nav-item stop-battle" onclick={stopBattle}>
         <span class="icon">⏹️</span>
-        <span class="label">Stop Battle</span>
+        <span class="label">{gs.activity.tournament ? 'Concede Match' : 'Stop Playing'}</span>
       </button>
     {/if}
   </nav>

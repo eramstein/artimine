@@ -1,9 +1,14 @@
 {
   "id": "sewers",
   "name": "Sewers",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "type": "land",
-  "colors": [],
+  "colors": [
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
   "health": 1,
   "cost": 0,
   "ruinsAbilities": [

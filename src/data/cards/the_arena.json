@@ -1,0 +1,39 @@
+{
+  "id": "the_arena",
+  "name": "The Arena",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    }
+  ],
+  "health": 8,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "rage",
+              "counterValue": 1,
+              "range": {
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

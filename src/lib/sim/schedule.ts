@@ -64,7 +64,9 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   gs.activity = activityPlan.activity;
   gs.player.place = activityPlan.place;
   activityPlan.activity.participants.forEach((participant) => {
-    gs.characters[participant].place = activityPlan.place;
+    if (gs.characters[participant]) {
+      gs.characters[participant].place = activityPlan.place;
+    }
   });
 }
 

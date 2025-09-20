@@ -1,6 +1,6 @@
 <script lang="ts">
   import { UiView } from '@/lib/_model';
-  import { gs } from '@/lib/_state/main.svelte';
+  import { gs, saveStateToLocalStorage } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { deleteDeck } from '@/lib/sim/decks';
   import Collection from './Collection.svelte';
@@ -16,6 +16,7 @@
   function goBack() {
     uiState.currentView = UiView.Decks;
     uiState.collection.editedDeckKey = null;
+    saveStateToLocalStorage();
   }
 
   async function copyDeckToClipboard() {
@@ -163,7 +164,8 @@
     flex: 1;
     gap: 2rem;
     padding: 5px 2rem;
-    overflow: hidden;
+    overflow: auto;
+    min-height: 0;
   }
 
   .collection-panel {
@@ -171,6 +173,7 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
+    overflow: auto;
   }
 
   .deck-panel {
@@ -180,6 +183,8 @@
     min-width: 0;
     margin-top: 1rem;
     width: fit-content;
+    overflow: auto;
+    max-height: 100%;
   }
 
   .no-deck-message {

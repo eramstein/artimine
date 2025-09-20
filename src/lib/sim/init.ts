@@ -3,11 +3,12 @@ import { CHARACTER_PLAYER } from '@/data/characters/player';
 import { PLACES } from '@/data/places/places';
 import type { GameState } from '../_model';
 import { CardSet } from '../_model/enums-battle';
-import { ActivityType, DayPeriod, ItemType } from '../_model/enums-sim';
+import { ActivityType, DayPeriod, ItemType, TournamentType } from '../_model/enums-sim';
 import { gs } from '../_state/main.svelte';
 import { openBoosterForCharacter } from './booster';
 import { getCollectionFromDeck } from './collection';
 import { fillDefaultActivities } from './schedule';
+import { getTournament } from './tournament';
 
 export const defaultGameState: GameState = {
   time: {
@@ -76,9 +77,21 @@ export const initSim = async () => {
   const othersAtCave = Object.values(gs.characters).filter(
     (c) => c.key !== gs.player.key && c.place === goblinCave!.index
   );
+  // we start gaming at the Cave
   gs.activity = {
     activityType: ActivityType.Gaming,
     participants: [gs.player.key, ...othersAtCave.map((c) => c.key)],
   };
-  fillDefaultActivities(8);
+  fillDefaultActivities(9);
+  // next Sunday's local tournament
+  gs.activities[8][1] = {
+    activity: {
+      activityType: ActivityType.Tournament,
+      participants: [gs.player.key, ...othersAtCave.map((c) => c.key)],
+      tournament: getTournament(gs.activity.participants, TournamentType.Mini),
+    },
+    day: 8,
+    dayPeriod: DayPeriod.Afternoon,
+    place: goblinCave!.index,
+  };
 };

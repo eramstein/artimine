@@ -1,0 +1,39 @@
+{
+  "id": "big_mammas_inn",
+  "name": "Big Mamma's Inn",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "health": 8,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "range": {
+                "sameRow": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

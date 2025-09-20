@@ -12,6 +12,7 @@
   import Place from './Place.svelte';
   import Player from './Player.svelte';
   import Schedule from './Schedule.svelte';
+  import Tournament from './Tournament.svelte';
   import Trade from './Trade.svelte';
 </script>
 
@@ -39,6 +40,10 @@
       <CharacterInteraction />
     {:else if uiState.currentView === UiView.Trade}
       <Trade />
+    {:else if uiState.currentView === UiView.Tournament}
+      {#if gs.activity.tournament}
+        <Tournament tournament={gs.activity.tournament} />
+      {/if}
     {/if}
   </div>
 

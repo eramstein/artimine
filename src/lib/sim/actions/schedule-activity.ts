@@ -26,8 +26,11 @@ export const scheduleActivityAction: ActionTypeDefinition = {
     console.log('ScheduleActivity', { people, destination, activityType, day, time });
     const participants = getKeysFromNames(people);
     const activityTypeEnum = ActivityType[activityType as keyof typeof ActivityType];
-    const dayNumber = getDayNumberFromWeekday(day || defaultDay);
     const dayPeriod = time ?? defaultTime;
+    let dayNumber = getDayNumberFromWeekday(day || defaultDay);
+    if (dayPeriod < gs.time.period) {
+      dayNumber += 7;
+    }
     const place = gs.places.find((p) => p.name === destination);
     if (!place) {
       console.log('Destination not found');

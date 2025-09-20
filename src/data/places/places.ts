@@ -32,6 +32,11 @@ export const PLACES: Place[] = [
     name: 'Le Chat Noir',
     description: 'A restaurant located in the city center. It serves French cuisine and wines.',
   },
+  {
+    key: 'chez_raoul',
+    name: 'Chez Raoul',
+    description: 'A rustic and popular café. Good place to relax and enjoy a drink with friends.',
+  },
 ].map((p, i) => ({
   index: i,
   key: p.key,

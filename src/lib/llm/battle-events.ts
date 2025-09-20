@@ -48,7 +48,7 @@ export async function sendBattleEvent(message: string): Promise<string> {
   uiState.chat.streamingContent = '';
 
   const stream = await llmService.chat({
-    messages: gs.chat.history.slice(-6),
+    messages: [gs.chat.history[0], ...gs.chat.history.slice(-6)],
     stream: true,
     options: {
       temperature: 0.7,

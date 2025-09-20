@@ -33,36 +33,28 @@
 
 <div class="decks-container">
   <h2 class="decks-title">My Decks</h2>
-
-  {#if gs.player.decks.length === 0}
-    <div class="no-decks">
-      <p>No decks created yet.</p>
-      <p>Create your first deck to get started!</p>
-    </div>
-  {:else}
-    <div class="decks-grid">
-      {#each gs.player.decks as deck}
-        <div class="deck-box" onclick={() => handleEditDeck(deck)}>
-          <div class="deck-image">
-            <img src={getFirstCardImage(deck)} alt="Deck preview" />
-          </div>
-          <div class="deck-name">{deck.name}</div>
-          <div class="deck-count">
-            {deck.cards.reduce((total, card) => total + card.count, 0)} cards
-          </div>
+  <div class="decks-grid">
+    {#each gs.player.decks as deck}
+      <div class="deck-box" onclick={() => handleEditDeck(deck)}>
+        <div class="deck-image">
+          <img src={getFirstCardImage(deck)} alt="Deck preview" />
         </div>
-      {/each}
-
-      <!-- New Deck Button -->
-      <div class="deck-box new-deck-box" onclick={handleCreateNewDeck}>
-        <div class="deck-image new-deck-image">
-          <div class="new-deck-icon">+</div>
+        <div class="deck-name">{deck.name}</div>
+        <div class="deck-count">
+          {deck.cards.reduce((total, card) => total + card.count, 0)} cards
         </div>
-        <div class="deck-name">New Deck</div>
-        <div class="deck-count">Create new</div>
       </div>
+    {/each}
+
+    <!-- New Deck Button -->
+    <div class="deck-box new-deck-box" onclick={handleCreateNewDeck}>
+      <div class="deck-image new-deck-image">
+        <div class="new-deck-icon">+</div>
+      </div>
+      <div class="deck-name">New Deck</div>
+      <div class="deck-count">Create new</div>
     </div>
-  {/if}
+  </div>
 </div>
 
 <style>

@@ -108,7 +108,7 @@ export async function playerSendChat(message: string): Promise<string> {
   uiState.chat.streamingContent = '';
 
   const stream = await llmService.chat({
-    messages: gs.chat.history.slice(-6),
+    messages: [gs.chat.history[0], ...gs.chat.history.slice(-6)],
     stream: true,
     options: {
       temperature: 0.7,
@@ -140,7 +140,7 @@ export async function playerSendChat(message: string): Promise<string> {
   if ((gs.chat.history.length - 1) % SUMMARY_INTERVAL <= 1) {
     const currentSummary = gs.chat.summary;
     const messagesToSummarize = gs.chat.history
-      .filter((m) => m.role !== 'system')
+      .filter((m) => m.role !== 'system' && !m.fromEngine)
       .slice(2 - SUMMARY_INTERVAL)
       .map((m) => m.content || '')
       .join(' \n');

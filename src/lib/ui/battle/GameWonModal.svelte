@@ -2,7 +2,7 @@
   import type { Player } from '@lib/_model';
   import { UiView } from '@lib/_model';
   import { uiState } from '@lib/_state';
-  import { resetBattleState } from '@lib/_state/main.svelte';
+  import { gs, resetBattleState } from '@lib/_state/main.svelte';
   import { getCharacterImagePath } from '@lib/_utils/asset-paths';
 
   let { winningPlayer }: { winningPlayer: Player } = $props();
@@ -13,7 +13,11 @@
 
   const closeModal = () => {
     resetBattleState();
-    uiState.currentView = UiView.CurrentPlace;
+    if (gs.activity.tournament) {
+      uiState.currentView = UiView.Tournament;
+    } else {
+      uiState.currentView = UiView.CurrentPlace;
+    }
   };
 </script>
 

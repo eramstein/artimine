@@ -14,7 +14,7 @@ export const TEST_DECK: Deck = {
     },
   ],
   //lands: ['forest', 'market', 'city', 'mountain'],
-  lands: ['unstable_lab', 'unstable_lab', 'unstable_lab', 'unstable_lab'],
+  lands: ['big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn'],
 };
 
 export const BASE_DECK: Deck = {

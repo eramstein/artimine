@@ -1,4 +1,11 @@
-import type { ActionType, ActivityType, DayPeriod, ItemType } from './enums-sim';
+import type {
+  ActionType,
+  ActivityType,
+  DayPeriod,
+  ItemType,
+  TournamentStatus,
+  TournamentType,
+} from './enums-sim';
 
 export interface GameState {
   time: {
@@ -84,6 +91,7 @@ export interface Item extends ItemDefinition {
 export interface Activity {
   activityType: ActivityType;
   participants: string[]; // Character keys
+  tournament?: Tournament;
 }
 
 export interface ActivityPlan {
@@ -141,4 +149,14 @@ export interface ActionTypeDefinition {
 export interface ActionAttempt {
   actionType: ActionType;
   args: Record<string, any>;
+}
+
+export interface Tournament {
+  players: string[]; // character keys
+  winner?: string;
+  status: TournamentStatus;
+  tournamentType: TournamentType;
+  rankings: Record<string, number>; // character key to current points
+  pairings: Record<string, string>; // character keys, who plays who in current round
+  remainingMatches: Record<string, string[]>; // for mini tournament, who the player still has to play with
 }

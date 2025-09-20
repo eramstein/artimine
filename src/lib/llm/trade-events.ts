@@ -54,7 +54,7 @@ export async function sendTradeEvent(message: string, accepted: boolean): Promis
   uiState.chat.streamingContent = '';
 
   const stream = await llmService.chat({
-    messages: gs.chat.history.slice(-6),
+    messages: [gs.chat.history[0], ...gs.chat.history.slice(-6)],
     stream: true,
     options: {
       temperature: 0.7,

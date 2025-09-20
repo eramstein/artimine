@@ -1,3 +1,4 @@
+import { TournamentStatus } from '../_model/enums-sim';
 import type { Npc } from '../_model/model-game';
 import { UiView, type UiState } from '../_model/model-ui';
 import { recordActionInChat } from '../llm/action';
@@ -83,6 +84,9 @@ export async function initTrade(partner: Npc) {
 export async function startGame(foe: Npc) {
   uiState.deckSelectionModal.foeKey = foe.key;
   uiState.deckSelectionModal.visible = true;
+  if (gs.activity.tournament) {
+    gs.activity.tournament.status = TournamentStatus.RoundOngoing;
+  }
   await initPlayerChat([foe]);
   recordActionInChat(`${foe.name} and ${gs.player.name} have started a game of Hordes cards.`);
 }
