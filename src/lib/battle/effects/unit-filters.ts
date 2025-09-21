@@ -149,9 +149,9 @@ export function getUnitsInRange(
     }
   } else if (range) {
     const params = { player, ...range };
-    if (sourcePermanent.type === CardType.Unit) {
+    if (sourcePermanent?.type === CardType.Unit) {
       params.unit = sourcePermanent as UnitDeployed;
-    } else if (sourcePermanent.type === CardType.Land) {
+    } else if (sourcePermanent?.type === CardType.Land) {
       params.land = sourcePermanent as Land;
     }
     unitsInRange = filterUnits(params);

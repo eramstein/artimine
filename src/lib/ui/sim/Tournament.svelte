@@ -27,8 +27,24 @@
         key: player,
         name: getCharacterName(player),
         points: tournament.rankings[player] || 0,
+        tiebreakers: tournament.tiebreakers[player] || 0,
       }))
-      .sort((a, b) => b.points - a.points)
+      .sort((a, b) => {
+        // Primary sort: by points
+        const pointsDiff = b.points - a.points;
+        if (pointsDiff !== 0) {
+          return pointsDiff;
+        }
+
+        // Secondary sort: by tiebreakers
+        const tiebreakerDiff = b.tiebreakers - a.tiebreakers;
+        if (tiebreakerDiff !== 0) {
+          return tiebreakerDiff;
+        }
+
+        // Tertiary sort: by name
+        return a.name.localeCompare(b.name);
+      })
   );
 
   // Get current pairings (deduplicated)
@@ -80,7 +96,7 @@
   // Get tournament type display text
   function getTypeText(type: TournamentType): string {
     switch (type) {
-      case TournamentType.Mini:
+      case TournamentType.RoundRobin:
         return 'Round Robin';
       case TournamentType.Swiss:
         return 'Swiss Tournament';
@@ -135,6 +151,12 @@
         <span class="label">Players:</span>
         <span class="value">{tournament.players.length}</span>
       </div>
+      {#if tournament.tournamentType === TournamentType.Swiss && tournament.rounds}
+        <div class="info-item">
+          <span class="label">Round:</span>
+          <span class="value">{tournament.playedRounds + 1} of {tournament.rounds}</span>
+        </div>
+      {/if}
     </div>
   </div>
 
@@ -166,7 +188,10 @@
             <div class="ranking-item" class:first={index === 0}>
               <div class="rank">#{index + 1}</div>
               <div class="player-name">{player.name}</div>
-              <div class="points">{player.points} pts</div>
+              <div class="points-container">
+                <div class="points">{player.points} pts</div>
+                <div class="tiebreakers">({player.tiebreakers})</div>
+              </div>
             </div>
           {/each}
         </div>
@@ -433,9 +458,23 @@
     font-weight: 500;
   }
 
+  .points-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+  }
+
   .points {
     color: var(--text-secondary, #aaa);
     font-weight: 600;
+  }
+
+  .tiebreakers {
+    color: var(--text-muted, #666);
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.7;
   }
 
   .pairings {

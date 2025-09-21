@@ -20,7 +20,7 @@
   };
 
   const getActivityFor = (dayOffset: number, periodIndex: number): ActivityPlan | null => {
-    const dayActivities = gs.activities[dayOffset];
+    const dayActivities = gs.activityPlans[dayOffset];
     if (!dayActivities) return null;
     return dayActivities[periodIndex] ?? null;
   };

@@ -3,7 +3,7 @@
   "name": "Giant Growth",
   "rarity": "common",
   "type": "spell",
-  "cost": 2,
+  "cost": 4,
   "colors": [
     {
       "color": "green",

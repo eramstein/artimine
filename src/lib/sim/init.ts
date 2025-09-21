@@ -35,7 +35,7 @@ export const defaultGameState: GameState = {
     activityType: ActivityType.Chill,
     participants: [],
   },
-  activities: [],
+  activityPlans: [],
   chat: null,
 };
 
@@ -84,11 +84,11 @@ export const initSim = async () => {
   };
   fillDefaultActivities(9);
   // next Sunday's local tournament
-  gs.activities[8][1] = {
+  gs.activityPlans[8][1] = {
     activity: {
       activityType: ActivityType.Tournament,
       participants: [gs.player.key, ...othersAtCave.map((c) => c.key)],
-      tournament: getTournament(gs.activity.participants, TournamentType.Mini),
+      tournament: getTournament(gs.activity.participants, TournamentType.Swiss, 3),
     },
     day: 8,
     dayPeriod: DayPeriod.Afternoon,

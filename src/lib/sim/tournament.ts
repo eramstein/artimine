@@ -1,16 +1,25 @@
-import { TournamentStatus, TournamentType } from '../_model/enums-sim';
+import { ActivityType, TournamentStatus, TournamentType } from '../_model/enums-sim';
 import type { Tournament } from '../_model/model-game';
 import { gs } from '../_state/main.svelte';
-import { getRandomFromArray } from '../_utils/random';
+import { generateUniqueId, getRandomFromArray } from '../_utils/random';
+import { saveActivityLog } from '../llm/memories-db';
 
-export function getTournament(players: string[], tournamentType: TournamentType): Tournament {
+export function getTournament(
+  players: string[],
+  tournamentType: TournamentType,
+  rounds?: number
+): Tournament {
   return {
     players: players,
     tournamentType: tournamentType,
     status: TournamentStatus.Planned,
     rankings: {},
+    wonAgainst: {},
     pairings: {},
     remainingMatches: {},
+    tiebreakers: {},
+    rounds: rounds,
+    playedRounds: 0,
   };
 }
 
@@ -25,8 +34,10 @@ export function recordTournamentResult(win: boolean) {
   // update player score
   if (win) {
     tournament.rankings[player] += 1;
+    tournament.wonAgainst[player].push(opponent);
   } else {
     tournament.rankings[opponent] += 1;
+    tournament.wonAgainst[opponent].push(player);
   }
 
   // simulate other matches
@@ -39,16 +50,20 @@ export function recordTournamentResult(win: boolean) {
     alreadyPlayed[player1] = true;
     alreadyPlayed[player2] = true;
     const winner = getRandomFromArray([player1, player2]);
+    const loser = [player1, player2].find((p) => p !== winner)!;
     tournament.rankings[winner] += 1;
+    tournament.wonAgainst[winner].push(loser);
   }
   updateRemainingMatches(tournament);
+  updateTiebreakers(tournament);
+  tournament.playedRounds += 1;
 
   const winner = checkWinner(tournament);
-  console.log('winner', winner);
 
   if (winner) {
     tournament.winner = winner;
     tournament.status = TournamentStatus.Finished;
+    recordTournament(tournament);
     return;
   }
 
@@ -60,10 +75,14 @@ export function recordTournamentResult(win: boolean) {
 export function initTournament(tournament: Tournament) {
   tournament.status = TournamentStatus.PairingsPublished;
   tournament.rankings = {};
+  tournament.wonAgainst = {};
+  tournament.tiebreakers = {};
   for (const player of tournament.players) {
     tournament.rankings[player] = 0;
+    tournament.wonAgainst[player] = [];
+    tournament.tiebreakers[player] = 0;
     tournament.remainingMatches[player] =
-      tournament.tournamentType === TournamentType.Mini
+      tournament.tournamentType === TournamentType.RoundRobin
         ? tournament.players.filter((p) => p !== player)
         : [];
   }
@@ -72,9 +91,7 @@ export function initTournament(tournament: Tournament) {
 
 function getPairings(tournament: Tournament): Record<string, string> {
   const pairings: Record<string, string> = {};
-  const sortedPlayers = Object.keys(tournament.rankings).sort(
-    (a, b) => tournament.rankings[b] - tournament.rankings[a]
-  );
+  const sortedPlayers = getPlayersSortedByRankings(tournament);
   const pairedPlayers: Record<string, boolean> = {};
   // we pick an opponent for each player starting from top of the rankings
   for (let i = 0; i < sortedPlayers.length; i++) {
@@ -83,7 +100,8 @@ function getPairings(tournament: Tournament): Record<string, string> {
       continue;
     }
     pairedPlayers[player] = true;
-    if (tournament.tournamentType === TournamentType.Mini) {
+    // for round robin tournaments, every one plays every one
+    if (tournament.tournamentType === TournamentType.RoundRobin) {
       const pool = tournament.remainingMatches[player].filter((p) => !pairedPlayers[p]);
       if (pool.length === 0) {
         continue;
@@ -93,7 +111,17 @@ function getPairings(tournament: Tournament): Record<string, string> {
       pairings[opponent] = player;
       pairedPlayers[opponent] = true;
     }
-    // TODO: Swiss tournament
+    // for swiss tournaments, players are paired against the closest ranking
+    if (tournament.tournamentType === TournamentType.Swiss) {
+      const pool = sortedPlayers.filter((p) => !pairedPlayers[p]);
+      if (pool.length === 0) {
+        continue;
+      }
+      const opponent = pool[0];
+      pairings[player] = opponent;
+      pairings[opponent] = player;
+      pairedPlayers[opponent] = true;
+    }
   }
   updateRemainingMatches(tournament);
   return pairings;
@@ -115,16 +143,65 @@ function updateRemainingMatches(tournament: Tournament) {
 }
 
 function checkWinner(tournament: Tournament): string | undefined {
-  if (tournament.tournamentType === TournamentType.Mini) {
-    if (tournament.remainingMatches[gs.player.key].length !== 0) {
-      return undefined;
-    }
-    const sortedPlayers = Object.keys(tournament.rankings).sort(
-      (a, b) => tournament.rankings[b] - tournament.rankings[a]
-    );
-    // TODO: handle draws
-    return sortedPlayers[0];
+  if (
+    tournament.tournamentType === TournamentType.RoundRobin &&
+    tournament.remainingMatches[gs.player.key].length !== 0
+  ) {
+    return undefined;
   }
-  // TODO: Swiss tournament
-  return undefined;
+  if (
+    tournament.tournamentType === TournamentType.Swiss &&
+    tournament.playedRounds < (tournament.rounds || 1)
+  ) {
+    return undefined;
+  }
+  const sortedPlayers = getPlayersSortedByRankings(tournament);
+  return sortedPlayers[0];
+}
+
+function getPlayersSortedByRankings(tournament: Tournament): string[] {
+  return Object.keys(tournament.rankings).sort((a, b) => {
+    // Primary sort: by points (rankings)
+    const pointsDiff = tournament.rankings[b] - tournament.rankings[a];
+    if (pointsDiff !== 0) {
+      return pointsDiff;
+    }
+
+    // Secondary sort: by tiebreakers
+    const tiebreakerDiff = (tournament.tiebreakers[b] || 0) - (tournament.tiebreakers[a] || 0);
+    if (tiebreakerDiff !== 0) {
+      return tiebreakerDiff;
+    }
+
+    return a.localeCompare(b);
+  });
+}
+
+// tiebreakers are sum of rankings of the players you won against
+function updateTiebreakers(tournament: Tournament) {
+  for (const player of tournament.players) {
+    tournament.tiebreakers[player] = tournament.wonAgainst[player].reduce(
+      (acc, p) => acc + tournament.rankings[p],
+      0
+    );
+  }
+}
+
+function recordTournament(tournament: Tournament) {
+  if (!tournament.winner) {
+    return;
+  }
+  const winnerName =
+    tournament.winner === gs.player.key ? gs.player.name : gs.characters[tournament.winner]?.name;
+
+  // Ensure participants array contains only serializable strings
+  const participants = tournament.players.map((player) => String(player));
+  saveActivityLog({
+    id: generateUniqueId(),
+    day: gs.time.day,
+    participants: participants,
+    location: gs.places[gs.player.place].name,
+    activityType: ActivityType.Tournament,
+    summary: `${winnerName} won the tournament!`,
+  });
 }

@@ -1,6 +1,5 @@
 import Dexie, { type Table } from 'dexie';
 import type { GroupActivityLog, RelationshipSummaryUpdate } from '../_model';
-import { ActivityType } from '../_model/enums-sim';
 
 /*
   Long term memories database
@@ -24,23 +23,19 @@ const chats: Table<GroupActivityLog> = db.table('chats');
 const relationshipArcs: Table<RelationshipSummaryUpdate> = db.table('relationshipArcs');
 
 // Save a chat to the database
-export async function saveChat(
-  id: string,
-  day: number,
-  participants: string[],
-  location: string,
-  activityType: ActivityType,
-  summary: string
-): Promise<number> {
+export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
+  console.log('Saving activity log:', log);
   try {
-    return await chats.put({
-      id,
-      day,
-      participants,
-      location,
-      activityType,
-      summary,
-    });
+    // Ensure all data is serializable by creating a deep copy with only primitive values
+    const serializableLog = {
+      id: String(log.id),
+      day: Number(log.day),
+      participants: Array.isArray(log.participants) ? log.participants.map((p) => String(p)) : [],
+      location: String(log.location),
+      activityType: log.activityType, // Keep as enum type
+      summary: String(log.summary),
+    };
+    return await chats.put(serializableLog);
   } catch (error) {
     console.error('Error saving chat:', error);
     throw error;

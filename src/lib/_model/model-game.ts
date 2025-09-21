@@ -16,7 +16,7 @@ export interface GameState {
   player: Player;
   places: Place[];
   activity: Activity; // current activity
-  activities: ActivityPlan[][]; // plan for future activities by days in future and day period
+  activityPlans: ActivityPlan[][]; // plan for future activityPlans by days in future and day period
   chat: ChatState | null;
 }
 
@@ -156,7 +156,11 @@ export interface Tournament {
   winner?: string;
   status: TournamentStatus;
   tournamentType: TournamentType;
+  rounds?: number; // for swiss tournament, how many rounds will be played
+  playedRounds: number; // for swiss tournament, how many rounds have been played
   rankings: Record<string, number>; // character key to current points
+  wonAgainst: Record<string, string[]>; // character key to array of character keys it has won against - used for breaking ties
+  tiebreakers: Record<string, number>; // character key to current tiebreaker points
   pairings: Record<string, string>; // character keys, who plays who in current round
   remainingMatches: Record<string, string[]>; // for mini tournament, who the player still has to play with
 }

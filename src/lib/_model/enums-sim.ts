@@ -10,7 +10,7 @@ export enum ItemType {
   BoardGame = 'board game',
 }
 
-// activities are long, they last for one time period
+// activityPlans are long, they last for one time period
 export enum ActivityType {
   Chill = 'Chilling',
   Gaming = 'Gaming',
@@ -22,7 +22,7 @@ export enum ActivityType {
 }
 
 export enum TournamentType {
-  Mini = 'Mini', // every player plays against every other player
+  RoundRobin = 'RoundRobin', // every player plays against every other player
   Swiss = 'Swiss',
 }
 

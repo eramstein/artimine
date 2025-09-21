@@ -29,11 +29,11 @@ export function scheduleActivity(
 ) {
   const dayPeriodIndex = dayPeriodIndexes[dayPeriod];
   const dayIndex = getScheduleIndexOfDay(day);
-  if (!gs.activities[dayIndex]) {
+  if (!gs.activityPlans[dayIndex]) {
     console.log('day not found, adding planning', day);
     fillDefaultActivities(day);
   }
-  gs.activities[dayIndex][dayPeriodIndex] = {
+  gs.activityPlans[dayIndex][dayPeriodIndex] = {
     activity: activity,
     day: day,
     dayPeriod: dayPeriod,
@@ -42,10 +42,10 @@ export function scheduleActivity(
 }
 
 export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
-  const activityPlan = gs.activities[day][dayPeriodIndexes[dayPeriod]];
+  const activityPlan = gs.activityPlans[day][dayPeriodIndexes[dayPeriod]];
   await endPlayerChat();
-  // auto-resolve activities
-  gs.activities
+  // auto-resolve activityPlans
+  gs.activityPlans
     .filter((_, d) => d <= day)
     .forEach((dayActivities) => {
       dayActivities.forEach((activityPlan) => {
@@ -54,7 +54,7 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
       });
     });
   // clean up passed schedule
-  gs.activities = gs.activities.slice(day);
+  gs.activityPlans = gs.activityPlans.slice(day);
   // fill schedule for next days
   gs.time.day += day;
   gs.time.period = dayPeriod;
@@ -79,7 +79,7 @@ export function fillDefaultActivities(untilDay: number) {
   let weekDay = 0;
   for (let day = fromDay; day < toDay; day++) {
     weekDay = day % 7;
-    gs.activities.push([]);
+    gs.activityPlans.push([]);
     for (let dayPeriod = 0; dayPeriod < 3; dayPeriod++) {
       let activityType: ActivityType = ActivityType.Chill;
       let participants: string[] = [];
@@ -101,7 +101,7 @@ export function fillDefaultActivities(untilDay: number) {
         participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
         place = goblinCaveIndex;
       }
-      gs.activities[gs.activities.length - 1][dayPeriod] = {
+      gs.activityPlans[gs.activityPlans.length - 1][dayPeriod] = {
         activity: {
           activityType: activityType,
           participants: participants,
@@ -115,10 +115,10 @@ export function fillDefaultActivities(untilDay: number) {
 }
 
 function getLastScheduledDay() {
-  if (gs.activities.length === 0 || gs.activities[0].length === 0) return -1;
-  return gs.activities[gs.activities.length - 1][0].day;
+  if (gs.activityPlans.length === 0 || gs.activityPlans[0].length === 0) return -1;
+  return gs.activityPlans[gs.activityPlans.length - 1][0].day;
 }
 
 function getScheduleIndexOfDay(day: number) {
-  return gs.activities.findIndex((d) => d[0].day === day);
+  return gs.activityPlans.findIndex((d) => d[0].day === day);
 }

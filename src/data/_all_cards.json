@@ -2817,6 +2817,52 @@
     "cardSet": "alpha"
   },
   {
+    "id": "gas_station",
+    "name": "Gas Station",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "land",
+    "cost": 0,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "health": 5,
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 1,
+                "range": {
+                  "sameRow": true,
+                  "unitType": "construct"
+                }
+              }
+            },
+            "targets": [
+              {
+                "type": "unit",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "gate_keepers",
     "name": "Gate Keepers",
     "rarity": "common",
@@ -2866,7 +2912,7 @@
     "name": "Giant Growth",
     "rarity": "common",
     "type": "spell",
-    "cost": 2,
+    "cost": 4,
     "colors": [
       {
         "color": "green",
@@ -5770,9 +5816,14 @@
   {
     "id": "sewers",
     "name": "Sewers",
-    "rarity": "uncommon",
+    "rarity": "rare",
     "type": "land",
-    "colors": [],
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
     "health": 1,
     "cost": 0,
     "ruinsAbilities": [
@@ -6622,7 +6673,6 @@
                 "counterType": "rage",
                 "counterValue": 1,
                 "range": {
-                  "all": true,
                   "sameRow": true
                 }
               }

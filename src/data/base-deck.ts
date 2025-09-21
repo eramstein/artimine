@@ -294,12 +294,8 @@ export const BASE_DECK_ARABIA: Deck = {
       count: 3,
     },
     {
-      cardTemplateId: 'arc_lightning_specialist',
-      count: 2,
-    },
-    {
       cardTemplateId: 'albatros',
-      count: 1,
+      count: 2,
     },
     {
       cardTemplateId: 'peaceful_faerie',
@@ -307,7 +303,7 @@ export const BASE_DECK_ARABIA: Deck = {
     },
     {
       cardTemplateId: 'shameless_imitator',
-      count: 1,
+      count: 2,
     },
     {
       cardTemplateId: 'zeppelin',

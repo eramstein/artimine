@@ -6,7 +6,7 @@ import { getGroupDescription } from './chat-helpers';
 import { playerChatSystemPrompt, summarySystemPrompt } from './chat-system-prompts';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
-import { saveChat, saveRelationshipSummaryUpdate } from './memories-db';
+import { saveActivityLog, saveRelationshipSummaryUpdate } from './memories-db';
 import { updateOpinion } from './opinion';
 
 async function generateSummary(transcript: string): Promise<string> {
@@ -136,12 +136,11 @@ export async function playerSendChat(message: string): Promise<string> {
 
   // every 10 messages, update the previous summary
   const SUMMARY_INTERVAL = 10;
-
-  if ((gs.chat.history.length - 1) % SUMMARY_INTERVAL <= 1) {
+  if (gs.chat.history.length > gs.chat.lastSummaryMessageIndex + SUMMARY_INTERVAL) {
     const currentSummary = gs.chat.summary;
     const messagesToSummarize = gs.chat.history
-      .filter((m) => m.role !== 'system' && !m.fromEngine)
-      .slice(2 - SUMMARY_INTERVAL)
+      .filter((m) => m.role !== 'system')
+      .slice(gs.chat.lastSummaryMessageIndex + 1, gs.chat.history.length - 1)
       .map((m) => m.content || '')
       .join(' \n');
     const summayPrompt = currentSummary
@@ -222,13 +221,13 @@ export async function endPlayerChat() {
     updateOpinion(npc.key, npc.name, npc.relationSummary, summary);
   }
   // save memory in DB
-  await saveChat(
-    generateUniqueId(),
-    gs.time.day,
-    gs.chat!.characters.map((c) => c.key),
-    gs.places[gs.player.place].name,
-    gs.activity.activityType,
-    summary
-  );
+  await saveActivityLog({
+    id: generateUniqueId(),
+    day: gs.time.day,
+    participants: gs.chat!.characters.map((c) => String(c.key)),
+    location: gs.places[gs.player.place].name,
+    activityType: gs.activity.activityType,
+    summary: summary,
+  });
   gs.chat = null;
 }
