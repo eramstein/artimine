@@ -10,8 +10,8 @@ export enum ItemType {
   BoardGame = 'board game',
 }
 
-// activityPlans are long, they last for one time period
 export enum ActivityType {
+  OldMemories = 'Old Memories',
   Chill = 'Chilling',
   Gaming = 'Gaming',
   Work = 'Working',

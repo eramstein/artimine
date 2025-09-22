@@ -20,6 +20,17 @@ export interface GameState {
   chat: ChatState | null;
 }
 
+export interface Character {
+  key: string;
+  name: string;
+  bio: string;
+  place: number;
+  collection: CardTuple[];
+  decks: Deck[];
+  cash: number;
+  items: Item[];
+}
+
 export interface Player extends Character {
   attributes: CharacterAttributes;
   studyPoints: number;
@@ -42,17 +53,6 @@ export interface CharacterAttributes {
   charisma: number; // 0 to 10
   vitality: number; // 0 to 10
   dexterity: number; // 0 to 10
-}
-
-export interface Character {
-  key: string;
-  name: string;
-  bio: string;
-  place: number;
-  collection: CardTuple[];
-  decks: Deck[];
-  cash: number;
-  items: Item[];
 }
 
 export interface CardTuple {

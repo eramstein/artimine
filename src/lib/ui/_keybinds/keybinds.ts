@@ -1,8 +1,5 @@
 import { PLACES } from '@/data/places/places';
-import { UiView } from '@/lib/_model';
-import { initBattle } from '@/lib/battle';
 import {
-  getCurrentBattleState,
   gs,
   loadGameStateFromLocalStorage,
   resetBattleState,
@@ -36,13 +33,6 @@ export function handleKeybinds(event: KeyboardEvent) {
     event.preventDefault();
     resetBattleState();
     console.log('Battle state reset');
-  } else if (event.key === 'b') {
-    event.preventDefault();
-    initBattle();
-    uiState.currentView = UiView.Battle;
-    console.log('Battle initialized');
-  } else if (event.key === 'l') {
-    console.log('Current battle state:', getCurrentBattleState());
   } else if (event.key === 't') {
     gs.places = PLACES;
   } else if (event.key === 'Escape') {

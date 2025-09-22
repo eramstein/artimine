@@ -1,3 +1,4 @@
+import { CHARACTER_INITIAL_MEMORIES } from '@/data/characters/memories';
 import Dexie, { type Table } from 'dexie';
 import type { GroupActivityLog, RelationshipSummaryUpdate } from '../_model';
 import { getEmbedding } from './embeddings';
@@ -87,6 +88,7 @@ export async function deleteOldChats(olderThan: number): Promise<void> {
 export async function resetIndexDB(): Promise<void> {
   await chats.clear();
   await relationshipArcs.clear();
+  CHARACTER_INITIAL_MEMORIES.forEach((memory) => saveActivityLog(memory));
 }
 
 // Save a relationship summary update to the database

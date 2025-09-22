@@ -2,6 +2,7 @@
   import { UiView } from '../_model';
   import { uiState } from '../_state';
   import { gs, resetBattleState } from '../_state/main.svelte';
+  import { resetIndexDB } from '../llm/memories-db';
   import { recordTournamentResult } from '../sim/tournament';
 
   const navItems = [
@@ -19,6 +20,16 @@
       uiState.currentView = UiView.CurrentPlace;
     }
     uiState.navigationVisible = false;
+  };
+
+  const handleResetIndexDB = async () => {
+    try {
+      await resetIndexDB();
+      alert('IndexedDB has been reset successfully!');
+    } catch (error) {
+      console.error('Failed to reset IndexedDB:', error);
+      alert('Failed to reset IndexedDB. Check console for details.');
+    }
   };
 </script>
 
@@ -44,6 +55,14 @@
         <span class="label">{gs.activity.tournament ? 'Concede Match' : 'Stop Playing'}</span>
       </button>
     {/if}
+
+    <div class="admin-section">
+      <div class="admin-divider"></div>
+      <button class="nav-item admin-item" onclick={handleResetIndexDB}>
+        <span class="icon">🗑️</span>
+        <span class="label">Reset IndexedDB</span>
+      </button>
+    </div>
   </nav>
 </div>
 
@@ -117,5 +136,26 @@
   .stop-battle:hover {
     background: rgba(220, 38, 38, 0.2);
     border-color: rgba(220, 38, 38, 0.4);
+  }
+
+  .admin-section {
+    margin-top: 1rem;
+  }
+
+  .admin-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 0;
+  }
+
+  .admin-item {
+    background: rgba(156, 163, 175, 0.1);
+    border-color: rgba(156, 163, 175, 0.2);
+    color: #d1d5db;
+  }
+
+  .admin-item:hover {
+    background: rgba(156, 163, 175, 0.2);
+    border-color: rgba(156, 163, 175, 0.3);
   }
 </style>
