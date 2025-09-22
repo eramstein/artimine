@@ -106,7 +106,6 @@ export interface ChatState {
   history: ChatMessage[];
   summary: string;
   lastSummaryMessageIndex: number;
-  memories: string;
   attemptedActionsResults: string;
 }
 
@@ -124,6 +123,7 @@ export interface GroupActivityLog {
   location: string;
   day: number;
   summary: string;
+  embedding: number[];
 }
 
 export interface RelationshipSummaryUpdate {

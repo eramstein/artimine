@@ -73,17 +73,6 @@
     color: #e0e0e0;
   }
 
-  .no-decks {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: #888;
-  }
-
-  .no-decks p {
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
-  }
-
   .decks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

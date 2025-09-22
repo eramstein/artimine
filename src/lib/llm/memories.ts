@@ -1,5 +1,6 @@
 import type { Character, GroupActivityLog, Place } from '../_model';
 import { ActivityType } from '../_model/enums-sim';
+import { cosineSimilarity, getEmbedding } from './embeddings';
 import { getChatsForCharacters } from './memories-db';
 
 // returns a text describing relevant memories to be added to the chat system prompt
@@ -7,11 +8,14 @@ export async function getSystemPromptMemories(
   day: number,
   characters: Character[],
   place: Place,
-  activityType: ActivityType
+  activityType: ActivityType,
+  userMessage: string
 ) {
   const characterIds = characters.map((c) => c.key);
 
   const indexDbMemories = await getChatsForCharacters(characterIds, 0, day);
+
+  const embeddedUserMessage = await getEmbedding(userMessage);
 
   // Add a score to each memory
   const scoredMemories = indexDbMemories
@@ -22,6 +26,7 @@ export async function getSystemPromptMemories(
         characters,
         place,
         activityType,
+        embeddedUserMessage,
       }),
     }))
     .filter((m) => m.score > 0.5)
@@ -46,26 +51,31 @@ function scoreMemory(
     characters: Character[];
     place: Place;
     activityType: ActivityType;
+    embeddedUserMessage: number[];
   }
 ) {
   const weights = {
     time: 0.5,
     characters: 0.1,
     location: 0.05,
-    activity: 0.1,
-    semantic: 0.25,
+    activity: 0.05,
+    semantic: 0.3,
   };
 
   const time = timeScore(memory.day, context.day);
   const chars = memory.participants ? characterScore(memory.participants, context.characters) : 0;
   const loc = locationScore(memory.location, context.place.key);
   const act = activityScore(memory.activityType, context.activityType);
+  const sem = cosineSimilarity(memory.embedding, context.embeddedUserMessage);
+
+  console.log('sem', sem, memory.summary);
 
   return (
     weights.time * time +
     weights.characters * chars +
     weights.location * loc +
-    weights.activity * act
+    weights.activity * act +
+    weights.semantic * sem
   );
 }
 

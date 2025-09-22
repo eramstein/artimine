@@ -1,5 +1,6 @@
 import { Mistral } from '@mistralai/mistralai';
-import { LLM_API_MODEL } from './config';
+import type { EmbeddingResponse } from '@mistralai/mistralai/models/components';
+import { LLM_API_EMBEDDING_MODEL, LLM_API_MODEL } from './config';
 
 const mistralApiKey = import.meta.env.VITE_MISTRAL_API_KEY;
 
@@ -85,10 +86,12 @@ export interface StreamChunk {
 export interface LLMService {
   chat(request: ChatRequest & { stream: true }): Promise<AsyncIterable<ChatResponse | StreamChunk>>;
   chat(request: ChatRequest & { stream?: false }): Promise<ChatResponse | ChatResponse>;
+  embed(inputs: string[]): Promise<EmbeddingResponse>;
   getMessage(response: ChatResponse | ChatResponse): string;
   getStreamChunk(response: ChatResponse | StreamChunk): string;
   getTools(response: ChatResponse | ChatResponse): ToolCall[];
   getToolArguments(response: { [id: string]: any } | string): Record<string, any>;
+  getEmbedding(response: EmbeddingResponse): number[];
 }
 
 export class MistralService implements LLMService {
@@ -127,6 +130,12 @@ export class MistralService implements LLMService {
       },
     }) as Promise<ChatResponse>;
   }
+  async embed(inputs: string[]): Promise<EmbeddingResponse> {
+    return mistralClient.embeddings.create({
+      model: LLM_API_EMBEDDING_MODEL,
+      inputs,
+    });
+  }
   getMessage(chunk: ChatResponse): string {
     return chunk.choices[0].message.content;
   }
@@ -138,6 +147,9 @@ export class MistralService implements LLMService {
   }
   getToolArguments(response: string): Record<string, any> {
     return JSON.parse(response);
+  }
+  getEmbedding(response: EmbeddingResponse): number[] {
+    return response?.data[0]?.embedding || [];
   }
 }
 

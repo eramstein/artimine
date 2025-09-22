@@ -40,6 +40,7 @@ export const defaultGameState: GameState = {
 };
 
 export const initSim = async () => {
+  console.log('initSim');
   // CARD COLLECTIONS
   for (const character of Object.values(gs.characters)) {
     character.collection = getCollectionFromDeck(character.decks[0]);

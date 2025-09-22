@@ -48,8 +48,17 @@ export async function playerSendChat(message: string): Promise<string> {
   const currentSummary = gs.chat.summary
     ? 'Previous Conversation Summary:\n' + gs.chat.summary
     : '';
-  const memoriesPrompt = gs.chat.memories
-    ? `- Relevant Memory:\nThe characters remember a past event that may influence today's conversation:\n"${gs.chat.memories}"`
+
+  // get last memory involving at least one of these characters
+  const relevantMemories = await getSystemPromptMemories(
+    gs.time.day,
+    gs.chat.characters,
+    gs.places[gs.player.place],
+    gs.activity.activityType,
+    message
+  );
+  const memoriesPrompt = relevantMemories
+    ? `- Relevant Memory:\nThe characters remember a past event that may influence today's conversation:\n"${relevantMemories}"`
     : '';
 
   const systemPrompt = {
@@ -161,13 +170,6 @@ export async function initPlayerChat(characters: Npc[]) {
   } else {
     await endPlayerChat();
   }
-  // get last memory involving at least one of these characters
-  const relevantMemories = await getSystemPromptMemories(
-    gs.time.day,
-    characters,
-    gs.places[gs.player.place],
-    gs.activity.activityType
-  );
   gs.chat = {
     characters,
     history: [
@@ -178,7 +180,6 @@ export async function initPlayerChat(characters: Npc[]) {
     ],
     summary: '',
     lastSummaryMessageIndex: 0,
-    memories: relevantMemories,
     attemptedActionsResults: '',
   };
 
@@ -228,6 +229,7 @@ export async function endPlayerChat() {
     location: gs.places[gs.player.place].name,
     activityType: gs.activity.activityType,
     summary: summary,
+    embedding: [],
   });
   gs.chat = null;
 }

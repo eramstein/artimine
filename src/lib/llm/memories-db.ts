@@ -1,5 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { GroupActivityLog, RelationshipSummaryUpdate } from '../_model';
+import { getEmbedding } from './embeddings';
 
 /*
   Long term memories database
@@ -26,14 +27,17 @@ const relationshipArcs: Table<RelationshipSummaryUpdate> = db.table('relationshi
 export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
   console.log('Saving activity log:', log);
   try {
-    // Ensure all data is serializable by creating a deep copy with only primitive values
+    // call LLM to create embedding
+    const embedding = await getEmbedding(log.summary);
+    // store in IndexedDB
     const serializableLog = {
       id: String(log.id),
       day: Number(log.day),
       participants: Array.isArray(log.participants) ? log.participants.map((p) => String(p)) : [],
       location: String(log.location),
-      activityType: log.activityType, // Keep as enum type
+      activityType: log.activityType,
       summary: String(log.summary),
+      embedding,
     };
     return await chats.put(serializableLog);
   } catch (error) {
