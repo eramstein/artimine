@@ -203,5 +203,6 @@ function recordTournament(tournament: Tournament) {
     location: gs.places[gs.player.place].name,
     activityType: ActivityType.Tournament,
     summary: `${winnerName} won the tournament!`,
+    embedding: [],
   });
 }

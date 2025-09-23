@@ -203,7 +203,7 @@ export const BASE_DECK_MIDGUARD: Deck = {
   cards: [
     {
       cardTemplateId: 'earthquake',
-      count: 30,
+      count: 3,
     },
     {
       cardTemplateId: 'hungry_hermit',

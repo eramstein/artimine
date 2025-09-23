@@ -1,7 +1,15 @@
-import { type Activity, ActivityType, DayPeriod, type Place } from '../_model';
+import {
+  type Activity,
+  ActivityType,
+  DayPeriod,
+  type Place,
+  type Tournament,
+  TournamentType,
+} from '../_model';
 import { gs } from '../_state/main.svelte';
 import { endPlayerChat } from '../llm';
 import { autoResolveActivity } from './activity';
+import { getTournament } from './tournament';
 
 const dayPeriodIndexes = {
   [DayPeriod.Morning]: 0,
@@ -84,6 +92,7 @@ export function fillDefaultActivities(untilDay: number) {
       let activityType: ActivityType = ActivityType.Chill;
       let participants: string[] = [];
       let place: number = bedroomIndex;
+      let tournament: Tournament | undefined;
       // not week end
       if (weekDay > 1) {
         if (dayPeriod === 0) {
@@ -101,10 +110,18 @@ export function fillDefaultActivities(untilDay: number) {
         participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
         place = goblinCaveIndex;
       }
+      // friday evening local tournament
+      if (weekDay === 6 && dayPeriod === 2) {
+        activityType = ActivityType.Tournament;
+        participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
+        place = goblinCaveIndex;
+        tournament = getTournament(participants, TournamentType.Swiss, 3);
+      }
       gs.activityPlans[gs.activityPlans.length - 1][dayPeriod] = {
         activity: {
           activityType: activityType,
           participants: participants,
+          tournament: tournament,
         },
         day: day,
         dayPeriod: dayPeriods[dayPeriod],
