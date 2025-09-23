@@ -1,5 +1,4 @@
 import { ActivityType } from '@/lib/_model/enums-sim';
-import { generateUniqueId } from '@/lib/_utils/random';
 import { BASE_DECK_MIDGUARD } from '../base-deck';
 
 export const CHARACTER_THE_DUDE = {
@@ -17,7 +16,6 @@ export const CHARACTER_THE_DUDE = {
 
 export const CHARACTER_THE_DUDE_MEMORIES = [
   {
-    id: generateUniqueId(),
     summary: `
       The Dude opened the Goblin's Den five years ago.
       He always dreamt of owning his own local game store.
@@ -28,10 +26,8 @@ export const CHARACTER_THE_DUDE_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_THE_DUDE.key],
     location: "The Goblin's Den",
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       The Dude remembers his first customer.
       It was a woman his age looking for a toy for her little boy.
@@ -42,10 +38,8 @@ export const CHARACTER_THE_DUDE_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_THE_DUDE.key],
     location: "The Goblin's Den",
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       The Dude participated in his first Hordes tournament.
       He was very hopeful but he didn't do very well, though he stil lrefuses to admit it and blames luck.
@@ -54,6 +48,5 @@ export const CHARACTER_THE_DUDE_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_THE_DUDE.key],
     location: "The Goblin's Den",
-    embedding: [],
   },
 ];

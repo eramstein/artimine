@@ -1,7 +1,7 @@
-import type { Character, GroupActivityLog, Place } from '../_model';
+import type { Character, GroupActivityLog, Place, WorldFact } from '../_model';
 import { ActivityType } from '../_model/enums-sim';
 import { cosineSimilarity, getEmbedding } from './embeddings';
-import { getChatsForCharacters } from './memories-db';
+import { getChatsForCharacters, getWorldFacts } from './memories-db';
 
 // returns a text describing relevant memories to be added to the chat system prompt
 export async function getSystemPromptMemories(
@@ -37,11 +37,26 @@ export async function getSystemPromptMemories(
   }
 
   // return top 2 memories summary with highest scores
-  return scoredMemories
+  const topMemories = scoredMemories
     .sort((a, b) => b.score - a.score)
     .slice(0, 2)
     .map((memory) => memory.summary)
     .join('\n');
+
+  const worldFacts = await getWorldFacts();
+  console.log('worldFacts', worldFacts);
+  const topWorldFacts = worldFacts
+    .map((fact) => ({
+      summary: fact.description,
+      score: scoreWorldFact(fact, { embeddedUserMessage }),
+    }))
+    .filter((m) => m.score > 0.5)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2)
+    .map((fact) => fact.summary)
+    .join('\n');
+
+  return `${topMemories}\n\n${topWorldFacts}`;
 }
 
 function scoreMemory(
@@ -67,8 +82,6 @@ function scoreMemory(
   const loc = locationScore(memory.location, context.place.key);
   const act = activityScore(memory.activityType, context.activityType);
   const sem = cosineSimilarity(memory.embedding, context.embeddedUserMessage);
-
-  console.log('sem', sem, memory.summary);
 
   return (
     weights.time * time +
@@ -99,4 +112,8 @@ function locationScore(memoryLoc: string | undefined, currentLoc: string): numbe
 
 function activityScore(memType: ActivityType | undefined, currentType: ActivityType): number {
   return memType === currentType ? 1 : 0;
+}
+
+function scoreWorldFact(worldFact: WorldFact, context: { embeddedUserMessage: number[] }): number {
+  return cosineSimilarity(worldFact.embedding, context.embeddedUserMessage);
 }

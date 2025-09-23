@@ -1,5 +1,4 @@
 import { ActivityType } from '@/lib/_model/enums-sim';
-import { generateUniqueId } from '@/lib/_utils/random';
 import { BASE_DECK_ARABIA } from '../base-deck';
 
 export const CHARACTER_MOLLY = {
@@ -16,7 +15,6 @@ export const CHARACTER_MOLLY = {
 
 export const CHARACTER_MOLLY_MEMORIES = [
   {
-    id: generateUniqueId(),
     summary: `
       Molly remembers spending hours as a teenager reading books about the mind.
       She was fascinated by why people feel, dream, and act the way they do.
@@ -26,10 +24,8 @@ export const CHARACTER_MOLLY_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_MOLLY.key],
     location: 'Childhood Bedroom',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Molly recalls her first day at university.
       She felt shy walking into the lecture hall full of strangers,
@@ -39,10 +35,8 @@ export const CHARACTER_MOLLY_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_MOLLY.key],
     location: 'University Lecture Hall',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Molly remembers her first psychology experiment in class.
       It was a simple test on memory and attention,
@@ -52,10 +46,8 @@ export const CHARACTER_MOLLY_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_MOLLY.key],
     location: 'Psychology Lab',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Molly recalls her first shift as a waitress.
       She dropped a tray of glasses and turned bright red,
@@ -65,10 +57,8 @@ export const CHARACTER_MOLLY_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_MOLLY.key],
     location: 'Café',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Molly remembers listening to her friends talk about their worries.
       She didn’t say much, but they always told her she was a good listener,
@@ -78,6 +68,5 @@ export const CHARACTER_MOLLY_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_MOLLY.key],
     location: 'Dormitory Common Room',
-    embedding: [],
   },
 ];

@@ -1,5 +1,4 @@
 import { ActivityType } from '@/lib/_model/enums-sim';
-import { generateUniqueId } from '@/lib/_utils/random';
 import { BASE_DECK_ITALIA } from '../base-deck';
 
 export const CHARACTER_EMMA = {
@@ -17,7 +16,6 @@ export const CHARACTER_EMMA = {
 
 export const CHARACTER_EMMA_MEMORIES = [
   {
-    id: generateUniqueId(),
     summary: `
       Emma remembers sketching for hours as a little girl.
       She would sit by the window of her family's small apartment,
@@ -28,10 +26,8 @@ export const CHARACTER_EMMA_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_EMMA.key],
     location: 'Childhood Apartment',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Emma remembers her father working late shifts and her mother
       patching clothes to save money. 
@@ -42,10 +38,8 @@ export const CHARACTER_EMMA_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_EMMA.key],
     location: 'Childhood Home',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Emma recalls winning a school art contest at age twelve.
       For a brief moment she felt like her dream of becoming an artist was possible,
@@ -55,10 +49,8 @@ export const CHARACTER_EMMA_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_EMMA.key],
     location: 'Middle School',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Emma remembers studying at the public library every evening in high school.
       While her friends went out, she stayed behind to work,
@@ -68,10 +60,8 @@ export const CHARACTER_EMMA_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_EMMA.key],
     location: 'Public Library',
-    embedding: [],
   },
   {
-    id: generateUniqueId(),
     summary: `
       Emma recalls her first day of law school.
       She felt proud and out of place at the same time,
@@ -82,6 +72,5 @@ export const CHARACTER_EMMA_MEMORIES = [
     activityType: ActivityType.OldMemories,
     participants: [CHARACTER_EMMA.key],
     location: 'Law School',
-    embedding: [],
   },
 ];

@@ -1,6 +1,8 @@
 import { CHARACTER_INITIAL_MEMORIES } from '@/data/characters/memories';
+import { WORLD_FACTS } from '@/data/world-facts';
 import Dexie, { type Table } from 'dexie';
-import type { GroupActivityLog, RelationshipSummaryUpdate } from '../_model';
+import type { GroupActivityLog, RelationshipSummaryUpdate, WorldFact } from '../_model';
+import { generateUniqueId } from '../_utils/random';
 import { getEmbedding } from './embeddings';
 
 /*
@@ -16,6 +18,7 @@ const db = new Dexie('ArtimineDB');
 db.version(1).stores({
   chats: 'id,day,activityType,[participants+day]',
   relationshipArcs: 'id,character',
+  worldFacts: 'id,description',
 });
 
 // Export the chats table
@@ -24,11 +27,13 @@ const chats: Table<GroupActivityLog> = db.table('chats');
 // Export the relationshipArcs table
 const relationshipArcs: Table<RelationshipSummaryUpdate> = db.table('relationshipArcs');
 
+// Export the worldFacts table
+const worldFacts: Table<WorldFact> = db.table('worldFacts');
+
 // Save a chat to the database
 export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
   console.log('Saving activity log:', log);
   try {
-    // call LLM to create embedding
     const embedding = await getEmbedding(log.summary);
     // store in IndexedDB
     const serializableLog = {
@@ -65,6 +70,11 @@ export async function getChatsForCharacters(
   }
 }
 
+// Fetch world facts
+export async function getWorldFacts(): Promise<WorldFact[]> {
+  return await worldFacts.toArray();
+}
+
 // Fetch a single chat by ID
 export async function getChatById(id: number): Promise<GroupActivityLog | undefined> {
   try {
@@ -88,7 +98,27 @@ export async function deleteOldChats(olderThan: number): Promise<void> {
 export async function resetIndexDB(): Promise<void> {
   await chats.clear();
   await relationshipArcs.clear();
-  CHARACTER_INITIAL_MEMORIES.forEach((memory) => saveActivityLog(memory));
+  await worldFacts.clear();
+  CHARACTER_INITIAL_MEMORIES.forEach((memory) =>
+    saveActivityLog({ ...memory, id: generateUniqueId(), embedding: [] })
+  );
+  WORLD_FACTS.forEach((fact) => saveWorldFact({ ...fact, id: generateUniqueId(), embedding: [] }));
+}
+
+// Save a world fact to the database
+export async function saveWorldFact(fact: WorldFact): Promise<number> {
+  try {
+    const embedding = await getEmbedding(fact.description);
+    const serializableFact = {
+      id: String(fact.id),
+      description: String(fact.description),
+      embedding,
+    };
+    return await worldFacts.put(serializableFact);
+  } catch (error) {
+    console.error('Error saving world fact:', error);
+    throw error;
+  }
 }
 
 // Save a relationship summary update to the database

@@ -5,7 +5,7 @@ import { CHARACTER_MOLLY_MEMORIES } from './molly';
 import { CHARACTER_OUSMANE_MEMORIES } from './ousmane';
 import { CHARACTER_THE_DUDE_MEMORIES } from './the-dude';
 
-export const CHARACTER_INITIAL_MEMORIES: GroupActivityLog[] = [
+export const CHARACTER_INITIAL_MEMORIES: Omit<GroupActivityLog, 'id' | 'embedding'>[] = [
   ...CHARACTER_THE_DUDE_MEMORIES,
   ...CHARACTER_EMMA_MEMORIES,
   ...CHARACTER_HENRY_MEMORIES,

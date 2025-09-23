@@ -126,6 +126,12 @@ export interface GroupActivityLog {
   embedding: number[];
 }
 
+export interface WorldFact {
+  id: string;
+  description: string;
+  embedding: number[];
+}
+
 export interface RelationshipSummaryUpdate {
   id: string;
   npc: string;
