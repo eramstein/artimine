@@ -82,3 +82,18 @@ export enum CounterType {
   Energy = 'energy',
   Rage = 'rage',
 }
+
+/* Updated at the start of the turn, assess the situation and pick a strategy */
+export enum AiTurnStrategy {
+  Normal = 'Normal',
+  Attack = 'Attack', // moderate offensive stance
+  Defend = 'Defend', // moderate defensive stance
+  Turtle = 'Turtle', // we have long term advantage, try to make the game last long
+  Reach = 'Reach', // the opponent is low on HP, all out attack, make sacrifices if needed
+}
+export enum AiTurnGoal {
+  Reset = 'Reset', // we are too far behind, reset the board if possible
+  ControlRow = 'Control Row', // get control of a specific row
+  DestroyUnit = 'Destroy Unit', // destroy a specific unit
+  DestroyLand = 'Destroy Land', // destroy a specific land
+}

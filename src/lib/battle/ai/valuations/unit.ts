@@ -1,4 +1,5 @@
 import { TriggerType, type UnitDeployed } from '@/lib/_model';
+import { bs } from '@/lib/_state';
 import { getBudgetForUnit } from '@/tools/generator/budgets';
 
 export function valueUnit(unit: UnitDeployed) {
@@ -27,4 +28,14 @@ export function wouldBeDestroyedByCounterAttack(
     damage += attacker.power - (unit.keywords?.armor || 0);
   });
   return damage >= unit.health;
+}
+
+// returns total AI units values minus total player units values
+export function valueBoard(): number {
+  const playerId = bs.players.filter((player) => player.isPlayer)[0].id;
+  const aiUnits = bs.units.filter((unit) => unit.ownerPlayerId !== playerId);
+  const playerUnits = bs.units.filter((unit) => unit.ownerPlayerId === playerId);
+  const aiUnitsValue = aiUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
+  const playerUnitsValue = playerUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
+  return aiUnitsValue - playerUnitsValue;
 }

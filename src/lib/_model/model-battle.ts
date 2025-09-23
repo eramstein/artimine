@@ -1,5 +1,7 @@
 import type { UnitFilterArgs } from '../battle/effects';
 import {
+  AiTurnGoal,
+  AiTurnStrategy,
   CardColor,
   CardRarity,
   CardSet,
@@ -16,6 +18,7 @@ export interface BattleState {
   playerIdWon: number | null;
   players: Player[];
   units: UnitDeployed[];
+  aiState: AiState;
 }
 
 export interface Player {
@@ -42,6 +45,7 @@ export interface BaseCardTemplate {
   type: CardType;
   cost: number;
   colors: { color: CardColor; count: number }[];
+  aiHints?: AiTurnGoal[];
 }
 
 export interface UnitCardTemplate extends BaseCardTemplate {
@@ -184,4 +188,9 @@ export type ActionDefinition = {
     args: Record<string, any>;
   };
   targets?: TargetDefinition[];
+};
+
+export type AiState = {
+  strategy: AiTurnStrategy;
+  goals: { goal: AiTurnGoal; args: any }[];
 };

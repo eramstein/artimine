@@ -1,8 +1,10 @@
-import { type Land, type Player, type UnitDeployed } from '@/lib/_model';
+import { AiTurnGoal, type Land, type Player, type UnitDeployed } from '@/lib/_model';
+import { bs } from '@/lib/_state';
 import { getRandomFromArray } from '../../../_utils/random';
 import { getEmptyCells } from '../../boards';
 import { attackLand, attackPlayer, attackUnit } from '../../combat';
 import { moveUnit } from '../../move';
+import { playSpell } from '../../spell';
 import { deployUnit } from '../../unit';
 import type { PossibleActions } from '../model';
 import { type AiPersona } from '../model';
@@ -13,7 +15,25 @@ import { getHighestMoveValue } from '../valuations/move';
 import { valueUnit, wouldBeDestroyed } from '../valuations/unit';
 
 export const AiPersonaNormal: AiPersona = {
+  // TODO: assess all options together, we need comparable value estimates
   executeAction(possibleActions: PossibleActions) {
+    // for spells we rely on cards aiHints and check if they match a goal
+    if (possibleActions.playableSpells.length > 0 && bs.aiState.goals.length > 0) {
+      const goalsMap = bs.aiState.goals.reduce(
+        (acc, curr) => {
+          acc[curr.goal] = curr.args;
+          return acc;
+        },
+        {} as Record<AiTurnGoal, any>
+      );
+      for (const spell of possibleActions.playableSpells) {
+        if (spell.aiHints?.some((hint) => goalsMap[hint])) {
+          // for now AIs don't use spells with targets
+          playSpell(spell, [[]]);
+          return;
+        }
+      }
+    }
     if (possibleActions.unitsWhoCanAttack?.length > 0) {
       // for now we don't try to order the attacks
       const unit = getRandomFromArray(possibleActions.unitsWhoCanAttack);
@@ -42,6 +62,7 @@ export const AiPersonaNormal: AiPersona = {
 };
 
 // figure out whether to attack or move based on expected values
+// TODO: use current AiStrategy to weight alternatives
 function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
   const bestAttack = getHighestValueTarget(unit);
   let bestAttackValue = bestAttack.value;

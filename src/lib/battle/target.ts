@@ -145,14 +145,15 @@ export function getEligibleTargets(
 
 export function getTargetLabel(target: TargetDefinition): string {
   const count = target.count ?? 1;
+  const countLabel = count > 1 ? String(count) : '';
   if (target.type === TargetType.Units) {
-    return `to target unit${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target unit${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Ennemies) {
-    return `to target ennemy${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target ennemy${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Allies) {
-    return `to target ally${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target ally${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Cell) {
     return `, targets cell${count !== 1 ? 's' : ''}`;
@@ -167,16 +168,16 @@ export function getTargetLabel(target: TargetDefinition): string {
     return `, targets empty cell${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Land) {
-    return `to target land${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target land${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.GraveyardCard) {
-    return `to target graveyard card${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target graveyard card${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.DeckCard) {
-    return `to target deck card${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target deck card${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.Player) {
-    return `to target player${count !== 1 ? 's' : ''}`;
+    return `to ${countLabel} target player${count !== 1 ? 's' : ''}`;
   }
   if (target.type === TargetType.HandCard) {
     return ` card${count !== 1 ? 's' : ''} in hand`;

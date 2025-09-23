@@ -10,7 +10,7 @@ export function getColorToIncrement(player: Player): CardColor | null {
     green: 0,
     red: 0,
   };
-  player.hand.forEach((card) => {
+  for (const card of player.hand) {
     const payable = isPayable(card);
     const color = isPayableAfterColorIncrementation(card);
     if (!payable && color !== false && color !== true) {
@@ -23,7 +23,7 @@ export function getColorToIncrement(player: Player): CardColor | null {
         );
       });
     }
-  });
+  }
 
   // else, increment the color with the lowest value unless they all are already enough for the hand
   const minColor: { color: CardColor; value: number } = Object.entries(player.colors)

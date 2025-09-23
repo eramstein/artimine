@@ -1,4 +1,4 @@
-import type { UnitCard, UnitDeployed } from '@/lib/_model';
+import type { SpellCard, UnitCard, UnitDeployed } from '@/lib/_model';
 
 export interface AiPersona {
   executeAction(possibleActions: PossibleActions): void;
@@ -11,6 +11,7 @@ export enum PersonaType {
 
 export interface PossibleActions {
   count: number;
+  playableSpells: SpellCard[];
   deployableUnits: UnitCard[];
   unitsWhoCanAttack: UnitDeployed[];
   unitsWhoCanMove: UnitDeployed[];

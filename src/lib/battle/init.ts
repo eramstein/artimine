@@ -1,7 +1,7 @@
 import { cards, lands } from '@/data';
 import { BASE_DECK } from '@/data/base-deck';
 import { config } from '../_config';
-import type { BattleState, Card, Deck, Land } from '../_model';
+import { AiTurnStrategy, type BattleState, type Card, type Deck, type Land } from '../_model';
 import { bs, gs } from '../_state';
 import { pickNpcDeck } from '../sim/decks';
 import { drawCard, shuffleDeck } from './deck';
@@ -13,6 +13,10 @@ export const defaultBattleState: BattleState = {
   playerIdWon: null,
   players: [],
   units: [],
+  aiState: {
+    strategy: AiTurnStrategy.Normal,
+    goals: [],
+  },
 };
 
 export const initBattle = (foeKey: string = 'the-dude', playerDeck: Deck = BASE_DECK) => {

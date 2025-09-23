@@ -202,6 +202,10 @@ export const BASE_DECK_MIDGUARD: Deck = {
   name: 'Midguard',
   cards: [
     {
+      cardTemplateId: 'earthquake',
+      count: 30,
+    },
+    {
       cardTemplateId: 'hungry_hermit',
       count: 3,
     },

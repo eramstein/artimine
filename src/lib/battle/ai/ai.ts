@@ -1,5 +1,5 @@
 import { config } from '@/lib/_config';
-import { isUnitCard, type Player, type UnitCard } from '@/lib/_model';
+import { CardType, isUnitCard, type Player, type SpellCard, type UnitCard } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { isBoardSizeFull } from '../boards';
 import { canAttack } from '../combat';
@@ -8,18 +8,18 @@ import { canMove } from '../move';
 import { usePlayerColorAbility } from '../player';
 import { nextTurn } from '../turn';
 import { getColorToIncrement, incrementRandomColor } from './colors';
+import { getAiGoals } from './goals';
 import { usePlayerLandAbility } from './lands';
 import { PersonaType, type AiPersona, type PossibleActions } from './model';
 import { AiPersonaAggro } from './personas/aggro';
 import { AiPersonaNormal } from './personas/normal';
+import { getAiStrategy } from './strategy';
 
 const AI_PERSONA: PersonaType = PersonaType.Normal;
 const MAX_ACTIONS_SAFETY_NET = 100;
 let actionsPlayedthisTurn = 0;
 
 export function playAiTurn() {
-  console.log('playing AI', bs);
-
   let persona: AiPersona;
   switch (AI_PERSONA) {
     case PersonaType.Aggro:
@@ -30,6 +30,10 @@ export function playAiTurn() {
       persona = AiPersonaNormal;
       break;
   }
+
+  bs.aiState.strategy = getAiStrategy(AI_PERSONA);
+  bs.aiState.goals = getAiGoals(AI_PERSONA);
+  console.log('aiState', JSON.stringify(bs.aiState, null, 2));
 
   setTimeout(() => {
     loopAiActions(persona);
@@ -78,11 +82,15 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
   const deployableUnits = boardFull
     ? []
     : (leader.hand.filter((unit) => isUnitCard(unit) && isPayable(unit)) as UnitCard[]);
+  const playableSpells = leader.hand.filter(
+    (spell) => spell.type === CardType.Spell && isPayable(spell)
+  ) as SpellCard[];
   const unitsWhoCanMove = boardFull ? [] : leaderUnits.filter((unit) => canMove(unit));
   const unitsWhoCanAttack = leaderUnits.filter((unit) => canAttack(unit));
   const playerAbility = !leader.abilityUsed;
   return {
     deployableUnits,
+    playableSpells,
     unitsWhoCanMove,
     unitsWhoCanAttack,
     playerAbility,
