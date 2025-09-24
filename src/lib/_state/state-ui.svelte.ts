@@ -18,6 +18,7 @@ export const uiState: UiState = $state({
     currentTargetIndex: 0,
     targetBeingSelected: null,
     attackingUnitId: null,
+    playedSpellId: null,
     colorBeingIncremented: null,
     graveyardModal: {
       visible: false,

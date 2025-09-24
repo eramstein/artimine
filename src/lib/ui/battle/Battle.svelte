@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { cards } from '@/data/loader';
   import { bs } from '@lib/_state';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { getTableImagePath } from '@lib/_utils/asset-paths';
   import { handleEndTurn } from '@lib/ui/_helpers/end-turn';
+  import { fade, scale } from 'svelte/transition';
   import CardFull from '../cards/CardFull.svelte';
   import ModalHost from '../ModalHost.svelte';
   import Chat from '../sim/Chat.svelte';
@@ -17,6 +19,11 @@
   // Derived value to check if game is won
   let gameWon = $derived(bs.playerIdWon !== null);
   let winningPlayer = $derived(gameWon ? bs.players[bs.playerIdWon!] : null);
+
+  // Currently played spell (shown briefly when a spell is cast)
+  let playedSpellCard = $derived(
+    uiState.battle.playedSpellId ? cards[uiState.battle.playedSpellId] : null
+  );
 </script>
 
 <div class="battle" style="background-image: url('{getTableImagePath()}');">
@@ -70,6 +77,25 @@
 <GraveyardModal />
 <DeckModal />
 <ModalHost />
+
+<!-- Briefly show the played spell card -->
+{#if playedSpellCard}
+  <div
+    class="played-spell-flash"
+    aria-live="polite"
+    in:fade={{ duration: 120 }}
+    out:fade={{ duration: 150 }}
+  >
+    <div
+      class="played-spell-card"
+      onclick={(e) => e.stopPropagation()}
+      in:scale={{ duration: 120, start: 0.9 }}
+      out:scale={{ duration: 120, start: 1.0 }}
+    >
+      <CardFull card={playedSpellCard} />
+    </div>
+  </div>
+{/if}
 
 <!-- CardFull overlay -->
 {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
@@ -253,5 +279,20 @@
     height: 430px;
     z-index: 1000;
     pointer-events: auto;
+  }
+
+  /* Played spell flash */
+  .played-spell-flash {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1002;
+    pointer-events: none;
+  }
+
+  .played-spell-card {
+    transform: scale(0.9);
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
   }
 </style>

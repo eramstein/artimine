@@ -203,68 +203,72 @@ export const BASE_DECK_MIDGUARD: Deck = {
   cards: [
     {
       cardTemplateId: 'earthquake',
-      count: 3,
+      count: 30,
     },
-    {
-      cardTemplateId: 'hungry_hermit',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'young_viking',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'swift_drakkar',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'shield_maiden',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'northern_challenger',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'snow_troll',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'odins_chosen',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'havrhell',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'viking_banner',
-      count: 2,
-    },
-    {
-      cardTemplateId: 'enraged_goblin',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'hill_troll',
-      count: 3,
-    },
-    {
-      cardTemplateId: 'rock_elemental',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'frenzied_shaman',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'drake',
-      count: 1,
-    },
-    {
-      cardTemplateId: 'bear_minimum',
-      count: 1,
-    },
+    // {
+    //   cardTemplateId: 'young_hobbit',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'hungry_hermit',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'young_viking',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'swift_drakkar',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'shield_maiden',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'northern_challenger',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'snow_troll',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'odins_chosen',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'havrhell',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'viking_banner',
+    //   count: 2,
+    // },
+    // {
+    //   cardTemplateId: 'enraged_goblin',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'hill_troll',
+    //   count: 3,
+    // },
+    // {
+    //   cardTemplateId: 'rock_elemental',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'frenzied_shaman',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'drake',
+    //   count: 1,
+    // },
+    // {
+    //   cardTemplateId: 'bear_minimum',
+    //   count: 1,
+    // },
   ],
   lands: ['forest', 'mountain', 'plains', 'market'],
 };

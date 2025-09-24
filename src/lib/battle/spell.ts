@@ -4,7 +4,7 @@ import {
   type SpellCard,
   type TargetDefinition,
 } from '../_model';
-import { bs } from '../_state';
+import { bs, uiState } from '../_state';
 import { chatOnLargeCardPlayed } from './chat';
 import { isPayable } from './cost';
 import { DataEffectTemplates } from './effects/effect-templates';
@@ -12,10 +12,7 @@ import { discard } from './hand';
 import { checkTargets } from './target';
 
 export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
-  console.log(spell.name + ' on ' + (targets && targets.map((t) => JSON.stringify(t)).join(', ')));
-
-  // CHECKS + COSTS
-  // ----------------------------------------------------------------------
+  // check and pay cost
   if (!checkMultipleEffectsTargets(spell, spell.actions, targets)) {
     console.log('failed to check multiple effects targets');
     return;
@@ -25,25 +22,29 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
     return;
   }
 
-  // EFFECTS
-  // ----------------------------------------------------------------------
-  const player = bs.players[spell.ownerPlayerId];
-  spell.actions.forEach((actionDef, actionIndex) => {
-    DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
-      targets: targets[actionIndex],
-      triggerParams: {},
-      player,
-    });
-  });
-
-  // DISCARD
-  // ----------------------------------------------------------------------
-  discard(spell.instanceId, spell.ownerPlayerId);
-
   // Hint to LLM that a unit was deployed
   if (spell.cost >= 7) {
     chatOnLargeCardPlayed(spell);
   }
+
+  // Do effects after a short time to play the animation
+  const animationDuration = bs.isPlayersTurn ? 0 : 750;
+  const spellDelay = bs.isPlayersTurn ? 0 : 250;
+  uiState.battle.playedSpellId = spell.id;
+  setTimeout(() => {
+    uiState.battle.playedSpellId = null;
+  }, animationDuration);
+  setTimeout(() => {
+    const player = bs.players[spell.ownerPlayerId];
+    spell.actions.forEach((actionDef, actionIndex) => {
+      DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
+        targets: targets[actionIndex],
+        triggerParams: {},
+        player,
+      });
+    });
+    discard(spell.instanceId, spell.ownerPlayerId);
+  }, animationDuration + spellDelay);
 }
 
 function paySpellCost(spell: SpellCard): boolean {

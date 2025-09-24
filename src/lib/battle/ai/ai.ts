@@ -98,6 +98,7 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
       deployableUnits.length +
       unitsWhoCanMove.length +
       unitsWhoCanAttack.length +
+      playableSpells.length +
       (playerAbility ? 1 : 0),
   };
 }
