@@ -188,13 +188,15 @@ export const DataEffectTemplates: Record<
     maxHealth,
     range,
     dynamicValue,
+    fromTriggerParam,
   }: {
     power?: number;
     maxHealth?: number;
     range?: UnitFilterArgs;
     dynamicValue?: DynamicValue;
+    fromTriggerParam?: string;
   }) => ({
-    fn: ({ unit, land, targets, player }) => {
+    fn: ({ unit, land, targets, player, triggerParams }) => {
       const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const effectivePower = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * (power ?? 0)
@@ -202,12 +204,9 @@ export const DataEffectTemplates: Record<
       const effectiveMaxHealth = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * (maxHealth ?? 0)
         : maxHealth;
-      const unitsInRange = getUnitsInRange(
-        targets as UnitDeployed[][],
-        range,
-        sourcePermanent,
-        player
-      );
+      const unitsInRange = fromTriggerParam
+        ? [triggerParams[fromTriggerParam]]
+        : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         if (effectivePower) {
           u.power += effectivePower;
@@ -250,11 +249,11 @@ export const DataEffectTemplates: Record<
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
-      if (unit && reset) {
-        clearUnitStaticAbilities(unit, abilityName);
+      if ((unit || land) && reset) {
+        clearUnitStaticAbilities(sourcePermanent, abilityName);
       }
       unitsInRange.forEach((u) => {
-        addStaticKeyword(u, keywordDef, false, abilityName, unit);
+        addStaticKeyword(u, keywordDef, false, abilityName, sourcePermanent);
       });
     },
     label: (targets: TargetDefinition[]) => {

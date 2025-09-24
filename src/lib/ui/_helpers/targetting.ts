@@ -13,7 +13,8 @@ import {
   type UnitDeployed,
 } from '@/lib/_model';
 import { bs, uiState } from '@/lib/_state';
-import { playAbility } from '@/lib/battle';
+import { getHumanPlayer, playAbility } from '@/lib/battle';
+import { selectAiAbilityTargets } from '@/lib/battle/ai/target';
 import { getPositionKey } from '@/lib/battle/boards';
 import { isActivityPayable } from '@/lib/battle/cost';
 import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
@@ -100,6 +101,16 @@ export function activateSpell(spell: SpellCard) {
 }
 
 export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, triggerParams: any) {
+  if (
+    unit.ownerPlayerId !== getHumanPlayer().id &&
+    ability.actions.length > 0 &&
+    ability.actions.some((action) => action.targets && action.targets.length > 0)
+  ) {
+    const targets = selectAiAbilityTargets(unit, ability);
+    playTriggeredAbility(unit, ability, targets, triggerParams);
+    return;
+  }
+
   const ui = uiState.battle;
   ui.triggeredAbilityPending = { unit, ability, triggerParams };
   ui.currentEffectIndex = 0;
@@ -119,10 +130,6 @@ export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, t
       playTriggeredAbility(unit, ability, [], triggerParams);
       clearUiState();
     }
-  } else {
-    ui.targetBeingSelected = null;
-    playTriggeredAbility(unit, ability, [], triggerParams);
-    clearUiState();
   }
 }
 

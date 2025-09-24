@@ -114,7 +114,7 @@ export const BASE_DECK: Deck = {
       count: 1,
     },
   ],
-  lands: ['market', 'city', 'plains', 'forest'],
+  lands: ['market', 'city', 'mountain', 'forest'],
 };
 
 export const BASE_DECK_ITALIA: Deck = {
@@ -194,7 +194,7 @@ export const BASE_DECK_ITALIA: Deck = {
       count: 1,
     },
   ],
-  lands: ['island', 'city', 'plains', 'market'],
+  lands: ['island', 'city', 'emmas_dark_tower', 'market'],
 };
 
 export const BASE_DECK_MIDGUARD: Deck = {
@@ -202,75 +202,67 @@ export const BASE_DECK_MIDGUARD: Deck = {
   name: 'Midguard',
   cards: [
     {
-      cardTemplateId: 'earthquake',
-      count: 30,
+      cardTemplateId: 'hungry_hermit',
+      count: 3,
     },
-    // {
-    //   cardTemplateId: 'young_hobbit',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'hungry_hermit',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'young_viking',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'swift_drakkar',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'shield_maiden',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'northern_challenger',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'snow_troll',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'odins_chosen',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'havrhell',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'viking_banner',
-    //   count: 2,
-    // },
-    // {
-    //   cardTemplateId: 'enraged_goblin',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'hill_troll',
-    //   count: 3,
-    // },
-    // {
-    //   cardTemplateId: 'rock_elemental',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'frenzied_shaman',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'drake',
-    //   count: 1,
-    // },
-    // {
-    //   cardTemplateId: 'bear_minimum',
-    //   count: 1,
-    // },
+    {
+      cardTemplateId: 'young_viking',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'swift_drakkar',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'shield_maiden',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'northern_challenger',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'snow_troll',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'odins_chosen',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'havrhell',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'viking_banner',
+      count: 2,
+    },
+    {
+      cardTemplateId: 'enraged_goblin',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'hill_troll',
+      count: 3,
+    },
+    {
+      cardTemplateId: 'rock_elemental',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'frenzied_shaman',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'drake',
+      count: 1,
+    },
+    {
+      cardTemplateId: 'bear_minimum',
+      count: 1,
+    },
   ],
-  lands: ['forest', 'mountain', 'plains', 'market'],
+  lands: ['forest', 'mountain', 'dudes_arms_stash', 'market'],
 };
 
 export const BASE_DECK_ARABIA: Deck = {
@@ -345,6 +337,10 @@ export const BASE_DECK_REIK: Deck = {
   key: '159c2238-c2f6-4a4a-b19e-017176d32d6b',
   name: 'Teutonic',
   cards: [
+    {
+      cardTemplateId: 'kolossal_mistake',
+      count: 1,
+    },
     {
       cardTemplateId: 'vengeful_crusader',
       count: 3,

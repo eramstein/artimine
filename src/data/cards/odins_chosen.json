@@ -53,7 +53,7 @@
           },
           "targets": [
             {
-              "type": "unit",
+              "type": "unit_allies",
               "count": 1
             }
           ]

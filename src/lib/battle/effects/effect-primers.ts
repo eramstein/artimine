@@ -48,8 +48,8 @@ export const DataEffectPrimers: Record<
     otherArgs: any;
   }) => ({
     fn: ({ unit, player, targets, triggerParams }) => {
-      const energyUsed = energyCost ?? unit.counters?.energy;
-      if (!unit.counters?.energy || (energyCost && unit.counters?.energy < energyCost)) {
+      const energyUsed = energyCost ?? unit?.counters?.energy;
+      if (!unit?.counters?.energy || (energyCost && unit?.counters?.energy < energyCost)) {
         console.log('not enough energy');
         return;
       }
@@ -59,7 +59,7 @@ export const DataEffectPrimers: Record<
         targets,
         triggerParams,
       });
-      unit.counters.energy -= energyUsed ?? 0;
+      unit!.counters!.energy -= energyUsed ?? 0;
     },
     label: (targets: TargetDefinition[]) => {
       const costLabel = energyCost ? `${energyCost} energy: ` : 'All energy: ';

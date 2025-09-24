@@ -62,6 +62,22 @@
   // Click-only animation state (avoids reactive effects)
   let clickIncrementActive = $state<Record<string, boolean>>({});
   let clickIncrementTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+
+  // Life change animation (mirrors UnitDeployed pattern)
+  let previousLife = $state(player.life);
+  let lifeChangeAmount = $state(0);
+  let lifeChangeType: 'inc' | 'dec' | null = $state(null);
+  $effect(() => {
+    const diff = player.life - previousLife;
+    if (diff !== 0 && Number.isFinite(diff)) {
+      lifeChangeAmount = Math.abs(diff);
+      lifeChangeType = diff > 0 ? 'inc' : 'dec';
+      setTimeout(() => {
+        lifeChangeType = null;
+      }, 900);
+    }
+    previousLife = player.life;
+  });
 </script>
 
 <div class="player-container">
@@ -72,8 +88,18 @@
     </div>
 
     <div class="player-info" style="background-image: url('{characterImagePath}')">
-      <div class="life-display">
+      <div
+        class="life-display {lifeChangeType === 'inc' ? 'highlight-inc' : ''} {lifeChangeType ===
+        'dec'
+          ? 'highlight-dec'
+          : ''}"
+      >
         <span class="life-value">{player.life}</span>
+        {#if lifeChangeType}
+          <span class="life-float {lifeChangeType}"
+            >{lifeChangeType === 'inc' ? '+' : '-'}{lifeChangeAmount}</span
+          >
+        {/if}
       </div>
     </div>
   </div>
@@ -212,6 +238,82 @@
 
   .life-value {
     color: white;
+  }
+
+  /* Life change highlight */
+  .life-display.highlight-inc {
+    box-shadow:
+      0 0 14px rgba(46, 204, 113, 0.95),
+      inset 0 0 10px rgba(46, 204, 113, 0.75);
+    animation: life-pulse-inc 0.9s ease-out;
+  }
+  .life-display.highlight-dec {
+    box-shadow:
+      0 0 14px rgba(231, 76, 60, 0.95),
+      inset 0 0 10px rgba(231, 76, 60, 0.75);
+    animation: life-pulse-dec 0.9s ease-out;
+  }
+
+  /* Floating life delta near the badge; reuse float-up */
+  .life-float {
+    position: absolute;
+    left: 50%;
+    top: -0.8rem;
+    transform: translateX(-50%);
+    font-weight: 900;
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.9),
+      0 0 2px rgba(255, 255, 255, 0.9);
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.6);
+    animation: life-float 0.9s ease-out forwards;
+    pointer-events: none;
+    font-size: 1.2rem;
+    z-index: 3;
+  }
+  .life-float.inc {
+    color: #2ecc71;
+  }
+  .life-float.dec {
+    color: #e74c3c;
+  }
+
+  @keyframes life-pulse-inc {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes life-pulse-dec {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes life-float {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 0) scale(0.7);
+    }
+    20% {
+      opacity: 1;
+      transform: translate(-50%, -6px) scale(1.15);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -22px) scale(1);
+    }
   }
 
   .player-actions {

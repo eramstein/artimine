@@ -96,7 +96,7 @@ export interface UnitDeployed extends UnitCard, BaseCardDeployed {
   statuses: UnitStatuses;
   untilEndOfTurn: UnitEndOfTurnEffects;
   staticModifiers: {
-    source: { unitId?: string; effectName: string };
+    source: { sourceId?: string; effectName: string };
     permanent: boolean;
     keyword?: UnitKeywordDefinition;
     attack?: number;

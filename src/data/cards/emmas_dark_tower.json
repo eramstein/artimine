@@ -1,0 +1,31 @@
+{
+  "id": "emmas_dark_tower",
+  "name": "Emma's Dark Tower",
+  "rarity": "legendary",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damagePlayer",
+            "args": {
+              "damage": 1,
+              "opposingPlayer": "true"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

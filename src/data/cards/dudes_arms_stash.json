@@ -1,0 +1,32 @@
+{
+  "id": "dudes_arms_stash",
+  "name": "Dude's Arms Stash",
+  "rarity": "legendary",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "allies": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticStats",
+            "args": {
+              "power": 1,
+              "maxHealth": 1,
+              "fromTriggerParam": "unit"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

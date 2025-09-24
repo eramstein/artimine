@@ -1,4 +1,4 @@
-import type { Player } from '@/lib/_model';
+import { TriggerType, type Player } from '@/lib/_model';
 import { activateAbility } from '@/lib/ui/_helpers/targetting';
 import { isActivityPayable } from '../cost';
 
@@ -7,7 +7,7 @@ export function usePlayerLandAbility(player: Player): boolean {
   player.lands.forEach((land) => {
     if (
       !player.abilityUsed &&
-      land.abilities?.length &&
+      land.abilities?.filter((a) => a.trigger.type === TriggerType.Activated).length &&
       isActivityPayable(land, land.abilities[0])
     ) {
       activateAbility(land, land.abilities[0]);
