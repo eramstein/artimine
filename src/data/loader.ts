@@ -26,8 +26,10 @@ export async function loadGameData() {
 }
 
 // Returns a random unit card from the full catalog in _all_cards.json
-export function getRandomUnitCardFromAll(): UnitCardTemplate {
+export function getRandomUnitCardFromAll(manaCost?: number): UnitCardTemplate {
   return getRandomFromArray(
-    allCards.filter((card) => card.type === CardType.Unit) as UnitCardTemplate[]
+    allCards.filter(
+      (card) => card.type === CardType.Unit && (manaCost ? card.cost === manaCost : true)
+    ) as UnitCardTemplate[]
   );
 }

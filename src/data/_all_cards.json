@@ -3549,6 +3549,34 @@
     "cardSet": "alpha"
   },
   {
+    "id": "henrys_cemetary",
+    "name": "Henry's Cemetary",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "land",
+    "cost": 0,
+    "colors": [],
+    "health": 10,
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "reanimate",
+              "args": {}
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "hill_troll",
     "name": "Hill Troll",
     "rarity": "common",
@@ -4606,6 +4634,36 @@
     "cardSet": "alpha"
   },
   {
+    "id": "mollys_oasis",
+    "name": "Molly's Oasis",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "land",
+    "cost": 0,
+    "colors": [],
+    "health": 10,
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addMana",
+              "args": {
+                "amount": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "mosquito",
     "name": "Mosquito",
     "type": "unit",
@@ -5052,6 +5110,38 @@
       "armor": 1
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "ousmanes_summoning_circle",
+    "name": "Ousmane's Summoning Circle",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "land",
+    "cost": 0,
+    "colors": [],
+    "health": 10,
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "summon",
+              "args": {
+                "isRespawn": false,
+                "randomPositions": 1,
+                "randomManaCost": 2
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "pandy_panda",

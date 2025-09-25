@@ -3,7 +3,7 @@
   import { CHARACTER_PLAYER } from '@/data/characters/player';
   import { TournamentStatus, TournamentType } from '@/lib/_model/enums-sim';
   import type { Tournament } from '@/lib/_model/model-game';
-  import { initDeckSelection } from '@/lib/sim/ongoing-tabble';
+  import { initDeckSelection } from '@/lib/sim/ongoing-battle';
   import { initTournament } from '@/lib/sim/tournament';
 
   interface Props {

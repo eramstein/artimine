@@ -4,7 +4,7 @@
   import { gs } from '@/lib/_state/main.svelte';
   import { initTrade } from '@/lib/_state/state-ui.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
-  import { initDeckSelection } from '@/lib/sim/ongoing-tabble';
+  import { initDeckSelection } from '@/lib/sim/ongoing-battle';
   import CharacterPortrait from './CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
 

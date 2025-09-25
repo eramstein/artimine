@@ -121,7 +121,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'summon',
-    argNames: ['summonedUnit', 'isRespawn'],
+    argNames: ['summonedUnit', 'isRespawn', 'randomPositions', 'randomManaCost'],
     budget: (args, targets) => 20, // TBD based on summonedUnit
   },
   {
@@ -223,6 +223,11 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'putToDeckBottom',
     argNames: [],
     budget: (args, targets) => 20, // TBD
+  },
+  {
+    effectName: 'addMana',
+    argNames: ['amount'],
+    budget: (args, targets) => 10, // TBD
   },
 ];
 

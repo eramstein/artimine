@@ -5,7 +5,7 @@
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
-  import { initOngoingBattle } from '@/lib/sim/ongoing-tabble';
+  import { initOngoingBattle } from '@/lib/sim/ongoing-battle';
 
   // Get player's decks
   let playerDecks = $derived([BASE_DECK, TEST_DECK, ...gs.player.decks]);

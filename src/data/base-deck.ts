@@ -346,7 +346,7 @@ export const BASE_DECK_ARABIA: Deck = {
       count: 2,
     },
   ],
-  lands: ['plains', 'market', 'island', 'mountain'],
+  lands: ['mollys_oasis', 'market', 'island', 'mountain'],
   record: {
     wins: 0,
     losses: 0,
@@ -434,7 +434,7 @@ export const BASE_DECK_REIK: Deck = {
       count: 1,
     },
   ],
-  lands: ['city', 'market', 'plains', 'mountain'],
+  lands: ['city', 'market', 'henrys_cemetary', 'mountain'],
   record: {
     wins: 0,
     losses: 0,
@@ -510,7 +510,7 @@ export const BASE_DECK_KISLEV: Deck = {
       count: 1,
     },
   ],
-  lands: ['island', 'forest', 'plains', 'market'],
+  lands: ['island', 'forest', 'ousmanes_summoning_circle', 'market'],
   record: {
     wins: 0,
     losses: 0,

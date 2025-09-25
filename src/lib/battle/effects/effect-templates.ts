@@ -13,8 +13,10 @@ import type {
   UnitKeywords,
 } from '@/lib/_model/model-battle';
 import { bs } from '@/lib/_state';
+import { getRandomFromArray } from '@/lib/_utils/random';
 import {
   addCounters,
+  addMana,
   addStaticKeyword,
   applyTemporaryEffect,
   applyUnitStatus,
@@ -25,6 +27,7 @@ import {
   destroyUnit,
   discard,
   drawCard,
+  getEmptyCells,
   getOpposingPlayer,
   getRandomEmptyAlliedCells,
   getTemporaryEffectLabel,
@@ -38,7 +41,7 @@ import {
   tutorCard,
   untapPlayer,
 } from '@/lib/battle';
-import { reanimate, regrowCard } from '../graveyard';
+import { getAllGraveyardsCards, reanimate, regrowCard } from '../graveyard';
 import { damageLand, fortifyLand } from '../land';
 import { forceMoveUnit } from '../move';
 import { soundManager } from '../sound';
@@ -54,12 +57,11 @@ export const DataEffectTemplates: Record<
   ...DataEffectPrimers,
   reanimate: () => ({
     fn: ({ unit, player, targets }) => {
-      if (targets.length < 2) {
-        return;
-      }
       const playerId = player?.id ?? unit?.ownerPlayerId;
-      const reanimatedUnit = targets[0]?.[0] as UnitCard;
-      const position = targets[1]?.[0] as Position;
+      const isPlayer = playerId === 0;
+      const reanimatedUnit = (targets[0]?.[0] ||
+        getRandomFromArray(getAllGraveyardsCards())) as UnitCard;
+      const position = (targets[1]?.[0] || getRandomFromArray(getEmptyCells(isPlayer))) as Position;
       if (reanimatedUnit && position) {
         reanimate(reanimatedUnit, position, playerId);
       }
@@ -331,13 +333,15 @@ export const DataEffectTemplates: Record<
     summonedUnit,
     isRespawn,
     randomPositions,
+    randomManaCost,
   }: {
     summonedUnit?: UnitCardTemplate;
     isRespawn?: boolean;
     randomPositions?: number;
+    randomManaCost?: number;
   }) => ({
     fn: ({ targets, player, unit }) => {
-      const unitTemplate = summonedUnit ?? getRandomUnitCardFromAll();
+      const unitTemplate = summonedUnit ?? getRandomUnitCardFromAll(randomManaCost);
       const createdUnit = makeUnit(player.id, unitTemplate);
       if (isRespawn && unit) {
         summonUnit(createdUnit, unit.position);
@@ -542,5 +546,11 @@ export const DataEffectTemplates: Record<
       putToDeckBottom(card, player);
     },
     label: () => `Put that card on the bottom of your deck`,
+  }),
+  addMana: ({ amount }: { amount: number }) => ({
+    fn: ({ player }) => {
+      addMana(player, amount);
+    },
+    label: () => `Add ${amount} mana`,
   }),
 };

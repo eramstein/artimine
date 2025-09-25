@@ -46,3 +46,7 @@ export function usePlayerColorAbility(player: Player, color: CardColor) {
   incrementColor(player, color, 1);
   player.abilityUsed = true;
 }
+
+export function addMana(player: Player, amount: number) {
+  player.mana += amount;
+}

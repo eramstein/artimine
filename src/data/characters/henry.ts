@@ -1,12 +1,12 @@
 import { ActivityType } from '@/lib/_model/enums-sim';
-import { BASE_DECK_KISLEV } from '../base-deck';
+import { BASE_DECK_REIK } from '../base-deck';
 
 export const CHARACTER_HENRY = {
   key: 'henry',
   name: 'Henry',
   place: 0,
   cash: 20,
-  decks: [BASE_DECK_KISLEV],
+  decks: [BASE_DECK_REIK],
   bio: `Henry is a 25 years old history student.
   He is naive, friendly, generous and a loyal friend.
   He works as an assistant teacher.

@@ -1,0 +1,32 @@
+{
+  "id": "ousmanes_summoning_circle",
+  "name": "Ousmane's Summoning Circle",
+  "rarity": "legendary",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "summon",
+            "args": {
+              "isRespawn": false,
+              "randomPositions": 1,
+              "randomManaCost": 2
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

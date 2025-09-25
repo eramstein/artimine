@@ -1,0 +1,28 @@
+{
+  "id": "henrys_cemetary",
+  "name": "Henry's Cemetary",
+  "rarity": "legendary",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "reanimate",
+            "args": {}
+          }
+        }
+      ]
+    }
+  ]
+}

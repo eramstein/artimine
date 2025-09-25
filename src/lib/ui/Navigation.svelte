@@ -3,7 +3,7 @@
   import { uiState } from '../_state';
   import { gs, resetBattleState } from '../_state/main.svelte';
   import { resetMemoriesDB } from '../llm/memories-db';
-  import { recordBattleResult } from '../sim/ongoing-tabble';
+  import { recordBattleResult } from '../sim/ongoing-battle';
 
   const navItems = [
     { view: UiView.Battle, label: 'Game', icon: '🎮' },
