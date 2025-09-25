@@ -1,10 +1,11 @@
 import { ActionType } from '@/lib/_model/enums-sim';
 import type { ActionTypeDefinition } from '@/lib/_model/model-game';
 import { gs } from '../_state/main.svelte';
-import { initTrade, startGame } from '../_state/state-ui.svelte';
+import { initTrade } from '../_state/state-ui.svelte';
 import { recordActionInChat } from '../llm/action';
 import { generalChallengeAction, scheduleActivityAction } from './actions/index';
 import { moveCharacters } from './move';
+import { initDeckSelection } from './ongoing-battle';
 
 export const ACTIONS: Record<string, ActionTypeDefinition> = {
   [ActionType.ScheduleActivity]: scheduleActivityAction,
@@ -32,7 +33,7 @@ export const ACTIONS: Record<string, ActionTypeDefinition> = {
     onSuccess: ({ opponent }: { opponent: string }) => {
       const opponentNpc = Object.values(gs.characters).find((c) => c.name === opponent);
       if (opponentNpc) {
-        startGame(opponentNpc);
+        initDeckSelection(opponentNpc);
       }
     },
     checkSuccess: ({ opponent }: { opponent: string }) => ({

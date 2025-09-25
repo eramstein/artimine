@@ -8,6 +8,10 @@ export function createNewDeck(name: string): Deck {
     name,
     cards: [],
     lands: [],
+    record: {
+      wins: 0,
+      losses: 0,
+    },
   };
   gs.player.decks.push(deck);
   return deck;
@@ -49,4 +53,12 @@ export function removeLandFromDeck(deck: Deck, landId: string) {
 
 export function pickNpcDeck(npcKey: string): Deck {
   return getRandomFromArray(gs.characters[npcKey].decks);
+}
+
+export function updateDeckRecord(deck: Deck, win: boolean) {
+  if (win) {
+    deck.record.wins++;
+  } else {
+    deck.record.losses++;
+  }
 }

@@ -2,8 +2,9 @@
   import { UiView, type Npc, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
-  import { initTrade, startGame } from '@/lib/_state/state-ui.svelte';
+  import { initTrade } from '@/lib/_state/state-ui.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
+  import { initDeckSelection } from '@/lib/sim/ongoing-tabble';
   import CharacterPortrait from './CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
 
@@ -53,7 +54,7 @@
   async function handleMenuOption(option: string) {
     if (selectedCharacters.length > 0) {
       if (option === 'play game' && selectedCharacters.length === 1) {
-        await startGame(selectedCharacters[0]);
+        await initDeckSelection(selectedCharacters[0]);
       } else if (option === 'trade' && selectedCharacters.length === 1) {
         await initTrade(selectedCharacters[0]);
       } else if (option === 'chat') {

@@ -1,17 +1,12 @@
 import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
 import { bs, uiState } from '../_state';
-import { recordTournamentResult } from '../sim/tournament';
-import { chatOnBattleEnd } from './chat';
 import { soundManager } from './sound';
+import { checkIfPlayerLost } from './win';
 
 export function damagePlayer(player: Player, damage: number) {
   player.life -= damage;
-  if (player.life <= 0) {
-    bs.playerIdWon = player.id === 0 ? 1 : 0;
-    recordTournamentResult(bs.playerIdWon === player.id);
-    chatOnBattleEnd();
-  }
+  checkIfPlayerLost(player);
   if (player.life > config.initialLife) {
     player.life = config.initialLife;
   }

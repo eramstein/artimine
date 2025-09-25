@@ -3,7 +3,7 @@
   import { CHARACTER_PLAYER } from '@/data/characters/player';
   import { TournamentStatus, TournamentType } from '@/lib/_model/enums-sim';
   import type { Tournament } from '@/lib/_model/model-game';
-  import { startGame } from '@/lib/_state/state-ui.svelte';
+  import { initDeckSelection } from '@/lib/sim/ongoing-tabble';
   import { initTournament } from '@/lib/sim/tournament';
 
   interface Props {
@@ -121,7 +121,7 @@
   async function handleStartGame() {
     const opponent = playerOpponent();
     if (opponent) {
-      await startGame(opponent);
+      await initDeckSelection(opponent);
     }
   }
 </script>

@@ -15,6 +15,10 @@ export const TEST_DECK: Deck = {
   ],
   //lands: ['forest', 'market', 'city', 'mountain'],
   lands: ['big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK: Deck = {
@@ -115,6 +119,10 @@ export const BASE_DECK: Deck = {
     },
   ],
   lands: ['market', 'city', 'mountain', 'forest'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK_ITALIA: Deck = {
@@ -195,6 +203,10 @@ export const BASE_DECK_ITALIA: Deck = {
     },
   ],
   lands: ['island', 'city', 'emmas_dark_tower', 'market'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK_MIDGUARD: Deck = {
@@ -263,6 +275,10 @@ export const BASE_DECK_MIDGUARD: Deck = {
     },
   ],
   lands: ['forest', 'mountain', 'dudes_arms_stash', 'market'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK_ARABIA: Deck = {
@@ -331,6 +347,10 @@ export const BASE_DECK_ARABIA: Deck = {
     },
   ],
   lands: ['plains', 'market', 'island', 'mountain'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK_REIK: Deck = {
@@ -415,6 +435,10 @@ export const BASE_DECK_REIK: Deck = {
     },
   ],
   lands: ['city', 'market', 'plains', 'mountain'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };
 
 export const BASE_DECK_KISLEV: Deck = {
@@ -487,4 +511,8 @@ export const BASE_DECK_KISLEV: Deck = {
     },
   ],
   lands: ['island', 'forest', 'plains', 'market'],
+  record: {
+    wins: 0,
+    losses: 0,
+  },
 };

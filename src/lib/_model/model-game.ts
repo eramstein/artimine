@@ -18,6 +18,7 @@ export interface GameState {
   activity: Activity; // current activity
   activityPlans: ActivityPlan[][]; // plan for future activityPlans by days in future and day period
   chat: ChatState | null;
+  ongoingBattle: OngoingBattle | null;
 }
 
 export interface Character {
@@ -73,6 +74,10 @@ export interface Deck {
   name: string;
   cards: CardTuple[];
   lands: string[];
+  record: {
+    wins: number;
+    losses: number;
+  };
 }
 
 export interface ItemDefinition {
@@ -169,4 +174,12 @@ export interface Tournament {
   tiebreakers: Record<string, number>; // character key to current tiebreaker points
   pairings: Record<string, string>; // character keys, who plays who in current round
   remainingMatches: Record<string, string[]>; // for mini tournament, who the player still has to play with
+}
+
+export interface OngoingBattle {
+  opponentKey: string;
+  deckNames: {
+    player: string;
+    opponent: string;
+  };
 }

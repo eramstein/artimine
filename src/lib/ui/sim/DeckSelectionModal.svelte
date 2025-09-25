@@ -5,7 +5,7 @@
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
-  import { initBattle } from '@/lib/battle';
+  import { initOngoingBattle } from '@/lib/sim/ongoing-tabble';
 
   // Get player's decks
   let playerDecks = $derived([BASE_DECK, TEST_DECK, ...gs.player.decks]);
@@ -21,7 +21,7 @@
 
   function handleDeckSelect(deck: Deck) {
     if (uiState.deckSelectionModal.foeKey) {
-      initBattle(uiState.deckSelectionModal.foeKey, deck);
+      initOngoingBattle(gs.characters[uiState.deckSelectionModal.foeKey], deck);
       uiState.currentView = UiView.Battle;
       closeModal();
     }
@@ -62,10 +62,17 @@
                 </div>
                 <div class="deck-name">{deck.name}</div>
                 <div class="deck-info">
-                  <span class="card-count"
-                    >{deck.cards.reduce((total, card) => total + card.count, 0)} cards</span
-                  >
-                  <span class="land-count">{deck.lands.length} lands</span>
+                  {deck.cards.reduce((total, card) => total + card.count, 0)} cards
+                </div>
+                <div class="deck-record">
+                  <span class="wl">{deck.record.wins}–{deck.record.losses}</span>
+                  {#if deck.record.wins + deck.record.losses > 0}
+                    <span class="winrate"
+                      >{Math.round(
+                        (deck.record.wins / (deck.record.wins + deck.record.losses)) * 100
+                      )}% win rate</span
+                    >
+                  {/if}
                 </div>
               </div>
             {/each}
@@ -98,9 +105,9 @@
     padding: 0;
     color: white;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
-    min-width: 500px;
+    min-width: 1000px;
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow: hidden;
     position: relative;
   }
@@ -206,14 +213,28 @@
 
   .deck-info {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    justify-content: center;
     font-size: 0.9rem;
     color: #888;
   }
 
-  .card-count,
-  .land-count {
-    display: block;
+  .deck-record {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+
+  .deck-record .wl {
+    font-weight: bold;
+    color: #e0e0e0;
+  }
+
+  .deck-record .winrate {
+    color: #9aa27a;
   }
 </style>
