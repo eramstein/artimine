@@ -1,33 +1,14 @@
 import { CHARACTER_INITIAL_MEMORIES } from '@/data/characters/memories';
 import { WORLD_FACTS } from '@/data/world-facts';
-import Dexie, { type Table } from 'dexie';
+import { type Table } from 'dexie';
 import type { GroupActivityLog, RelationshipSummaryUpdate, WorldFact } from '../_model';
+import { db } from '../_state/database';
 import { generateUniqueId } from '../_utils/random';
 import { getEmbedding } from './embeddings';
 
-/*
-  Long term memories database
-  These are structured JSON to be queried by character, date...
-  Semantic ones should use a vector DB like Chroma
-*/
-
-// Initialize Dexie database
-const db = new Dexie('ArtimineDB');
-
-// Define schema
-db.version(1).stores({
-  chats: 'id,day,activityType,[participants+day]',
-  relationshipArcs: 'id,character',
-  worldFacts: 'id,description',
-});
-
-// Export the chats table
+// Tables
 const chats: Table<GroupActivityLog> = db.table('chats');
-
-// Export the relationshipArcs table
 const relationshipArcs: Table<RelationshipSummaryUpdate> = db.table('relationshipArcs');
-
-// Export the worldFacts table
 const worldFacts: Table<WorldFact> = db.table('worldFacts');
 
 // Save a chat to the database
@@ -95,7 +76,7 @@ export async function deleteOldChats(olderThan: number): Promise<void> {
   }
 }
 
-export async function resetIndexDB(): Promise<void> {
+export async function resetMemoriesDB(): Promise<void> {
   await chats.clear();
   await relationshipArcs.clear();
   await worldFacts.clear();

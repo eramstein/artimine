@@ -58,6 +58,10 @@ function loopAiActions(persona: AiPersona) {
     persona.executeAction(possibleActions);
   }
 
+  if (bs.playerIdWon !== null) {
+    return;
+  }
+
   setTimeout(() => {
     loopAiActions(persona);
   }, config.aiActionInterval);

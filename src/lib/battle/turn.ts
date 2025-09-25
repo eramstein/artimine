@@ -18,7 +18,6 @@ export function nextTurn() {
   const player = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
   initPlayerTurn(player);
   onTurnStart(player);
-  console.log('isPlayersTurn', bs.isPlayersTurn);
   if (!bs.isPlayersTurn) {
     soundManager.playSound('button');
     playAiTurn();

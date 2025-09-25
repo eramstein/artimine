@@ -6,6 +6,7 @@
   import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
   import Main from './lib/ui/Main.svelte';
   import Navigation from './lib/ui/Navigation.svelte';
+  import SaveManagerModal from './lib/ui/sim/SaveManagerModal.svelte';
   import Analytics from './tools/analytics/Analytics.svelte';
   import CardBuilder from './tools/generator/card-builder-ui/CardBuilder.svelte';
 
@@ -56,6 +57,7 @@
   {#if uiState.navigationVisible}
     <Navigation />
   {/if}
+  <SaveManagerModal />
 {/if}
 
 <style>

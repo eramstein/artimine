@@ -71,6 +71,9 @@ export type UiState = {
     isStreaming: boolean;
     streamingContent: string;
   };
+  saveManagerModal: {
+    visible: boolean;
+  };
   tradingWith: string | null;
   rollResults: {
     success: boolean;

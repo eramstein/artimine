@@ -1,27 +1,34 @@
 import { type BattleState, type GameState } from '../_model';
 import { defaultBattleState } from '../battle';
 import { defaultGameState, initSim } from '../sim/init';
+import { getGame, getLatestGame, saveGame, type SaveGame } from './save-games';
 
-const LOCAL_STORAGE_KEY = 'artimineState';
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
 
 export const gs: GameState = $state(defaultGameState);
 export const bs: BattleState = $state(defaultBattleState);
 
-export const saveStateToLocalStorage = (): void => {
+export const saveStateToLocalStorage = (id: string = 'quicksave'): void => {
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(gs));
+    // gs goes to IndexedDB to have multiple named saves if needed
+    const savedGame: SaveGame = {
+      id,
+      createdAt: new Date(),
+      gameState: JSON.parse(JSON.stringify(gs)),
+    };
+    saveGame(savedGame);
+    // bs in local storage for now
     localStorage.setItem(LOCAL_STORAGE_KEY_BATTLE, JSON.stringify(bs));
   } catch (error) {
     console.error('Failed to save state to localStorage:', error);
   }
 };
 
-export const loadGameStateFromLocalStorage = async () => {
+export const loadGameStateFromLocalStorage = async (id: string) => {
   try {
-    const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const savedState = id ? await getGame(id) : await getLatestGame();
     if (savedState) {
-      const parsedState: GameState = JSON.parse(savedState);
+      const parsedState: GameState = savedState.gameState;
       Object.assign(gs, parsedState);
     } else {
       initSim();

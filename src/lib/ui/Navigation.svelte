@@ -2,7 +2,7 @@
   import { UiView } from '../_model';
   import { uiState } from '../_state';
   import { gs, resetBattleState } from '../_state/main.svelte';
-  import { resetIndexDB } from '../llm/memories-db';
+  import { resetMemoriesDB } from '../llm/memories-db';
   import { recordTournamentResult } from '../sim/tournament';
 
   const navItems = [
@@ -23,8 +23,12 @@
   };
 
   const handleResetIndexDB = async () => {
+    const proceed = confirm(
+      'This will erase all IndexedDB data (memories, saves, etc.). Continue?'
+    );
+    if (!proceed) return;
     try {
-      await resetIndexDB();
+      await resetMemoriesDB();
       alert('IndexedDB has been reset successfully!');
     } catch (error) {
       console.error('Failed to reset IndexedDB:', error);
@@ -60,7 +64,11 @@
       <div class="admin-divider"></div>
       <button class="nav-item admin-item" onclick={handleResetIndexDB}>
         <span class="icon">🗑️</span>
-        <span class="label">Reset IndexedDB</span>
+        <span class="label">Reset Memories</span>
+      </button>
+      <button class="nav-item admin-item" onclick={() => (uiState.saveManagerModal.visible = true)}>
+        <span class="icon">💾</span>
+        <span class="label">Save / Load</span>
       </button>
     </div>
   </nav>
@@ -152,6 +160,8 @@
     background: rgba(156, 163, 175, 0.1);
     border-color: rgba(156, 163, 175, 0.2);
     color: #d1d5db;
+    margin: 0.5rem 0;
+    width: 100%;
   }
 
   .admin-item:hover {
