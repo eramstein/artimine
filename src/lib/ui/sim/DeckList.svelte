@@ -43,9 +43,44 @@
   function getColorImagePath(color: CardColor): string {
     return getAssetPath(`images/color_${color}.png`);
   }
+
+  // Compact mana-cost histogram data
+  type ManaChartData = { buckets: number[]; maxCount: number };
+  let manaData: ManaChartData = $derived(
+    (() => {
+      const countByCost = new Map<number, number>();
+      let maxCost = 0;
+      for (const entry of deck.cards) {
+        const cost = getCardCost(entry.cardTemplateId);
+        maxCost = Math.max(maxCost, cost);
+        countByCost.set(cost, (countByCost.get(cost) || 0) + entry.count);
+      }
+      const buckets: number[] = [];
+      let maxCount = 0;
+      for (let i = 0; i <= maxCost; i += 1) {
+        const count = countByCost.get(i) || 0;
+        buckets.push(count);
+        if (count > maxCount) maxCount = count;
+      }
+      return { buckets, maxCount };
+    })()
+  );
 </script>
 
 <div class="deck-list-container">
+  <div class="mana-chart" aria-hidden="true">
+    {#each manaData.buckets as count, index}
+      <div class="bar-container">
+        <div
+          class="bar"
+          style="height: {manaData.maxCount > 0
+            ? Math.max(2, Math.round((count / manaData.maxCount) * 100))
+            : 0}%"
+        ></div>
+        <div class="mana-cost-label">{index}</div>
+      </div>
+    {/each}
+  </div>
   <div class="cards-section">
     <div class="section-title">
       Cards ({deck.cards.reduce((total, card) => total + card.count, 0)})
@@ -85,7 +120,6 @@
 
   {#if deck.lands && deck.lands.length > 0}
     <div class="lands-section">
-      <div class="section-title">Lands</div>
       <div class="lands-list">
         {#each deck.lands as land}
           <div class="card-item">
@@ -101,6 +135,43 @@
   .deck-list-container {
     color: white;
     max-width: 400px;
+  }
+
+  .mana-chart {
+    width: 250px;
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    padding: 4px 2px 12px 2px;
+    margin: 0 0 0.5rem 0;
+    background: #1f1f1f;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  .bar-container {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  .mana-chart .bar {
+    width: 100%;
+    background: linear-gradient(180deg, #6fb1ff 0%, #3a82e4 100%);
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+    transition: height 0.2s ease;
+  }
+
+  .mana-cost-label {
+    font-size: 8px;
+    color: #888;
+    margin-top: 2px;
+    line-height: 1;
   }
 
   .no-cards {
@@ -127,7 +198,7 @@
     background: #2a2a2a;
     border: 1px solid #444;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
 
   .section-title {

@@ -1,12 +1,14 @@
+import { CHARACTER_DECKS } from '@/data/base-deck';
 import { CHARACTERS } from '@/data/characters/main';
 import { CHARACTER_PLAYER } from '@/data/characters/player';
+import { loadBaseDeck } from '@/data/loader';
 import { PLACES } from '@/data/places/places';
 import type { GameState } from '../_model';
 import { CardSet } from '../_model/enums-battle';
 import { ActivityType, DayPeriod, ItemType } from '../_model/enums-sim';
 import { gs } from '../_state/main.svelte';
 import { openBoosterForCharacter } from './booster';
-import { getCollectionFromDeck } from './collection';
+import { getCollectionFromDeck, getFullCollection } from './collection';
 import { fillDefaultActivities } from './schedule';
 
 export const defaultGameState: GameState = {
@@ -17,7 +19,7 @@ export const defaultGameState: GameState = {
   characters: CHARACTERS,
   player: {
     ...CHARACTER_PLAYER,
-    collection: [],
+    collection: getFullCollection(),
     decks: [],
     cash: 0,
     items: [],
@@ -41,6 +43,11 @@ export const defaultGameState: GameState = {
 
 export const initSim = async () => {
   console.log('initSim');
+  // DECKS
+  for (const character of Object.values(gs.characters)) {
+    character.decks.push(await loadBaseDeck(CHARACTER_DECKS[character.key]));
+  }
+
   // CARD COLLECTIONS
   for (const character of Object.values(gs.characters)) {
     character.collection = getCollectionFromDeck(character.decks[0]);

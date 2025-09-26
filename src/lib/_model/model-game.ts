@@ -77,6 +77,7 @@ export interface Deck {
   record: {
     wins: number;
     losses: number;
+    cardResults: Record<string, number>; // card key to win record
   };
 }
 

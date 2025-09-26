@@ -43,6 +43,7 @@
   function isLandCard(card: CardTemplate | Land): card is (CardTemplate | Land) & {
     health: number;
     abilities?: any;
+    ruinsAbilities?: any;
     retaliate?: number;
   } {
     return card.type === CardType.Land;
@@ -203,6 +204,33 @@
     {#if (isUnitCard(card) || isLandCard(card)) && card.abilities && card.abilities.length > 0}
       {#each card.abilities as ability}
         <div class="ability-item">
+          <div class="ability-header">
+            <span
+              class="ability-icon"
+              class:has-trigger-icon={TRIGGER_ICONS[
+                ability.trigger.type as keyof typeof TRIGGER_ICONS
+              ]}
+              style={TRIGGER_ICONS[ability.trigger.type as keyof typeof TRIGGER_ICONS]
+                ? `background-image: url('${TRIGGER_ICONS[ability.trigger.type as keyof typeof TRIGGER_ICONS]}')`
+                : ''}
+            ></span>
+            <span class="ability-trigger">{ability.trigger.type}</span>
+            {#if ability.cost !== undefined && ability.cost > 0}
+              <span class="ability-cost">({ability.cost})</span>
+            {/if}
+            {#if ability.exhausts}
+              <span class="ability-exhausts">↻</span>
+            {/if}
+          </div>
+          <div class="ability-text">{getAbilityText(ability)}</div>
+        </div>
+      {/each}
+    {/if}
+
+    <!-- Ruins Abilities display - only for Land cards with ruinsAbilities -->
+    {#if isLandCard(card) && card.ruinsAbilities && card.ruinsAbilities.length > 0}
+      {#each card.ruinsAbilities as ability}
+        <div class="ability-item ruins-ability">
           <div class="ability-header">
             <span
               class="ability-icon"
@@ -394,6 +422,11 @@
     padding: 8px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
+  }
+
+  .ability-item.ruins-ability {
+    background: rgba(139, 69, 19, 0.2);
+    border: 1px solid rgba(139, 69, 19, 0.5);
   }
 
   .ability-header {

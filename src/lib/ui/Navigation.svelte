@@ -2,8 +2,8 @@
   import { UiView } from '../_model';
   import { uiState } from '../_state';
   import { gs, resetBattleState } from '../_state/main.svelte';
+  import { endBattle } from '../battle/win';
   import { resetMemoriesDB } from '../llm/memories-db';
-  import { recordBattleResult } from '../sim/ongoing-battle';
 
   const navItems = [
     { view: UiView.Battle, label: 'Game', icon: '🎮' },
@@ -12,8 +12,8 @@
   ];
 
   const stopBattle = () => {
+    endBattle(true);
     resetBattleState();
-    recordBattleResult(false);
     if (gs.activity.tournament) {
       uiState.currentView = UiView.Tournament;
     } else {

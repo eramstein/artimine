@@ -30,7 +30,11 @@ export async function initOngoingBattle(foe: Npc, deck: Deck) {
   recordActionInChat(`${foe.name} and ${gs.player.name} have started a game of Hordes cards.`);
 }
 
-export function recordBattleResult(won: boolean) {
+export function recordBattleResult(
+  won: boolean,
+  playerPlayedCards: string[],
+  opponentPlayedCards: string[]
+) {
   if (!gs.ongoingBattle) {
     return;
   }
@@ -40,12 +44,12 @@ export function recordBattleResult(won: boolean) {
   const opponentDeck = gs.characters[gs.ongoingBattle.opponentKey].decks.find(
     (deck) => deck.key === gs.ongoingBattle!.deckNames.opponent
   );
-  if (!playerDeck || !opponentDeck) {
-    return;
+  if (playerDeck) {
+    updateDeckRecord(playerDeck, won, playerPlayedCards);
   }
-  updateDeckRecord(playerDeck, won);
-  updateDeckRecord(opponentDeck, !won);
-
+  if (opponentDeck) {
+    updateDeckRecord(opponentDeck, !won, opponentPlayedCards);
+  }
   if (gs.activity.tournament) {
     recordTournamentResult(won);
   }

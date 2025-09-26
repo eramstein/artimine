@@ -28,7 +28,6 @@ export async function sendBattleEvent(message: string): Promise<string> {
     ${charactersDescription}
     `,
   };
-  console.log('systemPrompt', systemPrompt.content);
 
   // reset initial system prompt
   gs.chat.history[0] = systemPrompt;
@@ -42,6 +41,14 @@ export async function sendBattleEvent(message: string): Promise<string> {
 
   gs.chat.history.push(userPrompt);
   gs.chat.attemptedActionsResults = '';
+
+  const playerMessagesCount = gs.chat.history.filter(
+    (msg) => msg.role === 'user' && !msg.fromEngine
+  ).length;
+
+  if (playerMessagesCount === 0) {
+    return '';
+  }
 
   // Start streaming
   uiState.chat.isStreaming = true;

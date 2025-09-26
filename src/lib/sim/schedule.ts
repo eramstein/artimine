@@ -9,6 +9,7 @@ import {
 import { gs } from '../_state/main.svelte';
 import { endPlayerChat } from '../llm';
 import { autoResolveActivity } from './activity';
+import { adjustNpcDecks, expandNpcCollections } from './npc';
 import { getTournament } from './tournament';
 
 const dayPeriodIndexes = {
@@ -58,6 +59,11 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
     .forEach((dayActivities) => {
       dayActivities.forEach((activityPlan) => {
         autoResolveActivity(activityPlan.activity);
+        // weekly NPC updates
+        if (activityPlan.day % 7 === 0 && activityPlan.dayPeriod === DayPeriod.Afternoon) {
+          expandNpcCollections();
+          adjustNpcDecks();
+        }
         if (activityPlan.day === day && activityPlan.dayPeriod === dayPeriod) return;
       });
     });

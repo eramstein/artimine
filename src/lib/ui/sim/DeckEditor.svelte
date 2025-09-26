@@ -2,7 +2,7 @@
   import { UiView } from '@/lib/_model';
   import { gs, saveStateToLocalStorage } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
-  import { deleteDeck } from '@/lib/sim/decks';
+  import { deleteDeck, renameDeck } from '@/lib/sim/decks';
   import Collection from './Collection.svelte';
   import DeckList from './DeckList.svelte';
 
@@ -12,6 +12,10 @@
       ? gs.player.decks.find((deck) => deck.key === uiState.collection.editedDeckKey) || null
       : null
   );
+
+  // State for editing deck name
+  let isEditingName = $state(false);
+  let tempDeckName = $state('');
 
   function goBack() {
     uiState.currentView = UiView.Decks;
@@ -45,6 +49,36 @@
       uiState.collection.editedDeckKey = null;
     }
   }
+
+  function startEditingName() {
+    if (!selectedDeck) return;
+    isEditingName = true;
+    tempDeckName = selectedDeck.name;
+  }
+
+  function saveDeckName() {
+    if (!selectedDeck || !tempDeckName.trim()) return;
+
+    const newName = tempDeckName.trim();
+    if (newName !== selectedDeck.name) {
+      renameDeck(selectedDeck, newName);
+      saveStateToLocalStorage();
+    }
+    isEditingName = false;
+  }
+
+  function cancelEditingName() {
+    isEditingName = false;
+    tempDeckName = '';
+  }
+
+  function handleNameKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      saveDeckName();
+    } else if (event.key === 'Escape') {
+      cancelEditingName();
+    }
+  }
 </script>
 
 <div class="deck-editor-container">
@@ -56,7 +90,27 @@
     {#if selectedDeck}
       <div class="deck-selector">
         <span class="current-deck-label">Editing:</span>
-        <span class="current-deck-name">{selectedDeck.name}</span>
+        {#if isEditingName}
+          <div class="name-edit-container">
+            <input
+              type="text"
+              bind:value={tempDeckName}
+              onkeydown={handleNameKeydown}
+              onblur={saveDeckName}
+              class="name-input"
+              placeholder="Deck name"
+              autofocus
+            />
+            <button class="save-name-button" onclick={saveDeckName} title="Save">✓</button>
+            <button class="cancel-name-button" onclick={cancelEditingName} title="Cancel">✗</button>
+          </div>
+        {:else}
+          <div class="name-display-container">
+            <span class="current-deck-name" onclick={startEditingName}>{selectedDeck.name}</span>
+            <button class="edit-name-button" onclick={startEditingName} title="Edit name">✏️</button
+            >
+          </div>
+        {/if}
       </div>
     {:else}
       <div class="no-deck-selected">
@@ -152,6 +206,76 @@
     color: #e0e0e0;
     font-weight: bold;
     font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  .current-deck-name:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .name-display-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .name-edit-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .name-input {
+    background: #3a3a3a;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    min-width: 150px;
+    outline: none;
+  }
+
+  .name-input:focus {
+    border-color: #4a9eff;
+    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+  }
+
+  .edit-name-button,
+  .save-name-button,
+  .cancel-name-button {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+  }
+
+  .edit-name-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+  }
+
+  .save-name-button:hover {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+  }
+
+  .cancel-name-button:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
   }
 
   .no-deck-selected {

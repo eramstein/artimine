@@ -1,12 +1,10 @@
 import { ActivityType } from '@/lib/_model/enums-sim';
-import { BASE_DECK_ITALIA } from '../base-deck';
 
 export const CHARACTER_EMMA = {
   key: 'emma',
   name: 'Emma',
   place: 0,
   cash: 80,
-  decks: [BASE_DECK_ITALIA],
   bio: `Emma is a 27 years old successful lawyer.
   She is smart, witty, competitive, but also playful and funny.
   She is very attractive and knows how to use it.

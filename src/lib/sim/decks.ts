@@ -11,6 +11,7 @@ export function createNewDeck(name: string): Deck {
     record: {
       wins: 0,
       losses: 0,
+      cardResults: {},
     },
   };
   gs.player.decks.push(deck);
@@ -55,10 +56,20 @@ export function pickNpcDeck(npcKey: string): Deck {
   return getRandomFromArray(gs.characters[npcKey].decks);
 }
 
-export function updateDeckRecord(deck: Deck, win: boolean) {
+export function updateDeckRecord(deck: Deck, win: boolean, playedCards: string[]) {
   if (win) {
     deck.record.wins++;
+    playedCards.forEach((card) => {
+      deck.record.cardResults[card] = (deck.record.cardResults[card] || 0) + 1;
+    });
   } else {
     deck.record.losses++;
+    playedCards.forEach((card) => {
+      deck.record.cardResults[card] = (deck.record.cardResults[card] || 0) - 1;
+    });
   }
+}
+
+export function renameDeck(deck: Deck, name: string) {
+  deck.name = name;
 }

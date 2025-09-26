@@ -23,7 +23,16 @@ function addDefaultCollectionAndDecks(character: any): Npc {
       love: 0,
       respect: 0,
     },
+    decks: [],
     collection: [],
     items: [],
   };
 }
+
+export const CHARACTERS_LEGENDARY_CARDS: Record<string, string[]> = {
+  [CHARACTER_THE_DUDE.key]: ['dudes_arms_stash'],
+  [CHARACTER_EMMA.key]: ['emmas_dark_tower'],
+  [CHARACTER_HENRY.key]: ['henrys_cemetary'],
+  [CHARACTER_MOLLY.key]: ['mollys_oasis'],
+  [CHARACTER_OUSMANE.key]: ['ousmanes_summoning_circle'],
+};

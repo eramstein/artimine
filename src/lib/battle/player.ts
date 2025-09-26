@@ -24,6 +24,10 @@ export function getHumanPlayer(): Player {
   return bs.players[0];
 }
 
+export function getAiPlayer(): Player {
+  return bs.players[1];
+}
+
 export function untapPlayer(player: Player) {
   player.abilityUsed = false;
 }

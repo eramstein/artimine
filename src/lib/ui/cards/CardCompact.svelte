@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { isLandCard } from '@/lib/_model';
   import { CardColor, CardType } from '@/lib/_model/enums-battle';
   import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
   import { CARD_HEIGHT, CARD_WIDTH } from '@lib/_config/ui-config';
@@ -152,9 +153,14 @@
     <!-- Bottom section with abilities and bottom row -->
     <div class="bottom-section">
       <!-- Abilities display - only for Unit cards with abilities -->
-      {#if isUnitCard(card) && card.abilities && card.abilities.length > 0}
+      {#if (isUnitCard(card) || isLandCard(card)) && card.abilities && card.abilities.length > 0}
         <div class="abilities-container">
           <Abilities abilities={card.abilities} />
+        </div>
+      {/if}
+      {#if isLandCard(card) && card.ruinsAbilities && card.ruinsAbilities.length > 0}
+        <div class="abilities-container">
+          <Abilities abilities={card.ruinsAbilities} />
         </div>
       {/if}
 
@@ -320,9 +326,6 @@
     padding-left: 8px;
     font-size: var(--name-font-size, 0.9rem);
     line-height: 1.1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .abilities-container {

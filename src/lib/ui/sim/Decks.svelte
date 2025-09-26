@@ -29,6 +29,66 @@
       uiState.collection.editedDeckKey = newDeck.key;
     }
   }
+
+  // Handle load deck from clipboard (expects JSON Deck)
+  async function handleLoadDeck(): Promise<void> {
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.readText) {
+        alert('Clipboard API not available. Please paste a Deck JSON into a prompt-based import.');
+        return;
+      }
+
+      const text = await navigator.clipboard.readText();
+      if (!text || !text.trim()) {
+        alert('Clipboard is empty. Copy a Deck JSON first.');
+        return;
+      }
+
+      let parsed: any;
+      try {
+        parsed = JSON.parse(text);
+      } catch (err) {
+        alert('Clipboard does not contain valid JSON.');
+        return;
+      }
+
+      // Minimal validation and normalization
+      const name =
+        typeof parsed?.name === 'string' && parsed.name.trim()
+          ? parsed.name.trim()
+          : 'Imported Deck';
+      const cardsArray = Array.isArray(parsed?.cards) ? parsed.cards : [];
+      const landsArray = Array.isArray(parsed?.lands) ? parsed.lands : [];
+      const recordObj = parsed?.record && typeof parsed.record === 'object' ? parsed.record : {};
+
+      const normalizedCards = cardsArray
+        .filter((c: any) => c && typeof c.cardTemplateId === 'string' && Number.isFinite(c.count))
+        .map((c: any) => ({
+          cardTemplateId: c.cardTemplateId,
+          count: Math.max(1, Math.floor(c.count)),
+        }));
+
+      const normalizedLands = landsArray.filter((l: any) => typeof l === 'string');
+
+      const newDeck = {
+        key: crypto.randomUUID(),
+        name,
+        cards: normalizedCards,
+        lands: normalizedLands,
+        record: {
+          wins: Number.isFinite(recordObj.wins) ? Math.max(0, Math.floor(recordObj.wins)) : 0,
+          losses: Number.isFinite(recordObj.losses) ? Math.max(0, Math.floor(recordObj.losses)) : 0,
+        },
+      };
+
+      gs.player.decks.push(newDeck);
+      uiState.currentView = UiView.DeckEditor;
+      uiState.collection.editedDeckKey = newDeck.key;
+    } catch (error) {
+      console.error('Failed to load deck from clipboard', error);
+      alert('Failed to load deck from clipboard. See console for details.');
+    }
+  }
 </script>
 
 <div class="decks-container">
@@ -53,6 +113,15 @@
       </div>
       <div class="deck-name">New Deck</div>
       <div class="deck-count">Create new</div>
+    </div>
+
+    <!-- Load Deck Button -->
+    <div class="deck-box new-deck-box" onclick={handleLoadDeck}>
+      <div class="deck-image new-deck-image">
+        <div class="new-deck-icon">⎘</div>
+      </div>
+      <div class="deck-name">Load Deck</div>
+      <div class="deck-count">Paste from clipboard</div>
     </div>
   </div>
 </div>
