@@ -105,6 +105,7 @@ export interface ActivityPlan {
   dayPeriod: DayPeriod;
   activity: Activity;
   place: number; // Place index
+  resolved?: boolean;
 }
 
 export interface ChatState {

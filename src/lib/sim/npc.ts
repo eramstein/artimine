@@ -1,5 +1,5 @@
 import { cards, lands } from '@/data';
-import type { CardColor, CardTuple, Deck } from '../_model';
+import type { CardColor, CardTemplate, CardTuple, Deck, UnitCardTemplate } from '../_model';
 import { CardSet } from '../_model/enums-battle';
 import { gs } from '../_state/main.svelte';
 import { openBoosterForCharacter } from './booster';
@@ -35,11 +35,14 @@ function addNewCardToDeck(deck: Deck, collection: CardTuple[]) {
     (acc, land) => acc.concat(lands[land].colors.map((color) => color.color)),
     [] as CardColor[]
   );
-  const eligibleCards = collection.filter(
-    (tuple) =>
+  const eligibleCards = collection.filter((tuple) => {
+    const card = cards[tuple.cardTemplateId];
+    return (
       !lands[tuple.cardTemplateId] &&
-      !cards[tuple.cardTemplateId].colors.some((color) => !deckColors.includes(color.color))
-  );
+      !card.colors.some((color) => !deckColors.includes(color.color)) &&
+      (!card || isCardUsableByAi(card))
+    );
+  });
   eligibleCards.forEach((tuple) => {
     if (deck.cards.find((c) => c.cardTemplateId === tuple.cardTemplateId)) {
       return;
@@ -57,4 +60,9 @@ function addNewCardToDeck(deck: Deck, collection: CardTuple[]) {
   }
   console.log('adding card to deck', cardToAdd);
   addCardToDeck(deck, cardToAdd);
+}
+
+// AI can handle either cards with no abilities, or cards with aiHints
+function isCardUsableByAi(card: CardTemplate) {
+  return card.aiHints || !(card as UnitCardTemplate).abilities;
 }

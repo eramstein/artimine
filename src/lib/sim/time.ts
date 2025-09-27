@@ -1,5 +1,12 @@
+import { DayPeriod } from '../_model';
 import { gs } from '../_state/main.svelte';
 import { dayNames } from './schedule';
+
+export const dayPeriodIndexes = {
+  [DayPeriod.Morning]: 0,
+  [DayPeriod.Afternoon]: 1,
+  [DayPeriod.Evening]: 2,
+};
 
 export function getDayNumberFromWeekday(weekday: string): number {
   const targetWeekday = dayNames.findIndex((d) => d === weekday);
@@ -12,4 +19,12 @@ export function getDayNumberFromWeekday(weekday: string): number {
     return gs.time.day + 7 - currentWeekday + targetWeekday;
   }
   return gs.time.day + targetWeekday - currentWeekday;
+}
+
+export function isTimePeriodBefore(dayPeriod1: DayPeriod, dayPeriod2: DayPeriod) {
+  return dayPeriodIndexes[dayPeriod1] < dayPeriodIndexes[dayPeriod2];
+}
+
+export function isTimePeriodBeforeOrNow(dayPeriod1: DayPeriod, dayPeriod2: DayPeriod) {
+  return dayPeriodIndexes[dayPeriod1] <= dayPeriodIndexes[dayPeriod2];
 }

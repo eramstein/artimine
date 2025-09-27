@@ -10,13 +10,8 @@ import { gs } from '../_state/main.svelte';
 import { endPlayerChat } from '../llm';
 import { autoResolveActivity } from './activity';
 import { adjustNpcDecks, expandNpcCollections } from './npc';
+import { dayPeriodIndexes, isTimePeriodBefore } from './time';
 import { getTournament } from './tournament';
-
-const dayPeriodIndexes = {
-  [DayPeriod.Morning]: 0,
-  [DayPeriod.Afternoon]: 1,
-  [DayPeriod.Evening]: 2,
-};
 
 const dayPeriods = [DayPeriod.Morning, DayPeriod.Afternoon, DayPeriod.Evening];
 
@@ -51,20 +46,26 @@ export function scheduleActivity(
 }
 
 export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
-  const activityPlan = gs.activityPlans[day][dayPeriodIndexes[dayPeriod]];
   await endPlayerChat();
   // auto-resolve activityPlans
   gs.activityPlans
     .filter((_, d) => d <= day)
     .forEach((dayActivities) => {
       dayActivities.forEach((activityPlan) => {
+        if (
+          activityPlan.resolved ||
+          (activityPlan.day === day + gs.time.day &&
+            !isTimePeriodBefore(activityPlan.dayPeriod, dayPeriod))
+        ) {
+          return;
+        }
+        activityPlan.resolved = true;
         autoResolveActivity(activityPlan.activity);
         // weekly NPC updates
         if (activityPlan.day % 7 === 0 && activityPlan.dayPeriod === DayPeriod.Afternoon) {
           expandNpcCollections();
           adjustNpcDecks();
         }
-        if (activityPlan.day === day && activityPlan.dayPeriod === dayPeriod) return;
       });
     });
   // clean up passed schedule
@@ -74,6 +75,7 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   gs.time.period = dayPeriod;
   fillDefaultActivities(gs.time.day + 14);
   // update activity, time and schedule
+  const activityPlan = gs.activityPlans[day][dayPeriodIndexes[dayPeriod]];
   if (!activityPlan) return;
   gs.activity = activityPlan.activity;
   gs.player.place = activityPlan.place;
