@@ -1,0 +1,45 @@
+{
+  "id": "ballista",
+  "name": "Ballista",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 4,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "building"
+  ],
+  "keywords": {
+    "ranged": true
+  },
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "staticKeyword",
+            "args": {
+              "abilityName": "ballista",
+              "keyword": "armor",
+              "keyWordValue": -2,
+              "fromTriggerParam": "defender"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

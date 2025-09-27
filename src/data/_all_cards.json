@@ -591,6 +591,51 @@
     "cardSet": "alpha"
   },
   {
+    "id": "ballista",
+    "name": "Ballista",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "building"
+    ],
+    "keywords": {
+      "ranged": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "ballista",
+                "keyword": "armor",
+                "keyWordValue": -2,
+                "fromTriggerParam": "defender"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "banshee",
     "name": "Banshee",
     "rarity": "rare",
@@ -2134,6 +2179,34 @@
     "cardSet": "alpha"
   },
   {
+    "id": "emergency_repairs",
+    "name": "Emergency Repairs",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "healUnit",
+          "args": {
+            "health": 99,
+            "range": {
+              "allies": true,
+              "unitType": "building"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "emmas_dark_tower",
     "name": "Emma's Dark Tower",
     "rarity": "legendary",
@@ -2292,6 +2365,50 @@
       "armor": 4
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "entangling_roots",
+    "name": "Entangling Roots",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 3,
+    "power": 1,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "plant"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Combat",
+          "range": {
+            "ennemies": true,
+            "sameRow": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "applyUnitStatus",
+              "args": {
+                "statusType": "root",
+                "duration": 2,
+                "range": {
+                  "self": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "execution",
@@ -6582,6 +6699,56 @@
     "cardSet": "alpha"
   },
   {
+    "id": "stone_skin",
+    "name": "Stone Skin",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 2,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "combine",
+          "args": {
+            "effectTemplates": [
+              {
+                "name": "addCounters",
+                "args": {
+                  "counterType": "decay",
+                  "counterValue": 2
+                }
+              },
+              {
+                "name": "staticKeyword",
+                "args": {
+                  "abilityName": "stoneSkin",
+                  "keyword": "armor",
+                  "keyWordValue": 2
+                }
+              }
+            ]
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "street_slinger",
     "name": "Street Slinger",
     "type": "unit",
@@ -7181,6 +7348,51 @@
       }
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "uncle_bobo",
+    "name": "Uncle Bobo",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 2,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "green",
+        "count": 3
+      }
+    ],
+    "unitTypes": [
+      "halfing"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "range": {
+                  "allies": true,
+                  "adjacent": true,
+                  "unitType": "plant"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "unicorn",

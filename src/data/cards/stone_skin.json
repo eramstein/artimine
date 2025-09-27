@@ -1,0 +1,50 @@
+{
+  "id": "stone_skin",
+  "name": "Stone Skin",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "combine",
+        "args": {
+          "effectTemplates": [
+            {
+              "name": "addCounters",
+              "args": {
+                "counterType": "decay",
+                "counterValue": 2
+              }
+            },
+            {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "stoneSkin",
+                "keyword": "armor",
+                "keyWordValue": 2
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

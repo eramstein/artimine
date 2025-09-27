@@ -1,0 +1,43 @@
+{
+  "id": "uncle_bobo",
+  "name": "Uncle Bobo",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 2,
+  "power": 1,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "green",
+      "count": 3
+    }
+  ],
+  "unitTypes": ["halfing"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Moving",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "growth",
+              "counterValue": 1,
+              "range": {
+                "allies": true,
+                "adjacent": true,
+                "unitType": "plant"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

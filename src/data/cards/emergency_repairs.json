@@ -1,0 +1,28 @@
+{
+  "id": "emergency_repairs",
+  "name": "Emergency Repairs",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "black",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "healUnit",
+        "args": {
+          "health": 99,
+          "range": {
+            "allies": true,
+            "unitType": "building"
+          }
+        }
+      }
+    }
+  ]
+}

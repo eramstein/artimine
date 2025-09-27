@@ -1,0 +1,40 @@
+{
+  "id": "entangling_roots",
+  "name": "Entangling Roots",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 3,
+  "power": 1,
+  "maxHealth": 5,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["plant"],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "After Combat",
+        "range": {
+          "ennemies": true,
+          "sameRow": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "applyUnitStatus",
+            "args": {
+              "statusType": "root",
+              "duration": 2,
+              "fromTriggerParam": "attacker"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

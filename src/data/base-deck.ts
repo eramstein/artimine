@@ -17,12 +17,27 @@ export const TEST_DECK: Deck = {
       count: 20,
     },
     {
-      cardTemplateId: 'hobbit_gardener',
+      cardTemplateId: 'stone_skin',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'emergency_repairs',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'uncle_bobo',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'entangling_roots',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'ballista',
       count: 20,
     },
   ],
-  //lands: ['forest', 'market', 'city', 'mountain'],
-  lands: ['big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn', 'big_mammas_inn'],
+  lands: ['forest', 'market', 'city', 'mountain'],
   record: {
     wins: 0,
     losses: 0,
