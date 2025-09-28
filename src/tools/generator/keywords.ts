@@ -37,6 +37,7 @@ export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   lance: { baseCost: 5, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
   flying: { baseCost: 6, prevalence: 3, scalesWithPower: true, requiresSomePower: true },
   immobile: { baseCost: -3, prevalence: 3 },
+  armorPiercing: { baseCost: 2, prevalence: 3 },
 };
 
 // Extract prevalence from definitions

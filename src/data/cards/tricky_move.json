@@ -1,0 +1,28 @@
+{
+  "id": "tricky_move",
+  "name": "Tricky Move",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "swapUnits",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

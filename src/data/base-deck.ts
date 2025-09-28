@@ -13,31 +13,19 @@ export const TEST_DECK: Deck = {
   name: 'Test',
   cards: [
     {
-      cardTemplateId: 'orc_miner',
+      cardTemplateId: 'ogre_brawler',
       count: 20,
     },
     {
-      cardTemplateId: 'stone_skin',
+      cardTemplateId: 'sucker_punch',
       count: 20,
     },
     {
-      cardTemplateId: 'emergency_repairs',
-      count: 20,
-    },
-    {
-      cardTemplateId: 'uncle_bobo',
-      count: 20,
-    },
-    {
-      cardTemplateId: 'entangling_roots',
-      count: 20,
-    },
-    {
-      cardTemplateId: 'ballista',
+      cardTemplateId: 'zizany',
       count: 20,
     },
   ],
-  lands: ['forest', 'market', 'city', 'mountain'],
+  lands: ['forest', 'island', 'city', 'mountain'],
   record: {
     wins: 0,
     losses: 0,

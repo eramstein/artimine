@@ -1,0 +1,38 @@
+{
+  "id": "plague_lands",
+  "name": "Plague Lands",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "land",
+  "cost": 0,
+  "colors": [],
+  "health": 10,
+  "abilities": [
+    {
+      "trigger": {
+        "type": "Activated"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "decay",
+              "counterValue": 1
+            }
+          },
+          "targets": [
+            {
+              "type": "unit_allies",
+              "count": 1
+            },
+            {
+              "type": "unit_ennemies",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

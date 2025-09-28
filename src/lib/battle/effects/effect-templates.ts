@@ -41,6 +41,7 @@ import {
   tutorCard,
   untapPlayer,
 } from '@/lib/battle';
+import { fightUnit } from '../combat';
 import { getAllGraveyardsCards, reanimate, regrowCard } from '../graveyard';
 import { damageLand, fortifyLand } from '../land';
 import { forceMoveUnit } from '../move';
@@ -154,12 +155,14 @@ export const DataEffectTemplates: Record<
     range,
     fromTriggerParam,
     dynamicValue,
+    valueIsMultiplier = false,
   }: {
     counterType: CounterType;
     counterValue: number;
     range?: UnitFilterArgs;
     fromTriggerParam?: string;
     dynamicValue?: DynamicValue;
+    valueIsMultiplier?: boolean;
   }) => ({
     fn: ({ unit, land, targets, player, triggerParams }) => {
       const value = dynamicValue
@@ -169,8 +172,9 @@ export const DataEffectTemplates: Record<
       const unitsInRange = fromTriggerParam
         ? [triggerParams[fromTriggerParam]]
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
-      unitsInRange.forEach((u) => {
-        addCounters(u, counterType, value);
+      unitsInRange.forEach((u: UnitDeployed) => {
+        const count = valueIsMultiplier ? (value - 1) * (u.counters[counterType] ?? 0) : value;
+        addCounters(u, counterType, count);
       });
     },
     label: (targets: TargetDefinition[]) => {
@@ -181,7 +185,12 @@ export const DataEffectTemplates: Record<
       const valueLabel = dynamicValue
         ? `[${dynamicValue} ${counterValue !== 1 ? ' x ' + counterValue : ''}]`
         : counterValue;
-      const verb = targets.length === 0 && (!range || range?.self) ? 'Gets' : 'Add';
+      const verb =
+        targets.length === 0 && (!range || range?.self)
+          ? 'Gets'
+          : valueIsMultiplier
+            ? 'Multiply by'
+            : 'Add';
       return `${verb} ${valueLabel} ${counterType} counter${counterValue !== 1 ? 's' : ''}${targetsLabel}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
@@ -510,6 +519,48 @@ export const DataEffectTemplates: Record<
       forceMoveUnit(unit, position);
     },
     label: () => `Force move unit to target position`,
+  }),
+  swapUnits: () => ({
+    fn: ({ targets }) => {
+      const unit1 = targets[0][0] as UnitDeployed;
+      const unit2 = targets[0][1] as UnitDeployed;
+      if (!unit1 || !unit2 || unit1.ownerPlayerId !== unit2.ownerPlayerId) {
+        return;
+      }
+      const position1 = unit1.position;
+      unit1.position = unit2.position;
+      unit2.position = position1;
+    },
+    label: () => `Swap positions of 2 units on the same side`,
+  }),
+  fight: ({
+    mutual = true,
+    sameSidePossible = false,
+  }: {
+    mutual?: boolean;
+    sameSidePossible?: boolean;
+  }) => ({
+    fn: ({ unit, targets }) => {
+      const unit1 = (targets[0][1] ? targets[0][0] : unit) as UnitDeployed;
+      const unit2 = (targets[0][1] ?? targets[0][0]) as UnitDeployed;
+      if (!unit1 || !unit2) {
+        return;
+      }
+      if (!sameSidePossible && unit1.ownerPlayerId === unit2.ownerPlayerId) {
+        return;
+      }
+      fightUnit(unit1, unit2);
+      if (mutual) {
+        fightUnit(unit2, unit1);
+      }
+    },
+    label: (targets) => {
+      const subject = targets[0].count && targets[0].count > 1 ? 'Target unit' : 'This unit';
+      const oppositeSideLabel = sameSidePossible ? ' on the opposite side' : '';
+      return mutual
+        ? `${subject} fights another unit${oppositeSideLabel}`
+        : `Attack target unit${oppositeSideLabel} (no fight back)`;
+    },
   }),
   cycleCards: () => ({
     fn: ({ targets }) => {

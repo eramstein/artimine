@@ -1,0 +1,42 @@
+{
+  "id": "magic_weapons",
+  "name": "Magic Weapons",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 5,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "staticKeyword",
+        "args": {
+          "abilityName": "magicWeapons",
+          "keyword": "armorPiercing",
+          "range": {
+            "sameColumn": true
+          }
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "effect": {
+        "name": "drawCard",
+        "args": {
+          "cardCount": 1
+        }
+      }
+    }
+  ]
+}

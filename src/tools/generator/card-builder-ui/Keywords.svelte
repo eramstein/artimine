@@ -20,6 +20,7 @@
     lance: boolean;
     flying: boolean;
     immobile: boolean;
+    armorPiercing: boolean;
   };
 
   export let keywordCosts: any;
@@ -89,6 +90,13 @@
       <label class="checkbox-label">
         <input type="checkbox" bind:checked={state_keywords.immobile} />
         Immobile <span class="keyword-cost">({keywordCosts.immobile} pts)</span>
+      </label>
+    </div>
+
+    <div class="keyword-group">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={state_keywords.armorPiercing} />
+        Armor Piercing <span class="keyword-cost">({keywordCosts.armorPiercing} pts)</span>
       </label>
     </div>
 

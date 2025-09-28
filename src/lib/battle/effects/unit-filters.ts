@@ -1,6 +1,7 @@
 import {
   CardType,
   isDeployedUnit,
+  isPosition,
   type Land,
   type Player,
   type Position,
@@ -137,16 +138,14 @@ export function getUnitsInRange(
 ): UnitDeployed[] {
   let unitsInRange: UnitDeployed[] = [];
   if (targets && targets[0]?.length) {
-    const targetsToLoop = targets[0];
-    if (isDeployedUnit(targetsToLoop)) {
-      targetsToLoop.forEach((u) => {
-        unitsInRange = [...unitsInRange, ...(range ? filterUnits({ unit: u, ...range }) : [u])];
-      });
-    } else {
-      targetsToLoop.forEach((p) => {
-        unitsInRange = [...unitsInRange, ...(range ? filterUnits({ position: p, ...range }) : [])];
-      });
-    }
+    const unitsToLoop = targets.filter(isDeployedUnit);
+    const positionsToLoop = targets.filter(isPosition);
+    unitsToLoop.flat().forEach((u) => {
+      unitsInRange = [...unitsInRange, ...(range ? filterUnits({ unit: u, ...range }) : [u])];
+    });
+    positionsToLoop.flat().forEach((p) => {
+      unitsInRange = [...unitsInRange, ...(range ? filterUnits({ position: p, ...range }) : [])];
+    });
   } else if (range) {
     const params = { player, ...range };
     if (sourcePermanent?.type === CardType.Unit) {

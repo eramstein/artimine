@@ -1,0 +1,30 @@
+{
+  "id": "sucker_punch",
+  "name": "Sucker Punch",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "fight",
+        "args": {
+          "mutual": false
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

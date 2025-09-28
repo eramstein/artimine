@@ -1,0 +1,28 @@
+{
+  "id": "fight",
+  "name": "Fight!",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 1,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "fight",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

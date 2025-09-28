@@ -1,0 +1,25 @@
+{
+  "id": "second_breakfast",
+  "name": "Second Breakfast",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 1,
+  "colors": [
+    {
+      "color": "green",
+      "count": 4
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "addCounters",
+        "args": {
+          "counterType": "growth",
+          "counterValue": 2
+        }
+      }
+    }
+  ]
+}

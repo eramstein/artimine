@@ -68,7 +68,14 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'addCounters',
-    argNames: ['counterType', 'counterValue', 'range', 'fromTriggerParam', 'dynamicValue'],
+    argNames: [
+      'counterType',
+      'counterValue',
+      'range',
+      'fromTriggerParam',
+      'dynamicValue',
+      'valueIsMultiplier',
+    ],
     budget: (args, targets) => {
       const baseCost =
         (args.counterValue || 1) * (counterCost[args.counterType as CounterType] || 1);
@@ -228,6 +235,16 @@ export const baseEffects: BaseEffect[] = [
     effectName: 'addMana',
     argNames: ['amount'],
     budget: (args, targets) => 10, // TBD
+  },
+  {
+    effectName: 'swapUnits',
+    argNames: [],
+    budget: (args, targets) => 30, // TBD
+  },
+  {
+    effectName: 'fight',
+    argNames: ['mutual', 'sameSidePossible'],
+    budget: (args, targets) => (args.mutual ? 10 : 30) * (args.sameSidePossible ? 3 : 1), // TBD
   },
 ];
 

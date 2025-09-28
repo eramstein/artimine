@@ -1,0 +1,35 @@
+{
+  "id": "zizany",
+  "name": "Zizany",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "fight",
+        "args": {
+          "mutual": "true",
+          "sameSidePossible": "true"
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

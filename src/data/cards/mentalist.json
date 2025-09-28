@@ -1,0 +1,23 @@
+{
+  "id": "mentalist",
+  "name": "Mentalist",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 5,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": [
+    "human"
+  ],
+  "keywords": {
+    "ranged": true,
+    "retaliate": 3
+  }
+}

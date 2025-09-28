@@ -1,0 +1,40 @@
+{
+  "id": "ogre_brawler",
+  "name": "Ogre Brawler",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 5,
+  "power": 4,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Deploy",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "fight",
+            "args": {}
+          },
+          "targets": [
+            {
+              "type": "unit",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

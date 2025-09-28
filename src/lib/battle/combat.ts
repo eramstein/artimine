@@ -89,7 +89,7 @@ export function attackUnit(unit: UnitDeployed, target: UnitDeployed) {
   }
 
   attackedUnits.forEach((attackedUnit) => {
-    const preventedDamage = attackedUnit.keywords?.armor || 0;
+    const preventedDamage = (!unit.keywords?.armorPiercing && attackedUnit.keywords?.armor) || 0;
     const dealtDamage = unit.power - preventedDamage;
     const excessDamage = dealtDamage - attackedUnit.health;
     if (unit.keywords?.poisonous) {
@@ -185,4 +185,14 @@ function useRage(unit: UnitDeployed) {
     applyTemporaryEffect(unit, { power: unit.counters.rage });
     unit.counters.rage = 0;
   }
+}
+
+export function fightUnit(unit1: UnitDeployed, unit2: UnitDeployed) {
+  const preventedDamage = (!unit1.keywords?.armorPiercing && unit2.keywords?.armor) || 0;
+  const dealtDamage = unit1.power - preventedDamage;
+  const retaliation = unit2.keywords?.retaliate;
+  if (retaliation) {
+    damageUnit(unit1, retaliation);
+  }
+  damageUnit(unit2, dealtDamage);
 }
