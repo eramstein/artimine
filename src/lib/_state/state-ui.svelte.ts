@@ -42,6 +42,14 @@ export const uiState: UiState = $state({
     visible: false,
     card: null,
   },
+  confirmPopover: {
+    visible: false,
+    title: '',
+    body: '',
+    anchorEl: null as unknown as HTMLElement | null,
+    onConfirm: undefined,
+    onCancel: undefined,
+  },
   deckSelectionModal: {
     visible: false,
     foeKey: null,
@@ -72,7 +80,6 @@ export function addRollResult(result: {
   attribute: string;
   difficulty: number;
 }) {
-  console.log('addRollResult', result);
   uiState.rollResults.push(result);
 }
 

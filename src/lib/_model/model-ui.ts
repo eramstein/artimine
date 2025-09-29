@@ -55,6 +55,14 @@ export type UiState = {
     visible: boolean;
     card: CardTemplate | null;
   };
+  confirmPopover: {
+    visible: boolean;
+    title: string;
+    body: string;
+    anchorEl: HTMLElement | null;
+    onConfirm?: () => void;
+    onCancel?: () => void;
+  };
   deckSelectionModal: {
     visible: boolean;
     foeKey: string | null;

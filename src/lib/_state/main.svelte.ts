@@ -1,9 +1,11 @@
-import { type BattleState, type GameState } from '../_model';
+import { type BattleState, type GameState, type UiState } from '../_model';
 import { defaultBattleState } from '../battle';
 import { defaultGameState, initSim } from '../sim/init';
 import { getGame, getLatestGame, saveGame, type SaveGame } from './save-games';
+import { uiState } from './state-ui.svelte';
 
 const LOCAL_STORAGE_KEY_BATTLE = 'artimineBattleState';
+const LOCAL_STORAGE_KEY_UI = 'artimineUiState';
 
 export const gs: GameState = $state(defaultGameState);
 export const bs: BattleState = $state(defaultBattleState);
@@ -17,8 +19,9 @@ export const saveStateToLocalStorage = (id: string = 'quicksave'): void => {
       gameState: JSON.parse(JSON.stringify(gs)),
     };
     saveGame(savedGame);
-    // bs in local storage for now
+    // bs and ui in local storage for now
     localStorage.setItem(LOCAL_STORAGE_KEY_BATTLE, JSON.stringify(bs));
+    localStorage.setItem(LOCAL_STORAGE_KEY_UI, JSON.stringify(uiState));
   } catch (error) {
     console.error('Failed to save state to localStorage:', error);
   }
@@ -26,6 +29,7 @@ export const saveStateToLocalStorage = (id: string = 'quicksave'): void => {
 
 export const loadGameStateFromLocalStorage = async (id: string) => {
   try {
+    // sim state
     const savedState = id ? await getGame(id) : await getLatestGame();
     if (savedState) {
       const parsedState: GameState = savedState.gameState;
@@ -34,11 +38,18 @@ export const loadGameStateFromLocalStorage = async (id: string) => {
       initSim();
     }
 
+    // battle state
     const savedBattleState = localStorage.getItem(LOCAL_STORAGE_KEY_BATTLE);
     if (!savedBattleState) return {};
-
     const parsedBattleState: BattleState = JSON.parse(savedBattleState);
     Object.assign(bs, parsedBattleState);
+
+    // ui state
+    const saveduiState = localStorage.getItem(LOCAL_STORAGE_KEY_UI);
+    if (!saveduiState) return {};
+    const parseduiState: UiState = JSON.parse(saveduiState);
+    Object.assign(uiState, parseduiState);
+    console.log('Ui state loaded from localStorage', uiState.currentView);
   } catch (error) {
     console.error('Failed to load state from localStorage:', error);
     return null;

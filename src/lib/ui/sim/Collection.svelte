@@ -261,7 +261,7 @@
       <div
         class="card-compact-wrapper"
         onclick={() => handleTileClick(entry.cardTemplateId)}
-        oncontextmenu={(e) => removeFromDeck(e, entry.cardTemplateId)}
+        oncontextmenu={(e: MouseEvent) => removeFromDeck(e, entry.cardTemplateId)}
       >
         <div class="count-squares">
           {#each Array(entry.totalInCollection) as _, index}
@@ -285,7 +285,10 @@
           style={backgroundStyle(entry.cardTemplateId)}
           title={entry.cardTemplateId}
           onclick={() => handleTileClick(entry.cardTemplateId)}
-          oncontextmenu={(e) => displayCardFull(e, entry.cardTemplateId)}
+          oncontextmenu={(e: MouseEvent) => {
+            e.preventDefault();
+            displayCardFull(e, entry.cardTemplateId);
+          }}
         ></div>
       </div>
     {/if}

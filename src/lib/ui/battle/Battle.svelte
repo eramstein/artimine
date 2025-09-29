@@ -9,6 +9,7 @@
   import ModalHost from '../ModalHost.svelte';
   import Chat from '../sim/Chat.svelte';
   import Board from './Board.svelte';
+  import ConfirmPopover from './ConfirmPopover.svelte';
   import DeckModal from './DeckModal.svelte';
   import GameWonModal from './GameWonModal.svelte';
   import GraveyardModal from './GraveyardModal.svelte';
@@ -49,6 +50,7 @@
       <Hand player={bs.players[1]} />
     {/if}
   </div>
+  <ConfirmPopover />
 </div>
 
 <TargetPrompt />

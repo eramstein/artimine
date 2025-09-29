@@ -115,11 +115,11 @@
           class="color-symbol {clickIncrementActive[color] ? 'increment' : ''}"
           style="background-image: url('{getColorImagePath(color)}')"
         >
-          <span class="color-count">{count}</span>
           {#if clickIncrementActive[color]}
             <span class="float-plus">+1</span>
           {/if}
         </div>
+        <span class="color-count">{count}</span>
       </div>
     {/each}
   </div>
@@ -322,7 +322,7 @@
     gap: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0.25rem 0.5rem;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 6px;
     width: 200px;
@@ -339,7 +339,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
   }
 
   .color-symbol {
@@ -376,7 +375,7 @@
 
   .color-item.disabled .color-symbol {
     cursor: default;
-    opacity: 0.5;
+    opacity: 0.75;
   }
 
   .color-item.disabled .color-symbol:hover {
@@ -388,6 +387,7 @@
     font-weight: bold;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    text-align: center;
   }
 
   .float-plus {

@@ -159,3 +159,10 @@ export function getUnitsInRange(
   }
   return unitsInRange;
 }
+
+export function getUnitFromTriggerParam(triggerParams: any, triggerParam: string): UnitDeployed[] {
+  if (triggerParams[triggerParam]?.type === CardType.Unit) {
+    return [triggerParams[triggerParam]] as UnitDeployed[];
+  }
+  return [];
+}

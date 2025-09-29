@@ -23,7 +23,7 @@ export function handleKeybinds(event: KeyboardEvent) {
 
   if (event.key === 'F4') {
     event.preventDefault();
-    const loadedState = loadGameStateFromLocalStorage();
+    const loadedState = loadGameStateFromLocalStorage('quicksave');
     console.log('State reloaded from localStorage', loadedState);
   } else if (event.key === 'F5') {
     event.preventDefault();

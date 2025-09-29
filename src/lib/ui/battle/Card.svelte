@@ -58,7 +58,7 @@
   }
 
   // Handle card click
-  function handleClick() {
+  function handleClick(event?: MouseEvent) {
     // If selecting a target and it's a hand card, treat this click as target selection
     if (
       inHand &&
@@ -78,11 +78,13 @@
       const hasTargets = card.actions.some((action) => action.targets && action.targets.length > 0);
 
       if (!hasTargets) {
-        uiState.modal.visible = true;
-        uiState.modal.title = 'Cast Spell?';
-        uiState.modal.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${getSpellText()}</span>`;
-        uiState.modal.onConfirm = () => activateSpell(card);
-        uiState.modal.onCancel = undefined;
+        const anchor = (event?.currentTarget as HTMLElement) ?? null;
+        uiState.confirmPopover.visible = true;
+        uiState.confirmPopover.title = 'Cast Spell?';
+        uiState.confirmPopover.body = `Are you sure you want to cast <b>${card.name}</b>?<br><span class='spell-text'>${getSpellText()}</span>`;
+        uiState.confirmPopover.anchorEl = anchor;
+        uiState.confirmPopover.onConfirm = () => activateSpell(card);
+        uiState.confirmPopover.onCancel = undefined;
       } else {
         activateSpell(card);
       }

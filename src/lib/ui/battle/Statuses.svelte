@@ -23,7 +23,8 @@
     mezz: (value: number) =>
       `Mezzed (${value}): This unit cannot attack or move for ${value} more turns. Any damage breaks the effect.`,
     root: (value: number) => `Rooted (${value}): This unit cannot move for ${value} more turns.`,
-    stun: (value: number) => `Stunned (${value}): This unit cannot attack for ${value} more turns.`,
+    stun: (value: number) =>
+      `Stunned (${value}): This unit cannot do anything for ${value} more turns.`,
     daze: (value: number) => `Dazed (${value}): This unit cannot attack for ${value} more turns.`,
   };
 

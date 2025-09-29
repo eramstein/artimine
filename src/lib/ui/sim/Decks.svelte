@@ -22,12 +22,9 @@
 
   // Handle create new deck
   function handleCreateNewDeck(): void {
-    const name = prompt('Enter deck name:');
-    if (name && name.trim()) {
-      const newDeck = createNewDeck(name.trim());
-      uiState.currentView = UiView.DeckEditor;
-      uiState.collection.editedDeckKey = newDeck.key;
-    }
+    const newDeck = createNewDeck('New Deck');
+    uiState.currentView = UiView.DeckEditor;
+    uiState.collection.editedDeckKey = newDeck.key;
   }
 
   // Handle load deck from clipboard (expects JSON Deck)
@@ -59,7 +56,6 @@
           : 'Imported Deck';
       const cardsArray = Array.isArray(parsed?.cards) ? parsed.cards : [];
       const landsArray = Array.isArray(parsed?.lands) ? parsed.lands : [];
-      const recordObj = parsed?.record && typeof parsed.record === 'object' ? parsed.record : {};
 
       const normalizedCards = cardsArray
         .filter((c: any) => c && typeof c.cardTemplateId === 'string' && Number.isFinite(c.count))
@@ -76,8 +72,9 @@
         cards: normalizedCards,
         lands: normalizedLands,
         record: {
-          wins: Number.isFinite(recordObj.wins) ? Math.max(0, Math.floor(recordObj.wins)) : 0,
-          losses: Number.isFinite(recordObj.losses) ? Math.max(0, Math.floor(recordObj.losses)) : 0,
+          wins: 0,
+          losses: 0,
+          cardResults: {},
         },
       };
 

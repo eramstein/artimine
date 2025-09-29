@@ -49,7 +49,12 @@ import { soundManager } from '../sound';
 import { getTargetLabel } from '../target';
 import { DynamicValue, DynamicValues } from './dynamic-values';
 import { DataEffectPrimers } from './effect-primers';
-import { getRangeLabel, getUnitsInRange, type UnitFilterArgs } from './unit-filters';
+import {
+  getRangeLabel,
+  getUnitFromTriggerParam,
+  getUnitsInRange,
+  type UnitFilterArgs,
+} from './unit-filters';
 
 export const DataEffectTemplates: Record<
   string,
@@ -110,7 +115,7 @@ export const DataEffectTemplates: Record<
       const value = dynamicValue ? DynamicValues[dynamicValue]({ unit, player }) * damage : damage;
       const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
-        ? [triggerParams[fromTriggerParam]]
+        ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         damageUnit(u, value);
@@ -170,7 +175,7 @@ export const DataEffectTemplates: Record<
         : counterValue;
       const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
-        ? [triggerParams[fromTriggerParam]]
+        ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u: UnitDeployed) => {
         const count = valueIsMultiplier ? (value - 1) * (u.counters[counterType] ?? 0) : value;
@@ -216,7 +221,7 @@ export const DataEffectTemplates: Record<
         ? DynamicValues[dynamicValue]({ unit, player }) * (maxHealth ?? 0)
         : maxHealth;
       const unitsInRange = fromTriggerParam
-        ? [triggerParams[fromTriggerParam]]
+        ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         if (effectivePower) {
@@ -257,7 +262,7 @@ export const DataEffectTemplates: Record<
     fn: ({ unit, land, targets, player, triggerParams }) => {
       const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
-        ? [triggerParams[fromTriggerParam]]
+        ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       const keywordDef = { key: keyword, value: keyWordValue ?? true };
       if ((unit || land) && reset) {
@@ -325,7 +330,7 @@ export const DataEffectTemplates: Record<
     fn: ({ targets, player, unit, land, triggerParams }) => {
       const sourcePermanent = unit ?? (land as UnitDeployed | Land);
       const unitsInRange = fromTriggerParam
-        ? [triggerParams[fromTriggerParam]]
+        ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
       unitsInRange.forEach((u) => {
         if (u.statuses) {
@@ -478,7 +483,7 @@ export const DataEffectTemplates: Record<
     },
     label: (targets: TargetDefinition[]) => {
       const targetsLabel = targets.length > 0 ? ` ${getTargetLabel(targets[0])}` : '';
-      return `Bounce ${targetsLabel} unit${targets.length !== 1 ? 's' : ''}. ${range ? getRangeLabel(range) : ''}`;
+      return `Bounce ${targetsLabel.replace('to ', '')}. ${range ? getRangeLabel(range) : ''}`;
     },
   }),
   fortifyLand: ({ amount }: { amount: number }) => ({
@@ -518,7 +523,7 @@ export const DataEffectTemplates: Record<
       const position = targets[1][0] as Position;
       forceMoveUnit(unit, position);
     },
-    label: () => `Force move unit to target position`,
+    label: () => `Force move unit to target position.`,
   }),
   swapUnits: () => ({
     fn: ({ targets }) => {

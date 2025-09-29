@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from 'svelte';
   import { loadGameData } from './data/loader';
   import { UiView } from './lib/_model';
-  import { bs, loadGameStateFromLocalStorage, uiState } from './lib/_state';
+  import { loadGameStateFromLocalStorage, uiState } from './lib/_state';
   import { handleKeybinds } from './lib/ui/_keybinds/keybinds';
   import Main from './lib/ui/Main.svelte';
   import Navigation from './lib/ui/Navigation.svelte';
@@ -15,17 +15,8 @@
   onMount(async () => {
     window.addEventListener('keydown', handleKeybinds);
     await loadGameData();
-
     try {
-      // Load saved game state if it exists
-      await loadGameStateFromLocalStorage();
-
-      // if a battle is in progress, display it
-      if (bs.turn > 0) {
-        uiState.currentView = UiView.Battle;
-      } else {
-        uiState.currentView = UiView.CurrentPlace;
-      }
+      await loadGameStateFromLocalStorage('quicksave');
     } catch (error) {
       console.error('Failed to initialize game:', error);
     } finally {
