@@ -3,6 +3,7 @@
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import CharacterInteraction from './CharacterInteraction.svelte';
+  import Characters from './Characters.svelte';
   import Collection from './Collection.svelte';
   import DeckEditor from './DeckEditor.svelte';
   import DeckSelectionModal from './DeckSelectionModal.svelte';
@@ -30,6 +31,8 @@
       <Decks />
     {:else if uiState.currentView === UiView.Inventory}
       <Inventory />
+    {:else if uiState.currentView === UiView.Characters}
+      <Characters />
     {:else if uiState.currentView === UiView.Schedule}
       <Schedule />
     {:else if uiState.currentView === UiView.Player}

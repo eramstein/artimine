@@ -104,14 +104,13 @@ export async function saveWorldFact(fact: WorldFact): Promise<number> {
 
 // Save a relationship summary update to the database
 export async function saveRelationshipSummaryUpdate(
-  id: string,
   npc: string,
   description: string,
   day: number
 ): Promise<number> {
   try {
     return await relationshipArcs.put({
-      id,
+      id: generateUniqueId(),
       npc,
       description,
       day,

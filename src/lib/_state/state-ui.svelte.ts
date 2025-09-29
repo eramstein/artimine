@@ -5,6 +5,7 @@ import { initPlayerChat } from '../llm/chat';
 export const uiState: UiState = $state({
   currentView: UiView.CurrentPlace,
   navigationVisible: false,
+  selectedCharacterKey: null,
   battle: {
     selectedUnit: null,
     validTargets: null,

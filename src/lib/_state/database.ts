@@ -6,7 +6,7 @@ export const db = new Dexie('ArtimineDB');
 // Define schema
 db.version(1).stores({
   chats: 'id,day,activityType,[participants+day]',
-  relationshipArcs: 'id,character',
+  relationshipArcs: 'id,npc',
   worldFacts: 'id,description',
   savedGames: 'id',
 });

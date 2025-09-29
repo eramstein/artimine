@@ -60,6 +60,9 @@
       } else if (option === 'chat') {
         await initPlayerChat(selectedCharacters);
         uiState.currentView = UiView.Chat;
+      } else if (option === 'overview' && selectedCharacters.length === 1) {
+        uiState.selectedCharacterKey = selectedCharacters[0].key;
+        uiState.currentView = UiView.Characters;
       }
     }
     selectedCharacters = [];
@@ -119,6 +122,7 @@
             Play Game
           </button>
           <button class="menu-option" onclick={() => handleMenuOption('trade')}> Trade </button>
+          <button class="menu-option" onclick={() => handleMenuOption('overview')}> View </button>
         {/if}
         <button class="menu-option" onclick={() => handleMenuOption('chat')}> Chat </button>
       </div>
@@ -216,7 +220,6 @@
   }
 
   .character-portrait-container:hover {
-    transform: translateY(-4px);
     box-shadow:
       0 12px 32px rgba(0, 0, 0, 0.7),
       0 6px 16px rgba(0, 0, 0, 0.5),

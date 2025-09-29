@@ -57,6 +57,13 @@
     </button>
     <button
       class="tab-button"
+      class:active={uiState.currentView === UiView.Characters}
+      onclick={() => (uiState.currentView = UiView.Characters)}
+    >
+      Characters
+    </button>
+    <button
+      class="tab-button"
       class:active={uiState.currentView === UiView.Player}
       onclick={() => (uiState.currentView = UiView.Player)}
     >

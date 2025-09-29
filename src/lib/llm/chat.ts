@@ -217,7 +217,7 @@ export async function endPlayerChat() {
   // update NPC opinions
   for (const npc of gs.chat!.characters) {
     // save old opinion in DB
-    await saveRelationshipSummaryUpdate(npc.key, npc.name, npc.relationSummary, gs.time.day);
+    await saveRelationshipSummaryUpdate(npc.key, npc.relationSummary, gs.time.day);
     // update opinion
     updateOpinion(npc.key, npc.name, npc.relationSummary, summary);
   }

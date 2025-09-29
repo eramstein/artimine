@@ -168,7 +168,7 @@
   }
 
   .retaliate.retaliate-bg {
-    background: url('/assets/images/retaliate-icon2.png') center/contain no-repeat;
+    background: url('/assets/images/retaliate-icon.png') center/contain no-repeat;
     border: none;
     box-shadow: none;
     width: 34px;

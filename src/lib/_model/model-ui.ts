@@ -12,6 +12,7 @@ import type {
 export type UiState = {
   currentView: UiView;
   navigationVisible: boolean;
+  selectedCharacterKey: string | null;
   battle: {
     selectedUnit: UnitDeployed | null;
     validTargets: {
@@ -103,6 +104,7 @@ export enum UiView {
   Inventory = 'Inventory',
   Schedule = 'Schedule',
   Player = 'Player',
+  Characters = 'Characters',
   Chat = 'Chat',
   Trade = 'Trade',
   Tournament = 'Tournament',
