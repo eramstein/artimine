@@ -3,12 +3,16 @@
   "name": "Kislev",
   "cards": [
     {
+      "cardTemplateId": "tsunami",
+      "count": 2
+    },
+    {
       "cardTemplateId": "taiga_rangers",
       "count": 3
     },
     {
       "cardTemplateId": "glacial_guard",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "greedy_bear",
@@ -40,7 +44,7 @@
     },
     {
       "cardTemplateId": "hungry_wolf",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "deer",

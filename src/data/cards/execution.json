@@ -23,5 +23,6 @@
         }
       ]
     }
-  ]
+  ],
+  "aiHints": ["Remove Unit"]
 }

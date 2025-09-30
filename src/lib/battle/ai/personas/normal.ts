@@ -46,13 +46,18 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
     },
     {} as Record<AiTurnGoal, any>
   );
+  console.log('goalsMap', goalsMap);
   // priority 1: cards that match a goal
   if (bs.aiState.goals.length > 0) {
     for (const spell of possibleActions.playableSpells) {
       if (spell.aiHints?.some((hint) => goalsMap[hint])) {
-        // for now AIs don't use spells with targets
-        playSpell(spell, [[]]);
-        return true;
+        const targets = selectAiSpellTargets(spell);
+        if (targets) {
+          playSpell(spell, targets);
+          return true;
+        } else {
+          bs.aiState.dismissedCards[spell.id] = true;
+        }
       }
     }
     for (const unit of possibleActions.deployableUnits) {

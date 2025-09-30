@@ -1,4 +1,4 @@
-import { TriggerType, type UnitDeployed } from '@/lib/_model';
+import { TriggerType, type SpellCard, type UnitDeployed } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { getBudgetForUnit } from '@/tools/generator/budgets';
 
@@ -17,6 +17,22 @@ export function valueUnit(unit: UnitDeployed) {
 
 export function wouldBeDestroyed(unit: UnitDeployed, attacker: UnitDeployed) {
   return attacker.power >= unit.health + (unit.keywords?.armor || 0);
+}
+
+export function wouldBeDestroyedBySpell(unit: UnitDeployed, spell: SpellCard) {
+  let wouldBeDestroyed = false;
+  spell.actions.forEach((action) => {
+    if (action.effect.name === 'destroyUnit') {
+      wouldBeDestroyed = true;
+    }
+    if (
+      action.effect.name === 'damageUnit' &&
+      action.effect.args.damage >= unit.health + (unit.keywords?.resist || 0)
+    ) {
+      wouldBeDestroyed = true;
+    }
+  });
+  return wouldBeDestroyed;
 }
 
 export function wouldBeDestroyedByCounterAttack(

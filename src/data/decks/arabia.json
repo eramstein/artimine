@@ -3,6 +3,14 @@
   "name": "Arabia",
   "cards": [
     {
+      "cardTemplateId": "fireball",
+      "count": 2
+    },
+    {
+      "cardTemplateId": "earthquake",
+      "count": 2
+    },
+    {
       "cardTemplateId": "whirling_dervishes",
       "count": 3
     },
@@ -24,7 +32,7 @@
     },
     {
       "cardTemplateId": "cowardly_mage",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "albatros",
@@ -56,11 +64,7 @@
     },
     {
       "cardTemplateId": "kobold_slinger",
-      "count": 2
-    },
-    {
-      "cardTemplateId": "dwarf_berserker",
-      "count": 2
+      "count": 1
     }
   ],
   "lands": ["trap_road", "market", "island", "mountain"]

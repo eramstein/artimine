@@ -3,6 +3,10 @@
   "name": "Midguard",
   "cards": [
     {
+      "cardTemplateId": "lightning_bolt",
+      "count": 3
+    },
+    {
       "cardTemplateId": "hungry_hermit",
       "count": 3
     },
@@ -12,15 +16,15 @@
     },
     {
       "cardTemplateId": "swift_drakkar",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "shield_maiden",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "northern_challenger",
-      "count": 3
+      "count": 2
     },
     {
       "cardTemplateId": "snow_troll",

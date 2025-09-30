@@ -37,8 +37,12 @@ export const TEST_DECK_2: Deck = {
       cardTemplateId: 'lightning_bolt',
       count: 20,
     },
+    {
+      cardTemplateId: 'giant_growth',
+      count: 20,
+    },
   ],
-  lands: ['plains', 'plains', 'plains', 'mountain'],
+  lands: ['plains', 'plains', 'forest', 'mountain'],
   record: {
     wins: 0,
     losses: 0,
