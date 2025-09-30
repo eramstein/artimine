@@ -5,7 +5,7 @@
   import { initTrade } from '@/lib/_state/state-ui.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
   import { initDeckSelection } from '@/lib/sim/ongoing-battle';
-  import CharacterPortrait from './CharacterPortrait.svelte';
+  import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
 
   let { place }: { place: Place } = $props();

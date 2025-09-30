@@ -243,7 +243,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'fight',
-    argNames: ['mutual', 'sameSidePossible'],
+    argNames: ['mutual', 'sameSidePossible', 'targetInFront'],
     budget: (args, targets) => (args.mutual ? 10 : 30) * (args.sameSidePossible ? 3 : 1), // TBD
   },
 ];

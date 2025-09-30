@@ -2,12 +2,12 @@
   import { UiView } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
-  import CharacterInteraction from './CharacterInteraction.svelte';
-  import Characters from './Characters.svelte';
+  import CharacterInteraction from './characters/CharacterInteraction.svelte';
+  import Characters from './characters/Characters.svelte';
   import Collection from './Collection.svelte';
-  import DeckEditor from './DeckEditor.svelte';
-  import DeckSelectionModal from './DeckSelectionModal.svelte';
-  import Decks from './Decks.svelte';
+  import DeckEditor from './decks/DeckEditor.svelte';
+  import Decks from './decks/Decks.svelte';
+  import DeckSelectionModal from './decks/DeckSelectionModal.svelte';
   import Inventory from './Inventory.svelte';
   import Menu from './Menu.svelte';
   import Place from './Place.svelte';

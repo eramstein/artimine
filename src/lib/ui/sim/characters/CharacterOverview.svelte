@@ -3,27 +3,11 @@
   import type { Deck, RelationshipSummaryUpdate } from '@/lib/_model/model-game';
   import { gs } from '@/lib/_state';
   import { getRelationshipSummaryUpdates } from '@/lib/llm/memories-db';
+  import DeckList from '../decks/DeckList.svelte';
   import CharacterPortrait from './CharacterPortrait.svelte';
-  import DeckList from './DeckList.svelte';
+  import RelationBars from './RelationBars.svelte';
 
   let { npc }: { npc: Npc } = $props();
-
-  function getRelationColor(value: number): string {
-    const normalized = (value + 10) / 20;
-    if (normalized <= 0.5) {
-      const t = normalized * 2;
-      const r = Math.round(255);
-      const g = Math.round(255 * t);
-      const b = Math.round(68 * t);
-      return `rgb(${r}, ${g}, ${b})`;
-    } else {
-      const t = (normalized - 0.5) * 2;
-      const r = Math.round(255 * (1 - t));
-      const g = Math.round(255);
-      const b = Math.round(68 + 187 * t);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-  }
 
   const decks = $derived(npc.decks ?? []);
   let selectedDeck: Deck | null = $state(null);
@@ -60,47 +44,12 @@
       <div class="name">{npc.name}</div>
       <div class="bio-container">
         <div class="bio">{npc.bio}</div>
-        <div class="relation-values">
-          <div class="relation-bar">
-            <span class="relation-label">Friendship</span>
-            <div class="bar-container">
-              <div
-                class="bar-fill"
-                style="width: {Math.max(
-                  0,
-                  ((npc.relationValues.friendship + 10) / 20) * 100
-                )}%; background: {getRelationColor(npc.relationValues.friendship)}"
-              ></div>
-            </div>
-            <span class="relation-value">{npc.relationValues.friendship}</span>
-          </div>
-          <div class="relation-bar">
-            <span class="relation-label">Respect</span>
-            <div class="bar-container">
-              <div
-                class="bar-fill"
-                style="width: {Math.max(
-                  0,
-                  ((npc.relationValues.respect + 10) / 20) * 100
-                )}%; background: {getRelationColor(npc.relationValues.respect)}"
-              ></div>
-            </div>
-            <span class="relation-value">{npc.relationValues.respect}</span>
-          </div>
-          <div class="relation-bar">
-            <span class="relation-label">Love</span>
-            <div class="bar-container">
-              <div
-                class="bar-fill"
-                style="width: {Math.max(
-                  0,
-                  ((npc.relationValues.love + 10) / 20) * 100
-                )}%; background: {getRelationColor(npc.relationValues.love)}"
-              ></div>
-            </div>
-            <span class="relation-value">{npc.relationValues.love}</span>
-          </div>
-        </div>
+        <RelationBars
+          values={npc.relationValues}
+          labelMinWidthPx={72}
+          barWidthPx={200}
+          fontSizePx={12}
+        />
       </div>
     </div>
   </div>
@@ -268,46 +217,6 @@
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
     font-size: 12px;
-  }
-
-  .relation-values {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .relation-bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-  }
-
-  .relation-label {
-    color: rgba(255, 255, 255, 0.8);
-    min-width: 72px;
-    text-align: left;
-  }
-
-  .bar-container {
-    width: 200px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.3s ease;
-  }
-
-  .relation-value {
-    color: rgba(255, 255, 255, 0.9);
-    min-width: 24px;
-    text-align: right;
-    font-weight: 600;
   }
 
   .deck-list {

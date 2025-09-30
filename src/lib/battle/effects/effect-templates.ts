@@ -27,6 +27,7 @@ import {
   destroyUnit,
   discard,
   drawCard,
+  getClosestEnnemyInRow,
   getEmptyCells,
   getOpposingPlayer,
   getRandomEmptyAlliedCells,
@@ -541,14 +542,18 @@ export const DataEffectTemplates: Record<
   fight: ({
     mutual = true,
     sameSidePossible = false,
+    targetInFront = false,
   }: {
     mutual?: boolean;
     sameSidePossible?: boolean;
+    targetInFront?: boolean;
   }) => ({
     fn: ({ unit, targets }) => {
       const unit1 = (targets[0][1] ? targets[0][0] : unit) as UnitDeployed;
-      const unit2 = (targets[0][1] ?? targets[0][0]) as UnitDeployed;
-      if (!unit1 || !unit2) {
+      const unit2 = targetInFront
+        ? getClosestEnnemyInRow(unit1)
+        : ((targets[0][1] ?? targets[0][0]) as UnitDeployed);
+      if (!unit1 || !unit2 || unit1.ownerPlayerId === unit2.ownerPlayerId) {
         return;
       }
       if (!sameSidePossible && unit1.ownerPlayerId === unit2.ownerPlayerId) {
@@ -560,6 +565,9 @@ export const DataEffectTemplates: Record<
       }
     },
     label: (targets) => {
+      if (targetInFront) {
+        return `Attack the closest enemy unit in front of this unit`;
+      }
       const subject = targets[0].count && targets[0].count > 1 ? 'Target unit' : 'This unit';
       const oppositeSideLabel = sameSidePossible ? ' on the opposite side' : '';
       return mutual

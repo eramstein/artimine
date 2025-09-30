@@ -13,8 +13,8 @@ export async function initDeckSelection(foe: Npc) {
   uiState.deckSelectionModal.visible = true;
 }
 
-export async function initOngoingBattle(foe: Npc, deck: Deck) {
-  const foeDeck = pickNpcDeck(foe.key);
+export async function initOngoingBattle(foe: Npc, deck: Deck, requestedFoeDeck?: Deck) {
+  const foeDeck = requestedFoeDeck || pickNpcDeck(foe.key);
   gs.ongoingBattle = {
     opponentKey: foe.key,
     deckNames: {

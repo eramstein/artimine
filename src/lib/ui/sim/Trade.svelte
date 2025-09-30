@@ -8,7 +8,7 @@
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
   import { getAvailableCardsFromCollection } from '@/lib/sim/collection';
   import { proposeTrade } from '@/lib/sim/trade';
-  import CharacterPortrait from './CharacterPortrait.svelte';
+  import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import Chat from './Chat.svelte';
 
   // Get character from game state using the tradingWith key, default to first character

@@ -3,7 +3,7 @@
   import { gs, saveStateToLocalStorage } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { deleteDeck, renameDeck } from '@/lib/sim/decks';
-  import Collection from './Collection.svelte';
+  import Collection from '../Collection.svelte';
   import DeckList from './DeckList.svelte';
 
   // Get the deck being edited from the editedDeckKey

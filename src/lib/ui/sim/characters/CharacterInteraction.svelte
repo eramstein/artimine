@@ -2,8 +2,9 @@
   import { UiView } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
+  import Chat from '../Chat.svelte';
   import CharacterPortrait from './CharacterPortrait.svelte';
-  import Chat from './Chat.svelte';
+  import RelationBars from './RelationBars.svelte';
 
   const characters = $derived(gs.chat ? (gs.chat.characters ?? []) : []);
 
@@ -13,27 +14,6 @@
       uiState.currentView = UiView.CurrentPlace;
     }
   });
-
-  function getRelationColor(value: number): string {
-    // Convert -10 to +10 range to 0-1 for color interpolation
-    const normalized = (value + 10) / 20;
-
-    if (normalized <= 0.5) {
-      // Red to Yellow (0 to 0.5)
-      const t = normalized * 2;
-      const r = Math.round(255);
-      const g = Math.round(255 * t);
-      const b = Math.round(68 * t);
-      return `rgb(${r}, ${g}, ${b})`;
-    } else {
-      // Yellow to Green (0.5 to 1)
-      const t = (normalized - 0.5) * 2;
-      const r = Math.round(255 * (1 - t));
-      const g = Math.round(255);
-      const b = Math.round(68 + 187 * t);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-  }
 </script>
 
 {#if gs.chat}
@@ -52,47 +32,12 @@
 
             <div class="opinion-section">
               <div class="opinion-title">Opinion</div>
-              <div class="relation-values">
-                <div class="relation-bar">
-                  <span class="relation-label">Friendship</span>
-                  <div class="bar-container">
-                    <div
-                      class="bar-fill"
-                      style="width: {Math.max(
-                        0,
-                        ((character.relationValues.friendship + 10) / 20) * 100
-                      )}%; background: {getRelationColor(character.relationValues.friendship)}"
-                    ></div>
-                  </div>
-                  <span class="relation-value">{character.relationValues.friendship}</span>
-                </div>
-                <div class="relation-bar">
-                  <span class="relation-label">Respect</span>
-                  <div class="bar-container">
-                    <div
-                      class="bar-fill"
-                      style="width: {Math.max(
-                        0,
-                        ((character.relationValues.respect + 10) / 20) * 100
-                      )}%; background: {getRelationColor(character.relationValues.respect)}"
-                    ></div>
-                  </div>
-                  <span class="relation-value">{character.relationValues.respect}</span>
-                </div>
-                <div class="relation-bar">
-                  <span class="relation-label">Love</span>
-                  <div class="bar-container">
-                    <div
-                      class="bar-fill"
-                      style="width: {Math.max(
-                        0,
-                        ((character.relationValues.love + 10) / 20) * 100
-                      )}%; background: {getRelationColor(character.relationValues.love)}"
-                    ></div>
-                  </div>
-                  <span class="relation-value">{character.relationValues.love}</span>
-                </div>
-              </div>
+              <RelationBars
+                values={character.relationValues}
+                labelMinWidthPx={60}
+                barWidthPx={null}
+                fontSizePx={10}
+              />
             </div>
           </div>
         {/each}
@@ -202,47 +147,6 @@
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-  }
-
-  .relation-values {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .relation-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-  }
-
-  .relation-label {
-    color: rgba(255, 255, 255, 0.8);
-    min-width: 60px;
-    text-align: left;
-  }
-
-  .bar-container {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-  }
-
-  .relation-value {
-    color: rgba(255, 255, 255, 0.9);
-    min-width: 20px;
-    text-align: right;
-    font-weight: 600;
   }
 
   .content {

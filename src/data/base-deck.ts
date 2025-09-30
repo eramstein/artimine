@@ -13,15 +13,24 @@ export const TEST_DECK: Deck = {
   name: 'Test',
   cards: [
     {
-      cardTemplateId: 'ogre_brawler',
+      cardTemplateId: 'alpha_male',
       count: 20,
     },
+  ],
+  lands: ['forest', 'island', 'city', 'mountain'],
+  record: {
+    wins: 0,
+    losses: 0,
+    cardResults: {},
+  },
+};
+
+export const TEST_DECK_2: Deck = {
+  key: 'test2',
+  name: 'Test 2',
+  cards: [
     {
-      cardTemplateId: 'sucker_punch',
-      count: 20,
-    },
-    {
-      cardTemplateId: 'zizany',
+      cardTemplateId: 'alpha_male',
       count: 20,
     },
   ],

@@ -238,6 +238,49 @@
     "cardSet": "alpha"
   },
   {
+    "id": "alpha_male",
+    "name": "Alpha Male",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 7,
+    "power": 5,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "green",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "human"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "fight",
+              "args": {
+                "targetInFront": true
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "ammunition_cart",
     "name": "Ammunition Cart",
     "rarity": "uncommon",
