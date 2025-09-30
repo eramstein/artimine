@@ -15,6 +15,7 @@ export const defaultBattleState: BattleState = {
   aiState: {
     strategy: AiTurnStrategy.Normal,
     goals: [],
+    dismissedCards: {},
   },
 };
 

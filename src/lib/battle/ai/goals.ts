@@ -11,7 +11,6 @@ export function getAiGoals(persona: PersonaType): { goal: AiTurnGoal; args: any 
     return [];
   }
   const boardValueDiff = valueBoard();
-  console.log('boardValueDiff', boardValueDiff, baordWipeThreshold);
   if (boardValueDiff <= -baordWipeThreshold) {
     return [{ goal: AiTurnGoal.Reset, args: {} }];
   }

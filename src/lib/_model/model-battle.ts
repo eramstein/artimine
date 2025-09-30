@@ -194,4 +194,5 @@ export type ActionDefinition = {
 export type AiState = {
   strategy: AiTurnStrategy;
   goals: { goal: AiTurnGoal; args: any }[];
+  dismissedCards: Record<string, boolean>; // ids of cards that won't be played this turn
 };

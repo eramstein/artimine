@@ -81,7 +81,11 @@
 </script>
 
 <div class="player-container">
-  <div class="player {isValidTarget ? 'valid-target' : ''}" onclick={handlePlayerClick}>
+  <div
+    class="player {isValidTarget ? 'valid-target' : ''}"
+    data-player-id={player.id}
+    onclick={handlePlayerClick}
+  >
     <div class="mana-display">
       <div class="mana-value">{player.mana}</div>
       <div class="max-mana">{player.maxMana}</div>

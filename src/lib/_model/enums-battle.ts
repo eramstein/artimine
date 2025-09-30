@@ -94,6 +94,6 @@ export enum AiTurnStrategy {
 export enum AiTurnGoal {
   Reset = 'Reset', // we are too far behind, reset the board if possible
   ControlRow = 'Control Row', // get control of a specific row
-  DestroyUnit = 'Destroy Unit', // destroy a specific unit
+  RemoveUnit = 'Remove Unit', // remove a specific unit
   DestroyLand = 'Destroy Land', // destroy a specific land
 }

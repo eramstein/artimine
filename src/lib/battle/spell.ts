@@ -1,3 +1,4 @@
+import { config } from '../_config';
 import {
   type ActionDefinition,
   type EffectTargets,
@@ -28,23 +29,29 @@ export function playSpell(spell: SpellCard, targets: EffectTargets[][]) {
   }
 
   // Do effects after a short time to play the animation
-  const animationDuration = bs.isPlayersTurn ? 0 : 750;
+  const aiNextActionBuffer = bs.isPlayersTurn ? 0 : 250;
   const spellDelay = bs.isPlayersTurn ? 0 : 250;
+  const animationDuration = bs.isPlayersTurn ? 0 : config.aiActionInterval - spellDelay;
   uiState.battle.playedSpellId = spell.id;
+  uiState.battle.playedSpellTargets = targets;
   setTimeout(() => {
     uiState.battle.playedSpellId = null;
+    uiState.battle.playedSpellTargets = null;
   }, animationDuration);
-  setTimeout(() => {
-    const player = bs.players[spell.ownerPlayerId];
-    spell.actions.forEach((actionDef, actionIndex) => {
-      DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
-        targets: targets[actionIndex],
-        triggerParams: {},
-        player,
+  setTimeout(
+    () => {
+      const player = bs.players[spell.ownerPlayerId];
+      spell.actions.forEach((actionDef, actionIndex) => {
+        DataEffectTemplates[actionDef.effect.name](actionDef.effect.args).fn({
+          targets: targets[actionIndex],
+          triggerParams: {},
+          player,
+        });
       });
-    });
-    discard(spell.instanceId, spell.ownerPlayerId);
-  }, animationDuration + spellDelay);
+      discard(spell.instanceId, spell.ownerPlayerId);
+    },
+    animationDuration + spellDelay - aiNextActionBuffer
+  );
 }
 
 function paySpellCost(spell: SpellCard): boolean {

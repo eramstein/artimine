@@ -15,6 +15,8 @@
   import GraveyardModal from './GraveyardModal.svelte';
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
+  import SpellDimOverlay from './SpellDimOverlay.svelte';
+  import SpellTargetArrows from './SpellTargetArrows.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
 
   // Derived value to check if game is won
@@ -25,6 +27,9 @@
   let playedSpellCard = $derived(
     uiState.battle.playedSpellId ? cards[uiState.battle.playedSpellId] : null
   );
+
+  // ref to measure the floating card center for arrows
+  let playedCardEl: HTMLElement | null = $state(null);
 </script>
 
 <div class="battle" style="background-image: url('{getTableImagePath()}');">
@@ -93,10 +98,16 @@
       onclick={(e) => e.stopPropagation()}
       in:scale={{ duration: 120, start: 0.9 }}
       out:scale={{ duration: 120, start: 1.0 }}
+      bind:this={playedCardEl}
     >
       <CardFull card={playedSpellCard} />
     </div>
   </div>
+{/if}
+
+{#if uiState.battle.playedSpellId}
+  <SpellDimOverlay sourceEl={playedCardEl} />
+  <SpellTargetArrows sourceEl={playedCardEl} />
 {/if}
 
 <!-- CardFull overlay -->
@@ -286,9 +297,9 @@
   /* Played spell flash */
   .played-spell-flash {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 40%;
+    right: 20px;
+    transform: translateY(-40%);
     z-index: 1002;
     pointer-events: none;
   }

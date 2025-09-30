@@ -4,10 +4,13 @@ import { unitLifeValue } from './config';
 import { valueUnit, wouldBeDestroyed, wouldBeDestroyedByCounterAttack } from './unit';
 
 // this evaluates how much value would be lost if that unit doesn't move and gets counter attacked
-export function getCounterAttackValue(attacker: UnitDeployed, attackTarget: UnitDeployed) {
+// if attackTarget is set we assume we attack it first
+export function getCounterAttackValue(attacker: UnitDeployed, attackTarget?: UnitDeployed) {
   const defenders = getEnnemyUnitsInRow(attacker).filter((defender) => {
     return (
-      defender.instanceId !== attackTarget.instanceId || !wouldBeDestroyed(attackTarget, attacker)
+      !attackTarget ||
+      defender.instanceId !== attackTarget.instanceId ||
+      !wouldBeDestroyed(attackTarget, attacker)
     );
   });
   const destroyed = wouldBeDestroyedByCounterAttack(attacker, defenders);

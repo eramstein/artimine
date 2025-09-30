@@ -104,6 +104,7 @@
     ? 'dimmed'
     : ''} {isDamaged ? 'damaged' : ''}"
   style="background-image: url('{cardImagePath}'); --attack-x: {attackDirection.x}; --attack-y: {attackDirection.y};"
+  data-unit-instance-id={unit.instanceId}
   onclick={handleUnitClick}
   oncontextmenu={handleContextMenu}
   out:fade={{ duration: 250 }}

@@ -86,6 +86,7 @@
     ? 'color-increment'
     : ''} {showGoldenBorder() ? 'ability-available' : ''} {land.isRuined ? 'ruined' : ''}"
   style="background-image: url('{imagePath}')"
+  data-land-instance-id={land.instanceId}
   onclick={handleLandClick}
   oncontextmenu={handleContextMenu}
 >

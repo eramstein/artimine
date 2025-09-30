@@ -31,6 +31,7 @@ export type UiState = {
     targetBeingSelected: TargetDefinition | null;
     attackingUnitId: string | null;
     playedSpellId: string | null;
+    playedSpellTargets: EffectTargets[][] | null;
     colorBeingIncremented: CardColor | null;
     graveyardModal: {
       visible: boolean;

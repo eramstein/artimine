@@ -33,7 +33,7 @@ export function playAiTurn() {
 
   bs.aiState.strategy = getAiStrategy(AI_PERSONA);
   bs.aiState.goals = getAiGoals(AI_PERSONA);
-  console.log('aiState', JSON.stringify(bs.aiState, null, 2));
+  bs.aiState.dismissedCards = {};
 
   setTimeout(() => {
     loopAiActions(persona);
@@ -85,9 +85,12 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
   const boardFull = isBoardSizeFull(leader);
   const deployableUnits = boardFull
     ? []
-    : (leader.hand.filter((unit) => isUnitCard(unit) && isPayable(unit)) as UnitCard[]);
+    : (leader.hand.filter(
+        (unit) => isUnitCard(unit) && isPayable(unit) && !bs.aiState.dismissedCards[unit.id]
+      ) as UnitCard[]);
   const playableSpells = leader.hand.filter(
-    (spell) => spell.type === CardType.Spell && isPayable(spell)
+    (spell) =>
+      spell.type === CardType.Spell && isPayable(spell) && !bs.aiState.dismissedCards[spell.id]
   ) as SpellCard[];
   const unitsWhoCanMove = boardFull ? [] : leaderUnits.filter((unit) => canMove(unit));
   const unitsWhoCanAttack = leaderUnits.filter((unit) => canAttack(unit));
