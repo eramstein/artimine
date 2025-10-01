@@ -75,7 +75,7 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   gs.time.period = dayPeriod;
   fillDefaultActivities(gs.time.day + 14);
   // update activity, time and schedule
-  const activityPlan = gs.activityPlans[day][dayPeriodIndexes[dayPeriod]];
+  const activityPlan = gs.activityPlans[0][dayPeriodIndexes[gs.time.period]];
   if (!activityPlan) return;
   gs.activity = activityPlan.activity;
   gs.player.place = activityPlan.place;
@@ -121,7 +121,7 @@ export function fillDefaultActivities(untilDay: number) {
       // friday evening local tournament
       if (weekDay === 6 && dayPeriod === 2) {
         activityType = ActivityType.Tournament;
-        participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
+        participants = ['player', 'the-dude', 'emma', 'henry', 'molly', 'ousmane'];
         place = goblinCaveIndex;
         tournament = getTournament(participants, TournamentType.Swiss, 3);
       }

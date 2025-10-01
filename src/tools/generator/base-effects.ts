@@ -215,6 +215,15 @@ export const baseEffects: BaseEffect[] = [
     ],
   },
   {
+    effectName: 'controlUnit',
+    argNames: [],
+    budget: (args, targets) => 80, // TBD
+    defaultTargets: [
+      { type: TargetType.Units, count: 1 },
+      { type: TargetType.EmptyCell, count: 1 },
+    ],
+  },
+  {
     effectName: 'tutorCard',
     argNames: [],
     budget: (args, targets) => 50, // TBD

@@ -33,7 +33,7 @@
           "effect": {
             "name": "addCounters",
             "args": {
-              "counterValue": 2,
+              "counterValue": 1,
               "dynamicValue": "units in graveyards"
             }
           }

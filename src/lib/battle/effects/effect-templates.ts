@@ -22,6 +22,7 @@ import {
   applyUnitStatus,
   bounceUnit,
   clearUnitStaticAbilities,
+  controlUnit,
   damagePlayer,
   damageUnit,
   destroyUnit,
@@ -84,8 +85,9 @@ export const DataEffectTemplates: Record<
   }) => ({
     fn: ({ unit, player }) => {
       const targetPlayer = opposingPlayer
-        ? getOpposingPlayer(player?.id || unit?.ownerPlayerId || 1)
+        ? getOpposingPlayer(player?.id ?? unit?.ownerPlayerId ?? 1)
         : player;
+      console.log('damagePlayer', opposingPlayer, targetPlayer);
       damagePlayer(targetPlayer, damage);
     },
     label: () =>
@@ -525,6 +527,14 @@ export const DataEffectTemplates: Record<
       forceMoveUnit(unit, position);
     },
     label: () => `Force move unit to target position.`,
+  }),
+  controlUnit: () => ({
+    fn: ({ targets }) => {
+      const unit = targets[0][0] as UnitDeployed;
+      const position = targets[1][0] as Position;
+      controlUnit(unit, position);
+    },
+    label: () => `Take control of target unit.`,
   }),
   swapUnits: () => ({
     fn: ({ targets }) => {

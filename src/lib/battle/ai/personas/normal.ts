@@ -46,7 +46,6 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
     },
     {} as Record<AiTurnGoal, any>
   );
-  console.log('goalsMap', goalsMap);
   // priority 1: cards that match a goal
   if (bs.aiState.goals.length > 0) {
     for (const spell of possibleActions.playableSpells) {
@@ -139,6 +138,7 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
 
   const bestMove = getHighestMoveValue(unit);
   const counterattackAfterBestMove = getCounterAttackValue({ ...unit, position: bestMove.cell });
+  console.log(unit.name, { attackValue, bestMove, counterattackAfterBestMove });
 
   if (!canAlsoMove || attackValue >= -counterattackAfterBestMove) {
     if (isAttackTargetUnit(bestAttack.target as UnitDeployed)) {

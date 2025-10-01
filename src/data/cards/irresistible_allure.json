@@ -1,0 +1,36 @@
+{
+  "id": "irresistible_allure",
+  "name": "Irresistible Allure",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 8,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "controlUnit",
+        "args": {}
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        },
+        {
+          "type": "cell_empty",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

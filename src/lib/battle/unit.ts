@@ -1,4 +1,5 @@
-import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '../_model';
+import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '@/lib/_model';
+import { config } from '../_config';
 import { bs } from '../_state';
 import { clearUnitStaticAbilities } from './ability-static';
 import { isCellFree, isOnPlayersSide } from './boards';
@@ -151,7 +152,7 @@ export function getEnnemyUnits(playerId: number): UnitDeployed[] {
 
 export function getEnnemyUnitsInRow(unit: UnitDeployed): UnitDeployed[] {
   return bs.units.filter(
-    (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+    (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position?.row === unit.position?.row
   );
 }
 
@@ -181,4 +182,10 @@ export function bounceUnit(unit: UnitDeployed) {
   clearUnitStaticAbilities(unit);
   bs.units = bs.units.filter((u) => u.instanceId !== unit.instanceId);
   bs.players[unit.ownerPlayerId].hand.push(unit);
+}
+
+export function controlUnit(unit: UnitDeployed, position: Position) {
+  const positionOwnerPlayerId = position.column < config.boardColumns / 2 ? 0 : 1;
+  unit.ownerPlayerId = positionOwnerPlayerId;
+  unit.position = position;
 }

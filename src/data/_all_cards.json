@@ -2477,6 +2477,9 @@
         ]
       }
     ],
+    "aiHints": [
+      "Remove Unit"
+    ],
     "cardSet": "alpha"
   },
   {
@@ -2810,6 +2813,9 @@
           }
         ]
       }
+    ],
+    "aiHints": [
+      "Remove Unit"
     ],
     "cardSet": "alpha"
   },
@@ -3620,7 +3626,7 @@
             "effect": {
               "name": "addCounters",
               "args": {
-                "counterValue": 2,
+                "counterValue": 1,
                 "dynamicValue": "units in graveyards"
               }
             }
@@ -4067,6 +4073,42 @@
       "armor": 3
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "irresistible_allure",
+    "name": "Irresistible Allure",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 8,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "controlUnit",
+          "args": {}
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          },
+          {
+            "type": "cell_empty",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "island",
@@ -7611,6 +7653,9 @@
         }
       }
     ],
+    "aiHints": [
+      "Remove Unit"
+    ],
     "cardSet": "alpha"
   },
   {
@@ -7632,7 +7677,6 @@
           "args": {
             "damage": 4,
             "range": {
-              "addSelf": true,
               "sameColumn": true
             }
           }
@@ -7644,6 +7688,9 @@
           }
         ]
       }
+    ],
+    "aiHints": [
+      "Remove Unit"
     ],
     "cardSet": "alpha"
   },
@@ -7715,6 +7762,42 @@
       "resist": 2
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "unstable_bridge",
+    "name": "Unstable Bridge",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "bounceUnit",
+          "args": {
+            "range": {
+              "sameRow": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "unstable_lab",

@@ -1,23 +1,27 @@
 {
-  "id": "tsunami",
-  "name": "Tsunami",
+  "id": "unstable_bridge",
+  "name": "Unstable Bridge",
   "rarity": "uncommon",
+  "cardSet": "alpha",
   "type": "spell",
-  "cost": 5,
+  "cost": 4,
   "colors": [
     {
+      "color": "red",
+      "count": 1
+    },
+    {
       "color": "blue",
-      "count": 3
+      "count": 1
     }
   ],
   "actions": [
     {
       "effect": {
-        "name": "damageUnit",
+        "name": "bounceUnit",
         "args": {
-          "damage": 4,
           "range": {
-            "sameColumn": true
+            "sameRow": true
           }
         }
       },
@@ -28,6 +32,5 @@
         }
       ]
     }
-  ],
-  "aiHints": ["Remove Unit"]
+  ]
 }
