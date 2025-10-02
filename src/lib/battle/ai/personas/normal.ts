@@ -35,9 +35,6 @@ export const AiPersonaNormal: AiPersona = {
   },
 };
 
-// TODO: For cards in hand, we need to evaluate spells vs units deployment
-// since they compete for the same resources
-// returns true if an action was done
 function handleCardsToPlay(possibleActions: PossibleActions): boolean {
   const goalsMap = bs.aiState.goals.reduce(
     (acc, curr) => {
@@ -96,13 +93,9 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
   return false;
 }
 
-// Deployed units each decide to attack or move independently, no overall strategy
-// Not high on the priority list,
-// it would be very hard to implement with little impact since there is no shared resources at stake
-// returns true if an action was done
 function handleDeployedUnits(possibleActions: PossibleActions): boolean {
   if (possibleActions.unitsWhoCanAttack?.length > 0) {
-    const unit = getRandomFromArray(possibleActions.unitsWhoCanAttack);
+    const unit = getUnitWhoShouldAttackFirst(possibleActions.unitsWhoCanAttack);
     const canAlsoMove = possibleActions.unitsWhoCanMove?.findIndex((u) => u.id === unit.id) !== -1;
     attackOrMove(unit, canAlsoMove);
     return true;
@@ -138,8 +131,6 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
 
   const bestMove = getHighestMoveValue(unit);
   const counterattackAfterBestMove = getCounterAttackValue({ ...unit, position: bestMove.cell });
-  console.log(unit.name, { attackValue, bestMove, counterattackAfterBestMove });
-
   if (!canAlsoMove || attackValue >= -counterattackAfterBestMove) {
     if (isAttackTargetUnit(bestAttack.target as UnitDeployed)) {
       attackUnit(unit, bestAttack.target as UnitDeployed);
@@ -150,5 +141,44 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
     }
   } else if (canAlsoMove) {
     moveUnit(unit, bestMove.cell);
+  }
+}
+
+// if there are allies in the same row, attack in the correct order which doesn't overkill a blocker
+function getUnitWhoShouldAttackFirst(unitsWhoCanAttack: UnitDeployed[]): UnitDeployed {
+  const unit = getRandomFromArray(unitsWhoCanAttack);
+  const attackersInSameRow = unitsWhoCanAttack?.filter((u) => u.position.row === unit.position.row);
+
+  // if there is only one attacker in the row, or if there are no blockers, just attack
+  // ------------------------------------------------------------------------------------
+  if (attackersInSameRow.length === 1) {
+    return unit;
+  }
+  const blockers = bs.units.filter(
+    (u) => u.ownerPlayerId !== unit.ownerPlayerId && u.position.row === unit.position.row
+  );
+  if (blockers.length === 0) {
+    return unit;
+  }
+
+  // else, considering attacking with the other attacker in the row
+  // ------------------------------------------------------------------------------------
+
+  // if an attack has lance and there are several blockers, use it
+  const lanceAttackers = attackersInSameRow.filter((u) => u.keywords?.lance);
+  if (lanceAttackers.length > 0 && blockers.length > 1) {
+    return lanceAttackers[0];
+  }
+
+  // TODO: handle cleave
+
+  // can our smallest attacker kill the front blocker? if yes do it, else attack with the big one
+  const frontBlocker = blockers.sort((a, b) => b.position.column - a.position.column)[0];
+  const smallestAttacker = attackersInSameRow.sort((a, b) => a.power - b.power)[0];
+  const biggestAttacker = attackersInSameRow.sort((a, b) => a.power - b.power)[1];
+  if (wouldBeDestroyed(frontBlocker, smallestAttacker)) {
+    return smallestAttacker;
+  } else {
+    return biggestAttacker;
   }
 }

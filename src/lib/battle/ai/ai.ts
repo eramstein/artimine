@@ -93,7 +93,9 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
       spell.type === CardType.Spell && isPayable(spell) && !bs.aiState.dismissedCards[spell.id]
   ) as SpellCard[];
   const unitsWhoCanMove = boardFull ? [] : leaderUnits.filter((unit) => canMove(unit));
-  const unitsWhoCanAttack = leaderUnits.filter((unit) => canAttack(unit));
+  const unitsWhoCanAttack = leaderUnits
+    .filter((unit) => canAttack(unit))
+    .filter((unit) => unit.power > 0);
   const playerAbility = !leader.abilityUsed;
   return {
     deployableUnits,
