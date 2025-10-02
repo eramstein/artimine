@@ -38,3 +38,7 @@ export function clamp(value: number, min: number, max: number) {
 export function generateUniqueId(): string {
   return crypto.randomUUID();
 }
+
+export function getRandomInteger(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

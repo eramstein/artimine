@@ -1,9 +1,12 @@
+import { config } from '../_config';
+import type { Npc } from '../_model';
 import { gs } from '../_state';
 import { clamp } from '../_utils/random';
 import { LLM_API_TOOL_MODEL } from './config';
 import { llmService } from './llm-service';
+import { saveRelationshipSummaryUpdate } from './memories-db';
 
-export function updateOpinion(
+function updateOpinion(
   npcKey: string,
   npcName: string,
   oldOpinion: string,
@@ -13,8 +16,8 @@ export function updateOpinion(
     Update the current opinion of ${npcName} about ${gs.player.name} based on their previous opinion and recent events.
     Output a single JSON object with ${npcName}'s opinion, structured as follows:
 
-    - summary: A narrative summary (4-6 sentences) describing ${npcName}'s current feelings and perspective toward ${gs.player.name}, reflecting recent interactions.
-    - gameTags: An object with the following required fields.      
+    - summary: A narrative summary (4-6 sentences) describing ${npcName}'s current feelings toward ${gs.player.name}, and a description of their relationship.
+    - gameTags: Independant from the summary. An object with the following required fields.      
     - respect: how much does ${npcName} respect ${gs.player.name} compared to before the recent events?
     - friendship: how much does ${npcName} like ${gs.player.name} as a friend compared to before the recent events?
     - love: how interested is ${npcName} in ${gs.player.name} as a romantic partner compared to before the recent events?
@@ -67,24 +70,31 @@ export function updateOpinion(
         if (formattedOpinion.gameTags.respect) {
           gs.characters[npcKey].relationValues.respect = clamp(
             gs.characters[npcKey].relationValues.respect + formattedOpinion.gameTags.respect,
-            -10,
-            10
+            -config.opinionMaxValue,
+            config.opinionMaxValue
           );
         }
         if (formattedOpinion.gameTags.friendship) {
           gs.characters[npcKey].relationValues.friendship = clamp(
             gs.characters[npcKey].relationValues.friendship + formattedOpinion.gameTags.friendship,
-            -10,
-            10
+            -config.opinionMaxValue,
+            config.opinionMaxValue
           );
         }
         if (formattedOpinion.gameTags.love) {
           gs.characters[npcKey].relationValues.love = clamp(
             gs.characters[npcKey].relationValues.love + formattedOpinion.gameTags.love,
-            -10,
-            10
+            -config.opinionMaxValue,
+            config.opinionMaxValue
           );
         }
       }
     });
+}
+
+export async function updateNpcRelation(npc: Npc) {
+  // save old opinion in DB to build a relationship arc over time
+  await saveRelationshipSummaryUpdate(npc.key, npc.relationSummary, gs.time.day);
+  // update opinion
+  await updateOpinion(npc.key, npc.name, npc.relationSummary, npc.periodInteractionsSummary);
 }

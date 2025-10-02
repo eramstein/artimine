@@ -18,6 +18,7 @@ function addDefaultCollectionAndDecks(character: any): Npc {
   return {
     ...character,
     relationSummary: `${CHARACTER_PLAYER.name} is unknown to me.`,
+    periodInteractionsSummary: '',
     relationValues: {
       friendship: 0,
       love: 0,

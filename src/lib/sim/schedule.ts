@@ -7,7 +7,8 @@ import {
   TournamentType,
 } from '../_model';
 import { gs } from '../_state/main.svelte';
-import { endPlayerChat } from '../llm';
+import { hideToast, showToast } from '../_state/state-ui.svelte';
+import { endPlayerChat, updateNpcRelation } from '../llm';
 import { autoResolveActivity } from './activity';
 import { adjustNpcDecks, expandNpcCollections } from './npc';
 import { dayPeriodIndexes, isTimePeriodBefore } from './time';
@@ -46,7 +47,18 @@ export function scheduleActivity(
 }
 
 export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
+  showToast('Processing schedule updates...', 'info');
   await endPlayerChat();
+  // update NPC relations
+  for (const npc of Object.values(gs.characters)) {
+    if (npc.periodInteractionsSummary) {
+      await updateNpcRelation(npc);
+      npc.periodInteractionsSummary = '';
+      npc.periodCharismaRoll = undefined;
+    }
+  }
+  hideToast();
+
   // auto-resolve activityPlans
   gs.activityPlans
     .filter((_, d) => d <= day)

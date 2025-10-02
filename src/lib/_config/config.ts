@@ -4,6 +4,8 @@ export const config = {
   // sim
   startDate: '1993-04-01',
   startDayPeriod: DayPeriod.Afternoon,
+  attributesMaxValue: 10,
+  opinionMaxValue: 20,
   // battle
   initialMana: 2,
   initialHandSize: 7,

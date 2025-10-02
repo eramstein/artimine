@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { config } from '@/lib/_config';
   import { getRelationColor } from '../../_helpers/colors';
 
   interface RelationValues {
@@ -22,7 +23,7 @@
   } = $props();
 
   function percent(val: number): number {
-    return Math.max(0, ((val + 10) / 20) * 100);
+    return Math.max(0, ((val + config.opinionMaxValue) / (2 * config.opinionMaxValue)) * 100);
   }
 </script>
 

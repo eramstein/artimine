@@ -41,12 +41,14 @@ export interface Npc extends Character {
   relationSummary: string;
   relationValues: RelationValues;
   chatInitiation?: string; // the NPC has something to say
+  periodInteractionsSummary: string;
+  periodCharismaRoll?: number; // player's charisma roll for the period, influences NPC behavior
 }
 
 export interface RelationValues {
-  friendship: number; // -10 to 10
-  love: number; // -10 to 10
-  respect: number; // -10 to 10
+  friendship: number;
+  love: number;
+  respect: number;
 }
 
 export interface CharacterAttributes {

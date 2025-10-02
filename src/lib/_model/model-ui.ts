@@ -92,6 +92,11 @@ export type UiState = {
     attribute: string;
     difficulty: number;
   }[];
+  toast: {
+    visible: boolean;
+    message: string;
+    type: 'info' | 'success' | 'warning' | 'error';
+  };
 };
 
 export enum UiView {

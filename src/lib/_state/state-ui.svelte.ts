@@ -73,6 +73,11 @@ export const uiState: UiState = $state({
   },
   tradingWith: null,
   rollResults: [],
+  toast: {
+    visible: false,
+    message: '',
+    type: 'info' as const,
+  },
 });
 
 export function addRollResult(result: {
@@ -89,4 +94,17 @@ export async function initTrade(partner: Npc) {
   uiState.tradingWith = partner.key;
   await initPlayerChat([partner]);
   uiState.currentView = UiView.Trade;
+}
+
+export function showToast(
+  message: string,
+  type: 'info' | 'success' | 'warning' | 'error' = 'info'
+) {
+  uiState.toast.message = message;
+  uiState.toast.type = type;
+  uiState.toast.visible = true;
+}
+
+export function hideToast() {
+  uiState.toast.visible = false;
 }

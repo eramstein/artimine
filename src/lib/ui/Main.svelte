@@ -4,6 +4,7 @@
   import Battle from './battle/Battle.svelte';
   import ModalHost from './ModalHost.svelte';
   import Sim from './sim/Sim.svelte';
+  import Toast from './Toast.svelte';
 </script>
 
 <ModalHost />
@@ -19,6 +20,9 @@
   <!-- Tooltip portal - all tooltips will be rendered here -->
   <div id="tooltip-portal" class="tooltip-portal"></div>
 </div>
+
+<!-- Toast notifications -->
+<Toast />
 
 <style>
   .main {

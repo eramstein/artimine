@@ -1,6 +1,7 @@
 import { type CharacterAttributes } from '../_model/model-game';
 import { gs } from '../_state/main.svelte';
 import { addRollResult } from '../_state/state-ui.svelte';
+import { getRandomInteger } from '../_utils/random';
 
 /*
 Attributes are between 0 and 10.
@@ -12,7 +13,7 @@ export function checkActionSuccess(
   testedAttribute: string,
   difficulty: number
 ): { success: boolean; isCritical: boolean } {
-  const roll = Math.floor(Math.random() * 10) + 1;
+  const roll = getRandomInteger(1, 10);
   const attributeValue = gs.player.attributes[testedAttribute as keyof CharacterAttributes];
   const result = roll + attributeValue;
 

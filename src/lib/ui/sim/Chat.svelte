@@ -28,6 +28,14 @@
   // Actions surfaced from the LLM for user selection (single or none)
   let pendingActions: ActionAttempt[] = $state([]);
 
+  // Reset roll results when the component mounts (run once)
+  let hasInitialized = $state(false);
+  $effect(() => {
+    if (hasInitialized) return;
+    hasInitialized = true;
+    uiState.rollResults = [];
+  });
+
   function skipActions() {
     pendingActions = [];
     uiState.rollResults = [];
@@ -157,10 +165,7 @@
   // Auto-scroll when messages update or streaming content changes
   $effect(() => {
     // Touch dependencies
-    const _len = chatMessages.length;
     const _streaming = uiState.chat.isStreaming;
-    const _streamText = uiState.chat.streamingContent;
-
     // Defer until DOM paints
     requestAnimationFrame(() => scrollToBottom(!_streaming));
   });

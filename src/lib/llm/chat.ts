@@ -1,13 +1,13 @@
 import type { Npc } from '../_model';
 import { gs } from '../_state';
-import { uiState } from '../_state/state-ui.svelte';
+import { hideToast, showToast, uiState } from '../_state/state-ui.svelte';
 import { generateUniqueId } from '../_utils/random';
+import { getCharismaRoll } from './charisma';
 import { getGroupDescription } from './chat-helpers';
 import { playerChatSystemPrompt, summarySystemPrompt } from './chat-system-prompts';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
-import { saveActivityLog, saveRelationshipSummaryUpdate } from './memories-db';
-import { updateOpinion } from './opinion';
+import { saveActivityLog } from './memories-db';
 
 async function generateSummary(transcript: string): Promise<string> {
   const systemPrompt = {
@@ -40,14 +40,10 @@ export async function playerSendChat(message: string): Promise<string> {
   const place = gs.places[gs.player.place];
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
-  const actionOutcomes = gs.chat.attemptedActionsResults
-    ? `\n\nAction Outcomes: ${gs.chat.attemptedActionsResults}`
-    : '';
+  const actionOutcomes = gs.chat.attemptedActionsResults || '';
   const locationDescription = place.name + ', ' + place.description || '';
   const charactersDescription = getGroupDescription(gs.chat.characters);
-  const currentSummary = gs.chat.summary
-    ? 'Previous Conversation Summary:\n' + gs.chat.summary
-    : '';
+  const currentSummary = gs.chat.summary ? gs.chat.summary : '';
 
   // get last memory involving at least one of these characters
   const relevantMemories = await getSystemPromptMemories(
@@ -57,45 +53,32 @@ export async function playerSendChat(message: string): Promise<string> {
     gs.activity.activityType,
     message
   );
-  const memoriesPrompt = relevantMemories
-    ? `- Relevant Memory:\nThe characters remember a past event that may influence today's conversation:\n"${relevantMemories}"`
-    : '';
+  const memoriesPrompt = relevantMemories || '';
 
   const systemPrompt = {
     role: 'system',
-    content: `${playerChatSystemPrompt.intro}
+    content: `${playerChatSystemPrompt.intro(playerName)}
 
-    Player Character:
-      - The player controls ${gs.player.bio}.
-      - Do not write any dialogue, actions, body language, thoughts, or emotions for ${playerName}.
-      - The player will describe ${playerName}'s dialogue and actions.
+    ### Player Character
+      - **${gs.player.name}** ${gs.player.bio}
+      - Controlled only by the player. You may not write dialogue, actions, or thoughts for him.
 
-    NPC Control:
-    - You control all other characters (NPCs).
-    - Only write dialogue, actions, thoughts, emotions, and reactions for the NPCs.
-    - NPCs should respond naturally and believably to ${playerName} actions and words.
+    ### NPC Control
+      - You control all NPCs: their dialogue, actions, emotions, and thoughts.  
+    
+    ### Scene
+      - **Location:** ${locationDescription}
+      - **Time:** ${timeOfDay}
+      - **Activity:** ${context}
 
-    Narrative Style:
-    - Use immersive third-person narration for the NPCs you control.
-    - Include their body language, tone of voice, emotions, and internal thoughts.
-    - Do not include any narrative prose describing ${playerName}.
-    - If NPCs react to ${playerName} actions or emotions, describe their perception or interpretation (e.g., "Lise noticed the tension in ${gs.player.name}'s voice."), but do not narrate ${gs.player.name}'s state directly.
-
-    Scene Context:
-      - Location: ${locationDescription}
-      - Time of Day: ${timeOfDay}
-      - Current Activity: ${context}
-
-    Characters:
+    ### NPCs
     ${charactersDescription}
 
-    ${currentSummary}
+    ${currentSummary ? `### Previous Conversation Summary\n${currentSummary}` : ''}
 
-    ${memoriesPrompt}
+    ${memoriesPrompt ? `### Relevant Memories\n${memoriesPrompt}` : ''}
 
-    ${playerChatSystemPrompt.instruction}
-
-    ${actionOutcomes}
+    ${actionOutcomes ? `### Action Outcomes\n${actionOutcomes}` : ''}
     `,
   };
   console.log('systemPrompt', systemPrompt.content);
@@ -183,7 +166,7 @@ export async function initPlayerChat(characters: Npc[]) {
     attemptedActionsResults: '',
   };
 
-  // add chat initiation
+  // add chat initiation and charisma rolls
   characters.forEach((c) => {
     if (c.chatInitiation) {
       gs.chat!.history.push({
@@ -193,6 +176,7 @@ export async function initPlayerChat(characters: Npc[]) {
       });
       delete c.chatInitiation;
     }
+    c.periodCharismaRoll = c.periodCharismaRoll ?? getCharismaRoll();
   });
 }
 
@@ -213,13 +197,12 @@ export async function endPlayerChat() {
   const summayPrompt = currentSummary
     ? 'Summary of previous events: ' + currentSummary + '\n\n New events:' + messagesToSummarize
     : messagesToSummarize;
+
+  showToast('Generating summary...', 'info');
   const summary = await generateSummary(summayPrompt);
-  // update NPC opinions
+  // update NPC daily interactions summary
   for (const npc of gs.chat!.characters) {
-    // save old opinion in DB
-    await saveRelationshipSummaryUpdate(npc.key, npc.relationSummary, gs.time.day);
-    // update opinion
-    updateOpinion(npc.key, npc.name, npc.relationSummary, summary);
+    npc.periodInteractionsSummary += '\n' + summary;
   }
   // save memory in DB
   await saveActivityLog({
@@ -232,4 +215,5 @@ export async function endPlayerChat() {
     embedding: [],
   });
   gs.chat = null;
+  hideToast();
 }
