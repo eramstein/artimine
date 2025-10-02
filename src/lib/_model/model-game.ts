@@ -41,8 +41,11 @@ export interface Npc extends Character {
   relationSummary: string;
   relationValues: RelationValues;
   chatInitiation?: string; // the NPC has something to say
-  periodInteractionsSummary: string;
-  periodCharismaRoll?: number; // player's charisma roll for the period, influences NPC behavior
+  period: {
+    interactionsSummary: string;
+    charismaRoll?: number; // player's charisma roll for the period, influences NPC behavior
+    trades: number; // how many cards the NPC has traded with the player this period
+  };
 }
 
 export interface RelationValues {

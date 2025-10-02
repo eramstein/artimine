@@ -176,7 +176,7 @@ export async function initPlayerChat(characters: Npc[]) {
       });
       delete c.chatInitiation;
     }
-    c.periodCharismaRoll = c.periodCharismaRoll ?? getCharismaRoll();
+    c.period.charismaRoll = c.period.charismaRoll ?? getCharismaRoll();
   });
 }
 
@@ -202,7 +202,7 @@ export async function endPlayerChat() {
   const summary = await generateSummary(summayPrompt);
   // update NPC daily interactions summary
   for (const npc of gs.chat!.characters) {
-    npc.periodInteractionsSummary += '\n' + summary;
+    npc.period.interactionsSummary += '\n' + summary;
   }
   // save memory in DB
   await saveActivityLog({

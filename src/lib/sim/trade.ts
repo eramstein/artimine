@@ -1,14 +1,14 @@
 import { cards } from '@/data';
+import { config } from '../_config';
 import { CardRarity } from '../_model/enums-battle';
-import type { CardTuple, Character } from '../_model/model-game';
+import type { CardTuple, Character, Npc } from '../_model/model-game';
 import { gs } from '../_state';
 import { sendTradeEvent } from '../llm/trade-events';
 
-export function proposeTrade(
-  character: Character,
-  offers: CardTuple[],
-  wants: CardTuple[]
-): boolean {
+export function proposeTrade(character: Npc, offers: CardTuple[], wants: CardTuple[]): boolean {
+  if (character.period.trades >= getMaxTradesPerPeriod(character)) {
+    return false;
+  }
   let accepted = false;
   const offerValue = evaluateCardTuple(offers, character);
   const wantValue = evaluateCardTuple(wants, character);
@@ -25,9 +25,10 @@ export function proposeTrade(
   return accepted;
 }
 
-function performTrade(character: Character, offers: CardTuple[], wants: CardTuple[]): void {
+function performTrade(character: Npc, offers: CardTuple[], wants: CardTuple[]): void {
   mergeIntoCollection(character.collection, offers);
   removeFromCollection(character.collection, wants);
+  character.period.trades++;
 }
 
 function mergeIntoCollection(collection: CardTuple[], tuples: CardTuple[]): void {
@@ -68,4 +69,11 @@ function evaluateCardTuple(tuples: CardTuple[], character: Character): number {
     }
   }
   return value;
+}
+
+export function getMaxTradesPerPeriod(character: Npc): number {
+  return Math.max(
+    0,
+    config.maxTradesPerPeriod + Math.floor(character.relationValues.friendship / 4)
+  );
 }

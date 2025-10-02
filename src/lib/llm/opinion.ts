@@ -96,5 +96,5 @@ export async function updateNpcRelation(npc: Npc) {
   // save old opinion in DB to build a relationship arc over time
   await saveRelationshipSummaryUpdate(npc.key, npc.relationSummary, gs.time.day);
   // update opinion
-  await updateOpinion(npc.key, npc.name, npc.relationSummary, npc.periodInteractionsSummary);
+  await updateOpinion(npc.key, npc.name, npc.relationSummary, npc.period.interactionsSummary);
 }

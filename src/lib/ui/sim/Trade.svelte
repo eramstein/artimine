@@ -7,7 +7,8 @@
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
   import { getAvailableCardsFromCollection } from '@/lib/sim/collection';
-  import { proposeTrade } from '@/lib/sim/trade';
+  import { getMaxTradesPerPeriod, proposeTrade } from '@/lib/sim/trade';
+  import CardFull from '../cards/CardFull.svelte';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import Chat from './Chat.svelte';
 
@@ -37,6 +38,14 @@
   const characterCollection = $derived(() => {
     const char = character();
     return char ? getAvailableCardsFromCollection(char) : [];
+  });
+
+  // Calculate remaining trades for the character
+  const remainingTrades = $derived(() => {
+    const char = character();
+    if (!char) return 0;
+    const maxTrades = getMaxTradesPerPeriod(char);
+    return Math.max(0, maxTrades - char.period.trades);
   });
 
   // Apply rarity filter to collections
@@ -167,6 +176,16 @@
     tradeForm.characterSelectedCards = {};
   }
 
+  // Display card overlay on right click
+  function displayCardFull(event: MouseEvent, cardTemplateId: string) {
+    event.preventDefault();
+    const cardTemplate = getCardTemplate(cardTemplateId);
+    if (cardTemplate) {
+      uiState.cardFullOverlay.visible = true;
+      uiState.cardFullOverlay.card = cardTemplate;
+    }
+  }
+
   // Execute the trade
   function executeTrade() {
     const currentCharacter = character();
@@ -205,7 +224,8 @@
   const canExecuteTrade = $derived(() => {
     return (
       Object.keys(tradeForm.playerSelectedCards).length > 0 &&
-      Object.keys(tradeForm.characterSelectedCards).length > 0
+      Object.keys(tradeForm.characterSelectedCards).length > 0 &&
+      remainingTrades() >= Object.keys(tradeForm.characterSelectedCards).length
     );
   });
 
@@ -246,6 +266,9 @@
       </div>
       <div class="character-name">
         <h2>{character()!.name}</h2>
+        <div class="trades-info">
+          <span class="trades-remaining">Trades remaining: {remainingTrades()}</span>
+        </div>
       </div>
     </div>
 
@@ -352,6 +375,7 @@
                 style={`${backgroundStyle(entry.cardTemplateId)}; border-color: ${getRarityBorderColor(entry.cardTemplateId)};`}
                 title={cardTemplate?.name || entry.cardTemplateId}
                 onclick={() => handlePlayerCardClick(entry.cardTemplateId, availableCount)}
+                oncontextmenu={(e: MouseEvent) => displayCardFull(e, entry.cardTemplateId)}
               ></div>
             </div>
           {/each}
@@ -386,6 +410,7 @@
                 style={`${backgroundStyle(entry.cardTemplateId)}; border-color: ${getRarityBorderColor(entry.cardTemplateId)};`}
                 title={cardTemplate?.name || entry.cardTemplateId}
                 onclick={() => handleCharacterCardClick(entry.cardTemplateId, availableCount)}
+                oncontextmenu={(e: MouseEvent) => displayCardFull(e, entry.cardTemplateId)}
               ></div>
             </div>
           {/each}
@@ -406,6 +431,15 @@
       </div>
     </div>
   </div>
+
+  <!-- CardFull overlay -->
+  {#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
+    <div class="card-full-overlay" onclick={() => (uiState.cardFullOverlay.visible = false)}>
+      <div class="card-full-container" onclick={(e) => e.stopPropagation()}>
+        <CardFull card={uiState.cardFullOverlay.card} />
+      </div>
+    </div>
+  {/if}
 {:else}
   <div class="trade-container">
     <div class="no-character">
@@ -440,6 +474,7 @@
 
   .character-name {
     justify-self: end;
+    text-align: right;
   }
 
   .player-name h2,
@@ -447,6 +482,16 @@
     margin: 0;
     color: #bfa14a;
     font-size: 1.5rem;
+  }
+
+  .trades-info {
+    margin-top: 4px;
+  }
+
+  .trades-remaining {
+    font-size: 0.9rem;
+    color: #bfa14a;
+    opacity: 0.8;
   }
 
   .trade-actions {
@@ -742,5 +787,26 @@
     min-height: 200px;
     max-height: 300px;
     overflow: hidden;
+  }
+
+  .card-full-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    min-height: 100vh;
+  }
+
+  .card-full-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

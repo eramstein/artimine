@@ -7,7 +7,7 @@ export function getGroupDescription(characters: Npc[]) {
   for (const character of characters) {
     description += `- **${character.name}** - ${character.bio}\n
     **Relation to ${gs.player.name}:** ${character.relationSummary}\n
-    **Current Perception of ${gs.player.name} (Charisma effect):** ${getCharismaRollPrompt(character.periodCharismaRoll)}\n\n`;
+    **Current Perception of ${gs.player.name} (Charisma effect):** ${getCharismaRollPrompt(character.period.charismaRoll)}\n\n`;
   }
   return description;
 }

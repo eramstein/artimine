@@ -6,6 +6,7 @@ export const config = {
   startDayPeriod: DayPeriod.Afternoon,
   attributesMaxValue: 10,
   opinionMaxValue: 20,
+  maxTradesPerPeriod: 1,
   // battle
   initialMana: 2,
   initialHandSize: 7,
