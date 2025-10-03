@@ -13,7 +13,6 @@ const worldFacts: Table<WorldFact> = db.table('worldFacts');
 
 // Save a chat to the database
 export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
-  console.log('Saving activity log:', log);
   try {
     const embedding = await getEmbedding(log.summary);
     // store in IndexedDB
@@ -26,7 +25,6 @@ export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
       summary: String(log.summary),
       embedding,
     };
-    console.log('serializableLog', serializableLog);
     return await chats.put(serializableLog);
   } catch (error) {
     console.error('Error saving chat:', error);

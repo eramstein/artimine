@@ -35,6 +35,9 @@ export interface Character {
 export interface Player extends Character {
   attributes: CharacterAttributes;
   studyPoints: number;
+  period: {
+    improvedRelations: boolean; // did use the imporve relations action already
+  };
 }
 
 export interface Npc extends Character {

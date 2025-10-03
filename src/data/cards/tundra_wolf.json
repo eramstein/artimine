@@ -1,0 +1,24 @@
+{
+  "id": "tundra_wolf",
+  "name": "Tundra Wolf",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 3,
+  "power": 3,
+  "maxHealth": 3,
+  "colors": [
+    {
+      "color": "green",
+      "count": 1
+    },
+    {
+      "color": "blue",
+      "count": 1
+    }
+  ],
+  "unitTypes": ["beast"],
+  "keywords": {
+    "resist": 1
+  }
+}

@@ -755,6 +755,50 @@
     "cardSet": "alpha"
   },
   {
+    "id": "battery",
+    "name": "Battery",
+    "rarity": "common",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "construct"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "energy",
+                "counterValue": 1,
+                "range": {
+                  "self": true
+                },
+                "valueIsMultiplier": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bear_minimum",
     "name": "Bear Minimum",
     "rarity": "uncommon",
@@ -2498,6 +2542,55 @@
     ]
   },
   {
+    "id": "entrench",
+    "name": "Entrench",
+    "rarity": "uncommon",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 3,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 1
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "combine",
+          "args": {
+            "effectTemplates": [
+              {
+                "name": "staticKeyword",
+                "args": {
+                  "abilityName": "entrench",
+                  "keyword": "immobile"
+                }
+              },
+              {
+                "name": "staticStats",
+                "args": {
+                  "power": 3,
+                  "maxHealth": 3
+                }
+              }
+            ]
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "execution",
     "name": "Execution",
     "rarity": "common",
@@ -4190,6 +4283,29 @@
       "moveAndAttack": true
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "kobold",
+    "name": "Kobold",
+    "rarity": "common",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 2,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "keywords": {
+      "moveAndAttack": true
+    }
   },
   {
     "id": "kobold_slinger",
@@ -5886,6 +6002,45 @@
       "resist": 3
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "rage_elemental",
+    "name": "Rage Elemental",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 5,
+    "power": 5,
+    "maxHealth": 4,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "elemental"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Land Destroyed"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "damageUnit",
+              "args": {
+                "damage": 3,
+                "range": {
+                  "all": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "raise_dead",
@@ -7769,6 +7924,32 @@
       "Remove Unit"
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "tundra_wolf",
+    "name": "Tundra Wolf",
+    "rarity": "common",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 3,
+    "power": 3,
+    "maxHealth": 3,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": [
+      "beast"
+    ],
+    "keywords": {
+      "resist": 1
+    }
   },
   {
     "id": "uncle_bobo",

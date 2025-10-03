@@ -73,11 +73,6 @@
 {#if uiState.deckSelectionModal.visible}
   <div class="modal-backdrop" onclick={handleBackdropClick}>
     <div class="modal-content">
-      <div class="modal-header">
-        <h2>Select Your Deck</h2>
-        <button class="close-button" onclick={closeModal}>×</button>
-      </div>
-
       <div class="modal-body">
         {#if playerDecks.length === 0}
           <div class="empty-decks">
@@ -87,7 +82,7 @@
         {:else}
           <div>
             <div class="section-header">
-              <h3>Your Deck</h3>
+              <h3>Select Your Deck</h3>
               {#if !showFoeSelection}
                 <button class="request-btn" onclick={() => (showFoeSelection = true)}>
                   request playtesting
@@ -188,44 +183,8 @@
     position: relative;
   }
 
-  .modal-header {
-    padding: 1.5rem 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal-header h2 {
-    margin: 0;
-    color: var(--color-golden);
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  .close-button {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background 0.2s ease;
-  }
-
-  .close-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
   .modal-body {
-    padding: 2rem;
+    padding: 0.5rem 2rem 2rem 2rem;
     max-height: 60vh;
     overflow-y: auto;
   }

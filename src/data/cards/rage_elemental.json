@@ -1,0 +1,39 @@
+{
+  "id": "rage_elemental",
+  "name": "Rage Elemental",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 5,
+  "power": 5,
+  "maxHealth": 4,
+  "colors": [
+    {
+      "color": "red",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "elemental"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Land Destroyed"
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "damageUnit",
+            "args": {
+              "damage": 3,
+              "range": {
+                "all": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

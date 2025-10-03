@@ -249,10 +249,7 @@
 
 {#if character()}
   <div class="trade-container">
-    <div class="trade-header">
-      <div class="player-name">
-        <h2>{gs.player.name}</h2>
-      </div>
+    <div class="trade-topbar">
       <div class="trade-actions">
         <button class="trade-button" onclick={executeTrade} disabled={!canExecuteTrade()}>
           Propose Trade
@@ -263,32 +260,27 @@
         >
           Close
         </button>
-      </div>
-      <div class="character-name">
-        <h2>{character()!.name}</h2>
         <div class="trades-info">
           <span class="trades-remaining">Trades remaining: {remainingTrades()}</span>
         </div>
       </div>
-    </div>
-
-    <!-- Rarity Filter -->
-    <div class="rarity-filter">
-      {#each ['all', CardRarity.Common, CardRarity.Uncommon, CardRarity.Rare, CardRarity.Legendary] as const as rarity}
-        <button
-          class="rarity-filter-button"
-          class:active={rarityFilter === rarity}
-          class:rarity-all={rarity === 'all'}
-          class:rarity-common={rarity === CardRarity.Common}
-          class:rarity-uncommon={rarity === CardRarity.Uncommon}
-          class:rarity-rare={rarity === CardRarity.Rare}
-          class:rarity-legendary={rarity === CardRarity.Legendary}
-          onclick={() => (rarityFilter = rarity)}
-          style={`border-color: ${getRarityColor(rarity)}; color: ${getRarityColor(rarity)};`}
-        >
-          {getRarityDisplayName(rarity)}
-        </button>
-      {/each}
+      <div class="rarity-filter">
+        {#each ['all', CardRarity.Common, CardRarity.Uncommon, CardRarity.Rare, CardRarity.Legendary] as const as rarity}
+          <button
+            class="rarity-filter-button"
+            class:active={rarityFilter === rarity}
+            class:rarity-all={rarity === 'all'}
+            class:rarity-common={rarity === CardRarity.Common}
+            class:rarity-uncommon={rarity === CardRarity.Uncommon}
+            class:rarity-rare={rarity === CardRarity.Rare}
+            class:rarity-legendary={rarity === CardRarity.Legendary}
+            onclick={() => (rarityFilter = rarity)}
+            style={`border-color: ${getRarityColor(rarity)}; color: ${getRarityColor(rarity)};`}
+          >
+            {getRarityDisplayName(rarity)}
+          </button>
+        {/each}
+      </div>
     </div>
 
     <!-- Selected Cards Section -->
@@ -458,34 +450,20 @@
     color: #bfa14a;
   }
 
-  .trade-header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+  .trade-topbar {
+    display: flex;
     align-items: center;
-    padding: 15px 20px;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 20px;
     border-bottom: 2px solid #bfa14a;
     background: #2a2a2a;
-    gap: 20px;
-  }
-
-  .player-name {
-    justify-self: start;
-  }
-
-  .character-name {
-    justify-self: end;
-    text-align: right;
-  }
-
-  .player-name h2,
-  .character-name h2 {
-    margin: 0;
-    color: #bfa14a;
-    font-size: 1.5rem;
+    flex-wrap: wrap;
   }
 
   .trades-info {
     margin-top: 4px;
+    margin-left: 16px;
   }
 
   .trades-remaining {
@@ -502,11 +480,9 @@
 
   .rarity-filter {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 8px;
-    padding: 10px 20px;
-    background: #2a2a2a;
-    border-bottom: 1px solid #bfa14a;
+    padding: 0;
   }
 
   .rarity-filter-button {

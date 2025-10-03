@@ -55,7 +55,7 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
       await updateNpcRelation(npc);
     }
   }
-  resetDailyNpcState();
+  resetPeriodState();
   hideToast();
 
   // auto-resolve activityPlans
@@ -159,10 +159,11 @@ function getScheduleIndexOfDay(day: number) {
   return gs.activityPlans.findIndex((d) => d[0].day === day);
 }
 
-function resetDailyNpcState() {
+function resetPeriodState() {
   for (const npc of Object.values(gs.characters)) {
     npc.period.interactionsSummary = '';
     npc.period.charismaRoll = undefined;
     npc.period.trades = 0;
   }
+  gs.player.period.improvedRelations = false;
 }

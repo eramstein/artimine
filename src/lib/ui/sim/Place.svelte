@@ -44,13 +44,13 @@
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     menuPosition = {
       x: rect.left + rect.width / 2,
-      y: rect.top - 200, // Position on top of the portrait
+      y: window.innerHeight - rect.top + 20, // Position above the portrait using bottom positioning
     };
   }
 
   // Close menu when clicking outside
   function handleBackgroundClick() {
-    showMenu = false;
+    selectedCharacters = [];
   }
 
   // Handle shop button click
@@ -88,7 +88,11 @@
   <ShopModal />
 
   {#if showMenu}
-    <div class="social-modal" style={`left: 50%; top: ${menuPosition.y}px;`}>
+    <div
+      class="social-modal"
+      style={`left: 50%; bottom: ${menuPosition.y}px;`}
+      onclick={(e) => e.stopPropagation()}
+    >
       <div class="modal-body">
         <SocialAction characters={selectedCharacters} />
       </div>

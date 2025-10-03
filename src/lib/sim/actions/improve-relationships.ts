@@ -26,6 +26,8 @@ export const improveRelationshipsAction: ActionTypeDefinition = {
     },
     isCritical?: boolean
   ) => {
+    if (gs.player.period.improvedRelations) return;
+    gs.player.period.improvedRelations = true;
     const peopleNpcs = people
       .map((person) => Object.values(gs.characters).find((c) => c.name === person))
       .filter((p) => p !== undefined);
@@ -45,6 +47,8 @@ export const improveRelationshipsAction: ActionTypeDefinition = {
     },
     isCritical?: boolean
   ) => {
+    if (gs.player.period.improvedRelations) return;
+    gs.player.period.improvedRelations = true;
     const peopleNpcs = people
       .map((person) => Object.values(gs.characters).find((c) => c.name === person))
       .filter((p) => p !== undefined);

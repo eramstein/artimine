@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
       "@lib/*": ["./src/lib/*"],
       "@data/*": ["./src/data/*"]
-    }
+    },
+    "allowArbitraryExtensions": true
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "src/data/cards_B.json"]
 }

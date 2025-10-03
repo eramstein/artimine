@@ -1,0 +1,49 @@
+{
+  "id": "entrench",
+  "name": "Entrench",
+  "rarity": "uncommon",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 3,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "black",
+      "count": 1
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "combine",
+        "args": {
+          "effectTemplates": [
+            {
+              "name": "staticKeyword",
+              "args": {
+                "abilityName": "entrench",
+                "keyword": "immobile"
+              }
+            },
+            {
+              "name": "staticStats",
+              "args": {
+                "power": 3,
+                "maxHealth": 3
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "type": "unit",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

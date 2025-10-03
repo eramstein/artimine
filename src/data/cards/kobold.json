@@ -1,0 +1,23 @@
+{
+  "id": "kobold",
+  "name": "Kobold",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 2,
+  "power": 2,
+  "maxHealth": 2,
+  "colors": [
+    {
+      "color": "red",
+      "count": 1
+    },
+    {
+      "color": "green",
+      "count": 1
+    }
+  ],
+  "keywords": {
+    "moveAndAttack": true
+  }
+}

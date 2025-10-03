@@ -1,0 +1,44 @@
+{
+  "id": "battery",
+  "name": "Battery",
+  "rarity": "common",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 1,
+  "power": 0,
+  "maxHealth": 1,
+  "colors": [
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "unitTypes": [
+    "construct"
+  ],
+  "abilities": [
+    {
+      "trigger": {
+        "type": "On Turn Start",
+        "range": {
+          "self": true
+        }
+      },
+      "actions": [
+        {
+          "effect": {
+            "name": "addCounters",
+            "args": {
+              "counterType": "energy",
+              "counterValue": 1,
+              "range": {
+                "self": true
+              },
+              "valueIsMultiplier": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

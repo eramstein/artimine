@@ -13,11 +13,15 @@ export const TEST_DECK: Deck = {
   name: 'Test',
   cards: [
     {
-      cardTemplateId: 'busy_forge',
+      cardTemplateId: 'battery',
       count: 20,
     },
     {
-      cardTemplateId: 'zombie',
+      cardTemplateId: 'rage_elemental',
+      count: 20,
+    },
+    {
+      cardTemplateId: 'entrench',
       count: 20,
     },
   ],

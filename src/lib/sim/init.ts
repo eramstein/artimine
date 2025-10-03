@@ -30,6 +30,9 @@ export const defaultGameState: GameState = {
       vitality: 3,
       dexterity: 5,
     },
+    period: {
+      improvedRelations: false,
+    },
   },
   places: PLACES,
   activity: {
