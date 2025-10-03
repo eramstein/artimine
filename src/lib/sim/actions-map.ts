@@ -1,15 +1,22 @@
-import { ActionType } from '@/lib/_model/enums-sim';
+import { ActionType, ActivityType } from '@/lib/_model/enums-sim';
 import type { ActionTypeDefinition } from '@/lib/_model/model-game';
 import { gs } from '../_state/main.svelte';
 import { initTrade } from '../_state/state-ui.svelte';
 import { recordActionInChat } from '../llm/action';
-import { generalChallengeAction, scheduleActivityAction } from './actions/index';
+import { improveRelationshipsAction } from './actions/improve-relationships';
+import {
+  generalChallengeAction,
+  rollActivityProposalSuccess,
+  scheduleActivityAction,
+} from './actions/index';
 import { moveCharacters } from './move';
 import { initDeckSelection } from './ongoing-battle';
+import { dayNames } from './schedule';
 
 export const ACTIONS: Record<string, ActionTypeDefinition> = {
   [ActionType.ScheduleActivity]: scheduleActivityAction,
   [ActionType.GeneralChallenge]: generalChallengeAction,
+  [ActionType.ImproveRelationship]: improveRelationshipsAction,
   [ActionType.GoTo]: {
     onSuccess: ({ people, destination }: { people: string[]; destination: string }) => {
       const peopleNpcs = people
@@ -18,12 +25,14 @@ export const ACTIONS: Record<string, ActionTypeDefinition> = {
       moveCharacters(peopleNpcs, destination);
       recordActionInChat(`${gs.player.name} and ${people.join(', ')} went to ${destination}`, true);
     },
-    checkSuccess: ({ people, destination }) => ({
-      success: true,
-      isCritical: false,
-      descriptionSuccess: `${people.join(', ')} agreed to go to ${destination}`,
-      descriptionFailure: `${people.join(', ')} did not agree to go to ${destination}`,
-    }),
+    checkSuccess: ({ people, destination }) =>
+      rollActivityProposalSuccess(
+        people,
+        ActivityType.Chill,
+        destination,
+        dayNames[gs.time.day % 7],
+        gs.time.period
+      ),
     description: 'Propose to go somewhere',
     getLabel: ({ destination }: { people: string[]; destination: string }) => {
       return `Go to ${destination}`;

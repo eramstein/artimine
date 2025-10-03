@@ -1,0 +1,30 @@
+{
+  "id": "natures_reconquest",
+  "name": "Nature's Reconquest",
+  "rarity": "rare",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 4,
+  "colors": [
+    {
+      "color": "green",
+      "count": 2
+    },
+    {
+      "color": "blue",
+      "count": 2
+    }
+  ],
+  "actions": [
+    {
+      "effect": {
+        "name": "destroyUnit",
+        "args": {
+          "range": {
+            "unitType": "building"
+          }
+        }
+      }
+    }
+  ]
+}

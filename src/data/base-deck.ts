@@ -13,11 +13,7 @@ export const TEST_DECK: Deck = {
   name: 'Test',
   cards: [
     {
-      cardTemplateId: 'young_hobbit',
-      count: 20,
-    },
-    {
-      cardTemplateId: 'lion',
+      cardTemplateId: 'busy_forge',
       count: 20,
     },
     {
@@ -38,11 +34,11 @@ export const TEST_DECK_2: Deck = {
   name: 'Test 2',
   cards: [
     {
-      cardTemplateId: 'fireball',
+      cardTemplateId: 'natures_reconquest',
       count: 20,
     },
   ],
-  lands: ['plains', 'plains', 'mountain', 'plains'],
+  lands: ['island', 'plains', 'forest', 'plains'],
   record: {
     wins: 0,
     losses: 0,

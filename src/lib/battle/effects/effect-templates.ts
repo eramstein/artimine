@@ -223,9 +223,11 @@ export const DataEffectTemplates: Record<
       const effectiveMaxHealth = dynamicValue
         ? DynamicValues[dynamicValue]({ unit, player }) * (maxHealth ?? 0)
         : maxHealth;
+      console.log('fromTriggerParam', fromTriggerParam);
       const unitsInRange = fromTriggerParam
         ? getUnitFromTriggerParam(triggerParams, fromTriggerParam)
         : getUnitsInRange(targets as UnitDeployed[][], range, sourcePermanent, player);
+      console.log('unitsInRange', unitsInRange);
       unitsInRange.forEach((u) => {
         if (effectivePower) {
           u.power += effectivePower;

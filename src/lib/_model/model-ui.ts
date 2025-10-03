@@ -52,6 +52,13 @@ export type UiState = {
     body: string;
     onConfirm?: () => void;
     onCancel?: () => void;
+    custom?: {
+      component: any;
+      props?: Record<string, any>;
+      width?: number;
+      height?: number;
+      overlayOpacity?: number; // 0..1, default 0.7
+    } | null;
   };
   cardFullOverlay: {
     visible: boolean;

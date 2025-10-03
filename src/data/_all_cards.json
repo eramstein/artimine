@@ -1183,6 +1183,52 @@
     "cardSet": "alpha"
   },
   {
+    "id": "busy_forge",
+    "name": "Busy Forge",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 2,
+    "power": 0,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "red",
+        "count": 1
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": [
+      "building"
+    ],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "After Moving",
+          "range": {
+            "allies": true,
+            "adjacent": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "staticStats",
+              "args": {
+                "power": 1,
+                "maxHealth": 1,
+                "fromTriggerParam": "mover"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "caring_druidess",
     "name": "Caring Druidess",
     "rarity": "rare",
@@ -5094,6 +5140,36 @@
       }
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "natures_reconquest",
+    "name": "Nature's Reconquest",
+    "rarity": "rare",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 4,
+    "colors": [
+      {
+        "color": "green",
+        "count": 2
+      },
+      {
+        "color": "blue",
+        "count": 2
+      }
+    ],
+    "actions": [
+      {
+        "effect": {
+          "name": "destroyUnit",
+          "args": {
+            "range": {
+              "unitType": "building"
+            }
+          }
+        }
+      }
+    ]
   },
   {
     "id": "necessary_sacrifice",

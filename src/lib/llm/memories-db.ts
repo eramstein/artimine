@@ -26,6 +26,7 @@ export async function saveActivityLog(log: GroupActivityLog): Promise<number> {
       summary: String(log.summary),
       embedding,
     };
+    console.log('serializableLog', serializableLog);
     return await chats.put(serializableLog);
   } catch (error) {
     console.error('Error saving chat:', error);

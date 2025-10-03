@@ -23,7 +23,6 @@ export const scheduleActivityAction: ActionTypeDefinition = {
     day: string;
     time: DayPeriod;
   }) => {
-    console.log('ScheduleActivity', { people, destination, activityType, day, time });
     const participants = getKeysFromNames(people);
     const activityTypeEnum = ActivityType[activityType as keyof typeof ActivityType];
     const dayPeriod = time ?? defaultTime;
@@ -42,7 +41,7 @@ export const scheduleActivityAction: ActionTypeDefinition = {
     );
   },
   checkSuccess: ({ people, destination, activityType, day, time }) =>
-    rollCheckSuccess(people, activityType, destination, day, time),
+    rollActivityProposalSuccess(people, activityType, destination, day, time),
   description: 'Schedule an activity together',
   getLabel: ({
     destination,
@@ -68,7 +67,7 @@ const baseDifficulty = {
   [ActivityType.Gaming]: 5,
 };
 
-function rollCheckSuccess(
+export function rollActivityProposalSuccess(
   people: string[],
   activityType: string,
   destination: string,

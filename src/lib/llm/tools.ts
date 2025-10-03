@@ -63,6 +63,40 @@ const goTo: () => Tool = () => {
   };
 };
 
+const improveRelationship: () => Tool = () => {
+  return {
+    type: 'function',
+    function: {
+      name: ActionType.ImproveRelationship,
+      description: ACTIONS[ActionType.ImproveRelationship].description,
+      parameters: {
+        type: 'object',
+        required: ['people', 'relationType', 'difficulty'],
+        properties: {
+          relationType: {
+            type: 'string',
+            description: 'The type of relationship to improve',
+            enum: ['friendship', 'love', 'respect'],
+          },
+          people: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+            description: 'The people to improve the relationship with',
+            enum: gs.chat?.characters.map((c) => c.name),
+          },
+          difficulty: {
+            type: 'string',
+            description: 'How likely the people are to improve the relationship',
+            enum: Object.values(Difficulty),
+          },
+        },
+      },
+    },
+  };
+};
+
 const scheduleActivity: () => Tool = () => {
   return {
     type: 'function',
@@ -152,5 +186,7 @@ const startTrade: () => Tool = () => {
 };
 
 export function getTools(): Tool[] {
-  return [goTo, startGame, startTrade, scheduleActivity, generalChallenge].map((f) => f());
+  return [goTo, startGame, startTrade, scheduleActivity, generalChallenge, improveRelationship].map(
+    (f) => f()
+  );
 }

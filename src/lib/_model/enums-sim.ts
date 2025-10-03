@@ -41,6 +41,7 @@ export enum ActionType {
   StartGame = 'startGame',
   StartTrade = 'startTrade',
   ScheduleActivity = 'scheduleActivity',
+  ImproveRelationship = 'improveRelationship',
 }
 
 export enum Difficulty {

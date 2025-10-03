@@ -39,6 +39,7 @@ export const uiState: UiState = $state({
     body: '',
     onConfirm: undefined,
     onCancel: undefined,
+    custom: null,
   },
   cardFullOverlay: {
     visible: false,

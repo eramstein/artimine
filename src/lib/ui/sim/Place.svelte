@@ -7,6 +7,7 @@
   import { initDeckSelection } from '@/lib/sim/ongoing-battle';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
+  import SocialAction from './SocialAction.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -44,6 +45,7 @@
 
     // Calculate menu position relative to the clicked portrait
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    lastPortraitRect = rect;
     menuPosition = {
       x: rect.left + rect.width / 2,
       y: rect.top - 200, // Position on top of the portrait
@@ -51,6 +53,10 @@
   }
 
   // Handle menu option click
+  // Social Action modal state
+  let socialActionVisible = $state(false);
+  let lastPortraitRect = $state<DOMRect | null>(null);
+
   async function handleMenuOption(option: string) {
     if (selectedCharacters.length > 0) {
       if (option === 'play game' && selectedCharacters.length === 1) {
@@ -60,6 +66,9 @@
       } else if (option === 'chat') {
         await initPlayerChat(selectedCharacters);
         uiState.currentView = UiView.Chat;
+      } else if (option === 'social' && selectedCharacters.length === 1) {
+        await initPlayerChat(selectedCharacters);
+        socialActionVisible = true;
       } else if (option === 'overview' && selectedCharacters.length === 1) {
         uiState.selectedCharacterKey = selectedCharacters[0].key;
         uiState.currentView = UiView.Characters;
@@ -123,6 +132,9 @@
           </button>
           <button class="menu-option" onclick={() => handleMenuOption('trade')}> Trade </button>
           <button class="menu-option" onclick={() => handleMenuOption('overview')}> View </button>
+          <button class="menu-option" onclick={() => handleMenuOption('social')}>
+            Social Action
+          </button>
         {/if}
         <button class="menu-option" onclick={() => handleMenuOption('chat')}> Chat </button>
       </div>
@@ -131,6 +143,15 @@
 
   <!-- Shop Modal -->
   <ShopModal />
+
+  {#if socialActionVisible}
+    <div class="modal-overlay" onclick={() => (socialActionVisible = false)}></div>
+    <div class="social-modal">
+      <div class="modal-body">
+        <SocialAction />
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -338,5 +359,28 @@
 
   .menu-option:active {
     transform: translateX(2px) scale(0.98);
+  }
+
+  /* Social Action Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+  }
+
+  .social-modal {
+    position: fixed;
+    width: 1200px;
+    left: 200px;
+    top: 100px;
+    z-index: 1300;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .modal-body {
+    flex: 1 1 auto;
+    padding: 12px;
   }
 </style>

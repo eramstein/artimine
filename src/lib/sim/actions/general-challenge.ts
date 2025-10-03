@@ -18,8 +18,16 @@ const difficultyNumbers = {
 export const generalChallengeAction: ActionTypeDefinition = {
   checkSuccess: rollCheckSuccess,
   description: 'A character tries to achieve an action that requires an attribute check',
-  getLabel: ({ challengeDescription }: { challengeDescription: string }) => {
-    return `Challenge Check: ${challengeDescription}`;
+  getLabel: ({
+    challengeDescription,
+    attribute,
+    difficulty,
+  }: {
+    challengeDescription: string;
+    attribute: string;
+    difficulty: Difficulty;
+  }) => {
+    return `Challenge Check: ${challengeDescription} ${attribute} ${difficulty}`;
   },
 };
 
