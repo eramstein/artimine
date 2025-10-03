@@ -1,10 +1,7 @@
 <script lang="ts">
-  import { UiView, type Npc, type Place } from '@/lib/_model';
+  import { type Npc, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
-  import { initTrade } from '@/lib/_state/state-ui.svelte';
-  import { initPlayerChat } from '@/lib/llm/chat';
-  import { initDeckSelection } from '@/lib/sim/ongoing-battle';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
   import SocialAction from './SocialAction.svelte';
@@ -45,41 +42,15 @@
 
     // Calculate menu position relative to the clicked portrait
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    lastPortraitRect = rect;
     menuPosition = {
       x: rect.left + rect.width / 2,
       y: rect.top - 200, // Position on top of the portrait
     };
   }
 
-  // Handle menu option click
-  // Social Action modal state
-  let socialActionVisible = $state(false);
-  let lastPortraitRect = $state<DOMRect | null>(null);
-
-  async function handleMenuOption(option: string) {
-    if (selectedCharacters.length > 0) {
-      if (option === 'play game' && selectedCharacters.length === 1) {
-        await initDeckSelection(selectedCharacters[0]);
-      } else if (option === 'trade' && selectedCharacters.length === 1) {
-        await initTrade(selectedCharacters[0]);
-      } else if (option === 'chat') {
-        await initPlayerChat(selectedCharacters);
-        uiState.currentView = UiView.Chat;
-      } else if (option === 'social' && selectedCharacters.length === 1) {
-        await initPlayerChat(selectedCharacters);
-        socialActionVisible = true;
-      } else if (option === 'overview' && selectedCharacters.length === 1) {
-        uiState.selectedCharacterKey = selectedCharacters[0].key;
-        uiState.currentView = UiView.Characters;
-      }
-    }
-    selectedCharacters = [];
-  }
-
   // Close menu when clicking outside
   function handleBackgroundClick() {
-    selectedCharacters = [];
+    showMenu = false;
   }
 
   // Handle shop button click
@@ -113,42 +84,13 @@
     {/each}
   </div>
 
-  <!-- Character Menu -->
-  {#if showMenu && selectedCharacters.length > 0}
-    <div class="character-menu" style="left: {menuPosition.x}px; top: {menuPosition.y}px;">
-      <div class="menu-header">
-        <span class="character-name">
-          {#if selectedCharacters.length === 1}
-            {selectedCharacters[0].name}
-          {:else}
-            {selectedCharacters.length} characters selected
-          {/if}
-        </span>
-      </div>
-      <div class="menu-options">
-        {#if selectedCharacters.length === 1}
-          <button class="menu-option" onclick={() => handleMenuOption('play game')}>
-            Play Game
-          </button>
-          <button class="menu-option" onclick={() => handleMenuOption('trade')}> Trade </button>
-          <button class="menu-option" onclick={() => handleMenuOption('overview')}> View </button>
-          <button class="menu-option" onclick={() => handleMenuOption('social')}>
-            Social Action
-          </button>
-        {/if}
-        <button class="menu-option" onclick={() => handleMenuOption('chat')}> Chat </button>
-      </div>
-    </div>
-  {/if}
-
   <!-- Shop Modal -->
   <ShopModal />
 
-  {#if socialActionVisible}
-    <div class="modal-overlay" onclick={() => (socialActionVisible = false)}></div>
-    <div class="social-modal">
+  {#if showMenu}
+    <div class="social-modal" style={`left: 50%; top: ${menuPosition.y}px;`}>
       <div class="modal-body">
-        <SocialAction />
+        <SocialAction characters={selectedCharacters} />
       </div>
     </div>
   {/if}
@@ -287,92 +229,11 @@
     }
   }
 
-  /* Character Menu Styles */
-  .character-menu {
-    position: fixed;
-    z-index: 1000;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-      0 12px 32px rgba(0, 0, 0, 0.8),
-      0 6px 16px rgba(0, 0, 0, 0.6);
-    min-width: 200px;
-    overflow: hidden;
-    animation: menuAppear 0.2s ease-out;
-  }
-
-  @keyframes menuAppear {
-    from {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-10px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0) scale(1);
-    }
-  }
-
-  .menu-header {
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .character-name {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 14px;
-    text-align: center;
-    display: block;
-  }
-
-  .menu-options {
-    padding: 8px;
-  }
-
-  .menu-option {
-    width: 100%;
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: left;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-bottom: 4px;
-  }
-
-  .menu-option:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
-  }
-
-  .menu-option:last-child {
-    margin-bottom: 0;
-  }
-
-  .menu-option:active {
-    transform: translateX(2px) scale(0.98);
-  }
-
   /* Social Action Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1200;
-  }
-
   .social-modal {
     position: fixed;
     width: 1200px;
-    left: 200px;
-    top: 100px;
+    transform: translateX(-50%);
     z-index: 1300;
     display: flex;
     flex-direction: column;

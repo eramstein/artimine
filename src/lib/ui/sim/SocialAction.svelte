@@ -1,14 +1,23 @@
 <script lang="ts">
-  import { ActionType } from '@/lib/_model';
+  import { ActionType, UiView } from '@/lib/_model';
   import type { ActionAttempt, Npc } from '../../_model/model-game';
   import { gs } from '../../_state/main.svelte';
   import { initTrade, uiState } from '../../_state/state-ui.svelte';
   import { getActionsFromText } from '../../llm/action';
+  import { initPlayerChat } from '../../llm/chat';
   import { writeSceneDescription } from '../../llm/one-shot';
   import { rewriteMessageAfterFail } from '../../llm/re-write';
   import { attemptAction } from '../../sim/actions';
   import { ACTIONS } from '../../sim/actions-map';
   import { initDeckSelection } from '../../sim/ongoing-battle';
+
+  let {
+    characters,
+  }: {
+    characters: Npc[];
+  } = $props<{
+    characters: Npc[];
+  }>();
 
   let inputValue = $state('');
   let submitted = $state(false);
@@ -20,19 +29,23 @@
   let messagesRef = $state<HTMLDivElement>();
 
   const quickActions = {
-    'Play Game': () => initDeckSelection(gs.chat?.characters[0] as Npc),
-    Trade: () => initTrade(gs.chat?.characters[0] as Npc),
+    'Play Game': () => initDeckSelection(characters[0] as Npc),
+    Trade: () => initTrade(characters[0] as Npc),
     Invite: () => {
-      inputValue = `${gs.player.name} invites ${gs.chat?.characters.map((c) => c.name).join(', ')} to play a game at his place`;
+      inputValue = `${gs.player.name} invites ${characters.map((c) => c.name).join(', ')} to play a game at his place`;
       inputRef?.focus();
     },
     Charm: () => {
-      inputValue = `${gs.player.name} tries his best to charm ${gs.chat?.characters.map((c) => c.name).join(', ')}`;
+      inputValue = `${gs.player.name} tries his best to charm ${characters.map((c) => c.name).join(', ')}`;
       inputRef?.focus();
     },
     Befriend: () => {
-      inputValue = `${gs.player.name} tries his best to befriend ${gs.chat?.characters.map((c) => c.name).join(', ')}`;
+      inputValue = `${gs.player.name} tries his best to befriend ${characters.map((c) => c.name).join(', ')}`;
       inputRef?.focus();
+    },
+    Chat: async () => {
+      await initPlayerChat(characters);
+      uiState.currentView = UiView.Chat;
     },
   };
 
@@ -60,6 +73,7 @@
     if (submitted) return;
     const message = inputValue.trim();
     if (!message || uiState.chat.isStreaming) return;
+    initPlayerChat(characters);
     submitted = true;
     messageText = message;
     try {
@@ -193,6 +207,7 @@
         <button class="action-button" onclick={() => quickActions.Invite()}>Invite</button>
         <button class="action-button" onclick={() => quickActions.Charm()}>Charm</button>
         <button class="action-button" onclick={() => quickActions.Befriend()}>Befriend</button>
+        <button class="action-button" onclick={() => quickActions.Chat()}>Chat</button>
       </div>
     </div>
   {/if}
