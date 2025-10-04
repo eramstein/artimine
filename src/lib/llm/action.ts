@@ -23,7 +23,6 @@ async function getToolsFromText(message: string) {
       temperature: 0.1, // Lower temperature for more deterministic responses
     },
   });
-  console.log('getToolsFromText tools response', response);
   return response;
 }
 

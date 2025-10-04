@@ -1,6 +1,7 @@
 import { gs } from '../_state/main.svelte';
-import { uiState } from '../_state/state-ui.svelte';
+import { hideToast, showToast, uiState } from '../_state/state-ui.svelte';
 import { generateUniqueId } from '../_utils/random';
+import { generateSummary } from './chat';
 import { getGroupDescription } from './chat-helpers';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
@@ -35,6 +36,7 @@ export async function writeSceneDescription(message: string): Promise<string> {
     You are a dungeon master for a collaborative narrative RPG.
     You are given a description of what the player's character attempted to do, as well as the outcome.
     Write a description of what happened in the scene, including details about how the player's character behaved, and the present NPCs dialogues and actions.
+    Keep it around 2 or 3 short paragraphs.
 
     ### Player Character
       - **${gs.player.name}** ${gs.player.bio}
@@ -103,6 +105,12 @@ export async function writeSceneDescription(message: string): Promise<string> {
     content: transcript,
   });
 
+  return transcript;
+}
+
+export async function saveSceneSummary(transcript: string) {
+  showToast('Generating summary...', 'info');
+  const summary = await generateSummary(transcript);
   // save memory in DB
   await saveActivityLog({
     id: generateUniqueId(),
@@ -110,10 +118,9 @@ export async function writeSceneDescription(message: string): Promise<string> {
     participants: gs.chat!.characters.map((c) => String(c.key)),
     location: gs.places[gs.player.place].name,
     activityType: gs.activity.activityType,
-    summary: transcript,
+    summary: summary,
     embedding: [],
   });
   gs.chat = null;
-
-  return transcript;
+  hideToast();
 }

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { type Npc, type Place } from '@/lib/_model';
+  import { UiView, type Npc, type Place } from '@/lib/_model';
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
+  import { initPlayerChat } from '@/lib/llm/chat';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
   import SocialAction from './SocialAction.svelte';
@@ -29,6 +30,12 @@
   // Handle character portrait click
   function handleCharacterClick(event: MouseEvent, character: Npc) {
     event.stopPropagation();
+
+    if (character.chatInitiation) {
+      initPlayerChat([character]);
+      uiState.currentView = UiView.Chat;
+      return;
+    }
 
     // Toggle character selection
     const isSelected = selectedCharacters.some((c) => c.key === character.key);

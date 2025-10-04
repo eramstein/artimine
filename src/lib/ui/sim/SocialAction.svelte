@@ -5,7 +5,7 @@
   import { initTrade, uiState } from '../../_state/state-ui.svelte';
   import { getActionsFromText } from '../../llm/action';
   import { initPlayerChat } from '../../llm/chat';
-  import { writeSceneDescription } from '../../llm/one-shot';
+  import { saveSceneSummary, writeSceneDescription } from '../../llm/one-shot';
   import { rewriteMessageAfterFail } from '../../llm/re-write';
   import { attemptAction } from '../../sim/actions';
   import { ACTIONS } from '../../sim/actions-map';
@@ -123,6 +123,7 @@
       actionDef.onFailure(action.args, outcome.isCritical);
     }
     responseText = transcript || '';
+    saveSceneSummary(transcript);
   }
 
   function handleKeydown(event: KeyboardEvent) {

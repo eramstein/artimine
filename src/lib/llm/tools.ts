@@ -88,7 +88,7 @@ const improveRelationship: () => Tool = () => {
           },
           difficulty: {
             type: 'string',
-            description: 'How likely the people are to improve the relationship',
+            description: 'How difficult it is to improve the relationship with that approach',
             enum: Object.values(Difficulty),
           },
         },

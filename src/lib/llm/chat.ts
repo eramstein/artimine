@@ -2,14 +2,14 @@ import type { Npc } from '../_model';
 import { gs } from '../_state';
 import { hideToast, showToast, uiState } from '../_state/state-ui.svelte';
 import { generateUniqueId } from '../_utils/random';
-import { getCharismaRoll } from './charisma';
+import { getCharismaRoll, getCharismaRollPrompt } from './charisma';
 import { getGroupDescription } from './chat-helpers';
 import { playerChatSystemPrompt, summarySystemPrompt } from './chat-system-prompts';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
 import { saveActivityLog } from './memories-db';
 
-async function generateSummary(transcript: string): Promise<string> {
+export async function generateSummary(transcript: string): Promise<string> {
   const systemPrompt = {
     role: 'system',
     content: summarySystemPrompt,
@@ -44,6 +44,10 @@ export async function playerSendChat(message: string): Promise<string> {
   const locationDescription = place.name + ', ' + place.description || '';
   const charactersDescription = getGroupDescription(gs.chat.characters);
   const currentSummary = gs.chat.summary ? gs.chat.summary : '';
+  const charsimaEffect =
+    gs.chat.characters.length === 1
+      ? getCharismaRollPrompt(gs.chat.characters[0].period.charismaRoll)
+      : ''; // it is already in charactersDescription but we repeat it if only 1 character
 
   // get last memory involving at least one of these characters
   const relevantMemories = await getSystemPromptMemories(
@@ -79,6 +83,8 @@ export async function playerSendChat(message: string): Promise<string> {
     ${memoriesPrompt ? `### Relevant Memories\n${memoriesPrompt}` : ''}
 
     ${actionOutcomes ? `### Action Outcomes\n${actionOutcomes}` : ''}
+    
+    ${charsimaEffect ? `### How the scene plays out\n${charsimaEffect}` : ''}
     `,
   };
   console.log('systemPrompt', systemPrompt.content);
