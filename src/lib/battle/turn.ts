@@ -1,5 +1,5 @@
 import type { Player, UnitDeployed } from '../_model';
-import { bs } from '../_state';
+import { bs, saveStateToLocalStorage } from '../_state';
 import { clearSelections } from '../ui/_helpers/selections';
 import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
@@ -21,8 +21,9 @@ export function nextTurn() {
   if (!bs.isPlayersTurn) {
     soundManager.playSound('button');
     playAiTurn();
+  } else {
+    saveStateToLocalStorage();
   }
-  //saveStateToLocalStorage();
 }
 
 function initPlayerTurn(player: Player) {

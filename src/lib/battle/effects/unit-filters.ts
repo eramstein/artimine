@@ -97,6 +97,7 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
 
 export function getRangeLabel(filterArgs: UnitFilterArgs) {
   let labels = [];
+  console.log('filterArgs', filterArgs);
   if (filterArgs.all) {
     labels.push('all units');
   }
@@ -119,7 +120,10 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
     labels.push('in front of');
   }
   if (filterArgs.unitType) {
-    labels.push(filterArgs.unitType);
+    labels.push('with ' + filterArgs.unitType);
+  }
+  if (filterArgs.hasKeyword) {
+    labels.push(filterArgs.hasKeyword);
   }
   if (filterArgs.excludeSelf) {
     labels.push('(others)');

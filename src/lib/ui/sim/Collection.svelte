@@ -20,6 +20,7 @@
     cardType: undefined as string | undefined,
     colorCombination: undefined as string | undefined,
     manaCost: undefined as string | undefined,
+    textSearch: undefined as string | undefined,
   });
 
   // View toggle state
@@ -125,6 +126,17 @@
       });
     }
 
+    if (filters.textSearch) {
+      const query = filters.textSearch.toLowerCase().trim();
+      filtered = filtered.filter((entry) => {
+        const template = templates.get(entry.cardTemplateId);
+        if (!template) return false;
+        // Search in card name, type, and other text properties
+        const searchableText = JSON.stringify(template).toLowerCase();
+        return searchableText.includes(query);
+      });
+    }
+
     // Sort by mana cost ascending
     filtered = filtered.sort((a, b) => {
       const templateA = templates.get(a.cardTemplateId);
@@ -196,6 +208,7 @@
     cardType: string | undefined;
     colorCombination: string | undefined;
     manaCost: string | undefined;
+    textSearch: string | undefined;
   }) {
     filters = newFilters;
   }

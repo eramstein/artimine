@@ -128,10 +128,14 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
     counterAttackValue = getCounterAttackValue(unit, bestAttack.target as UnitDeployed);
   }
   const attackValue = bestAttackValue - counterAttackValue;
-
   const bestMove = getHighestMoveValue(unit);
+
   const counterattackAfterBestMove = getCounterAttackValue({ ...unit, position: bestMove.cell });
-  if (!canAlsoMove || attackValue >= -counterattackAfterBestMove) {
+  if (
+    !canAlsoMove ||
+    bestMove.value === -Infinity ||
+    (attackValue >= -counterattackAfterBestMove && bestMove.value !== Infinity)
+  ) {
     if (isAttackTargetUnit(bestAttack.target as UnitDeployed)) {
       attackUnit(unit, bestAttack.target as UnitDeployed);
     } else if (isAttackTargetLand(bestAttack.target as Land)) {

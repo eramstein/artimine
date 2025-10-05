@@ -368,10 +368,12 @@ export const DataEffectTemplates: Record<
         if (randomPositions) {
           const cells = getRandomEmptyAlliedCells(player.isPlayer, randomPositions);
           cells.forEach((cell) => {
+            createdUnit.instanceId = crypto.randomUUID();
             summonUnit(createdUnit, cell);
           });
         } else {
           (targets[0] as Position[]).forEach((cell: Position) => {
+            createdUnit.instanceId = crypto.randomUUID();
             summonUnit(createdUnit, cell);
           });
         }

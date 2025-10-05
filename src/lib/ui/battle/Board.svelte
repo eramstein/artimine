@@ -21,7 +21,6 @@
   // Create arrays for rows and columns based on config
   const rows = Array.from({ length: config.boardRows }, (_, i) => i);
   const columns = Array.from({ length: config.boardColumns }, (_, i) => i);
-
   // Calculate the middle column index for the gap
   const middleColumnIndex = Math.floor(config.boardColumns / 2) - 1;
 

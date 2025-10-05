@@ -16,7 +16,9 @@ export function valueUnit(unit: UnitDeployed) {
 }
 
 export function wouldBeDestroyed(unit: UnitDeployed, attacker: UnitDeployed) {
-  return attacker.power >= unit.health + (unit.keywords?.armor || 0);
+  return (
+    attacker.power + (attacker.counters?.rage || 0) >= unit.health + (unit.keywords?.armor || 0)
+  );
 }
 
 export function wouldBeDestroyedBySpell(unit: UnitDeployed, spell: SpellCard) {
@@ -41,7 +43,7 @@ export function wouldBeDestroyedByCounterAttack(
 ) {
   let damage = 0;
   counterAttackers.forEach((attacker) => {
-    damage += attacker.power - (unit.keywords?.armor || 0);
+    damage += attacker.power + (attacker.counters?.rage || 0) - (unit.keywords?.armor || 0);
   });
   return damage >= unit.health;
 }

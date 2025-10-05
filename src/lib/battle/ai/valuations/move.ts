@@ -1,4 +1,5 @@
 import type { Position, UnitDeployed } from '@/lib/_model';
+import { getRandomFromArray } from '@/lib/_utils/random';
 import { getEmptyCells } from '../../boards';
 import { getDangerLevelPerRow, getOpponentCountPerRow, getOpponentUnitDamagePerRow } from '../rows';
 import { landDestructionValue } from './config';
@@ -15,9 +16,13 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   const moveValues = cells.map((cell) =>
     getMoveValue(unit, cell, dangerLevelPerRow, ennemyPowerPerRow, ennemyCountPerRow)
   );
+  const maxValue = Math.max(...moveValues);
+  const cellsToConsider = moveValues
+    .map((c, i) => ({ index: i, value: c }))
+    .filter((c) => c.value === maxValue);
   return {
-    value: Math.max(...moveValues),
-    cell: cells[moveValues.indexOf(Math.max(...moveValues))],
+    value: maxValue,
+    cell: cells[getRandomFromArray(cellsToConsider).index],
   };
 }
 
@@ -33,7 +38,13 @@ const getMoveValue = (
   const ennemyCount = ennemyCountPerRow[cell.row];
   const wouldBeDestroyed =
     (unit.health ?? unit.maxHealth) + (unit.keywords?.armor || 0) * ennemyCount <= ennemyPower;
-  // If in danger of losing, blocking is mandatory
+
+  // If the unit stands in front of lethal, don't move
+  if (unit.position && dangerLevelPerRow[unit.position.row] === Infinity) {
+    return -Infinity;
+  }
+
+  // If another row is lethal, blocking is mandatory
   if (dangerLevel === Infinity) {
     return Infinity;
   }
@@ -50,6 +61,5 @@ const getMoveValue = (
 
   // Else, neutral value
   // TODO: add value if protecting vulnerable valuable unit
-  // TODO: add value for retaliation
   return 0;
 };

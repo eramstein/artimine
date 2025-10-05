@@ -12,11 +12,13 @@
       cardType: string | undefined;
       colorCombination: string | undefined;
       manaCost: string | undefined;
+      textSearch: string | undefined;
     };
     onFiltersChange: (filters: {
       cardType: string | undefined;
       colorCombination: string | undefined;
       manaCost: string | undefined;
+      textSearch: string | undefined;
     }) => void;
   } = $props();
 
@@ -83,6 +85,11 @@
     }
   }
 
+  function handleTextSearchChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    onFiltersChange({ ...filters, textSearch: target.value || undefined });
+  }
+
   // Helper function to get color image path
   function getColorImagePath(color: CardColor): string {
     return getAssetPath(`images/color_${color}.png`);
@@ -90,6 +97,25 @@
 </script>
 
 <div class="filters-section">
+  <!-- Text Search Filter -->
+  <div class="filter-group text-search-group">
+    <div class="search-container">
+      <input
+        type="text"
+        placeholder="Search cards..."
+        value={filters.textSearch || ''}
+        oninput={handleTextSearchChange}
+        class="search-input"
+      />
+      {#if filters.textSearch}
+        <button
+          class="clear-search"
+          onclick={() => onFiltersChange({ ...filters, textSearch: undefined })}>×</button
+        >
+      {/if}
+    </div>
+  </div>
+
   <!-- Card Type Filter -->
   <div class="filter-group card-type-tabs">
     <div class="tab-container">
@@ -336,5 +362,63 @@
   .tab.active {
     background-color: #007bff;
     color: #fff;
+  }
+
+  /* Text Search Styles */
+  .text-search-group {
+    padding-right: 25px;
+    border-right: 1px solid #606060;
+  }
+
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-input {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #606060;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    width: 120px;
+    transition: all 0.2s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #3a3a3a;
+  }
+
+  .search-input::placeholder {
+    color: #888;
+  }
+
+  .clear-search {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .clear-search:hover {
+    background-color: #4a4a4a;
+    color: #e0e0e0;
   }
 </style>

@@ -8,7 +8,7 @@ function getPowerPerRow(opponent: boolean = true): Record<number, number> {
     : bs.units.filter((u) => u.ownerPlayerId !== 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
-      acc[u.position.row] = (acc[u.position.row] || 0) + u.power;
+      acc[u.position.row] = (acc[u.position.row] || 0) + u.power + (u.counters?.rage || 0);
       return acc;
     },
     {} as Record<number, number>
@@ -21,7 +21,7 @@ export function getOpponentUnitDamagePerRow(): Record<number, number> {
   const units = bs.units.filter((u) => u.ownerPlayerId === 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
-      const damage = u.power + (u.keywords?.poisonous || 0);
+      const damage = u.power + (u.counters?.rage || 0) + (u.keywords?.poisonous || 0);
       acc[u.position.row] = (acc[u.position.row] || 0) + damage;
       if (u.keywords?.cleave) {
         acc[u.position.row - 1] = (acc[u.position.row - 1] || 0) + damage;
@@ -67,8 +67,8 @@ export function getDangerLevelPerRow(): Record<number, number> {
     if (diff <= 0) {
       dangerLevels[row] = 0;
     } else {
-      const player = bs.players[0];
-      const landInRow = player.lands.find((l) => l.position === row);
+      const player = bs.players[1];
+      const landInRow = player.lands.find((l) => l.position === row && !l.isRuined);
       if (landInRow) {
         dangerLevels[row] =
           landInRow.health <= opponentPower ? landDestructionValue : landLifeValue;
