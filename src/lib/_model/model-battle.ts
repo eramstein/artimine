@@ -27,6 +27,7 @@ export interface Player {
   name: string;
   mana: number;
   maxMana: number;
+  gold: number;
   life: number;
   hand: Card[];
   deck: Card[];

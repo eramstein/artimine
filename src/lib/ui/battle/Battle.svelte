@@ -33,17 +33,6 @@
 </script>
 
 <div class="battle" style="background-image: url('{getTableImagePath()}');">
-  <div class="turn-section">
-    <button
-      class="end-turn-btn"
-      class:disabled={!bs.isPlayersTurn}
-      onclick={handleEndTurn}
-      disabled={!bs.isPlayersTurn}
-      aria-label="End Turn"
-    >
-      <img src="/assets/images/pass_turn.png" alt="End Turn" />
-    </button>
-  </div>
   <div class="top-section">
     <Player player={bs.players[0]} />
     <Board />
@@ -51,6 +40,17 @@
   </div>
   <div class="bottom-section">
     <Hand player={bs.players[0]} />
+    <div class="turn-section">
+      <button
+        class="end-turn-btn"
+        class:disabled={!bs.isPlayersTurn}
+        onclick={handleEndTurn}
+        disabled={!bs.isPlayersTurn}
+        aria-label="End Turn"
+      >
+        <img src="/assets/images/pass_turn.png" alt="End Turn" />
+      </button>
+    </div>
     {#if !uiState.battle.displayChat}
       <Hand player={bs.players[1]} />
     {/if}
@@ -132,6 +132,7 @@
     background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
+    overflow: hidden;
   }
 
   .top-section {
@@ -144,10 +145,10 @@
   }
 
   .turn-section {
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
   }
 
   .end-turn-btn {

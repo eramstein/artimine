@@ -12,6 +12,7 @@ import { damageUnit, healUnit } from './unit';
 export function nextTurn() {
   clearSelections();
   const previousPlayer = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
+  updateGold(previousPlayer);
   updateStatuses(previousPlayer);
   bs.turn++;
   bs.isPlayersTurn = !bs.isPlayersTurn;
@@ -32,6 +33,14 @@ function initPlayerTurn(player: Player) {
   player.abilityUsed = false;
   updateUnits(player);
   drawCard(player);
+}
+
+// ununsed mana is converted to gold
+function updateGold(player: Player) {
+  if (player.mana > 0) {
+    player.gold += player.mana;
+    player.mana = 0;
+  }
 }
 
 function updateStatuses(player: Player) {
