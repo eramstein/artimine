@@ -1,0 +1,14 @@
+{
+  "id": "wooden_barricade",
+  "name": "Wooden Barricade",
+  "rarity": "shop",
+  "cardSet": "alpha",
+  "type": "unit",
+  "cost": 0,
+  "power": 0,
+  "maxHealth": 3,
+  "colors": [],
+  "unitTypes": [
+    "building"
+  ]
+}

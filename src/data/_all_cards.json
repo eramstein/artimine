@@ -3850,6 +3850,25 @@
     "cardSet": "alpha"
   },
   {
+    "id": "heal",
+    "name": "Heal",
+    "rarity": "shop",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 0,
+    "colors": [],
+    "actions": [
+      {
+        "effect": {
+          "name": "damagePlayer",
+          "args": {
+            "damage": -10
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "healing_salve",
     "name": "Healing Salve",
     "rarity": "common",
@@ -5328,6 +5347,35 @@
     "cardSet": "alpha"
   },
   {
+    "id": "neutralize",
+    "name": "Neutralize",
+    "rarity": "shop",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 0,
+    "colors": [],
+    "actions": [
+      {
+        "effect": {
+          "name": "applyUnitStatus",
+          "args": {
+            "statusType": "daze",
+            "duration": 1,
+            "range": {
+              "ennemies": true
+            }
+          }
+        },
+        "targets": [
+          {
+            "type": "unit",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "northern_challenger",
     "name": "Northern Challenger",
     "rarity": "uncommon",
@@ -6077,6 +6125,31 @@
       }
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "rebuild",
+    "name": "Rebuild",
+    "rarity": "shop",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 0,
+    "colors": [],
+    "actions": [
+      {
+        "effect": {
+          "name": "fortifyLand",
+          "args": {
+            "amount": 10
+          }
+        },
+        "targets": [
+          {
+            "type": "land",
+            "count": 1
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "red_dragon",
@@ -7629,6 +7702,27 @@
     "cardSet": "alpha"
   },
   {
+    "id": "the_great_reset",
+    "name": "The Great Reset",
+    "rarity": "shop",
+    "cardSet": "alpha",
+    "type": "spell",
+    "cost": 0,
+    "colors": [],
+    "actions": [
+      {
+        "effect": {
+          "name": "destroyUnit",
+          "args": {
+            "range": {
+              "all": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
     "id": "tim",
     "name": "Tim",
     "type": "unit",
@@ -8463,6 +8557,20 @@
       "retaliate": 1
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "wooden_barricade",
+    "name": "Wooden Barricade",
+    "rarity": "shop",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 0,
+    "power": 0,
+    "maxHealth": 3,
+    "colors": [],
+    "unitTypes": [
+      "building"
+    ]
   },
   {
     "id": "young_hobbit",

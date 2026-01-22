@@ -1,0 +1,25 @@
+{
+  "id": "rebuild",
+  "name": "Rebuild",
+  "rarity": "shop",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 0,
+  "colors": [],
+  "actions": [
+    {
+      "effect": {
+        "name": "fortifyLand",
+        "args": {
+          "amount": 10
+        }
+      },
+      "targets": [
+        {
+          "type": "land",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

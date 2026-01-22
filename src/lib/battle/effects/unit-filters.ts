@@ -97,7 +97,6 @@ export function filterUnits(filterArgs: UnitFilterArgs): UnitDeployed[] {
 
 export function getRangeLabel(filterArgs: UnitFilterArgs) {
   let labels = [];
-  console.log('filterArgs', filterArgs);
   if (filterArgs.all) {
     labels.push('all units');
   }

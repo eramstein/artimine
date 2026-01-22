@@ -9,6 +9,7 @@ export enum CardRarity {
   Uncommon = 'uncommon',
   Rare = 'rare',
   Legendary = 'legendary',
+  Shop = 'shop',
 }
 
 export enum CardSet {

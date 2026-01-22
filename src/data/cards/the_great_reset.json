@@ -1,0 +1,21 @@
+{
+  "id": "the_great_reset",
+  "name": "The Great Reset",
+  "rarity": "shop",
+  "cardSet": "alpha",
+  "type": "spell",
+  "cost": 0,
+  "colors": [],
+  "actions": [
+    {
+      "effect": {
+        "name": "destroyUnit",
+        "args": {
+          "range": {
+            "all": true
+          }
+        }
+      }
+    }
+  ]
+}

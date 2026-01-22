@@ -90,9 +90,6 @@
       <div class="mana-display">
         <div class="mana-value">{player.mana}</div>
       </div>
-      <div class="gold-display">
-        <div class="gold-value">{player.gold}</div>
-      </div>
       <div
         class="life-display {lifeChangeType === 'inc' ? 'highlight-inc' : ''} {lifeChangeType ===
         'dec'
@@ -165,37 +162,17 @@
 
   .mana-display {
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
+    bottom: 5px;
+    right: 5px;
     background: url('/assets/images/mana-contour.png') center/contain no-repeat;
     padding: 0;
     border-radius: 50%;
     font-weight: bold;
     z-index: 3;
-    width: 3.6rem;
-    height: 3.6rem;
+    width: 3rem;
+    height: 3rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .gold-display {
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(50%, -50%);
-    background: url('/assets/images/gold-contour.png') center/contain no-repeat;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    padding: 0;
-    border-radius: 50%;
-    font-weight: bold;
-    z-index: 3;
-    width: 3.6rem;
-    height: 3.6rem;
-    display: flex;
     align-items: center;
     justify-content: center;
   }
@@ -224,8 +201,8 @@
 
   .life-display {
     position: absolute;
-    bottom: 0.5rem;
-    left: 0.5rem;
+    bottom: 5px;
+    left: 5px;
     background: url('/assets/images/health-icon.png') center/cover no-repeat;
     color: white;
     padding: 0.5rem;
@@ -238,7 +215,7 @@
   }
 
   .mana-value {
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #184a76;
     line-height: 1;
     font-weight: 900;
@@ -246,17 +223,7 @@
       0 1px 2px rgba(0, 0, 0, 0.35),
       0 0 1px rgba(255, 255, 255, 0.35);
     margin-bottom: 0.3rem;
-  }
-
-  .gold-value {
-    font-size: 2rem;
-    color: #5f4a0e;
-    line-height: 1;
-    font-weight: 900;
-    text-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.25),
-      0 0 1px rgba(255, 255, 255, 0.2);
-    margin-bottom: 0.3rem;
+    margin-right: 0.1rem;
   }
 
   .life-value {

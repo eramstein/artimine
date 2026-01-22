@@ -19,6 +19,7 @@ export interface BattleState {
   players: Player[];
   units: UnitDeployed[];
   aiState: AiState;
+  shop: Shop;
 }
 
 export interface Player {
@@ -35,6 +36,10 @@ export interface Player {
   lands: Land[];
   colors: Partial<Record<CardColor, number>>;
   abilityUsed: boolean;
+}
+
+export interface Shop {
+  cards: { cost: number; template: CardTemplate }[];
 }
 
 // CARD TEMPLATE INTERFACES (before the game started, the card itself)

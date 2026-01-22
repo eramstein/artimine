@@ -5,6 +5,7 @@ import { AiTurnStrategy, type BattleState, type Card, type Deck, type Land } fro
 import { bs, gs } from '../_state';
 import { drawCard, shuffleDeck } from './deck';
 import { initColorsFromLands } from './land';
+import { rollShopCards } from './shop';
 
 export const defaultBattleState: BattleState = {
   turn: 0,
@@ -16,6 +17,9 @@ export const defaultBattleState: BattleState = {
     strategy: AiTurnStrategy.Normal,
     goals: [],
     dismissedCards: {},
+  },
+  shop: {
+    cards: [],
   },
 };
 
@@ -65,6 +69,7 @@ export const initBattle = (
   initColorsFromLands(bs.players[0]);
   initColorsFromLands(bs.players[1]);
 
+  rollShopCards();
   console.log('initBattle - battle initialized successfully');
 };
 
