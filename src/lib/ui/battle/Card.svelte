@@ -69,9 +69,9 @@
       return;
     }
 
-    const colorRequirementMet = isPayableAfterColorIncrementation(card);
+    const colorRequirementMet = isPayableAfterColorIncrementation(card);    
     if (inHand && isSpellCard(card) && colorRequirementMet !== false) {
-      if (colorRequirementMet !== true) {
+      if (colorRequirementMet !== true) { // this is the case when incrementing a color makes it playable
         usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet as CardColor);
       }
       // Check if any effect in the spell has targets

@@ -19,16 +19,19 @@ export function rollShopCards() {
   bs.shop.cards = shopCards.map((c) => ({ cost: c.cost, template: cards[c.template] })) ;
 }
 
-export function buyShopCard(player: Player, card: { cost: number; template: CardTemplate }) {
+export function buyShopCard(player: Player, card: { cost: number; template: CardTemplate }): Card | undefined {
   if (player.gold >= card.cost) {
     player.gold -= card.cost;
-    player.hand.push({
+    const newCard = {
       ...card.template,
       ownerPlayerId: player.id,
       instanceId: crypto.randomUUID(),
-    } as Card);
+    } as Card;
+    player.hand.push(newCard);
     bs.shop.cards = bs.shop.cards.filter((c) => c.template !== card.template);
+    return newCard;
   } else {
     console.log('Not enough gold to buy card');
+    return undefined;
   }
 }

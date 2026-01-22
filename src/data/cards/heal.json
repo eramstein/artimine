@@ -11,7 +11,8 @@
       "effect": {
         "name": "damagePlayer",
         "args": {
-          "damage": -10
+          "damage": -10,
+          "opposingPlayer": false
         }
       }
     }

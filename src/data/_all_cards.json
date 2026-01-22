@@ -3862,7 +3862,8 @@
         "effect": {
           "name": "damagePlayer",
           "args": {
-            "damage": -10
+            "damage": -10,
+            "opposingPlayer": false
           }
         }
       }
@@ -8563,13 +8564,25 @@
     "name": "Wooden Barricade",
     "rarity": "shop",
     "cardSet": "alpha",
-    "type": "unit",
+    "type": "spell",
     "cost": 0,
-    "power": 0,
-    "maxHealth": 3,
     "colors": [],
-    "unitTypes": [
-      "building"
+    "actions": [
+      {
+        "effect": {
+          "name": "summon",
+          "args": {
+            "summonedUnit": "wall_of_brambles",
+            "isRespawn": false
+          }
+        },
+        "targets": [
+          {
+            "type": "cell_ally",
+            "count": 1
+          }
+        ]
+      }
     ]
   },
   {

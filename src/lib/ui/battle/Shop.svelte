@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { CardType } from '@/lib/_model';
   import { bs } from '@/lib/_state';
-  import type { Card } from '@lib/_model/model-battle';
+  import type { Card, SpellCard } from '@lib/_model/model-battle';
   import { uiState } from '@lib/_state/state-ui.svelte';
   import { getHumanPlayer } from '@lib/battle/player';
   import { buyShopCard } from '@lib/battle/shop';
+  import { activateSpell } from '../_helpers/targetting';
   import CardComponent from './Card.svelte';
 
   function handleClose() {
@@ -27,8 +29,12 @@
   );
 
   function handleCardClick(shopCard: { cost: number; template: any }) {
-    buyShopCard(player, shopCard);
-  }
+    const newCard = buyShopCard(player, shopCard);
+    if (newCard && newCard.type === CardType.Spell) {
+      uiState.modal.visible = false;
+      activateSpell(newCard as SpellCard);
+    }
+  } 
 </script>
 
 <div class="shop">
