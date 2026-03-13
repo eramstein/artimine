@@ -79,6 +79,9 @@ export const uiState: UiState = $state({
     message: '',
     type: 'info' as const,
   },
+  cardEditor: {
+    card: null,
+  },
 });
 
 export function addRollResult(result: {

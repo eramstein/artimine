@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Color, Card } from './types';
   import CardFull from '@lib/ui/cards/CardFull.svelte';
+  import { uiState } from '@lib/_state';
+  import { UiView } from '@lib/_model';
 
   let { filteredCards = [] }: { filteredCards?: Card[] } = $props();
 
@@ -124,6 +126,12 @@
     selectedCard = null;
   }
 
+  function handleEdit(e: MouseEvent, card: Card) {
+    e.stopPropagation();
+    uiState.cardEditor.card = card as any;
+    uiState.currentView = UiView.CardBuilder;
+  }
+
   function formatColors(colors: Color[]): string {
     return colors.map((c) => `${c.color}(${c.count})`).join(', ');
   }
@@ -204,6 +212,7 @@
           <th class="sortable" onclick={() => handleSort('keywords')}>
             {getSortIcon('keywords')} Keywords
           </th>
+          <th class="actions-header">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -230,6 +239,9 @@
             <td class="card-rarity">{card.rarity}</td>
             <td class="card-unit-types">{formatUnitTypes(card.unitTypes)}</td>
             <td class="card-keywords">{formatKeywords(card.keywords)}</td>
+            <td class="card-actions">
+              <button class="edit-btn" onclick={(e) => handleEdit(e, card)}>Edit</button>
+            </td>
           </tr>
         {/each}
       </tbody>
@@ -445,6 +457,33 @@
 
   .close-button:hover {
     color: #333;
+  }
+
+  .actions-header {
+    text-align: center;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .edit-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .edit-btn:hover {
+    background: #0056b3;
   }
 
   /* Responsive design */

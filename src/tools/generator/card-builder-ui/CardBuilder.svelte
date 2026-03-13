@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, tick } from 'svelte';
   /*
     Giant vibecoded form to help create cards, not meant to be used by other people.
   */
@@ -28,6 +29,8 @@
   import type { UnitFilterArgs } from '../../../lib/battle/effects';
   import { baseStatsCost, getActionsBudget, getBudgetForSpell, getBudgetForUnit } from '../budgets';
   import { costPerKeywordForUnit } from '../keywords';
+  import { uiState, showToast } from '../../../lib/_state';
+  import { UiView } from '../../../lib/_model';
   // Import components
   import Abilities from './Abilities.svelte';
   import Actions from './Actions.svelte';
@@ -108,6 +111,54 @@
     cleave: false,
     lance: false,
     flying: false,
+  });
+
+  onMount(async () => {
+    if (uiState.cardEditor.card) {
+      const card = uiState.cardEditor.card;
+
+      state.name = card.name || '';
+      state.rarity = card.rarity || CardRarity.Common;
+      state.type = card.type || CardType.Unit;
+      state.cost = card.cost || 0;
+      state.colors = card.colors ? [...card.colors] : [{ color: CardColor.Red, count: 1 }];
+
+      if (card.type === CardType.Unit) {
+        state.power = (card as UnitCardTemplate).power || 0;
+        state.maxHealth = (card as UnitCardTemplate).maxHealth || 0;
+        state.unitTypes = (card as UnitCardTemplate).unitTypes
+          ? [...(card as UnitCardTemplate).unitTypes!]
+          : [];
+        state.abilities = (card as UnitCardTemplate).abilities
+          ? [...(card as UnitCardTemplate).abilities!]
+          : [];
+
+        const keywords = (card as UnitCardTemplate).keywords || {};
+        state_keywords.ranged = !!keywords.ranged;
+        state_keywords.haste = !!keywords.haste;
+        state_keywords.moveAndAttack = !!keywords.moveAndAttack;
+        state_keywords.trample = !!keywords.trample;
+        state_keywords.zerk = !!keywords.zerk;
+        state_keywords.cleave = !!keywords.cleave;
+        state_keywords.lance = !!keywords.lance;
+        state_keywords.flying = !!keywords.flying;
+        state_keywords.retaliate = keywords.retaliate || 0;
+        state_keywords.armor = keywords.armor || 0;
+        state_keywords.resist = keywords.resist || 0;
+        state_keywords.poisonous = keywords.poisonous || 0;
+        state_keywords.regeneration = keywords.regeneration || 0;
+      } else if (card.type === CardType.Spell) {
+        state.actions = (card as SpellCardTemplate).actions
+          ? [...(card as SpellCardTemplate).actions]
+          : [];
+      } else if (card.type === CardType.Land) {
+        state.maxHealth = (card as LandTemplate).health || 0;
+        state.retaliate = (card as LandTemplate).retaliate || 0;
+        state.abilities = (card as LandTemplate).abilities
+          ? [...(card as LandTemplate).abilities!]
+          : [];
+      }
+    }
   });
 
   // Action editing state
@@ -500,7 +551,7 @@
   // Download JSON function
   function downloadJSON() {
     if (!derivedId.trim()) {
-      alert('Please enter a Card Name first!');
+      showToast('Please enter a Card Name first!', 'error');
       return;
     }
 
@@ -513,6 +564,35 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  async function saveToServer() {
+    if (!derivedId.trim()) {
+      showToast('Please enter a Card Name first!', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/save-card', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonOutput,
+      });
+
+      if (response.ok) {
+        showToast(`Card "${state.name}" saved successfully!`, 'success');
+        // Clear editor state to prevent re-loading same card if navigating back
+        uiState.cardEditor.card = null;
+      } else {
+        const errorData = await response.json();
+        showToast(`Failed to save card: ${errorData.error || response.statusText}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error saving card:', error);
+      showToast('Error saving card connectivity issue', 'error');
+    }
   }
 </script>
 
@@ -556,7 +636,7 @@
       {cancelEditAbility}
     />
 
-    <JsonOutput {jsonOutput} {downloadJSON} />
+    <JsonOutput {jsonOutput} {downloadJSON} {saveToServer} />
   </div>
 </div>
 

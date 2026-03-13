@@ -1,9 +1,0 @@
-{
-  "id": "city",
-  "name": "City",
-  "colors": [{ "color": "black", "count": 1 }],
-  "health": 10,
-  "cost": 0,
-  "type": "land",
-  "rarity": "common"
-}

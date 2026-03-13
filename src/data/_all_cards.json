@@ -5361,7 +5361,7 @@
           "name": "applyUnitStatus",
           "args": {
             "statusType": "daze",
-            "duration": 1,
+            "duration": 2,
             "range": {
               "ennemies": true
             }
@@ -7423,9 +7423,10 @@
     "id": "swift_drakkar",
     "name": "Swift Drakkar",
     "rarity": "common",
+    "cardSet": "alpha",
     "type": "unit",
     "cost": 3,
-    "power": 3,
+    "power": 2,
     "maxHealth": 2,
     "colors": [
       {
@@ -7443,8 +7444,7 @@
     "keywords": {
       "haste": true,
       "retaliate": 1
-    },
-    "cardSet": "alpha"
+    }
   },
   {
     "id": "taiga_rangers",

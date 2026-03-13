@@ -104,6 +104,9 @@ export type UiState = {
     message: string;
     type: 'info' | 'success' | 'warning' | 'error';
   };
+  cardEditor: {
+    card: CardTemplate | null;
+  };
 };
 
 export enum UiView {
