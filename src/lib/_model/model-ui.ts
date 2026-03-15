@@ -41,6 +41,14 @@ export type UiState = {
       visible: boolean;
       playerId: number | null;
     };
+    dragArrow: {
+      instanceId: string;
+      active: boolean;
+      startX: number;
+      startY: number;
+      currentX: number;
+      currentY: number;
+    } | null;
     displayChat: boolean;
   };
   collection: {

@@ -29,6 +29,7 @@ export const uiState: UiState = $state({
     },
     currentEffectIndex: 0,
     displayChat: false,
+    dragArrow: null,
   },
   collection: {
     editedDeckKey: null,

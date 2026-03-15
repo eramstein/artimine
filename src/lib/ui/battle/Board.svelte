@@ -13,7 +13,7 @@
     setUnitsTargets,
     toggleUnitSelection,
   } from '@lib/ui/_helpers/selections';
-  import { targetCell } from '@lib/ui/_helpers/targetting';
+  import { activateSpell, targetCell, targetUnit } from '@lib/ui/_helpers/targetting';
   import { fly } from 'svelte/transition';
   import Land from './Land.svelte';
   import UnitDeployed from './UnitDeployed.svelte';
@@ -94,21 +94,46 @@
       const position: Position = { row, column };
       const card: Card = JSON.parse(cardData);
       const colorRequirementMet = isPayableAfterColorIncrementation(card);
-      if (
-        isUnitCard(card) &&
-        isOnPlayersSide(position, card.ownerPlayerId) &&
-        colorRequirementMet !== false
-      ) {
+
+      if (colorRequirementMet === false) return;
+
+      if (isUnitCard(card)) {
+        if (isOnPlayersSide(position, card.ownerPlayerId)) {
+          if (colorRequirementMet !== true) {
+            usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet);
+          }
+          deployUnit(card, position);
+          if (card.keywords?.haste) {
+            toggleUnitSelection(bs.units[bs.units.length - 1]);
+          }
+        }
+      } else if (card.type === 'spell') {
+        const spellCard = card as any;
         if (colorRequirementMet !== true) {
           usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet);
         }
-        deployUnit(card, position);
-        if (card.keywords?.haste) {
-          toggleUnitSelection(bs.units[bs.units.length - 1]);
+
+        // Activate the spell first to set up the targeting state
+        activateSpell(spellCard);
+
+        const hasTargets = spellCard.actions.some(
+          (action: any) => action.targets && action.targets.length > 0
+        );
+        if (hasTargets) {
+          // If the spell has targets, try to target the drop location
+          // Find if there's a unit at this position
+          const unitAtPosition = bs.units.find(
+            (u) => u.position.row === row && u.position.column === column
+          );
+          if (unitAtPosition) {
+            targetUnit(unitAtPosition);
+          } else {
+            targetCell(position);
+          }
         }
       }
     } catch (error) {
-      console.error('Error deploying unit:', error);
+      console.error('Error deploying unit or casting spell:', error);
     }
   }
 
@@ -201,6 +226,12 @@
     <div
       class="unit-container"
       style="left: {position.left}px; top: {position.top}px;"
+      class:drag-over={dragOverCell?.row === unit.position.row &&
+        dragOverCell?.column === unit.position.column}
+      ondragover={handleDragOver}
+      ondragenter={(event) => handleDragEnter(event, unit.position.row, unit.position.column)}
+      ondragleave={(event) => handleDragLeave(event, unit.position.row, unit.position.column)}
+      ondrop={(event) => handleDrop(event, unit.position.row, unit.position.column)}
       in:fly={isAiUnit ? { y: 0, x: 200, duration: 600 } : undefined}
       out:fly={{ y: 0, x: isAiUnit ? 200 : -200, duration: 350 }}
     >
@@ -308,5 +339,10 @@
     transition:
       left 0.3s ease,
       top 0.3s ease;
+  }
+
+  .unit-container.drag-over {
+    transform: scale(1.05);
+    filter: brightness(1.2);
   }
 </style>

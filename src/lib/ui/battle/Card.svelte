@@ -105,9 +105,22 @@
     return '';
   }
 
+  // Check if spell is draggable (0 or 1 target)
+  function isDraggableSpell(card: Card): boolean {
+    if (!isSpellCard(card)) return false;
+    const totalTargets = card.actions.reduce((acc, action) => acc + (action.targets?.length || 0), 0);
+    return totalTargets <= 1;
+  }
+
+  // Check if this card is currently being dragged
+  let isDragging = $derived(uiState.battle.dragArrow?.instanceId === card.instanceId);
+
   // Drag event handlers
   function handleDragStart(event: DragEvent) {
-    if (!isUnitCard(card) || isPayableAfterColorIncrementation(card) === false) {
+    const colorRequirementMet = isPayableAfterColorIncrementation(card);
+    const canDrag = (isUnitCard(card) || isDraggableSpell(card)) && colorRequirementMet !== false;
+
+    if (!canDrag) {
       event.preventDefault();
       return;
     }
@@ -115,6 +128,26 @@
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('application/json', JSON.stringify(card));
+
+      // Hide the default drag ghost image
+      const img = new Image();
+      img.src =
+        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // transparent pixel
+      event.dataTransfer.setDragImage(img, 0, 0);
+
+      // Initialize drag arrow state
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      const startX = rect.left + rect.width / 2;
+      const startY = rect.top + rect.height / 2;
+
+      uiState.battle.dragArrow = {
+        instanceId: card.instanceId,
+        active: true,
+        startX,
+        startY,
+        currentX: event.clientX,
+        currentY: event.clientY,
+      };
     }
   }
 
@@ -123,6 +156,16 @@
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
     }
+
+    // Update arrow position if it's not the final event (which has 0,0 coords)
+    if (uiState.battle.dragArrow && event.clientX !== 0 && event.clientY !== 0) {
+      uiState.battle.dragArrow.currentX = event.clientX;
+      uiState.battle.dragArrow.currentY = event.clientY;
+    }
+  }
+
+  function handleDragEnd() {
+    uiState.battle.dragArrow = null;
   }
 
   // Handle right-click to show CardFull
@@ -134,12 +177,14 @@
 </script>
 
 <div
-  class="card {isPendingSpell ? 'pending-spell' : ''}"
+  class="card {isPendingSpell ? 'pending-spell' : ''} {isDragging ? 'dragging' : ''}"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
     40}px; border-color: {getBorderColor()}; --name-font-size: {nameFontSize()}rem;"
-  draggable={isUnitCard(card) && isPayableAfterColorIncrementation(card) !== false}
+  draggable={(isUnitCard(card) || isDraggableSpell(card)) &&
+    isPayableAfterColorIncrementation(card) !== false}
   ondragstart={handleDragStart}
   ondrag={handleDrag}
+  ondragend={handleDragEnd}
   onclick={handleClick}
   oncontextmenu={handleContextMenu}
 >
@@ -422,6 +467,14 @@
 
   .card:hover .spell-effect {
     opacity: 1;
+  }
+
+  .card.dragging {
+    transform: translateY(-40px) scale(1.15);
+    border-color: var(--color-golden);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    opacity: 0.8;
   }
 
   @keyframes spell-pulse {
