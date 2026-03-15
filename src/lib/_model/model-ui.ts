@@ -58,6 +58,7 @@ export type UiState = {
       width?: number;
       height?: number;
       overlayOpacity?: number; // 0..1, default 0.7
+      closeOnOutsideClick?: boolean;
     } | null;
   };
   cardFullOverlay: {

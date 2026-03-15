@@ -35,14 +35,6 @@
       inputValue = `${gs.player.name} invites ${characters.map((c) => c.name).join(', ')} to play a game at his place`;
       inputRef?.focus();
     },
-    Charm: () => {
-      inputValue = `${gs.player.name} tries his best to charm ${characters.map((c) => c.name).join(', ')}`;
-      inputRef?.focus();
-    },
-    Befriend: () => {
-      inputValue = `${gs.player.name} tries his best to befriend ${characters.map((c) => c.name).join(', ')}`;
-      inputRef?.focus();
-    },
     Chat: async () => {
       await initPlayerChat(characters);
       uiState.currentView = UiView.Chat;
@@ -206,10 +198,6 @@
         <button class="action-button" onclick={() => quickActions['Play Game']()}>Play Game</button>
         <button class="action-button" onclick={() => quickActions.Trade()}>Trade</button>
         <button class="action-button" onclick={() => quickActions.Invite()}>Invite</button>
-        {#if !gs.player.period.improvedRelations}
-          <button class="action-button" onclick={() => quickActions.Charm()}>Charm</button>
-          <button class="action-button" onclick={() => quickActions.Befriend()}>Befriend</button>
-        {/if}
         <button class="action-button" onclick={() => quickActions.Chat()}>Chat</button>
       </div>
     </div>

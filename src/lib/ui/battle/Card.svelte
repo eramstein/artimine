@@ -149,9 +149,11 @@
       ? 'has-unit-types'
       : ''}"
   >
-    <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
-      {card.cost}
-    </div>
+    {#if card.cost > 0}
+      <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
+        {card.cost}
+      </div>
+    {/if}
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->

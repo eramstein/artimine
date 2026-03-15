@@ -14,4 +14,5 @@ export const config = {
   boardRows: 4,
   boardColumns: 4,
   aiActionInterval: 1000,
+  shopCards: 3,
 };

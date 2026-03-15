@@ -16,6 +16,7 @@
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
   import Shop from './Shop.svelte';
+  import GoldCost from './GoldCost.svelte';
   import SpellDimOverlay from './SpellDimOverlay.svelte';
   import SpellTargetArrows from './SpellTargetArrows.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
@@ -80,9 +81,7 @@
 
 <!-- Shop button and gold displays positioned in top center -->
 <div class="shop-gold-container">
-  <div class="gold-display">
-    <div class="gold-value">{bs.players[0]?.gold || 0}</div>
-  </div>
+  <GoldCost value={bs.players[0]?.gold || 0} size="md" />
   <button
     class="shop-btn"
     aria-label="Shop"
@@ -91,17 +90,16 @@
       uiState.modal.custom = {
         component: Shop,
         props: {},
-        width: window.innerWidth * 0.9,
-        height: window.innerHeight * 0.9,
+        width: Math.min(window.innerWidth * 0.8, 1200),
+        height: Math.min(window.innerHeight * 0.8, 800),
+        overlayOpacity: 0,
       };
       uiState.modal.visible = true;
     }}
   >
     <img src="/assets/images/shop.png" alt="Shop" />
   </button>
-  <div class="gold-display">
-    <div class="gold-value">{bs.players[1]?.gold || 0}</div>
-  </div>
+  <GoldCost value={bs.players[1]?.gold || 0} size="md" />
 </div>
 
 {#if gameWon && winningPlayer}
@@ -297,30 +295,6 @@
     display: block;
   }
 
-  .gold-display {
-    background: url('/assets/images/gold-contour.png') center/contain no-repeat;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    padding: 0;
-    border-radius: 50%;
-    font-weight: bold;
-    width: 2.8rem;
-    height: 2.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .gold-value {
-    font-size: 1.6rem;
-    color: #5f4a0e;
-    line-height: 1;
-    font-weight: 900;
-    text-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.25),
-      0 0 1px rgba(255, 255, 255, 0.2);
-    margin-bottom: 0.3rem;
-  }
 
   .bottom-section {
     display: flex;

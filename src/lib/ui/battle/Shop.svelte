@@ -7,13 +7,12 @@
   import { buyShopCard } from '@lib/battle/shop';
   import { activateSpell } from '../_helpers/targetting';
   import CardComponent from './Card.svelte';
+  import GoldCost from './GoldCost.svelte';
 
-  function handleClose() {
-    uiState.modal.visible = false;
-  }
+
 
   const player = $derived(getHumanPlayer());
-  
+
   // Sort shop cards by cost and create Card instances for display
   const sortedShopCards = $derived(
     [...bs.shop.cards]
@@ -34,23 +33,23 @@
       uiState.modal.visible = false;
       activateSpell(newCard as SpellCard);
     }
-  } 
+  }
 </script>
 
 <div class="shop">
-  <button class="close-button" onclick={handleClose}>×</button>
-  
+
   <div class="shop-content">
     <!-- Merchant Section -->
     <div class="section merchant-section">
-      <h2 class="section-title">Merchant</h2>
       <div class="cards-grid">
         {#each sortedShopCards as { shopCard, card }}
-          <div class="shop-card-wrapper" onclick={() => handleCardClick(shopCard)}>
+          <div 
+            class="shop-card-wrapper" 
+            class:too-expensive={player.gold < shopCard.cost}
+            onclick={() => handleCardClick(shopCard)}
+          >
             <CardComponent {card} inHand={false} />
-            <div class="card-cost">
-              <div class="cost-value">{shopCard.cost}</div>
-            </div>
+            <GoldCost value={shopCard.cost} class="card-cost" size="md" />
           </div>
         {/each}
       </div>
@@ -72,39 +71,14 @@
 
 <style>
   .shop {
-    padding: 2rem;
+    padding: 0rem 2rem;
     color: white;
     position: relative;
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
   }
 
-  .close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #333;
-    color: white;
-    border: 2px solid var(--color-golden);
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    z-index: 1001;
-  }
-
-  .close-button:hover {
-    background: #555;
-    transform: scale(1.1);
-  }
 
   .shop-content {
     display: flex;
@@ -114,10 +88,7 @@
   }
 
   .section {
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
     padding: 1.5rem;
-    border: 2px solid rgba(191, 161, 74, 0.3);
   }
 
   .section-title {
@@ -140,33 +111,28 @@
     position: relative;
     transition: all 0.2s ease;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .shop-card-wrapper.too-expensive {
+    filter: grayscale(1) brightness(0.6);
+    opacity: 0.8;
   }
 
   .shop-card-wrapper:hover {
     transform: translateY(-4px);
   }
 
-  .card-cost {
+  :global(.card-cost) {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    background: url('/assets/images/gold-contour.png') center/contain no-repeat;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    bottom: -3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
     pointer-events: none;
-  }
-
-  .cost-value {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ffd700;
-    text-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.8),
-      0 0 1px rgba(255, 255, 255, 0.5);
   }
 
   .placeholder {

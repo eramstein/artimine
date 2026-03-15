@@ -3,7 +3,6 @@ import type { ActionTypeDefinition } from '@/lib/_model/model-game';
 import { gs } from '../_state/main.svelte';
 import { initTrade } from '../_state/state-ui.svelte';
 import { recordActionInChat } from '../llm/action';
-import { improveRelationshipsAction } from './actions/improve-relationships';
 import {
   generalChallengeAction,
   rollActivityProposalSuccess,
@@ -16,7 +15,6 @@ import { dayNames } from './schedule';
 export const ACTIONS: Record<string, ActionTypeDefinition> = {
   [ActionType.ScheduleActivity]: scheduleActivityAction,
   [ActionType.GeneralChallenge]: generalChallengeAction,
-  [ActionType.ImproveRelationship]: improveRelationshipsAction,
   [ActionType.GoTo]: {
     onSuccess: ({ people, destination }: { people: string[]; destination: string }) => {
       const peopleNpcs = people

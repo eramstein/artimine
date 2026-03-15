@@ -1,7 +1,8 @@
-import { cards } from "@/data";
-import type { Card, CardTemplate, Player } from "../_model/model-battle";
-import { bs } from "../_state/main.svelte";
-import { getRandomFromArray } from "../_utils/random";
+import { cards } from '@/data';
+import { config } from '../_config';
+import type { Card, CardTemplate, Player } from '../_model/model-battle';
+import { bs } from '../_state/main.svelte';
+import { getRandomFromArray } from '../_utils/random';
 
 const shopCardsList = [
   { cost: 1, template: 'wooden_barricade' },
@@ -13,13 +14,16 @@ const shopCardsList = [
 
 export function rollShopCards() {
   const shopCards = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < config.shopCards; i++) {
     shopCards.push(getRandomFromArray(shopCardsList));
   }
-  bs.shop.cards = shopCards.map((c) => ({ cost: c.cost, template: cards[c.template] })) ;
+  bs.shop.cards = shopCards.map((c) => ({ cost: c.cost, template: cards[c.template] }));
 }
 
-export function buyShopCard(player: Player, card: { cost: number; template: CardTemplate }): Card | undefined {
+export function buyShopCard(
+  player: Player,
+  card: { cost: number; template: CardTemplate }
+): Card | undefined {
   if (player.gold >= card.cost) {
     player.gold -= card.cost;
     const newCard = {
