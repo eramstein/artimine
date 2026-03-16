@@ -22,6 +22,9 @@
   <div class="event-view">
     <div class="event-header">
       <h2>{eventData.title}</h2>
+      <button class="close-header-button" onclick={handleClose} title="Close">
+        &times;
+      </button>
     </div>
 
     <div class="event-content">
@@ -94,6 +97,9 @@
     padding: 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .event-header h2 {
@@ -103,6 +109,28 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #94a3b8;
+  }
+
+  .close-header-button {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 1.75rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+    line-height: 1;
+    margin: -8px;
+  }
+
+  .close-header-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
   }
 
   .event-content {

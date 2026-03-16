@@ -84,17 +84,18 @@
     background: #1a1a1a;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px;
-    width: 95vw;
-    max-width: 900px;
+    width: fit-content;
+    max-width: min(90vw, 800px);
     max-height: 85vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+    margin: auto;
   }
 
   .picker-header {
-    padding: 10px 16px;
+    padding: 8px 12px;
     background: rgba(255, 255, 255, 0.03);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
@@ -103,7 +104,7 @@
     font-weight: 600;
     color: var(--color-golden);
     text-transform: uppercase;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 1px;
   }
 
@@ -111,7 +112,7 @@
     background: transparent;
     border: none;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.2s;
@@ -124,19 +125,21 @@
 
   .picker-grid {
     display: grid;
-    grid-template-columns: 80px repeat(7, 1fr);
-    gap: 2px;
-    padding: 8px;
+    grid-template-columns: 75px repeat(7, minmax(60px, 1fr));
+    gap: 1px;
+    padding: 2px;
     overflow: auto;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .day-header {
     text-align: center;
-    padding: 4px 2px;
-    font-size: 10px;
+    padding: 6px 2px;
+    font-size: 9px;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
+    background: #1a1a1a;
   }
 
   .day-header.current {
@@ -147,11 +150,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     background: rgba(255, 255, 255, 0.02);
+    background: #1a1a1a;
   }
 
   .period-cell.current {
@@ -159,10 +163,10 @@
   }
 
   .slot {
-    min-height: 48px;
+    min-height: 40px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 2px;
     cursor: pointer;
     transition: all 0.15s;
@@ -177,22 +181,28 @@
   .slot:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
-    transform: scale(1.02);
+    z-index: 10;
   }
 
   .slot.selected {
     border-color: var(--color-golden);
-    background: rgba(191, 161, 74, 0.15);
-    box-shadow: 0 0 15px rgba(191, 161, 74, 0.2);
+    background: rgba(191, 161, 74, 0.2);
+    box-shadow: inset 0 0 10px rgba(191, 161, 74, 0.1);
+    z-index: 5;
   }
 
   .activity-type {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
+    line-height: 1.1;
     opacity: 0.9;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .empty-label {
-    opacity: 0.3;
+    opacity: 0.2;
+    font-size: 10px;
   }
 </style>

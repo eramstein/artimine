@@ -1,10 +1,11 @@
 import { config } from '../_config';
 import { gs } from '../_state/main.svelte';
-import { clamp } from '../_utils/random';
+import { clamp, generateUniqueId } from '../_utils/random';
 import { getGroupDescription } from './chat-helpers';
 import { LLM_API_TOOL_MODEL } from './config';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
+import { saveActivityLog } from './memories-db';
 
 export async function generateEventWithLLM() {
   const place = gs.places[gs.player.place];
@@ -99,6 +100,7 @@ export async function resolveEventWithLLM(
   const locationDescription = place.name + ', ' + place.description || '';
   const characters = gs.activity.participants.map((key) => gs.characters[key]);
   const charactersDescription = getGroupDescription(characters);
+  const eventDescription = gs.activity.event?.description || '';
 
   const systemPrompt = {
     role: 'system',
@@ -131,6 +133,7 @@ export async function resolveEventWithLLM(
       - **Location:** ${locationDescription}
       - **Time:** ${timeOfDay}
       - **Activity:** ${context}
+      - **Recent Event:** ${eventDescription}
 
     ### NPCs
     ${charactersDescription}
@@ -155,45 +158,58 @@ export async function resolveEventWithLLM(
       responseFormat: { type: 'json_object' },
       messages: [systemPrompt, userPrompt],
     })
-    .then((m) => {
+    .then(async (m) => {
       const outcome = llmService.getMessage(m);
       const formattedOutcome = JSON.parse(outcome);
       gs.activity.event!.outcome = formattedOutcome;
 
       // Update character relationship values
       if (formattedOutcome.relationValuesByCharacter) {
-        for (const [charName, changes] of Object.entries(formattedOutcome.relationValuesByCharacter)) {
+        for (const [charName, changes] of Object.entries(
+          formattedOutcome.relationValuesByCharacter
+        )) {
           const npcKey = Object.keys(gs.characters).find(
             (key) => gs.characters[key].name === charName
           );
 
-          if (npcKey) {
-            const char = gs.characters[npcKey];
-            const charChanges = changes as any;
-            if (charChanges.respect) {
-              char.relationValues.respect = clamp(
-                char.relationValues.respect + charChanges.respect,
-                -config.opinionMaxValue,
-                config.opinionMaxValue
-              );
-            }
-            if (charChanges.friendship) {
-              char.relationValues.friendship = clamp(
-                char.relationValues.friendship + charChanges.friendship,
-                -config.opinionMaxValue,
-                config.opinionMaxValue
-              );
-            }
-            if (charChanges.love) {
-              char.relationValues.love = clamp(
-                char.relationValues.love + charChanges.love,
-                -config.opinionMaxValue,
-                config.opinionMaxValue
-              );
-            }
+          if (!npcKey) return;
+          const char = gs.characters[npcKey];
+          const charChanges = changes as any;
+          if (charChanges.respect) {
+            char.relationValues.respect = clamp(
+              char.relationValues.respect + charChanges.respect,
+              -config.opinionMaxValue,
+              config.opinionMaxValue
+            );
           }
+          if (charChanges.friendship) {
+            char.relationValues.friendship = clamp(
+              char.relationValues.friendship + charChanges.friendship,
+              -config.opinionMaxValue,
+              config.opinionMaxValue
+            );
+          }
+          if (charChanges.love) {
+            char.relationValues.love = clamp(
+              char.relationValues.love + charChanges.love,
+              -config.opinionMaxValue,
+              config.opinionMaxValue
+            );
+          }
+          // update NPC daily interactions summary
+          char.period.interactionsSummary += '\n' + formattedOutcome.description;
         }
       }
+      // save memory in DB
+      await saveActivityLog({
+        id: generateUniqueId(),
+        day: gs.time.day,
+        participants: gs.activity!.event?.participants || [],
+        location: gs.places[gs.player.place].name,
+        activityType: gs.activity.activityType,
+        summary: eventDescription + '. ' + formattedOutcome.description,
+        embedding: [],
+      });
     })
     .catch((e) => {
       console.error('Error generating event', e);

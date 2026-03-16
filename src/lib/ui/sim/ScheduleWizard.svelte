@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ActivityType, DayPeriod, ActionType } from '@/lib/_model';
+  import { ActionType, ActivityType, DayPeriod } from '@/lib/_model';
   import { gs } from '../../_state/main.svelte';
   import { ACTIONS } from '../../sim/actions-map';
   import { dayNames } from '../../sim/schedule';
@@ -14,7 +14,9 @@
   // Initialize with all characters in the scene selected
   let selectedPeople = $state<string[]>(characters.map((c: any) => c.name));
   let selectedActivity = $state<ActivityType>(ActivityType.Chill);
-  let selectedDestination = $state<string>(gs.places.find(p => p.index === gs.player.place)?.name || gs.places[0]?.name || '');
+  let selectedDestination = $state<string>(
+    gs.places.find((p) => p.index === gs.player.place)?.name || gs.places[0]?.name || ''
+  );
   let selectedDay = $state<string>(dayNames[(gs.time.day + 1) % 7]);
   let selectedTime = $state<DayPeriod>(DayPeriod.Evening);
 
@@ -24,11 +26,10 @@
   const scheduleAction = ACTIONS[ActionType.ScheduleActivity];
 
   const activities = [ActivityType.Gaming, ActivityType.Social, ActivityType.Date];
-  const timePeriods = [DayPeriod.Morning, DayPeriod.Afternoon, DayPeriod.Evening];
 
   function togglePerson(name: string) {
     if (selectedPeople.includes(name)) {
-      selectedPeople = selectedPeople.filter(p => p !== name);
+      selectedPeople = selectedPeople.filter((p) => p !== name);
     } else {
       selectedPeople = [...selectedPeople, name];
     }
@@ -36,7 +37,7 @@
 
   function handleCheck() {
     if (selectedPeople.length === 0) {
-      checkResult = { success: false, description: "Select at least one person." };
+      checkResult = { success: false, description: 'Select at least one person.' };
       return;
     }
     const args = {
@@ -73,7 +74,7 @@
   }
 
   const inviteLabel = $derived.by(() => {
-    if (selectedPeople.length === 0) return "Invite someone...";
+    if (selectedPeople.length === 0) return 'Invite someone...';
     if (selectedPeople.length === 1) return `Invite ${selectedPeople[0]}`;
     if (selectedPeople.length === 2) return `Invite ${selectedPeople[0]} and ${selectedPeople[1]}`;
     return `Invite ${selectedPeople.slice(0, -1).join(', ')} and ${selectedPeople.slice(-1)}`;
@@ -85,8 +86,8 @@
     <div class="invite-summary">{inviteLabel}</div>
     <div class="people-chips">
       {#each characters as char}
-        <button 
-          class="person-chip {selectedPeople.includes(char.name) ? 'selected' : ''}" 
+        <button
+          class="person-chip {selectedPeople.includes(char.name) ? 'selected' : ''}"
           onclick={() => togglePerson(char.name)}
         >
           {char.name}
@@ -94,14 +95,14 @@
       {/each}
     </div>
   </div>
-  
+
   <div class="form-group">
     <label>What:</label>
     <div class="chips-row">
       {#each activities as act}
-        <button 
-          class="chip {selectedActivity === act ? 'selected' : ''}" 
-          onclick={() => selectedActivity = act}
+        <button
+          class="chip {selectedActivity === act ? 'selected' : ''}"
+          onclick={() => (selectedActivity = act)}
         >
           {act}
         </button>
@@ -113,9 +114,9 @@
     <label>Where:</label>
     <div class="chips-row">
       {#each gs.places as place}
-        <button 
-          class="chip {selectedDestination === place.name ? 'selected' : ''}" 
-          onclick={() => selectedDestination = place.name}
+        <button
+          class="chip {selectedDestination === place.name ? 'selected' : ''}"
+          onclick={() => (selectedDestination = place.name)}
         >
           {place.name}
         </button>
@@ -125,7 +126,7 @@
 
   <div class="form-group">
     <label>When:</label>
-    <button class="time-btn" onclick={() => showPicker = true}>
+    <button class="time-btn" onclick={() => (showPicker = true)}>
       <span class="day">{selectedDay}</span>
       <span class="period">{selectedTime}</span>
     </button>
@@ -148,11 +149,11 @@
 </div>
 
 {#if showPicker}
-  <SchedulePicker 
-    {selectedDay} 
-    selectedPeriod={selectedTime} 
-    onSelect={handleTimeSelect} 
-    onCancel={() => showPicker = false} 
+  <SchedulePicker
+    {selectedDay}
+    selectedPeriod={selectedTime}
+    onSelect={handleTimeSelect}
+    onCancel={() => (showPicker = false)}
   />
 {/if}
 
@@ -214,7 +215,6 @@
     flex-direction: column;
     gap: 8px;
   }
-
 
   label {
     font-size: 10px;
@@ -283,7 +283,6 @@
     text-transform: uppercase;
     font-weight: 700;
   }
-
 
   .result-message {
     padding: 10px 14px;

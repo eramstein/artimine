@@ -106,7 +106,7 @@
     {#if showMenu}
       <div
         class="social-modal"
-        style={`left: 50%; bottom: ${menuPosition.y}px;`}
+        style={`left: 50%; bottom: ${menuPosition.y}px; margin-left: -600px;`}
         onclick={(e) => e.stopPropagation()}
       >
         <div class="modal-body">
@@ -305,7 +305,6 @@
   .social-modal {
     position: fixed;
     width: 1200px;
-    transform: translateX(-50%);
     z-index: 1300;
     display: flex;
     flex-direction: column;
