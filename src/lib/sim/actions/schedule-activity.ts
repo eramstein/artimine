@@ -4,7 +4,7 @@ import { recordActionInChat } from '@/lib/llm/action';
 import { getCharactersFromNames, getKeysFromNames } from '../character';
 import { checkActionSuccess } from '../roll';
 import { scheduleActivity } from '../schedule';
-import { getDayNumberFromWeekday } from '../time';
+import { getDayNumberFromWeekday, isTimePeriodBefore } from '../time';
 
 const defaultDay = 'Sunday';
 const defaultTime = DayPeriod.Afternoon;
@@ -27,7 +27,7 @@ export const scheduleActivityAction: ActionTypeDefinition = {
     const activityTypeEnum = ActivityType[activityType as keyof typeof ActivityType];
     const dayPeriod = time ?? defaultTime;
     let dayNumber = getDayNumberFromWeekday(day || defaultDay);
-    if (dayPeriod < gs.time.period) {
+    if (isTimePeriodBefore(dayPeriod, gs.time.period)) {
       dayNumber += 7;
     }
     const place = gs.places.find((p) => p.name === destination);

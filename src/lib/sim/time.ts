@@ -10,7 +10,7 @@ export const dayPeriodIndexes = {
 
 export function getDayNumberFromWeekday(weekday: string): number {
   const targetWeekday = dayNames.findIndex((d) => d === weekday);
-  if (!targetWeekday) {
+  if (targetWeekday === -1) {
     return 0;
   }
   // we assume day 0 is Satudray (dayNames[0])

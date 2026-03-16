@@ -33,10 +33,10 @@ export function scheduleActivity(
   place: Place
 ) {
   const dayPeriodIndex = dayPeriodIndexes[dayPeriod];
-  const dayIndex = getScheduleIndexOfDay(day);
-  if (!gs.activityPlans[dayIndex]) {
-    console.log('day not found, adding planning', day);
+  let dayIndex = getScheduleIndexOfDay(day);
+  if (dayIndex === -1) {
     fillDefaultActivities(day);
+    dayIndex = getScheduleIndexOfDay(day);
   }
   gs.activityPlans[dayIndex][dayPeriodIndex] = {
     activity: activity,

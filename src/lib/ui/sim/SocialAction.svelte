@@ -10,6 +10,7 @@
   import { attemptAction } from '../../sim/actions';
   import { ACTIONS } from '../../sim/actions-map';
   import { initDeckSelection } from '../../sim/ongoing-battle';
+  import ScheduleWizard from './ScheduleWizard.svelte';
 
   let {
     characters,
@@ -27,13 +28,13 @@
   let pendingActions: ActionAttempt[] = $state([]);
   let selectedAction: ActionAttempt | null = $state(null);
   let messagesRef = $state<HTMLDivElement>();
+  let showWizard = $state(false);
 
   const quickActions = {
     'Play Game': () => initDeckSelection(characters[0] as Npc),
     Trade: () => initTrade(characters[0] as Npc),
     Invite: () => {
-      inputValue = `${gs.player.name} invites ${characters.map((c) => c.name).join(', ')} to play a game at his place`;
-      inputRef?.focus();
+      showWizard = !showWizard;
     },
     Chat: async () => {
       await initPlayerChat(characters);
@@ -200,6 +201,19 @@
         <button class="action-button" onclick={() => quickActions.Invite()}>Invite</button>
         <button class="action-button" onclick={() => quickActions.Chat()}>Chat</button>
       </div>
+
+      {#if showWizard}
+        <ScheduleWizard 
+          {characters} 
+          onCancel={() => showWizard = false} 
+          onSuccessDone={() => {
+            showWizard = false;
+            // Maybe we want to submit a message or just close it?
+            // The user said: "When submitting the values, call scheduleActivityAction.checkSuccess and display a sentence stating whether or not the Character(s) accepted. If yes, call scheduleActivityAction.onSuccess"
+            // I've handled this in the component.
+          }} 
+        />
+      {/if}
     </div>
   {/if}
 
