@@ -14,6 +14,7 @@
   import Player from './Player.svelte';
   import Schedule from './Schedule.svelte';
   import Tournament from './Tournament.svelte';
+  import TournamentLogs from './TournamentLogs.svelte';
   import Trade from './Trade.svelte';
 </script>
 
@@ -47,6 +48,8 @@
       {#if gs.activity.tournament}
         <Tournament tournament={gs.activity.tournament} />
       {/if}
+    {:else if uiState.currentView === UiView.TournamentLogs}
+      <TournamentLogs />
     {/if}
   </div>
 

@@ -69,6 +69,13 @@
     >
       Player
     </button>
+    <button
+      class="tab-button"
+      class:active={uiState.currentView === UiView.TournamentLogs}
+      onclick={() => (uiState.currentView = UiView.TournamentLogs)}
+    >
+      History
+    </button>
     {#if isTournamentActivity}
       <button
         class="tab-button tournament-tab"

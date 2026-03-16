@@ -4,7 +4,7 @@
   import { TournamentStatus, TournamentType } from '@/lib/_model/enums-sim';
   import type { Tournament } from '@/lib/_model/model-game';
   import { initDeckSelection } from '@/lib/sim/ongoing-battle';
-  import { initTournament } from '@/lib/sim/tournament';
+  import { initTournament, dropFromTournament } from '@/lib/sim/tournament';
 
   interface Props {
     tournament: Tournament;
@@ -124,17 +124,30 @@
       await initDeckSelection(opponent);
     }
   }
+
+  function handleDrop() {
+    if (confirm('Are you sure you want to drop from the tournament? This will end the tournament immediately.')) {
+      dropFromTournament();
+    }
+  }
 </script>
 
 <div class="tournament-container">
   <div class="tournament-header">
     <div class="header-top">
       <h2>Tournament</h2>
-      {#if !tournament.winner && playerOpponent() && tournament.status !== TournamentStatus.Planned}
-        <button class="start-game-button" onclick={handleStartGame}>
-          <span class="button-text">Play vs {playerOpponent()?.name}</span>
-        </button>
-      {/if}
+      <div class="header-actions">
+        {#if !tournament.winner && playerOpponent() && tournament.status !== TournamentStatus.Planned}
+          <button class="start-game-button" onclick={handleStartGame}>
+            <span class="button-text">Play vs {playerOpponent()?.name}</span>
+          </button>
+        {/if}
+        {#if !tournament.winner && tournament.status !== TournamentStatus.Planned}
+          <button class="drop-button" onclick={handleDrop}>
+            <span class="button-text">Drop</span>
+          </button>
+        {/if}
+      </div>
     </div>
     <div class="tournament-info">
       <div class="info-item">
@@ -259,6 +272,29 @@
 
   .start-game-button:hover {
     opacity: 0.8;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .drop-button {
+    background: transparent;
+    border: 1px solid var(--color-red, #e74c3c);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--color-red, #e74c3c);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .drop-button:hover {
+    background: var(--color-red, #e74c3c);
+    color: white;
   }
 
   .tournament-info {

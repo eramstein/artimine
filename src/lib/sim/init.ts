@@ -42,6 +42,7 @@ export const defaultGameState: GameState = {
   activityPlans: [],
   chat: null,
   ongoingBattle: null,
+  tournamentLogs: [],
 };
 
 export const initSim = async () => {

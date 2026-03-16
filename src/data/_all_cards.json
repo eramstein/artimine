@@ -4340,8 +4340,8 @@
     "rarity": "uncommon",
     "type": "unit",
     "cost": 4,
-    "power": 4,
-    "maxHealth": 3,
+    "power": 3,
+    "maxHealth": 2,
     "colors": [
       {
         "color": "red",
@@ -8271,7 +8271,26 @@
         "effect": {
           "name": "summon",
           "args": {
-            "summonedUnit": "wall_of_brambles",
+            "summonedUnit": {
+              "id": "wall_of_brambles",
+              "name": "Wall of brambles",
+              "rarity": "common",
+              "type": "unit",
+              "cost": 2,
+              "power": 0,
+              "maxHealth": 4,
+              "colors": [
+                {
+                  "color": "green",
+                  "count": 1
+                }
+              ],
+              "unitTypes": ["plant"],
+              "keywords": {
+                "retaliate": 2
+              },
+              "cardSet": "alpha"
+            },
             "isRespawn": false
           }
         },

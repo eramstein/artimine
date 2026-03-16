@@ -24,7 +24,7 @@ interface KeywordMetadata extends KeywordPrevalence {
 
 export const keywordConfig: Record<keyof UnitKeywords, KeywordDefinition> = {
   ranged: { baseCost: 3, prevalence: 8 },
-  haste: { baseCost: 2, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },
+  haste: { baseCost: 3, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },
   moveAndAttack: { baseCost: 2, scalesWithPower: true, requiresSomePower: true, prevalence: 3 },
   retaliate: { type: 'number', baseCost: 1, prevalence: 9, requiresSomeHealth: true },
   armor: { type: 'number', baseCost: 3, prevalence: 6 },

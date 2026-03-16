@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { CardType } from '@/lib/_model';
   import { bs } from '@/lib/_state';
-  import type { Card, SpellCard } from '@lib/_model/model-battle';
-  import { uiState } from '@lib/_state/state-ui.svelte';
+  import type { Card } from '@lib/_model/model-battle';
   import { getHumanPlayer } from '@lib/battle/player';
   import { buyShopCard } from '@lib/battle/shop';
-  import { activateSpell } from '../_helpers/targetting';
   import CardComponent from './Card.svelte';
   import GoldCost from './GoldCost.svelte';
-
-
 
   const player = $derived(getHumanPlayer());
 
@@ -28,23 +23,18 @@
   );
 
   function handleCardClick(shopCard: { cost: number; template: any }) {
-    const newCard = buyShopCard(player, shopCard);
-    if (newCard && newCard.type === CardType.Spell) {
-      uiState.modal.visible = false;
-      activateSpell(newCard as SpellCard);
-    }
+    buyShopCard(player, shopCard);
   }
 </script>
 
 <div class="shop">
-
   <div class="shop-content">
     <!-- Merchant Section -->
     <div class="section merchant-section">
       <div class="cards-grid">
         {#each sortedShopCards as { shopCard, card }}
-          <div 
-            class="shop-card-wrapper" 
+          <div
+            class="shop-card-wrapper"
             class:too-expensive={player.gold < shopCard.cost}
             onclick={() => handleCardClick(shopCard)}
           >
@@ -78,7 +68,6 @@
     display: flex;
     flex-direction: column;
   }
-
 
   .shop-content {
     display: flex;

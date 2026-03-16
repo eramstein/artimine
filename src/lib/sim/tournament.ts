@@ -194,6 +194,13 @@ function recordTournament(tournament: Tournament) {
   const winnerName =
     tournament.winner === gs.player.key ? gs.player.name : gs.characters[tournament.winner]?.name;
 
+  gs.tournamentLogs.push({
+    day: gs.time.day,
+    place: gs.player.place,
+    type: tournament.tournamentType,
+    winner: tournament.winner,
+  });
+
   // Ensure participants array contains only serializable strings
   const participants = tournament.players.map((player) => String(player));
   saveActivityLog({
@@ -205,4 +212,16 @@ function recordTournament(tournament: Tournament) {
     summary: `${winnerName} won the tournament!`,
     embedding: [],
   });
+}
+
+// The player automatically loses and the tournament is finished
+// For now, simply get random winner
+export function dropFromTournament() {
+  const tournament = gs.activity.tournament;
+  if (!tournament) {
+    return;
+  }
+  tournament.winner = getRandomFromArray(tournament.players.filter((p) => p !== gs.player.key));
+  tournament.status = TournamentStatus.Finished;
+  recordTournament(tournament);
 }

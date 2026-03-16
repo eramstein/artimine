@@ -5,6 +5,7 @@ import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
 import { drawCard } from './deck';
 import { onTurnStart } from './listeners';
+import { rollShopCards } from './shop';
 import { soundManager } from './sound';
 import { removeTemporaryEffects } from './temporary-effects';
 import { damageUnit, healUnit } from './unit';
@@ -23,6 +24,7 @@ export function nextTurn() {
     soundManager.playSound('button');
     playAiTurn();
   } else {
+    rollShopCards();
     saveStateToLocalStorage();
   }
 }
@@ -35,10 +37,10 @@ function initPlayerTurn(player: Player) {
   drawCard(player);
 }
 
-// ununsed mana is converted to gold
+// if some mana wasn't used, get 1 gold
 function updateGold(player: Player) {
   if (player.mana > 0) {
-    player.gold += player.mana;
+    player.gold++;
     player.mana = 0;
   }
 }

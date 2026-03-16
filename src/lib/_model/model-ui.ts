@@ -127,4 +127,5 @@ export enum UiView {
   Chat = 'Chat',
   Trade = 'Trade',
   Tournament = 'Tournament',
+  TournamentLogs = 'TournamentLogs',
 }

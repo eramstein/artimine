@@ -19,6 +19,7 @@ export interface GameState {
   activityPlans: ActivityPlan[][]; // plan for future activityPlans by days in future and day period
   chat: ChatState | null;
   ongoingBattle: OngoingBattle | null;
+  tournamentLogs: TournamentLog[];
 }
 
 export interface Character {
@@ -183,7 +184,7 @@ export interface Tournament {
   wonAgainst: Record<string, string[]>; // character key to array of character keys it has won against - used for breaking ties
   tiebreakers: Record<string, number>; // character key to current tiebreaker points
   pairings: Record<string, string>; // character keys, who plays who in current round
-  remainingMatches: Record<string, string[]>; // for mini tournament, who the player still has to play with
+  remainingMatches: Record<string, string[]>; // for round robin tournament, who the player still has to play with
 }
 
 export interface OngoingBattle {
@@ -192,4 +193,11 @@ export interface OngoingBattle {
     player: string;
     opponent: string;
   };
+}
+
+export interface TournamentLog {
+  day: number;
+  place: number;
+  type: TournamentType;
+  winner: string;
 }
