@@ -3,7 +3,7 @@ import { Difficulty } from '@/lib/_model/enums-sim';
 import { gs } from '@/lib/_state';
 import { checkActionSuccess } from '../roll';
 
-const difficultyNumbers = {
+export const difficultyNumbers = {
   [Difficulty.AutomaticSuccess]: -1000,
   [Difficulty.ExtremelyEasy]: -5,
   [Difficulty.VeryEasy]: 0,
@@ -31,7 +31,7 @@ export const generalChallengeAction: ActionTypeDefinition = {
   },
 };
 
-function rollCheckSuccess(args: {
+export function rollCheckSuccess(args: {
   attribute: keyof CharacterAttributes;
   challengeDescription: string;
   difficulty: Difficulty;

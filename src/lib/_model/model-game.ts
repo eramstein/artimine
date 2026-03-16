@@ -47,7 +47,6 @@ export interface Npc extends Character {
   chatInitiation?: string; // the NPC has something to say
   period: {
     interactionsSummary: string;
-    charismaRoll?: number; // player's charisma roll for the period, influences NPC behavior
     trades: number; // how many cards the NPC has traded with the player this period
   };
 }
@@ -107,6 +106,26 @@ export interface Activity {
   activityType: ActivityType;
   participants: string[]; // Character keys
   tournament?: Tournament;
+  event?: Event; // An event happening during current activity
+}
+
+export interface Event {
+  title: string;
+  description: string;
+  participants: string[]; // Character keys
+  options: EventOption[];
+  outcome?: EventOutcome;
+}
+
+export interface EventOption {
+  description: string;
+  difficulty: number; // 1 to 10
+  relatedAttribute: keyof CharacterAttributes;
+}
+
+export interface EventOutcome {
+  description: string;
+  relationValuesByCharacter: Record<string, RelationValues>; // character keys
 }
 
 export interface ActivityPlan {

@@ -3,9 +3,11 @@
   import { uiState } from '@/lib/_state';
   import { gs } from '@/lib/_state/main.svelte';
   import { initPlayerChat } from '@/lib/llm/chat';
+  import { createEventForCurrentActivity } from '@/lib/sim/event';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
   import ShopModal from './ShopModal.svelte';
   import SocialAction from './SocialAction.svelte';
+  import Event from './Event.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -67,62 +69,105 @@
   }
 </script>
 
-<div class="place-container" style="--bg-image: url('{imagePath}')" onclick={handleBackgroundClick}>
-  <!-- Shop Button -->
-  {#if place.shopInventory && place.shopInventory.length > 0}
-    <button class="shop-button" onclick={handleShopClick}>
-      <span class="shop-icon">🛒</span>
-      <span class="shop-label">Shop | {gs.player.cash}$</span>
-    </button>
-  {/if}
+<div class="main-layout" class:has-event={!!gs.activity.event}>
+  <div class="place-container" style="--bg-image: url('{imagePath}')" onclick={handleBackgroundClick}>
+    <div class="top-left-controls">
+      {#if place.shopInventory && place.shopInventory.length > 0}
+        <button class="shop-button" onclick={handleShopClick}>
+          <span class="shop-icon">🛒</span>
+          <span class="shop-label">Shop | {gs.player.cash}$</span>
+        </button>
+      {/if}
 
-  <div class="characters-overlay">
-    {#each charactersInPlace as character (character.key)}
+      <button class="event-button" onclick={() => createEventForCurrentActivity()}>
+        <span class="event-icon">✨</span>
+        <span class="event-label">Generate Event</span>
+      </button>
+    </div>
+
+    <div class="characters-overlay">
+      {#each charactersInPlace as character (character.key)}
+        <div
+          class="character-portrait-container"
+          class:selected={selectedCharacters.some((c) => c.key === character.key)}
+          onclick={(e) => handleCharacterClick(e, character)}
+        >
+          <CharacterPortrait {character} />
+          {#if character.chatInitiation}
+            <div class="chat-icon">💬</div>
+          {/if}
+        </div>
+      {/each}
+    </div>
+
+    <!-- Shop Modal -->
+    <ShopModal />
+
+    {#if showMenu}
       <div
-        class="character-portrait-container"
-        class:selected={selectedCharacters.some((c) => c.key === character.key)}
-        onclick={(e) => handleCharacterClick(e, character)}
+        class="social-modal"
+        style={`left: 50%; bottom: ${menuPosition.y}px;`}
+        onclick={(e) => e.stopPropagation()}
       >
-        <CharacterPortrait {character} />
-        {#if character.chatInitiation}
-          <div class="chat-icon">💬</div>
-        {/if}
+        <div class="modal-body">
+          <SocialAction characters={selectedCharacters} />
+        </div>
       </div>
-    {/each}
+    {/if}
   </div>
 
-  <!-- Shop Modal -->
-  <ShopModal />
-
-  {#if showMenu}
-    <div
-      class="social-modal"
-      style={`left: 50%; bottom: ${menuPosition.y}px;`}
-      onclick={(e) => e.stopPropagation()}
-    >
-      <div class="modal-body">
-        <SocialAction characters={selectedCharacters} />
-      </div>
+  {#if gs.activity.event}
+    <div class="event-pane">
+      <Event />
     </div>
   {/if}
 </div>
 
 <style>
+  .main-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
   .place-container {
     position: relative;
-    width: 100%;
+    flex: 1;
     height: 100%;
     background-image: var(--bg-image);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Shop Button Styles */
-  .shop-button {
+  .has-event .place-container {
+    flex: 0 0 50%;
+  }
+
+  .event-pane {
+    flex: 0 0 50%;
+    height: 100%;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    overflow: hidden;
+  }
+
+  /* Control Buttons Styles (Shop and Event) */
+  .top-left-controls {
     position: absolute;
     top: 20px;
     left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .shop-button,
+  .event-button {
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
     border: 2px solid rgba(255, 255, 255, 0.2);
@@ -136,13 +181,15 @@
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s ease;
-    z-index: 10;
     box-shadow:
       0 4px 12px rgba(0, 0, 0, 0.4),
       0 2px 6px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    width: fit-content;
   }
 
-  .shop-button:hover {
+  .shop-button:hover,
+  .event-button:hover {
     background: rgba(0, 0, 0, 0.9);
     border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
@@ -151,35 +198,44 @@
       0 3px 8px rgba(0, 0, 0, 0.3);
   }
 
-  .shop-button:active {
+  .shop-button:active,
+  .event-button:active {
     transform: translateY(0);
   }
 
-  .shop-icon {
+  .shop-icon,
+  .event-icon {
     font-size: 16px;
   }
 
-  .shop-label {
+  .shop-label,
+  .event-label {
     white-space: nowrap;
   }
 
   .characters-overlay {
     position: absolute;
-    bottom: 60px;
-    left: 60px;
+    bottom: 40px;
+    left: 40px;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 16px;
     z-index: 5;
     max-height: calc(100% - 80px);
     overflow: hidden;
   }
 
+  .has-event .characters-overlay {
+    bottom: 20px;
+    left: 20px;
+    gap: 12px;
+  }
+
   .character-portrait-container {
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
     border-radius: 12px;
     box-shadow:
       0 8px 24px rgba(0, 0, 0, 0.6),
@@ -191,6 +247,11 @@
     transition: all 0.3s ease;
     position: relative;
     cursor: pointer;
+  }
+
+  .has-event .character-portrait-container {
+    width: 220px;
+    height: 220px;
   }
 
   .character-portrait-container:hover {

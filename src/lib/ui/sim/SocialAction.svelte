@@ -203,15 +203,15 @@
       </div>
 
       {#if showWizard}
-        <ScheduleWizard 
-          {characters} 
-          onCancel={() => showWizard = false} 
+        <ScheduleWizard
+          {characters}
+          onCancel={() => (showWizard = false)}
           onSuccessDone={() => {
             showWizard = false;
             // Maybe we want to submit a message or just close it?
             // The user said: "When submitting the values, call scheduleActivityAction.checkSuccess and display a sentence stating whether or not the Character(s) accepted. If yes, call scheduleActivityAction.onSuccess"
             // I've handled this in the component.
-          }} 
+          }}
         />
       {/if}
     </div>

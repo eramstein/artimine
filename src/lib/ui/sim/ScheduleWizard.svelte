@@ -23,7 +23,7 @@
 
   const scheduleAction = ACTIONS[ActionType.ScheduleActivity];
 
-  const activities = Object.values(ActivityType);
+  const activities = [ActivityType.Gaming, ActivityType.Social, ActivityType.Date];
   const timePeriods = [DayPeriod.Morning, DayPeriod.Afternoon, DayPeriod.Evening];
 
   function togglePerson(name: string) {

@@ -10,6 +10,7 @@ import { gs } from '../_state/main.svelte';
 import { hideToast, showToast } from '../_state/state-ui.svelte';
 import { endPlayerChat, updateNpcRelation } from '../llm';
 import { autoResolveActivity } from './activity';
+import { createEventForCurrentActivity } from './event';
 import { adjustNpcDecks, expandNpcCollections } from './npc';
 import { dayPeriodIndexes, isTimePeriodBefore } from './time';
 import { getTournament } from './tournament';
@@ -90,6 +91,7 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
   if (!activityPlan) return;
   gs.activity = activityPlan.activity;
   gs.player.place = activityPlan.place;
+  createEventForCurrentActivity();
   activityPlan.activity.participants.forEach((participant) => {
     if (gs.characters[participant]) {
       gs.characters[participant].place = activityPlan.place;
@@ -162,7 +164,6 @@ function getScheduleIndexOfDay(day: number) {
 function resetPeriodState() {
   for (const npc of Object.values(gs.characters)) {
     npc.period.interactionsSummary = '';
-    npc.period.charismaRoll = undefined;
     npc.period.trades = 0;
   }
   gs.player.period.improvedRelations = false;
