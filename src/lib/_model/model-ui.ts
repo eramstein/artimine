@@ -1,6 +1,7 @@
 import type { CardColor } from './enums-battle';
 import type {
   Ability,
+  Card,
   CardTemplate,
   EffectTargets,
   Land,
@@ -41,15 +42,8 @@ export type UiState = {
       visible: boolean;
       playerId: number | null;
     };
-    dragArrow: {
-      instanceId: string;
-      active: boolean;
-      startX: number;
-      startY: number;
-      currentX: number;
-      currentY: number;
-    } | null;
     displayChat: boolean;
+    draggingCard: Card | null;
   };
   collection: {
     editedDeckKey: string | null;

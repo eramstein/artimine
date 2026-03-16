@@ -19,7 +19,7 @@
   import GoldCost from './GoldCost.svelte';
   import SpellDimOverlay from './SpellDimOverlay.svelte';
   import SpellTargetArrows from './SpellTargetArrows.svelte';
-  import DragArrow from './DragArrow.svelte';
+  import DragPreview from './DragPreview.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
 
   // Derived value to check if game is won
@@ -62,7 +62,7 @@
 </div>
 
 <TargetPrompt />
-<DragArrow />
+<DragPreview />
 
 <!-- Chat component positioned in bottom right -->
 {#if uiState.battle.displayChat}

@@ -113,7 +113,9 @@
   }
 
   // Check if this card is currently being dragged
-  let isDragging = $derived(uiState.battle.dragArrow?.instanceId === card.instanceId);
+  let isDragging = $derived(
+    inHand && uiState.battle.draggingCard?.instanceId === card.instanceId
+  );
 
   // Drag event handlers
   function handleDragStart(event: DragEvent) {
@@ -135,19 +137,8 @@
         'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // transparent pixel
       event.dataTransfer.setDragImage(img, 0, 0);
 
-      // Initialize drag arrow state
-      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-      const startX = rect.left + rect.width / 2;
-      const startY = rect.top + rect.height / 2;
-
-      uiState.battle.dragArrow = {
-        instanceId: card.instanceId,
-        active: true,
-        startX,
-        startY,
-        currentX: event.clientX,
-        currentY: event.clientY,
-      };
+      // Initialize dragging state
+      uiState.battle.draggingCard = card;
     }
   }
 
@@ -156,16 +147,10 @@
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move';
     }
-
-    // Update arrow position if it's not the final event (which has 0,0 coords)
-    if (uiState.battle.dragArrow && event.clientX !== 0 && event.clientY !== 0) {
-      uiState.battle.dragArrow.currentX = event.clientX;
-      uiState.battle.dragArrow.currentY = event.clientY;
-    }
   }
 
   function handleDragEnd() {
-    uiState.battle.dragArrow = null;
+    uiState.battle.draggingCard = null;
   }
 
   // Handle right-click to show CardFull
@@ -470,11 +455,11 @@
   }
 
   .card.dragging {
-    transform: translateY(-40px) scale(1.15);
+    transform: translateY(-20px) scale(1.05);
     border-color: var(--color-golden);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    opacity: 0.8;
+    opacity: 0.3;
   }
 
   @keyframes spell-pulse {
