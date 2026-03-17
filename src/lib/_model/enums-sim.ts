@@ -45,13 +45,13 @@ export enum ActionType {
 }
 
 export enum Difficulty {
-  AutomaticSuccess = 'automaticSuccess',
-  ExtremelyEasy = 'extremelyEasy',
-  VeryEasy = 'veryEasy',
+  AutomaticSuccess = 'automatic success',
+  ExtremelyEasy = 'extremely easy',
+  VeryEasy = 'very easy',
   Easy = 'easy',
   Medium = 'medium',
   Hard = 'hard',
-  VeryHard = 'veryHard',
-  ExtremelyHard = 'extremelyHard',
+  VeryHard = 'very hard',
+  ExtremelyHard = 'extremely hard',
   Impossible = 'impossible',
 }

@@ -85,6 +85,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
  * Returns normalized value in [0,1].
  */
 export function cosineSimilarity(a: number[], b: number[]): number {
+  if (!a || !b || a.length === 0 || b.length === 0) return 0;
   let dot = 0,
     normA = 0,
     normB = 0;
@@ -93,7 +94,9 @@ export function cosineSimilarity(a: number[], b: number[]): number {
     normA += a[i] * a[i];
     normB += b[i] * b[i];
   }
-  const cosine = dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  const denominator = Math.sqrt(normA) * Math.sqrt(normB);
+  if (denominator === 0) return 0;
+  const cosine = dot / denominator;
   return normalizeSemantic(cosine);
 }
 

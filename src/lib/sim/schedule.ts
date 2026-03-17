@@ -33,8 +33,6 @@ export function scheduleActivity(
   dayPeriod: DayPeriod,
   place: Place
 ) {
-  console.log('scheduling', activity, day, dayPeriod, place);
-
   const dayPeriodIndex = dayPeriodIndexes[dayPeriod];
   let dayIndex = getScheduleIndexOfDay(day);
   if (dayIndex === -1) {

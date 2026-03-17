@@ -3,7 +3,7 @@ import { Difficulty } from '@/lib/_model/enums-sim';
 import { gs } from '@/lib/_state';
 import { checkActionSuccess } from '../roll';
 
-export const difficultyNumbers = {
+export const difficultyNumbers: Record<string, number> = {
   [Difficulty.AutomaticSuccess]: -1000,
   [Difficulty.ExtremelyEasy]: -5,
   [Difficulty.VeryEasy]: 0,

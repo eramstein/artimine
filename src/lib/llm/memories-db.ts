@@ -92,6 +92,7 @@ export async function saveWorldFact(fact: WorldFact): Promise<number> {
     const serializableFact = {
       id: String(fact.id),
       description: String(fact.description),
+      place: String(fact.place ?? ''),
       embedding,
     };
     return await worldFacts.put(serializableFact);

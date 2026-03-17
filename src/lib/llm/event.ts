@@ -1,4 +1,5 @@
 import { config } from '../_config';
+import { Difficulty } from '../_model';
 import { gs } from '../_state/main.svelte';
 import { clamp, generateUniqueId } from '../_utils/random';
 import { getGroupDescription } from './chat-helpers';
@@ -15,33 +16,29 @@ export async function generateEventWithLLM() {
   const characters = gs.activity.participants.map((key) => gs.characters[key]);
   const charactersDescription = getGroupDescription(characters);
 
-  // get last memory involving at least one of these characters
   const relevantMemories = await getSystemPromptMemories(
     gs.time.day,
     characters,
     gs.places[gs.player.place],
-    gs.activity.activityType,
-    'memorable, important, funny'
+    gs.activity.activityType
   );
   const memoriesPrompt = relevantMemories || '';
 
   const systemPrompt = {
     role: 'system',
     content: `
+    You are a dungeon master for a collaborative narrative RPG. Your task is to generate an event description that occurs during the current scene. The event should be interesting, context-specific, and avoid being generic.
+    
     ### Instructions
-    You are a dungeon master for a collaborative narrative RPG.
-    Generate an event description that occurs during the current scene.
-    It should be interesting, so either funny, surprising, or dramatic.
-    It can be important (an accident, a romantic move) or trivial (like a character proposing to play a board game).
-    Important: try to make it context specific to avoid making it generic. See the ### NPCs section below to see the other characters opinion of the players and important memories.
-    Keep it around 2 or 3 short paragraphs.
-    Add an event title that is summarizing it in a few words.
-
-    Along with the event, generate 3 possible actions the player can take in reaction to that event.
-    Each option includes a relevant player attribute and a diffulty score to get a positive outcome if that option is chosen.
-    For example, if the option is "perform a backflip", the attribute is "dexterity" and the difficulty is 8/10. 
+    1. Generate an event description that is either funny, surprising, or dramatic.
+    2. The event should be context-specific, using details from the provided context about the characters, their relationships, and the location.
+    3. Keep the description around 2 or 3 short paragraphs.
+    4. Add an event title that summarizes it in a few words.
+    5. Along with the event, generate 3 possible actions the player can take in reaction to that event.
+    6. Each option includes a relevant player attribute and a difficulty level described in text.
 
     ### Possible attributes: ${Object.keys(gs.player.attributes).join(', ')}
+    ### Possible difficulty levels: ${Object.keys(Difficulty).join(', ')}
 
     ### Output Format:
     {
@@ -50,33 +47,38 @@ export async function generateEventWithLLM() {
       "options": [{
         "description": "string",
         "attribute": "string",
-        "difficulty": "number"
+        "difficulty": "string"
       }]
-    }
-
-    ### Player Character
-      - **${gs.player.name}** ${gs.player.bio}
-    
-    ### Context
-      - **Location:** ${locationDescription}
-      - **Time:** ${timeOfDay}
-      - **Activity:** ${context}
-
-    ### NPCs
-    ${charactersDescription}
-
-    ${memoriesPrompt ? `### Relevant Memories\n${memoriesPrompt}` : ''}    
+    }     
     `,
   };
 
-  console.log(systemPrompt.content);
+  const userPrompt = {
+    role: 'user',
+    content: `
+      ### Player Character
+      - **${gs.player.name}** ${gs.player.bio}
+    
+      ### Context
+        - **Activity:** The characters are ${context}
+        - **Location:** ${locationDescription}
+        - **Time:** ${timeOfDay}        
+
+      ### NPCs
+      ${charactersDescription}
+
+      ${memoriesPrompt ? `### Relevant Memories\n${memoriesPrompt}` : ''}   
+    `,
+  };
+
+  console.log(systemPrompt.content, userPrompt.content);
 
   llmService
     .chat({
       model: LLM_API_TOOL_MODEL,
       stream: false,
       responseFormat: { type: 'json_object' },
-      messages: [systemPrompt],
+      messages: [systemPrompt, userPrompt],
     })
     .then((m) => {
       const event = llmService.getMessage(m);
@@ -204,7 +206,7 @@ export async function resolveEventWithLLM(
       await saveActivityLog({
         id: generateUniqueId(),
         day: gs.time.day,
-        participants: gs.activity!.event?.participants || [],
+        participants: characters.map((c) => c.key),
         location: gs.places[gs.player.place].name,
         activityType: gs.activity.activityType,
         summary: eventDescription + '. ' + formattedOutcome.description,

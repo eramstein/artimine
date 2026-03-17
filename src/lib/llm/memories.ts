@@ -9,16 +9,43 @@ export async function getSystemPromptMemories(
   characters: Character[],
   place: Place,
   activityType: ActivityType,
-  userMessage: string
+  userMessage: string = ''
 ) {
   const characterIds = characters.map((c) => c.key);
 
   const indexDbMemories = await getChatsForCharacters(characterIds, 0, day);
+  const embeddedUserMessage = userMessage ? await getEmbedding(userMessage) : [];
 
-  const embeddedUserMessage = await getEmbedding(userMessage);
+  const worldFacts = await getWorldFacts();
 
-  // Add a score to each memory
-  const scoredMemories = indexDbMemories
+  const topWorldFacts = worldFacts
+    .map((fact) => ({
+      summary: fact.description,
+      score: scoreWorldFact(fact, { embeddedUserMessage, place }),
+    }))
+    .filter((m) => m.score > 0.5)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2)
+    .map((fact) => fact.summary)
+    .join('\n');
+
+  console.log('worldFacts', worldFacts);
+  console.log('topWorldFacts', topWorldFacts);
+
+  if (indexDbMemories.length === 0) {
+    console.log('only world facts');
+    return topWorldFacts;
+  }
+
+  // Always keep the latest memory
+  console.log('all memories', characterIds, day, indexDbMemories);
+
+  const latestMemory = indexDbMemories.sort((a, b) => b.day - a.day)[0];
+  const otherMemories = indexDbMemories.filter((m) => m.id !== latestMemory.id);
+  console.log('latestMemory', latestMemory);
+
+  // Add a score to each other memory
+  const scoredMemories = otherMemories
     .map((memory) => ({
       summary: memory.summary,
       score: scoreMemory(memory, {
@@ -32,9 +59,7 @@ export async function getSystemPromptMemories(
     .filter((m) => m.score > 0.5)
     .filter((m) => m.summary.length > 0);
 
-  if (scoredMemories.length === 0) {
-    return '';
-  }
+  console.log('scoredMemories', scoredMemories);
 
   // return top 2 memories summary with highest scores
   const topMemories = scoredMemories
@@ -43,20 +68,9 @@ export async function getSystemPromptMemories(
     .map((memory) => memory.summary)
     .join('\n');
 
-  const worldFacts = await getWorldFacts();
-  console.log('worldFacts', worldFacts);
-  const topWorldFacts = worldFacts
-    .map((fact) => ({
-      summary: fact.description,
-      score: scoreWorldFact(fact, { embeddedUserMessage }),
-    }))
-    .filter((m) => m.score > 0.5)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 2)
-    .map((fact) => fact.summary)
-    .join('\n');
+  console.log('topMemories', topMemories);
 
-  return `${topMemories}\n\n${topWorldFacts}`;
+  return `${latestMemory.summary}\n${topMemories}\n${topWorldFacts}`;
 }
 
 function scoreMemory(
@@ -81,7 +95,10 @@ function scoreMemory(
   const chars = memory.participants ? characterScore(memory.participants, context.characters) : 0;
   const loc = locationScore(memory.location, context.place.key);
   const act = activityScore(memory.activityType, context.activityType);
-  const sem = cosineSimilarity(memory.embedding, context.embeddedUserMessage);
+  const sem =
+    context.embeddedUserMessage.length > 0
+      ? cosineSimilarity(memory.embedding, context.embeddedUserMessage)
+      : 1;
 
   return (
     weights.time * time +
@@ -114,6 +131,20 @@ function activityScore(memType: ActivityType | undefined, currentType: ActivityT
   return memType === currentType ? 1 : 0;
 }
 
-function scoreWorldFact(worldFact: WorldFact, context: { embeddedUserMessage: number[] }): number {
-  return cosineSimilarity(worldFact.embedding, context.embeddedUserMessage);
+function scoreWorldFact(
+  worldFact: WorldFact,
+  context: { embeddedUserMessage: number[]; place: Place }
+): number {
+  const weights = {
+    location: 0.5,
+    semantic: 0.5,
+  };
+
+  const loc = locationScore(worldFact.place, context.place.key);
+  const sem =
+    context.embeddedUserMessage.length > 0
+      ? cosineSimilarity(worldFact.embedding, context.embeddedUserMessage)
+      : 1;
+
+  return weights.location * loc + weights.semantic * sem;
 }

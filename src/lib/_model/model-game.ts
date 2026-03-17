@@ -119,7 +119,7 @@ export interface Event {
 
 export interface EventOption {
   description: string;
-  difficulty: number; // 1 to 10
+  difficulty: string;
   relatedAttribute: keyof CharacterAttributes;
 }
 
@@ -164,6 +164,7 @@ export interface GroupActivityLog {
 export interface WorldFact {
   id: string;
   description: string;
+  place?: string; // place key
   embedding: number[];
 }
 

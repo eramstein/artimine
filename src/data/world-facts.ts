@@ -8,5 +8,6 @@ export const WORLD_FACTS: Omit<WorldFact, 'id' | 'embedding'>[] = [
   })),
   ...PLACES.map((place) => ({
     description: `${place.name}: ${place.description}`,
+    place: place.key,
   })),
 ];
