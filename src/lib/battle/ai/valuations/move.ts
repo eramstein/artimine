@@ -8,7 +8,7 @@ import { valueUnit } from './unit';
 export function getHighestMoveValue(unit: UnitDeployed): {
   value: number;
   cell: Position;
-} {
+} | null {
   const ennemyPowerPerRow = getOpponentUnitDamagePerRow();
   const dangerLevelPerRow = getDangerLevelPerRow();
   const ennemyCountPerRow = getOpponentCountPerRow();
@@ -20,6 +20,9 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   const cellsToConsider = moveValues
     .map((c, i) => ({ index: i, value: c }))
     .filter((c) => c.value === maxValue);
+  if (cellsToConsider.length === 0) {
+    return null;
+  }
   return {
     value: maxValue,
     cell: cells[getRandomFromArray(cellsToConsider).index],

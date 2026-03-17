@@ -59,8 +59,10 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
     for (const unit of possibleActions.deployableUnits) {
       if (unit.aiHints?.some((hint) => goalsMap[hint])) {
         const bestPosition = getHighestMoveValue(unit as UnitDeployed);
-        deployUnit(unit, bestPosition.cell);
-        return true;
+        if (bestPosition) {
+          deployUnit(unit, bestPosition.cell);
+          return true;
+        }
       }
     }
   }
@@ -78,8 +80,10 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
   const cardToPlay = cardsToConsider.sort((a, b) => b.cost - a.cost)[0];
   if (cardToPlay.type === CardType.Unit) {
     const bestPosition = getHighestMoveValue(cardToPlay as UnitDeployed);
-    deployUnit(cardToPlay as UnitCard, bestPosition.cell);
-    return true;
+    if (bestPosition) {
+      deployUnit(cardToPlay as UnitCard, bestPosition.cell);
+      return true;
+    }
   }
   if (cardToPlay.type === CardType.Spell) {
     const targets = selectAiSpellTargets(cardToPlay as SpellCard);
@@ -105,8 +109,10 @@ function handleDeployedUnits(possibleActions: PossibleActions): boolean {
     if (possiblePositions.length === 0) return false;
     const mover = getRandomFromArray(possibleActions.unitsWhoCanMove);
     const bestMove = getHighestMoveValue(mover);
-    moveUnit(mover, bestMove.cell);
-    return true;
+    if (bestMove) {
+      moveUnit(mover, bestMove.cell);
+      return true;
+    }
   }
   return false;
 }
@@ -129,9 +135,12 @@ function attackOrMove(unit: UnitDeployed, canAlsoMove: boolean) {
   }
   const attackValue = bestAttackValue - counterAttackValue;
   const bestMove = getHighestMoveValue(unit);
+  const counterattackAfterBestMove = bestMove
+    ? getCounterAttackValue({ ...unit, position: bestMove.cell })
+    : 0;
 
-  const counterattackAfterBestMove = getCounterAttackValue({ ...unit, position: bestMove.cell });
   if (
+    !bestMove ||
     !canAlsoMove ||
     bestMove.value === -Infinity ||
     (attackValue >= -counterattackAfterBestMove && bestMove.value !== Infinity)

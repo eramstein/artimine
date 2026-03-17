@@ -47,6 +47,13 @@ const hiddenIntentions = [
 
 const narrativePressures = ['low', 'medium', 'high'];
 
+// these are global to be shared across event generation and event resolution
+let eventType = '';
+let relationshipGoal = '';
+let twist = '';
+let hiddenIntention = '';
+let narrativePressure = '';
+
 export async function generateEventWithLLM() {
   // context
   const place = gs.places[gs.player.place];
@@ -57,11 +64,11 @@ export async function generateEventWithLLM() {
   const charactersDescription = getGroupDescription(characters);
 
   // constraints to help the LLM be less generic
-  const eventType = getRandomFromArray(eventTypes);
-  const relationshipGoal = getRandomFromArray(relationshipGoals);
-  const twist = Math.random() > 0.5 ? getRandomFromArray(twistTypes) : null;
-  const hiddenIntention = Math.random() > 0.5 ? getRandomFromArray(hiddenIntentions) : null;
-  const narrativePressure = getRandomFromArray(narrativePressures);
+  eventType = getRandomFromArray(eventTypes);
+  relationshipGoal = getRandomFromArray(relationshipGoals);
+  twist = Math.random() > 0.5 ? getRandomFromArray(twistTypes) : null;
+  hiddenIntention = Math.random() > 0.5 ? getRandomFromArray(hiddenIntentions) : null;
+  narrativePressure = getRandomFromArray(narrativePressures);
 
   const relevantMemories = await getSystemPromptMemories(
     gs.time.day,
@@ -79,11 +86,11 @@ You are a narrative designer for a character-driven RPG.
 Your goal is to generate a short, meaningful event that can evolve relationships between characters.
 
 [NARRATIVE_CONSTRAINTS]
-Event Type: ${eventType}
-Relationship Goal: ${relationshipGoal}
-Twist: ${twist}
-Hidden Intention (NPC): ${hiddenIntention}
-Narrative Pressure: ${narrativePressure}
+event_type: ${eventType}
+relationship_goal: ${relationshipGoal}
+twist: ${twist}
+hidden_intention: ${hiddenIntention}
+narrative_pressure: ${narrativePressure}
 [/NARRATIVE_CONSTRAINTS]
 
 RULES:
@@ -93,6 +100,20 @@ RULES:
 - Match intensity to narrative_pressure (low/medium/high).
 - Use specific context (personality, memories, relationship, location).
 - Avoid generic or overused situations.
+
+HARD RULES (STRICT):
+
+- NEVER mention or expose system concepts such as:
+  event_type, relationship_goal, twist, hidden_intention, narrative_pressure.
+- hidden_intention is internal only. It must influence behavior indirectly, never be stated.
+- NEVER control or describe the player character's decisions or actions.
+  The player character may only:
+  - react passively
+  - speak briefly if necessary
+  - but must NOT initiate major actions or decisions
+- The event must present a situation TO the player, not resolve it.
+- If the player character performs a strong action (accuse, confess, decide),
+  the output is INVALID.
 
 OPTIONS:
 - Generate 3 choices.
@@ -170,46 +191,92 @@ export async function resolveEventWithLLM(
   const systemPrompt = {
     role: 'system',
     content: `
-    ### Instructions
-    You are a dungeon master for a collaborative narrative RPG.
-    An event occurred and the player has made a decision.
-    For a given outcome of the player action, write a scene describing what happens next.
-    Based on that scene, also return how this affected the opinion the other characters have of the player.
-    For each character name, return the change in respect, friendship and love.
-    1 for small increase, 2 for big increase, 0 for no change, -1 for small decrease, -2 for big decrease
-    
-    ### Output Format:
-    {
-      "description": "string",
-      "relationValuesByCharacter": {
-        "characterName": {
-          "respect": "number",
-          "friendship": "number",
-          "love": "number",
-        }
-      }
+    You are a narrative simulator for a character-driven RPG.
+
+An event occurred. The player chose an action. The outcome is known.
+
+Your task:
+1. Describe what happens next in a short, vivid scene.
+2. Update how each NPC's perception of the player evolves.
+
+---
+
+[NARRATIVE CONTEXT]
+event_type = ${eventType}
+relationship_goal = ${relationshipGoal}
+hidden_intention = ${hiddenIntention}
+narrative_pressure = ${narrativePressure}
+[/NARRATIVE CONTEXT]
+
+---
+
+RULES:
+
+- The scene MUST be a direct consequence of the player’s action.
+- Reflect success/failure clearly in the outcome.
+- NPC reactions must be consistent with:
+  - their personality
+  - their relationship with the player
+  - their hidden intention
+
+- Avoid generic success/failure descriptions.
+
+---
+
+RELATIONSHIP EVOLUTION:
+
+For each NPC, update:
+- respect
+- friendship
+- love
+
+Values:
+-2 (big decrease), -1 (small decrease), 0 (no change), 1 (small increase), 2 (big increase)
+
+Guidelines:
+- Changes must be justified by the scene.
+- Do NOT change all values at once unless strongly justified.
+- Failure can still increase some values (e.g. vulnerability → friendship).
+- Success can backfire depending on personality.
+
+---
+
+OUTPUT (STRICT JSON):
+
+{
+  "description": "string",
+  "relationValuesByCharacter": {
+    "characterName": {
+      "respect": number,
+      "friendship": number,
+      "love": number
     }
+  }
+}
 
-    ### Player Character
-      - **${gs.player.name}** ${gs.player.bio}
-    
-    ### Context
-      - **Location:** ${locationDescription}
-      - **Time:** ${timeOfDay}
-      - **Activity:** ${context}
-      - **Recent Event:** ${eventDescription}
+---
 
-    ### NPCs
-    ${charactersDescription}
+[PLAYER CHARACTER]
+  - **${gs.player.name}** ${gs.player.bio}
+
+[CONTEXT]
+  - **Location:** ${locationDescription}
+  - **Time:** ${timeOfDay}
+  - **Activity:** ${context}
+  - **Recent Event:** ${eventDescription}
+
+[NPCs]
+${charactersDescription}
     `,
   };
 
   const userPrompt = {
     role: 'user',
     content: `
-      The player attempted this: ${optionDescription}
-      ${isSuccess ? 'The player succeeded ' : 'The player failed '}
-      ${isCritical ? 'critically' : ''}
+      [ACTION]
+      player_action = ${optionDescription}
+      outcome = ${isSuccess ? 'success' : 'failure'}
+      critical = ${isCritical ? 'yes' : 'no'}
     `,
   };
 
