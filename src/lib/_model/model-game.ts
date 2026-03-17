@@ -3,6 +3,7 @@ import type {
   ActivityType,
   DayPeriod,
   ItemType,
+  NpcPerk,
   TournamentStatus,
   TournamentType,
 } from './enums-sim';
@@ -50,6 +51,7 @@ export interface Npc extends Character {
     interactionsSummary: string;
     trades: number; // how many cards the NPC has traded with the player this period
   };
+  perks: Record<NpcPerk, number>;
 }
 
 export interface RelationValues {

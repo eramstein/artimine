@@ -30,6 +30,7 @@ function addDefaultCollectionAndDecks(character: any): Npc {
     decks: [],
     collection: [],
     items: [],
+    perks: {},
   };
 }
 

@@ -15,3 +15,7 @@ export function autoResolveActivity(activity: Activity) {
       break;
   }
 }
+
+export function getParticipants(activity: Activity) {
+  return activity.participants.map((key) => gs.characters[key]).filter(Boolean);
+}

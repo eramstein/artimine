@@ -1,7 +1,8 @@
-import { config } from '../_config';
 import { Difficulty } from '../_model';
 import { gs } from '../_state/main.svelte';
-import { clamp, generateUniqueId, getRandomFromArray } from '../_utils/random';
+import { generateUniqueId, getRandomFromArray } from '../_utils/random';
+import { getParticipants } from '../sim/activity';
+import { updateNpcRelationValue } from '../sim/relation';
 import { generateSummary } from './chat';
 import { getGroupDescription } from './chat-helpers';
 import { LLM_API_TOOL_MODEL } from './config';
@@ -60,7 +61,7 @@ export async function generateEventWithLLM() {
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
   const locationDescription = place.name + ', ' + place.description || '';
-  const characters = gs.activity.participants.map((key) => gs.characters[key]);
+  const characters = getParticipants(gs.activity);
   const charactersDescription = getGroupDescription(characters);
 
   // constraints to help the LLM be less generic
@@ -184,7 +185,7 @@ export async function resolveEventWithLLM(
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
   const locationDescription = place.name + ', ' + place.description || '';
-  const characters = gs.activity.participants.map((key) => gs.characters[key]);
+  const characters = getParticipants(gs.activity);
   const charactersDescription = getGroupDescription(characters);
   const eventDescription = gs.activity.event?.description || '';
 
@@ -307,25 +308,13 @@ ${charactersDescription}
           const char = gs.characters[npcKey];
           const charChanges = changes as any;
           if (charChanges.respect) {
-            char.relationValues.respect = clamp(
-              char.relationValues.respect + charChanges.respect,
-              -config.opinionMaxValue,
-              config.opinionMaxValue
-            );
+            updateNpcRelationValue(char, 'respect', charChanges.respect);
           }
           if (charChanges.friendship) {
-            char.relationValues.friendship = clamp(
-              char.relationValues.friendship + charChanges.friendship,
-              -config.opinionMaxValue,
-              config.opinionMaxValue
-            );
+            updateNpcRelationValue(char, 'friendship', charChanges.friendship);
           }
           if (charChanges.love) {
-            char.relationValues.love = clamp(
-              char.relationValues.love + charChanges.love,
-              -config.opinionMaxValue,
-              config.opinionMaxValue
-            );
+            updateNpcRelationValue(char, 'love', charChanges.love);
           }
           // update NPC daily interactions summary
           char.period.interactionsSummary += '\n' + formattedOutcome.description;
