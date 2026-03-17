@@ -138,3 +138,10 @@ function removeWeakestLandFromDeck(deck: Deck): boolean {
   }
   return false;
 }
+
+export function sendNpcsHome() {
+  // TODO: config where NPCs should be at a given day/period
+  Object.values(gs.characters).forEach((npc) => {
+    npc.place = 0;
+  });
+}

@@ -5,8 +5,8 @@ export const CHARACTER_MOLLY = {
   name: 'Molly',
   place: 0,
   cash: 10,
+  personality: 'friendly, warm, curious, shy, good listener',
   bio: `Molly is a 20 years old psychology student.
-  She is friendly, warm, curious and a bit shy.
   She works as a waitress.
   Her favorite Hordes cards are red and blue, especially Arabia cards.`,
 };

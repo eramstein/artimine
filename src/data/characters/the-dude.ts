@@ -5,6 +5,7 @@ export const CHARACTER_THE_DUDE = {
   name: 'The Dude',
   place: 0,
   cash: 60,
+  personality: 'laid-back, philosophical, easily confused, kind-hearted',
   bio: `The Dude is a 48 years old shop owner. His the owner of the Goblin's Den.  
   He speaks and behaves like The Big Lebowski.
   His ambition is to become the best Hordes player in the world, even though in reality he is not good at it.

@@ -26,6 +26,7 @@ export interface Character {
   key: string;
   name: string;
   bio: string;
+  personality: string;
   place: number;
   collection: CardTuple[];
   decks: Deck[];

@@ -1,20 +1,67 @@
 import { config } from '../_config';
 import { Difficulty } from '../_model';
 import { gs } from '../_state/main.svelte';
-import { clamp, generateUniqueId } from '../_utils/random';
+import { clamp, generateUniqueId, getRandomFromArray } from '../_utils/random';
+import { generateSummary } from './chat';
 import { getGroupDescription } from './chat-helpers';
 import { LLM_API_TOOL_MODEL } from './config';
 import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
 import { saveActivityLog } from './memories-db';
 
+const eventTypes = [
+  'Revelation (a secret or unexpected information)',
+  'Tension (conflict, disagreement, awkwardness)',
+  'Bonding (shared vulnerability or connection)',
+  'Test (a challenge that reveals character traits)',
+  'External disruption (something unexpected interrupts)',
+  'Moral dilemma (player must choose between values)',
+  'Status shift (change in power/dominance between characters)',
+];
+
+const relationshipGoals = [
+  'Increase trust',
+  'Create doubt',
+  'Build attraction',
+  'Trigger rivalry',
+  'Reveal vulnerability',
+  'Establish dominance',
+];
+
+const twistTypes = [
+  'Unexpected confession',
+  'Social interruption',
+  'Emotional shift',
+  'Status reversal',
+  'Hidden information revealed',
+];
+
+const hiddenIntentions = [
+  'impress',
+  'test',
+  'hide embarrassment',
+  'seek emotional connection',
+  'gain advantage',
+  'protect themselves',
+];
+
+const narrativePressures = ['low', 'medium', 'high'];
+
 export async function generateEventWithLLM() {
+  // context
   const place = gs.places[gs.player.place];
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
   const locationDescription = place.name + ', ' + place.description || '';
   const characters = gs.activity.participants.map((key) => gs.characters[key]);
   const charactersDescription = getGroupDescription(characters);
+
+  // constraints to help the LLM be less generic
+  const eventType = getRandomFromArray(eventTypes);
+  const relationshipGoal = getRandomFromArray(relationshipGoals);
+  const twist = Math.random() > 0.5 ? getRandomFromArray(twistTypes) : null;
+  const hiddenIntention = Math.random() > 0.5 ? getRandomFromArray(hiddenIntentions) : null;
+  const narrativePressure = getRandomFromArray(narrativePressures);
 
   const relevantMemories = await getSystemPromptMemories(
     gs.time.day,
@@ -27,47 +74,63 @@ export async function generateEventWithLLM() {
   const systemPrompt = {
     role: 'system',
     content: `
-    You are a dungeon master for a collaborative narrative RPG. Your task is to generate an event description that occurs during the current scene. The event should be interesting, context-specific, and avoid being generic.
-    
-    ### Instructions
-    1. Generate an event description that is either funny, surprising, or dramatic.
-    2. The event should be context-specific, using details from the provided context about the characters, their relationships, and the location.
-    3. Keep the description around 2 or 3 short paragraphs.
-    4. Add an event title that summarizes it in a few words.
-    5. Along with the event, generate 3 possible actions the player can take in reaction to that event.
-    6. Each option includes a relevant player attribute and a difficulty level described in text.
+You are a narrative designer for a character-driven RPG.
 
-    ### Possible attributes: ${Object.keys(gs.player.attributes).join(', ')}
-    ### Possible difficulty levels: ${Object.keys(Difficulty).join(', ')}
+Your goal is to generate a short, meaningful event that can evolve relationships between characters.
 
-    ### Output Format:
+[NARRATIVE_CONSTRAINTS]
+Event Type: ${eventType}
+Relationship Goal: ${relationshipGoal}
+Twist: ${twist}
+Hidden Intention (NPC): ${hiddenIntention}
+Narrative Pressure: ${narrativePressure}
+[/NARRATIVE_CONSTRAINTS]
+
+RULES:
+- The event MUST reflect event_type and support relationship_goal.
+- The twist MUST be clearly present.
+- The NPC's hidden_intention must subtly influence behavior.
+- Match intensity to narrative_pressure (low/medium/high).
+- Use specific context (personality, memories, relationship, location).
+- Avoid generic or overused situations.
+
+OPTIONS:
+- Generate 3 choices.
+- Each choice = different strategy and emotional tone.
+- Include: one safe, one balanced, one risky option.
+
+OUTPUT (STRICT JSON):
+
+{
+  "title": "string",
+  "description": "string",
+  "options": [
     {
-      "title": "string",
       "description": "string",
-      "options": [{
-        "description": "string",
-        "attribute": "string",
-        "difficulty": "string"
-      }]
-    }     
+      "attribute": "${Object.keys(gs.player.attributes).join(' | ')}",
+      "difficulty": "${Object.keys(Difficulty).join(' | ')}"
+    }
+  ]
+}
     `,
   };
 
   const userPrompt = {
     role: 'user',
     content: `
-      ### Player Character
-      - **${gs.player.name}** ${gs.player.bio}
+      [PLAYER]
+      ${gs.player.name}
+      ${gs.player.bio}
     
-      ### Context
-        - **Activity:** The characters are ${context}
-        - **Location:** ${locationDescription}
-        - **Time:** ${timeOfDay}        
+      [SCENE]
+      - Activity: ${context}
+      - Location: ${locationDescription}
+      - Time: ${timeOfDay}        
 
-      ### NPCs
+      [NPCs]
       ${charactersDescription}
 
-      ${memoriesPrompt ? `### Relevant Memories\n${memoriesPrompt}` : ''}   
+      ${memoriesPrompt ? `[MEMORIES]\n${memoriesPrompt}` : ''}   
     `,
   };
 
@@ -115,7 +178,6 @@ export async function resolveEventWithLLM(
     For each character name, return the change in respect, friendship and love.
     1 for small increase, 2 for big increase, 0 for no change, -1 for small decrease, -2 for big decrease
     
-
     ### Output Format:
     {
       "description": "string",
@@ -203,13 +265,14 @@ export async function resolveEventWithLLM(
         }
       }
       // save memory in DB
+      const summary = await generateSummary(eventDescription + '. ' + formattedOutcome.description);
       await saveActivityLog({
         id: generateUniqueId(),
         day: gs.time.day,
         participants: characters.map((c) => c.key),
         location: gs.places[gs.player.place].name,
         activityType: gs.activity.activityType,
-        summary: eventDescription + '. ' + formattedOutcome.description,
+        summary,
         embedding: [],
       });
     })

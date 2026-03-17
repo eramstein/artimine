@@ -11,7 +11,7 @@ import { hideToast, showToast } from '../_state/state-ui.svelte';
 import { endPlayerChat, updateNpcRelation } from '../llm';
 import { autoResolveActivity } from './activity';
 import { createEventForCurrentActivity } from './event';
-import { adjustNpcDecks, expandNpcCollections } from './npc';
+import { adjustNpcDecks, expandNpcCollections, sendNpcsHome } from './npc';
 import { dayPeriodIndexes, isTimePeriodBefore } from './time';
 import { getTournament } from './tournament';
 
@@ -80,6 +80,8 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
         }
       });
     });
+  // reset NPCs
+  sendNpcsHome();
   // clean up passed schedule
   gs.activityPlans = gs.activityPlans.slice(day);
   // fill schedule for next days

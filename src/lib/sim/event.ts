@@ -1,9 +1,13 @@
+import { ActivityType } from '../_model';
 import { gs } from '../_state';
 import { generateEventWithLLM, resolveEventWithLLM } from '../llm/event';
 import { difficultyNumbers } from './actions/general-challenge';
 import { checkActionSuccess } from './roll';
 
 export function createEventForCurrentActivity() {
+  if (gs.activity.activityType === ActivityType.Chill && !gs.activity.participants.length) {
+    return;
+  }
   generateEventWithLLM();
 }
 

@@ -66,11 +66,11 @@ export async function getSystemPromptMemories(
     .sort((a, b) => b.score - a.score)
     .slice(0, 2)
     .map((memory) => memory.summary)
-    .join('\n');
+    .join('\n\n');
 
   console.log('topMemories', topMemories);
 
-  return `${latestMemory.summary}\n${topMemories}\n${topWorldFacts}`;
+  return `${latestMemory.summary}\n\n${topMemories}\n\n${topWorldFacts}`;
 }
 
 function scoreMemory(
