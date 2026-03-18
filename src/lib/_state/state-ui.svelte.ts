@@ -83,6 +83,7 @@ export const uiState: UiState = $state({
   cardEditor: {
     card: null,
   },
+  activeGiftCharacterKey: null,
 });
 
 export function addRollResult(result: {

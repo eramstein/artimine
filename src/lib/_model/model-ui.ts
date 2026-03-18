@@ -110,6 +110,7 @@ export type UiState = {
   cardEditor: {
     card: CardTemplate | null;
   };
+  activeGiftCharacterKey: string | null;
 };
 
 export enum UiView {

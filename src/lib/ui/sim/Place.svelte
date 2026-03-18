@@ -8,6 +8,7 @@
   import ShopModal from './ShopModal.svelte';
   import SocialAction from './SocialAction.svelte';
   import Event from './Event.svelte';
+  import Gift from './Gift.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -67,9 +68,14 @@
     uiState.shopModal.placeKey = place.key;
     uiState.shopModal.visible = true;
   }
+
+  function handleGiftClick(event: MouseEvent, character: Npc) {
+    event.stopPropagation();
+    uiState.activeGiftCharacterKey = character.key;
+  }
 </script>
 
-<div class="main-layout" class:has-event={!!gs.activity.event}>
+<div class="main-layout" class:has-event={!!gs.activity.event || !!uiState.activeGiftCharacterKey}>
   <div class="place-container" style="--bg-image: url('{imagePath}')" onclick={handleBackgroundClick}>
     <div class="top-left-controls">
       {#if place.shopInventory && place.shopInventory.length > 0}
@@ -96,6 +102,9 @@
           {#if character.chatInitiation}
             <div class="chat-icon">💬</div>
           {/if}
+          {#if character.gifting?.cards.length > 0}
+            <div class="gift-icon" onclick={(e) => handleGiftClick(e, character)}>🎁</div>
+          {/if}
         </div>
       {/each}
     </div>
@@ -119,6 +128,10 @@
   {#if gs.activity.event}
     <div class="event-pane">
       <Event />
+    </div>
+  {:else if uiState.activeGiftCharacterKey}
+    <div class="event-pane">
+      <Gift />
     </div>
   {/if}
 </div>
@@ -298,6 +311,37 @@
     50% {
       transform: scale(1.1);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .gift-icon {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    border: 2px solid #fbbf24;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    animation: giftPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes giftPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
     }
   }
 

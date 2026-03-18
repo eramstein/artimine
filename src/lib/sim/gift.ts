@@ -1,4 +1,6 @@
+import type { Npc } from '../_model';
 import { gs } from '../_state';
+import { addCardToCollection } from './collection';
 
 // check for each character if they want to make a gift
 export function rollGifts() {
@@ -11,4 +13,12 @@ export function rollGifts() {
         char.unlocks.cards = char.unlocks.cards.filter((k) => k !== card);
       }
     });
+}
+
+export function acceptCardGifts(character: Npc) {
+  const cards = character.gifting.cards;
+  character.gifting.cards = [];
+  cards.forEach((cardId) => {
+    addCardToCollection(cardId);
+  });
 }
