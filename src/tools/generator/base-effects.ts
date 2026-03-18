@@ -116,6 +116,13 @@ export const baseEffects: BaseEffect[] = [
     budget: (args, targets) => 8,
   },
   {
+    effectName: 'gainGold',
+    argNames: ['goldCount'],
+    budget: (args, targets) => {
+      return args.goldCount * 5;
+    },
+  },
+  {
     effectName: 'applyUnitStatus',
     argNames: ['statusType', 'duration', 'range', 'fromTriggerParam'],
     budget: (args, targets) => {

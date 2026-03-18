@@ -1,6 +1,7 @@
 import { config } from '../_config';
 import type { CardColor, Player } from '../_model';
 import { bs, uiState } from '../_state';
+import { onGoldGained } from './listeners';
 import { soundManager } from './sound';
 import { checkIfPlayerLost } from './win';
 
@@ -53,4 +54,9 @@ export function usePlayerColorAbility(player: Player, color: CardColor) {
 
 export function addMana(player: Player, amount: number) {
   player.mana += amount;
+}
+
+export function gainGold(player: Player, amount: number) {
+  player.gold += amount;
+  onGoldGained(player, amount);
 }

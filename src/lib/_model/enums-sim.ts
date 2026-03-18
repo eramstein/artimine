@@ -58,6 +58,5 @@ export enum Difficulty {
 
 // bonuses or extra abilities the player has with a given NPC
 export enum NpcPerk {
-  ExtraTrade = 'extra trades usable once', // allows extra trades, usable once
-  ExtraTradePermanent = 'extra trades per period', // allows one extra trade per period
+  ExtraTrade = 'extra trades', // allows extra trades per period
 }

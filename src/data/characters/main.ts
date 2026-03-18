@@ -14,6 +14,10 @@ export const CHARACTERS: Record<string, Npc> = {
   [CHARACTER_OUSMANE.key]: addDefaultCollectionAndDecks(CHARACTER_OUSMANE),
 };
 
+export const CHARACTERS_CARD_UNLOCKS: Record<string, string[]> = {
+  [CHARACTER_MOLLY.key]: ['dunyazad', 'ali_baba'],
+};
+
 function addDefaultCollectionAndDecks(character: any): Npc {
   return {
     ...character,
@@ -31,6 +35,13 @@ function addDefaultCollectionAndDecks(character: any): Npc {
     collection: [],
     items: [],
     perks: {},
+    unlocks: {
+      lastUnlock: 0,
+      cards: [],
+    },
+    gifting: {
+      cards: [],
+    },
   };
 }
 

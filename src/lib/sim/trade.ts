@@ -1,6 +1,6 @@
 import { cards } from '@/data';
 import { config } from '../_config';
-import { ActivityType } from '../_model';
+import { ActivityType, NpcPerk } from '../_model';
 import { CardRarity } from '../_model/enums-battle';
 import type { CardTuple, Character, Npc } from '../_model/model-game';
 import { gs } from '../_state';
@@ -74,12 +74,13 @@ function evaluateCardTuple(tuples: CardTuple[], character: Character): number {
 
 export function getMaxTradesPerPeriod(character: Npc): number {
   let extraTrades = 0;
-  // +4 during gaming activties
+  // +1 during gaming activties
   if (gs.activity.activityType === ActivityType.Gaming) {
-    extraTrades = 4;
+    extraTrades = 1;
   }
-  return Math.max(
-    0,
-    config.maxTradesPerPeriod + extraTrades + Math.floor(character.relationValues.friendship / 4)
-  );
+  // +1 per 5 friendship points
+  extraTrades += Math.floor(character.relationValues.friendship / 5);
+  // +1 per perk
+  extraTrades += character.perks[NpcPerk.ExtraTrade] || 0;
+  return Math.max(0, config.maxTradesPerPeriod + extraTrades);
 }

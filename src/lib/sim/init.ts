@@ -1,5 +1,5 @@
 import { CHARACTER_DECKS } from '@/data/base-deck';
-import { CHARACTERS } from '@/data/characters/main';
+import { CHARACTERS, CHARACTERS_CARD_UNLOCKS } from '@/data/characters/main';
 import { CHARACTER_PLAYER } from '@/data/characters/player';
 import { loadBaseDeck } from '@/data/loader';
 import { PLACES } from '@/data/places/places';
@@ -58,6 +58,7 @@ export const initSim = async () => {
     openBoosterForCharacter(character, CardSet.Alpha);
     openBoosterForCharacter(character, CardSet.Alpha);
     openBoosterForCharacter(character, CardSet.Alpha);
+    character.unlocks.cards = CHARACTERS_CARD_UNLOCKS[character.key] || [];
   }
 
   // SHOPS

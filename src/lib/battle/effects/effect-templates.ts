@@ -28,6 +28,7 @@ import {
   destroyUnit,
   discard,
   drawCard,
+  gainGold,
   getClosestEnnemyInRow,
   getEmptyCells,
   getOpposingPlayer,
@@ -454,6 +455,12 @@ export const DataEffectTemplates: Record<
       }
     },
     label: () => `Draw ${cardCount} card${cardCount !== 1 ? 's' : ''}.`,
+  }),
+  gainGold: ({ goldCount = 1 }) => ({
+    fn: ({ player }) => {
+      gainGold(player, goldCount);
+    },
+    label: () => `Gain ${goldCount} gold${goldCount !== 1 ? 's' : ''}.`,
   }),
   destroyUnit: ({ range }: { range?: UnitFilterArgs }) => ({
     fn: ({ targets, unit, land, player }) => {

@@ -52,6 +52,13 @@ export interface Npc extends Character {
     trades: number; // how many cards the NPC has traded with the player this period
   };
   perks: Record<NpcPerk, number>;
+  unlocks: {
+    lastUnlock: number; // day of the last unlock
+    cards: string[]; // keys of unique cards the NPC can gift
+  };
+  gifting: {
+    cards: string[];
+  };
 }
 
 export interface RelationValues {
