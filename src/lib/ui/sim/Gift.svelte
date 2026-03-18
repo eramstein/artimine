@@ -4,6 +4,7 @@
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { getCardImagePath } from '@/lib/_utils/asset-paths';
   import { acceptCardGifts } from '@/lib/sim/gift';
+  import CardFull from '../cards/CardFull.svelte';
 
   let characterKey = $derived(uiState.activeGiftCharacterKey);
   let character = $derived(characterKey ? gs.characters[characterKey] : null);
@@ -17,6 +18,15 @@
 
   function handleClose() {
     uiState.activeGiftCharacterKey = null;
+  }
+
+  function displayCardFull(event: MouseEvent, cardTemplateId: string) {
+    event.preventDefault();
+    const cardTemplate = cards[cardTemplateId] || lands[cardTemplateId];
+    if (cardTemplate) {
+      uiState.cardFullOverlay.visible = true;
+      uiState.cardFullOverlay.card = cardTemplate;
+    }
   }
 </script>
 
@@ -36,7 +46,7 @@
       <div class="cards-container">
         {#each giftingCards as cardId}
           {@const card = cards[cardId] || lands[cardId]}
-          <div class="card-item">
+          <div class="card-item" oncontextmenu={(e) => displayCardFull(e, cardId)}>
             <img src={getCardImagePath(cardId)} alt={card?.name || cardId} class="card-image" />
             <div class="card-name">{card?.name || 'Unknown Card'}</div>
           </div>
@@ -44,6 +54,15 @@
       </div>
 
       <button class="claim-button" onclick={handleClaim}> Claim Gifts </button>
+    </div>
+  </div>
+{/if}
+
+<!-- CardFull overlay -->
+{#if uiState.cardFullOverlay.visible && uiState.cardFullOverlay.card}
+  <div class="card-full-overlay" onclick={() => (uiState.cardFullOverlay.visible = false)}>
+    <div class="card-full-container" onclick={(e) => e.stopPropagation()}>
+      <CardFull card={uiState.cardFullOverlay.card} />
     </div>
   </div>
 {/if}
@@ -117,8 +136,8 @@
 
   .cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
     margin-top: 8px;
   }
 
@@ -126,31 +145,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 12px;
     transition: all 0.2s ease;
+    cursor: help;
   }
 
   .card-item:hover {
     transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   }
 
   .card-image {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 
   .card-name {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #f8fafc;
     text-align: center;
@@ -186,5 +199,38 @@
 
   .claim-button:active {
     transform: translateY(0);
+  }
+
+  .card-full-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+
+  .card-full-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 </style>

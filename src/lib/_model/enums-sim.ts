@@ -19,6 +19,7 @@ export enum ActivityType {
   Social = 'Socializing',
   Date = 'Going on a date',
   Tournament = 'Tournament',
+  Gift = 'Gift',
 }
 
 export enum TournamentType {
@@ -41,7 +42,6 @@ export enum ActionType {
   StartGame = 'startGame',
   StartTrade = 'startTrade',
   ScheduleActivity = 'scheduleActivity',
-  ImproveRelationship = 'improveRelationship',
 }
 
 export enum Difficulty {
