@@ -41,5 +41,8 @@ export function handleKeybinds(event: KeyboardEvent) {
   } else if (event.key === ' ') {
     event.preventDefault();
     handleEndTurn();
+  } else if (event.key === '^') {
+    event.preventDefault();
+    uiState.consoleCommand.visible = !uiState.consoleCommand.visible;
   }
 }

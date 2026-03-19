@@ -84,6 +84,9 @@ export const uiState: UiState = $state({
     card: null,
   },
   activeGiftCharacterKey: null,
+  consoleCommand: {
+    visible: false,
+  },
 });
 
 export function addRollResult(result: {

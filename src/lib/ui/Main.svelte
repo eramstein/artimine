@@ -2,6 +2,7 @@
   import { UiView } from '../_model';
   import { bs, uiState } from '../_state';
   import Battle from './battle/Battle.svelte';
+  import ConsoleCommand from './ConsoleCommand.svelte';
   import ModalHost from './ModalHost.svelte';
   import Sim from './sim/Sim.svelte';
   import Toast from './Toast.svelte';
@@ -23,6 +24,9 @@
 
 <!-- Toast notifications -->
 <Toast />
+
+<!-- Console command overlay -->
+<ConsoleCommand />
 
 <style>
   .main {
