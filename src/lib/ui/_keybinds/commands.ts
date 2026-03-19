@@ -70,6 +70,27 @@ export function executeCommand(input: string): CommandResult {
       return { ok: true, message: `Added ${cardTemplate.name} to hand` };
     }
 
+    case 'gold': {
+      // /gold <amount>
+      const [, amountStr] = parts;
+      if (amountStr === undefined) {
+        return { ok: false, message: 'Usage: /gold <amount>' };
+      }
+
+      const amount = Number(amountStr);
+      if (isNaN(amount)) {
+        return { ok: false, message: `Invalid amount: ${amountStr}` };
+      }
+
+      const player = bs.players?.[0];
+      if (!player) {
+        return { ok: false, message: 'No active battle player' };
+      }
+
+      player.gold = amount;
+      return { ok: true, message: `Set player gold to ${amount}` };
+    }
+
     default:
       return { ok: false, message: `Unknown command: ${cmd}` };
   }

@@ -1,13 +1,38 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
+  import { tweened } from 'svelte/motion';
+  import { cubicOut } from 'svelte/easing';
+
   let { value, size = 'md', class: className = '' } = $props<{ 
     value: number | string; 
     size?: 'sm' | 'md' | 'lg';
     class?: string;
   }>();
+
+  const numericValue = $derived(typeof value === 'number' ? value : parseFloat(String(value)));
+  const displayValue = tweened(untrack(() => isNaN(numericValue) ? 0 : numericValue), {
+    duration: 400,
+    easing: cubicOut
+  });
+
+  let isChanging = $state(false);
+
+  $effect(() => {
+    if (!isNaN(numericValue)) {
+      displayValue.set(numericValue);
+      
+      // Trigger pop animation
+      isChanging = true;
+      const timeout = setTimeout(() => isChanging = false, 300);
+      return () => clearTimeout(timeout);
+    }
+  });
+
+  const finalDisplay = $derived(isNaN(numericValue) ? value : Math.round($displayValue));
 </script>
 
-<div class="gold-cost {size} {className}">
-  <div class="value">{value}</div>
+<div class="gold-cost {size} {className}" class:pop={isChanging}>
+  <div class="value">{finalDisplay}</div>
 </div>
 
 <style>
@@ -18,6 +43,11 @@
     justify-content: center;
     aspect-ratio: 1;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .gold-cost.pop {
+    transform: scale(1.2);
   }
 
   .value {

@@ -17,6 +17,7 @@ class SoundManager {
       draw: getSoundPath('draw'),
       button: getSoundPath('button'),
       button2: getSoundPath('button2'),
+      gold: getSoundPath('gold'),
     };
 
     for (const [name, path] of Object.entries(soundFiles)) {
@@ -51,6 +52,12 @@ class SoundManager {
 
   playDamageSound() {
     this.playSound('lightning');
+  }
+
+  playGoldSound() {
+    window.setTimeout(() => {
+      this.playSound('gold');
+    }, 100);
   }
 }
 

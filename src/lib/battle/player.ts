@@ -58,5 +58,6 @@ export function addMana(player: Player, amount: number) {
 
 export function gainGold(player: Player, amount: number) {
   player.gold += amount;
+  soundManager.playGoldSound();
   onGoldGained(player, amount);
 }
