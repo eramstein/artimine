@@ -1,6 +1,6 @@
-import { CardColor, CardRarity, CardType, UnitType, type UnitKeywords } from '../../lib/_model';
+import { CardRarity, CardType, UnitType } from '../../lib/_model';
 import { MOCK_LLM_OUTPUT } from './_mocks';
-import { type BaseTemplate, type ColorCombo } from './card-batches';
+import { type BaseTemplate } from './card-batches';
 
 export interface LllmInput {
   rarity?: CardRarity;

@@ -3128,6 +3128,51 @@
     "cardSet": "alpha"
   },
   {
+    "id": "franz",
+    "name": "Franz",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 7,
+    "power": 3,
+    "maxHealth": 5,
+    "colors": [
+      {
+        "color": "red",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": ["human"],
+    "keywords": {
+      "armor": 2
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Gold Gained",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "fight",
+              "args": {
+                "mutual": "false",
+                "targetInFront": "true"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "frenzied_shaman",
     "name": "Frenzied Shaman",
     "type": "unit",
@@ -5603,6 +5648,44 @@
       "armor": 1
     },
     "cardSet": "alpha"
+  },
+  {
+    "id": "ourssaf",
+    "name": "Ourssaf",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 6,
+    "power": 6,
+    "maxHealth": 6,
+    "colors": [
+      {
+        "color": "black",
+        "count": 6
+      }
+    ],
+    "unitTypes": ["demon"],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "gainGold",
+              "args": {
+                "steal": 666,
+                "goldCount": 0
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "ousmanes_summoning_circle",

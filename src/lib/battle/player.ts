@@ -56,8 +56,14 @@ export function addMana(player: Player, amount: number) {
   player.mana += amount;
 }
 
-export function gainGold(player: Player, amount: number) {
+export function gainGold(player: Player, amount: number, steal = 0) {
   player.gold += amount;
+  if (steal) {
+    const targetPlayer = getOpposingPlayer(player.id);
+    const stolenAmount = Math.min(targetPlayer.gold, steal);
+    targetPlayer.gold -= stolenAmount;
+    player.gold += stolenAmount;
+  }
   soundManager.playGoldSound();
   onGoldGained(player, amount);
 }

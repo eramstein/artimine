@@ -116,7 +116,6 @@ export function attackLand(unit: UnitDeployed, target: Land) {
   if (!isValidTarget(unit, target)) {
     throw new Error('Invalid attack target');
   }
-
   useRage(unit);
   const wasDestroyed = damageLand(target, unit.power);
   if (!wasDestroyed && target.retaliate) {
@@ -125,6 +124,9 @@ export function attackLand(unit: UnitDeployed, target: Land) {
   const excessDamage = unit.power - target.health;
   if (excessDamage && unit.keywords?.trample) {
     damagePlayer(bs.players[target.ownerPlayerId], excessDamage);
+  }
+  if (unit.keywords?.raid) {
+    bs.players[unit.ownerPlayerId].gold += unit.keywords.raid;
   }
   onCombatResolution(unit, target);
   onUnitReach(unit);

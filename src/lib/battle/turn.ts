@@ -5,6 +5,7 @@ import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
 import { drawCard } from './deck';
 import { onTurnStart } from './listeners';
+import { gainGold } from './player';
 import { rollShopCards } from './shop';
 import { soundManager } from './sound';
 import { removeTemporaryEffects } from './temporary-effects';
@@ -40,7 +41,7 @@ function initPlayerTurn(player: Player) {
 // if some mana wasn't used, get 1 gold
 function updateGold(player: Player) {
   if (player.mana > 0) {
-    player.gold++;
+    gainGold(player, 1);
     player.mana = 0;
   }
 }

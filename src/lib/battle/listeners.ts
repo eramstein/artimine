@@ -84,7 +84,9 @@ function checkTriggerCondition(
 
   // case triggerer is a player, here Self means the player
   if (
-    [TriggerType.OnCardDrawn, TriggerType.OnTurnStart].includes(ability.trigger.type) &&
+    [TriggerType.OnCardDrawn, TriggerType.OnTurnStart, TriggerType.OnGoldGained].includes(
+      ability.trigger.type
+    ) &&
     ability.trigger.range.self
   ) {
     return triggerArgs.player.id === permanentWithAbility.ownerPlayerId;

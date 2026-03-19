@@ -117,7 +117,7 @@ export const baseEffects: BaseEffect[] = [
   },
   {
     effectName: 'gainGold',
-    argNames: ['goldCount'],
+    argNames: ['goldCount', 'steal'],
     budget: (args, targets) => {
       return args.goldCount * 5;
     },
