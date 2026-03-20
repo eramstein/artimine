@@ -59,6 +59,13 @@ export interface Npc extends Character {
   gifting: {
     cards: string[];
   };
+  ambitions: Ambition[];
+}
+
+export interface Ambition {
+  summary: string;
+  currentState: string;
+  latestDevelopments: string;
 }
 
 export interface RelationValues {
@@ -124,13 +131,26 @@ export interface Event {
   description: string;
   participants: string[]; // Character keys
   options: EventOption[];
+  history: string[];
   outcome?: EventOutcome;
 }
 
 export interface EventOption {
   description: string;
-  difficulty: string;
-  relatedAttribute: keyof CharacterAttributes;
+  stopPoint: boolean; // if this option is chosen, the event chain stops there
+  onSuccess?: {
+    relation?: Record<string, number>;
+    cardGift?: boolean;
+    cashGift?: boolean;
+  };
+  onFailure?: {
+    relation?: Record<string, number>;
+    cashLoss?: boolean;
+  };
+  difficulty?: string;
+  relatedAttribute?: keyof CharacterAttributes;
+  schedulesActivity?: ActivityPlan;
+  createsChallenge?: any; // TODO
 }
 
 export interface EventOutcome {

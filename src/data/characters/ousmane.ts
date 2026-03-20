@@ -9,6 +9,17 @@ export const CHARACTER_OUSMANE = {
   bio: `Ousmane is a 29 years old former athlete.
   He used ot be a professional footballer but got injured. He now dreams to become a pro card player.
   His favorite Hordes cards are red and black, especially Reik cards.`,
+  ambitions: [
+    {
+      summary: `
+        Ousmane dreams of becoming a professional card player.
+        He has been working on his skills for the past few years.
+        He hopes to one day become a professional card player and make a living from it.
+      `,
+      currentState: 'working on his skills',
+      latestDevelopments: '',
+    },
+  ],
 };
 
 export const CHARACTER_OUSMANE_MEMORIES = [

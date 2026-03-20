@@ -9,6 +9,15 @@ export const CHARACTER_MOLLY = {
   bio: `Molly is a 20 years old psychology student.
   She works as a waitress.
   Her favorite Hordes cards are red and blue, especially Arabia cards.`,
+  ambitions: [
+    {
+      summary: `
+        Molly dreams of having a family. She wants to find a partner and have children.
+      `,
+      currentState: 'still single',
+      latestDevelopments: '',
+    },
+  ],
 };
 
 export const CHARACTER_MOLLY_MEMORIES = [

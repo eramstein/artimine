@@ -9,6 +9,17 @@ export const CHARACTER_HENRY = {
   bio: `Henry is a 25 years old history student.
   He works as an assistant teacher.
   His favorite Hordes cards are green and blue, especially Kislev cards.`,
+  ambitions: [
+    {
+      summary: `
+        Henry dreams of becoming a history professor.
+        He has been working on his PhD for the past few years.
+        He hopes to one day become a professor and teach history to students.
+      `,
+      currentState: 'working on his PhD',
+      latestDevelopments: 'he has completed the first draft of his dissertation',
+    },
+  ],
 };
 
 export const CHARACTER_HENRY_MEMORIES = [

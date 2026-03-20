@@ -11,6 +11,15 @@ export const CHARACTER_THE_DUDE = {
   His ambition is to become the best Hordes player in the world, even though in reality he is not good at it.
   He is not very confident, but when he is in his shop (The Goblin's Den), he acts like royalty.
   His favorite Hordes cards are red and green, especially Midguard cards.`,
+  ambitions: [
+    {
+      summary: `
+        The Dude dreams of becoming recognized as a great player.
+      `,
+      currentState: 'working on his skills',
+      latestDevelopments: '',
+    },
+  ],
 };
 
 export const CHARACTER_THE_DUDE_MEMORIES = [

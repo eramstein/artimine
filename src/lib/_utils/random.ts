@@ -1,4 +1,4 @@
-export function getRandomFromArray(items: any[]) {
+export function getRandomFromArray<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)];
 }
 

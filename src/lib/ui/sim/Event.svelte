@@ -9,8 +9,16 @@
   let options = $derived(eventData?.options || []);
   let outcome = $derived(eventData?.outcome);
 
-  function handleOptionClick(index: number) {
-    setEventOutcome(index);
+  let pending = $state(false);
+
+  async function handleOptionClick(index: number) {
+    if (pending) return;
+    pending = true;
+    try {
+      await setEventOutcome(index);
+    } finally {
+      pending = false;
+    }
   }
 
   function handleClose() {
@@ -22,15 +30,25 @@
   <div class="event-view">
     <div class="event-header">
       <h2>{eventData.title}</h2>
-      <button class="close-header-button" onclick={handleClose} title="Close">
-        &times;
-      </button>
+      <button class="close-header-button" onclick={handleClose} title="Close"> &times; </button>
     </div>
 
     <div class="event-content">
-      <div class="description">
-        {description}
-      </div>
+      {#if eventData.history && eventData.history.length > 0}
+        <div class="history">
+          {#each eventData.history as item, i}
+            <div class="history-item" class:choice={i % 2 === 1}>
+              {item}
+            </div>
+          {/each}
+        </div>
+      {/if}
+
+      {#if !outcome}
+        <div class="description">
+          {description}
+        </div>
+      {/if}
 
       {#if outcome}
         <div class="outcome-container">
@@ -47,8 +65,13 @@
                     <span class="char-name">{charName}:</span>
                     <div class="relation-badges">
                       {#each activeChanges as [type, val]}
-                        <span class="relation-badge" class:positive={val > 0} class:negative={val < 0}>
-                          {type} {val > 0 ? `+${val}` : val}
+                        <span
+                          class="relation-badge"
+                          class:positive={val > 0}
+                          class:negative={val < 0}
+                        >
+                          {type}
+                          {val > 0 ? `+${val}` : val}
                         </span>
                       {/each}
                     </div>
@@ -57,15 +80,16 @@
               {/each}
             </div>
           {/if}
-          <button class="close-button" onclick={handleClose}>
-            Continue
-          </button>
+          <button class="close-button" onclick={handleClose}> Continue </button>
         </div>
       {:else}
-        <div class="options-container">
+        <div class="options-container" class:pending>
+          {#if pending}
+            <div class="pending-hint">The world is reacting...</div>
+          {/if}
           {#each options as option_raw, i}
             {@const option = option_raw as any}
-            <button class="option-button" onclick={() => handleOptionClick(i)}>
+            <button class="option-button" disabled={pending} onclick={() => handleOptionClick(i)}>
               <div class="option-description">{option.description || ''}</div>
               {#if option.attribute || option.relatedAttribute}
                 <div class="option-meta">
@@ -144,9 +168,33 @@
   .description {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #cbd5e1;
+    color: #f8fafc;
     white-space: pre-wrap;
     font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .history {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .history-item {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #94a3b8;
+    white-space: pre-wrap;
+  }
+
+  .history-item.choice {
+    font-weight: 700;
+    color: #60a5fa;
+    border-left: 2px solid rgba(96, 165, 250, 0.3);
+    padding-left: 12px;
+    font-style: italic;
+    font-size: 0.9rem;
   }
 
   .options-container {
@@ -178,6 +226,37 @@
 
   .option-button:active {
     transform: scale(0.98);
+  }
+
+  .option-button:disabled {
+    cursor: default;
+    transform: none !important;
+  }
+
+  .options-container.pending {
+    opacity: 0.7;
+  }
+
+  .pending-hint {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #94a3b8;
+    text-align: center;
+    font-size: 0.95rem;
+    font-style: italic;
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
   .option-description {

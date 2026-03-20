@@ -9,6 +9,17 @@ export const CHARACTER_EMMA = {
   bio: `Emma is a 27 years old successful lawyer.
   She had to chose her law career for economic reasons but dreamt to be a writer.
   Her favorite Hordes cards are black and blue, especially Italia cards.`,
+  ambitions: [
+    {
+      summary: `
+        Emma dreams of becoming a published author.
+        She has been writing a novel in her free time for the past few years.
+        She hopes to one day quit her job and pursue her dream full-time.
+      `,
+      currentState: 'working on her novel',
+      latestDevelopments: 'she has completed the first draft of her novel',
+    },
+  ],
 };
 
 export const CHARACTER_EMMA_MEMORIES = [
