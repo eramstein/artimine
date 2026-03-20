@@ -18,6 +18,7 @@ export const CHARACTERS_CARD_UNLOCKS: Record<string, string[]> = {
   [CHARACTER_MOLLY.key]: ['dunyazad', 'ali_baba'],
   [CHARACTER_THE_DUDE.key]: ['ragnar_lothbrok', 'kobold_undercity'],
   [CHARACTER_OUSMANE.key]: ['franz', 'ourssaf'],
+  [CHARACTER_EMMA.key]: ['council_envoy', 'donatello'],
 };
 
 function addDefaultCollectionAndDecks(character: any): Npc {

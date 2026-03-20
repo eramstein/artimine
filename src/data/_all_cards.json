@@ -1601,6 +1601,58 @@
     "cardSet": "alpha"
   },
   {
+    "id": "council_envoy",
+    "name": "Council Envoy",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 5,
+    "power": 1,
+    "maxHealth": 1,
+    "colors": [
+      {
+        "color": "black",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 3
+      }
+    ],
+    "unitTypes": ["human"],
+    "keywords": {
+      "armor": 1
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useGold",
+              "args": {
+                "effectTemplate": "forceMoveUnit",
+                "goldCost": 1
+              }
+            },
+            "targets": [
+              {
+                "type": "unit_ennemies",
+                "count": 1
+              },
+              {
+                "type": "cell_enemy",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "cowardly_mage",
     "name": "Cowardly Mage",
     "rarity": "common",
@@ -1947,6 +1999,45 @@
       }
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "donatello",
+    "name": "Donatello",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 4,
+    "power": 2,
+    "maxHealth": 2,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 2
+      },
+      {
+        "color": "black",
+        "count": 2
+      }
+    ],
+    "unitTypes": ["human"],
+    "abilities": [
+      {
+        "trigger": {
+          "type": "Activated"
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "useGold",
+              "args": {
+                "effectTemplate": "drawCard",
+                "goldCost": 3
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "drake",

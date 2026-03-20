@@ -9,8 +9,6 @@ import { llmService } from './llm-service';
 import { getSystemPromptMemories } from './memories';
 import { saveActivityLog } from './memories-db';
 
-// TODO: make event chain and store history
-
 /**
  * Generates a narrative event using an LLM, based on the current game state and context.
  * The event is designed to evolve character arcs and provide challenges and rewards.

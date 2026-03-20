@@ -208,6 +208,11 @@ export const baseEffects: BaseEffect[] = [
     budget: (args, targets) => 0, // TBD
   },
   {
+    effectName: 'useGold',
+    argNames: ['effectTemplate', 'goldUsedForArgs', 'goldCost', 'otherArgs'],
+    budget: (args, targets) => 0, // TBD
+  },
+  {
     effectName: 'combine',
     argNames: ['effectTemplates'],
     budget: (args, targets) => 0, // TBD
