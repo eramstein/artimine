@@ -1,3 +1,4 @@
+import type { CardColor } from './enums-battle';
 import type {
   ActionType,
   ActivityType,
@@ -8,7 +9,6 @@ import type {
   TournamentStatus,
   TournamentType,
 } from './enums-sim';
-import type { DraftState } from '../battle/draft/model-draft';
 
 export interface GameState {
   time: {
@@ -254,4 +254,12 @@ export interface TournamentLog {
   place: number;
   type: TournamentType;
   winner: string;
+}
+
+export interface DraftState {
+  packNumber: number; // 0, 1, 2
+  direction: 1 | -1; // 1 (left), -1 (right)
+  activeBoosters: Record<string, string[]>; // playerKey -> cardIds in the current pack they are holding
+  draftedCards: Record<string, string[]>; // playerKey -> cardIds drafted so far
+  botsColors: Record<string, CardColor[]>; // assigned colors for AI players
 }

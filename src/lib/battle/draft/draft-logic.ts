@@ -1,15 +1,14 @@
-import { CardColor, CardSet } from '../../_model/enums-battle';
-import type { DraftState } from './model-draft';
-import { TournamentStatus } from '../../_model/enums-sim';
-import type { Tournament } from '../../_model/model-game';
-import { generateBooster } from '../../sim/booster';
-import { getRandomFromArray } from '../../_utils/random';
-import { gs } from '../../_state/main.svelte';
 import { cards, lands } from '@/data';
+import { CardColor, CardSet } from '../../_model/enums-battle';
+import { TournamentStatus } from '../../_model/enums-sim';
+import type { DraftState, Tournament } from '../../_model/model-game';
+import { gs } from '../../_state/main.svelte';
+import { getRandomFromArray } from '../../_utils/random';
+import { generateBooster } from '../../sim/booster';
 
 export function startDraft(tournament: Tournament) {
   // Clear any previous player draft deck
-  const existingPlayerIndex = gs.player.decks.findIndex(d => d.key === tournament.format);
+  const existingPlayerIndex = gs.player.decks.findIndex((d) => d.key === tournament.format);
   if (existingPlayerIndex !== -1) {
     gs.player.decks.splice(existingPlayerIndex, 1);
   }
@@ -30,7 +29,7 @@ export function startDraft(tournament: Tournament) {
     direction: 1, // Start by passing left
     activeBoosters: {},
     draftedCards: {},
-    botsColors
+    botsColors,
   };
 
   // Initialize empty drafted arrays
@@ -54,7 +53,7 @@ export function openDraftPacks(draftState: DraftState, tournament: Tournament) {
   for (const playerKey of tournament.players) {
     // Generate booster from Alpha set by default
     const booster = generateBooster(CardSet.Alpha);
-    draftState.activeBoosters[playerKey] = booster.map(c => c.id);
+    draftState.activeBoosters[playerKey] = booster.map((c) => c.id);
   }
 }
 
@@ -74,7 +73,7 @@ export function processDraftTurn(tournament: Tournament, playerPickId: string) {
   // 2. AI picks
   for (const botKey of tournament.players) {
     if (botKey === playerKey) continue;
-    
+
     const botBooster = draftState.activeBoosters[botKey];
     if (botBooster.length === 0) continue;
 
@@ -82,7 +81,9 @@ export function processDraftTurn(tournament: Tournament, playerPickId: string) {
     // Find cards matching colors
     const matchingCards = botBooster.filter((id: string) => {
       const card = cards[id];
-      return card && card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color));
+      return (
+        card && card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color))
+      );
     });
 
     let pickedId = '';
@@ -116,7 +117,7 @@ export function processDraftTurn(tournament: Tournament, playerPickId: string) {
       let nextIndex = (i + draftState.direction) % playersCount;
       if (nextIndex < 0) nextIndex += playersCount;
       const next = tournament.players[nextIndex];
-      
+
       newBoosters[next] = draftState.activeBoosters[current];
     }
     draftState.activeBoosters = newBoosters;
@@ -135,18 +136,22 @@ export function autoBuildBotDecks(tournament: Tournament) {
 
     const draftedCardIds = draftState.draftedCards[botKey];
     const preferredColors = draftState.botsColors[botKey];
-    
+
     const mainDeckIds: string[] = [];
-    
+
     // Pick matching colors first
     const matching = draftedCardIds.filter((id: string) => {
       const card = cards[id];
-      return card && card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color));
+      return (
+        card && card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color))
+      );
     });
-    
+
     const others = draftedCardIds.filter((id: string) => {
       const card = cards[id];
-      return !card || !card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color));
+      return (
+        !card || !card.colors?.some((c: { color: CardColor }) => preferredColors.includes(c.color))
+      );
     });
 
     // Shuffle both
@@ -155,7 +160,7 @@ export function autoBuildBotDecks(tournament: Tournament) {
 
     // Fill up to 30
     const needed = 30;
-    
+
     for (const id of matching) {
       if (mainDeckIds.length < needed) mainDeckIds.push(id);
     }
@@ -164,22 +169,25 @@ export function autoBuildBotDecks(tournament: Tournament) {
     }
 
     // Convert to CardTuples
-    const cardTuples = mainDeckIds.reduce((acc, id) => {
-      const existing = acc.find(t => t.cardTemplateId === id);
-      if (existing) {
-        existing.count++;
-      } else {
-        acc.push({ cardTemplateId: id, count: 1 });
-      }
-      return acc;
-    }, [] as { cardTemplateId: string, count: number }[]);
+    const cardTuples = mainDeckIds.reduce(
+      (acc, id) => {
+        const existing = acc.find((t) => t.cardTemplateId === id);
+        if (existing) {
+          existing.count++;
+        } else {
+          acc.push({ cardTemplateId: id, count: 1 });
+        }
+        return acc;
+      },
+      [] as { cardTemplateId: string; count: number }[]
+    );
 
     // Specific lands: 1 city, 1 island, 1 mountain, 1 forest
     const landsIds = ['city', 'island', 'mountain', 'forest']; // Assuming these are the land keys
-    const actualLands = landsIds.filter(l => lands[l]).map(l => lands[l].id);
+    const actualLands = landsIds.filter((l) => lands[l]).map((l) => lands[l].id);
 
     // Overwrite previous draft deck for the bot
-    const existingIndex = bot.decks.findIndex(d => d.key === tournament.format);
+    const existingIndex = bot.decks.findIndex((d) => d.key === tournament.format);
     if (existingIndex !== -1) {
       bot.decks.splice(existingIndex, 1);
     }
@@ -189,11 +197,11 @@ export function autoBuildBotDecks(tournament: Tournament) {
       name: `Draft Deck - ${bot.name}`,
       cards: cardTuples,
       lands: actualLands,
-      record: { wins: 0, losses: 0, cardResults: {} }
+      record: { wins: 0, losses: 0, cardResults: {} },
     };
 
     bot.decks.push(newDeck);
-    
+
     // Usually NPCs don't have a "current selected deck" specific to the tournament stored globally,
     // they pick their deck at battle start. But maybe we need to ensure they play this one?
     // According to existing game logic, an NPC picks a deck randomly or best deck.
