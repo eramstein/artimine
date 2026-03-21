@@ -5,7 +5,7 @@
   let inputValue = $state('');
   let resultMessage = $state('');
   let resultOk = $state(true);
-  let inputEl: HTMLInputElement;
+  let inputEl = $state<HTMLInputElement>();
 
   $effect(() => {
     if (uiState.consoleCommand.visible) {

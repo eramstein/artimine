@@ -7,6 +7,7 @@ export enum DynamicValue {
   Buildings = 'buildings',
   UnitsWithStatus = 'units with status',
   EnergyCounters = 'energy counters',
+  Turns = 'turns',
 }
 
 export const DynamicValues: Record<
@@ -34,5 +35,8 @@ export const DynamicValues: Record<
     return bs.units
       .filter((u) => u.ownerPlayerId === playerId)
       .reduce((acc, u) => acc + (u.counters.energy || 0), 0);
+  },
+  [DynamicValue.Turns]: () => {
+    return Math.ceil(bs.turn / 2);
   },
 };

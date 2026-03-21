@@ -1,7 +1,7 @@
 import { cards } from '@/data';
 import type { Card } from '../../_model';
-import { bs, gs } from '../../_state';
 import type { RelationValues } from '../../_model/model-game';
+import { bs, gs } from '../../_state';
 
 export interface CommandResult {
   ok: boolean;
@@ -32,7 +32,10 @@ export function executeCommand(input: string): CommandResult {
 
       const validKeys: (keyof RelationValues)[] = ['friendship', 'love', 'respect'];
       if (!validKeys.includes(relationKey as keyof RelationValues)) {
-        return { ok: false, message: `Invalid relation key: ${relationKey}. Valid: ${validKeys.join(', ')}` };
+        return {
+          ok: false,
+          message: `Invalid relation key: ${relationKey}. Valid: ${validKeys.join(', ')}`,
+        };
       }
 
       const value = Number(valueStr);
@@ -64,6 +67,8 @@ export function executeCommand(input: string): CommandResult {
         ...cardTemplate,
         ownerPlayerId: 0,
         instanceId: crypto.randomUUID(),
+        cost: 0,
+        colors: [],
       } as Card;
 
       bs.players[0].hand.push(card);

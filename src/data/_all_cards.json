@@ -7831,6 +7831,52 @@
     "cardSet": "alpha"
   },
   {
+    "id": "time_elemental",
+    "name": "Time Elemental",
+    "rarity": "legendary",
+    "type": "unit",
+    "cost": 1,
+    "power": 0,
+    "maxHealth": 0,
+    "colors": [
+      {
+        "color": "blue",
+        "count": 1
+      },
+      {
+        "color": "green",
+        "count": 1
+      }
+    ],
+    "unitTypes": ["elemental"],
+    "keywords": {
+      "moveAndAttack": true
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Deploy",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "addCounters",
+              "args": {
+                "counterType": "growth",
+                "counterValue": 1,
+                "dynamicValue": "turns"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "cardSet": "alpha"
+  },
+  {
     "id": "to_the_gates",
     "name": "To the gates!",
     "rarity": "uncommon",
@@ -7860,6 +7906,54 @@
       }
     ],
     "cardSet": "alpha"
+  },
+  {
+    "id": "todorat",
+    "name": "Todorat",
+    "rarity": "legendary",
+    "cardSet": "alpha",
+    "type": "unit",
+    "cost": 8,
+    "power": 1,
+    "maxHealth": 9,
+    "colors": [
+      {
+        "color": "green",
+        "count": 1
+      },
+      {
+        "color": "blue",
+        "count": 1
+      }
+    ],
+    "unitTypes": ["demon", "beast", "human"],
+    "keywords": {
+      "armor": 1,
+      "resist": 3
+    },
+    "abilities": [
+      {
+        "trigger": {
+          "type": "On Turn Start",
+          "range": {
+            "self": true
+          }
+        },
+        "actions": [
+          {
+            "effect": {
+              "name": "destroyUnit",
+              "args": {
+                "range": {
+                  "sameRow": true,
+                  "ennemies": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "transfer_energy",

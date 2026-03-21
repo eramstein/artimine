@@ -2,9 +2,9 @@
   import { fly } from 'svelte/transition';
   import { uiState } from '../_state/state-ui.svelte';
 
-  let toastElement: HTMLElement;
+  let toastElement = $state<HTMLElement>();
 
-  $: toast = uiState.toast;
+  let toast = $derived(uiState.toast);
 
   function getToastStyles(type: string) {
     const baseStyles =

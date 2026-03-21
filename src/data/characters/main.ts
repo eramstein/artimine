@@ -19,6 +19,7 @@ export const CHARACTERS_CARD_UNLOCKS: Record<string, string[]> = {
   [CHARACTER_THE_DUDE.key]: ['ragnar_lothbrok', 'kobold_undercity'],
   [CHARACTER_OUSMANE.key]: ['franz', 'ourssaf'],
   [CHARACTER_EMMA.key]: ['council_envoy', 'donatello'],
+  [CHARACTER_HENRY.key]: ['time_elemental', 'todorat'],
 };
 
 function addDefaultCollectionAndDecks(character: any): Npc {
