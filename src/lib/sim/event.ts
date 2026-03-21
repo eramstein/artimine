@@ -91,75 +91,91 @@ function makeEventOptions(character: Npc, activityType: ActivityType): EventOpti
 }
 
 export async function setEventOutcome(optionIndex: number) {
-  if (
-    !gs.activity.event ||
-    !gs.activity.event.options ||
-    gs.activity.event.options.length <= optionIndex
-  ) {
-    return;
-  }
   const event = gs.activity.event;
+  if (!event || optionIndex >= (event.options?.length ?? 0)) return;
+
   const option = event.options[optionIndex];
+
   if (option.stopPoint) {
-    if (option.relatedAttribute && option.difficulty) {
-      const difficulty = difficultyNumbers[option.difficulty] ?? difficultyNumbers.medium;
-      const outcome = checkActionSuccess(option.relatedAttribute, difficulty);
-      const outcomeDescription = await resolveEventWithLLM(
-        option.description,
-        outcome.success,
-        outcome.isCritical
-      );
-      const relationValuesByCharacter: Record<string, RelationValues> = {};
-      event.participants.forEach((npc) => {
-        relationValuesByCharacter[npc] = { friendship: 0, love: 0, respect: 0 };
-      });
-      if (option.onSuccess && outcome.success) {
-        if (option.onSuccess.relation) {
-          Object.entries(option.onSuccess.relation).forEach(([key, value]) => {
-            event.participants.forEach((npc) => {
-              updateNpcRelationValue(gs.characters[npc], key as keyof RelationValues, value);
-              relationValuesByCharacter[npc][key as keyof RelationValues] = value;
-            });
-          });
-        }
-      }
-      if (option.onFailure && !outcome.success) {
-        if (option.onFailure.relation) {
-          Object.entries(option.onFailure.relation).forEach(([key, value]) => {
-            event.participants.forEach((npc) => {
-              updateNpcRelationValue(gs.characters[npc], key as keyof RelationValues, -value);
-              relationValuesByCharacter[npc][key as keyof RelationValues] = -value;
-            });
-          });
-        }
-      }
-      event.outcome = {
-        description: outcomeDescription,
-        relationValuesByCharacter,
-      };
-    } else {
-      resolveEventWithLLM(option.description, true, false);
-    }
-    event.history.push(event.description);
-    event.history.push(option.description);
+    await handleEventCompletion(event, option);
   } else {
-    const oldEvent = { ...gs.activity.event };
-    const actingCharacter = gs.characters[oldEvent!.participants[0]];
-    const plot = `Previous event: ${oldEvent?.description || ''}. What the player did in response: ${option?.description || ''}. Now describe what happens next.`;
-    const newOptions = makeEventOptions(actingCharacter, gs.activity.activityType);
-    const nextEvent = await generateEventWithLLM(plot, newOptions, [actingCharacter]);
-    nextEvent.history = [
-      ...(oldEvent?.history || []),
-      oldEvent?.description || '',
-      option.description,
-    ];
-    nextEvent.options = newOptions.map((option, i) => ({
-      ...option,
-      description: nextEvent.options[i].description || option.description,
-    }));
-    gs.activity.event = {
-      ...oldEvent,
-      ...nextEvent,
-    };
+    await handleEventContinuation(event, option);
   }
+}
+
+/**
+ * Handles the logic when an event option ends the event (stopPoint: true).
+ * Manages attribute checks, relation updates, and outcome generation.
+ */
+async function handleEventCompletion(event: Event, option: EventOption) {
+  const { relatedAttribute, difficulty, description } = option;
+
+  if (relatedAttribute && difficulty) {
+    const powerRequirement = difficultyNumbers[difficulty] ?? difficultyNumbers.medium;
+    const checkOutcome = checkActionSuccess(relatedAttribute, powerRequirement);
+
+    // Resolve description via LLM
+    const outcomeDescription = await resolveEventWithLLM(
+      description,
+      checkOutcome.success,
+      checkOutcome.isCritical
+    );
+
+    // Identify which outcome to apply
+    const outcomeData = checkOutcome.success ? option.onSuccess : option.onFailure;
+    const relationValuesByCharacter: Record<string, RelationValues> = {};
+
+    event.participants.forEach((npcKey) => {
+      const npc = gs.characters[npcKey];
+      const characterUpdates: RelationValues = { friendship: 0, love: 0, respect: 0 };
+
+      if (outcomeData?.relation) {
+        Object.entries(outcomeData.relation).forEach(([key, value]) => {
+          const relationKey = key as keyof RelationValues;
+          updateNpcRelationValue(npc, relationKey, value);
+          characterUpdates[relationKey] = value;
+        });
+      }
+
+      relationValuesByCharacter[npcKey] = characterUpdates;
+    });
+
+    event.outcome = {
+      description: outcomeDescription,
+      relationValuesByCharacter,
+    };
+  } else {
+    // Basic resolution if no attribute check is required
+    await resolveEventWithLLM(description, true, false);
+  }
+
+  // Update event history
+  event.history.push(event.description, description);
+}
+
+/**
+ * Handles the logic when an event option continues the event (stopPoint: false).
+ * Generates the next stage of the event using LLM.
+ */
+async function handleEventContinuation(event: Event, option: EventOption) {
+  const actingCharacter = gs.characters[event.participants[0]];
+  const plot = `Previous event: ${event.description}\nPlayer choice: ${option.description}\nDescribe what happens next.`;
+
+  const nextOptions = makeEventOptions(actingCharacter, gs.activity.activityType);
+  const nextEventResult = await generateEventWithLLM(plot, nextOptions, [actingCharacter]);
+
+  // Consolidate history and options
+  const history = [...event.history, event.description, option.description];
+  const finalOptions = nextOptions.map((opt, i) => ({
+    ...opt,
+    description: nextEventResult.options[i].description || opt.description,
+  }));
+
+  // Update global state with the new event stage
+  gs.activity.event = {
+    ...event,
+    ...nextEventResult,
+    history,
+    options: finalOptions,
+  };
 }
