@@ -1,10 +1,15 @@
 <script lang="ts">
   import { CHARACTERS } from '@/data/characters/main';
   import { CHARACTER_PLAYER } from '@/data/characters/player';
-  import { TournamentStatus, TournamentType } from '@/lib/_model/enums-sim';
-  import type { Tournament } from '@/lib/_model/model-game';
-  import { initDeckSelection } from '@/lib/sim/ongoing-battle';
-  import { initTournament, dropFromTournament } from '@/lib/sim/tournament';
+  import { UiView } from '@/lib/_model';
+  import { TournamentFormat, TournamentStatus, TournamentType } from '@/lib/_model/enums-sim';
+  import type { Deck, Tournament } from '@/lib/_model/model-game';
+  import { uiState } from '@/lib/_state';
+  import { gs } from '@/lib/_state/main.svelte';
+  import { initDeckSelection, initOngoingBattle } from '@/lib/sim/ongoing-battle';
+  import { dropFromTournament, initTournament } from '@/lib/sim/tournament';
+  import DraftDeckEditor from '../draft/DraftDeckEditor.svelte';
+  import DraftTable from '../draft/DraftTable.svelte';
 
   interface Props {
     tournament: Tournament;
@@ -114,19 +119,34 @@
   const playerOpponent = $derived(() => {
     const playerKey = CHARACTER_PLAYER.key;
     const opponentKey = tournament.pairings[playerKey];
-    return opponentKey ? CHARACTERS[opponentKey] : null;
+    return opponentKey ? gs.characters[opponentKey] : null;
   });
 
   // Handle starting a game with opponent
   async function handleStartGame() {
     const opponent = playerOpponent();
     if (opponent) {
-      await initDeckSelection(opponent);
+      if (tournament.format === TournamentFormat.Draft) {
+        const playerDeck = gs.player.decks.find((d: Deck) => d.key === TournamentFormat.Draft);
+        const opponentDeck = opponent.decks.find((d: Deck) => d.key === TournamentFormat.Draft);
+        if (playerDeck && opponentDeck) {
+          await initOngoingBattle(opponent, playerDeck, opponentDeck);
+          uiState.currentView = UiView.Battle;
+        } else {
+          await initDeckSelection(opponent); // fallback
+        }
+      } else {
+        await initDeckSelection(opponent);
+      }
     }
   }
 
   function handleDrop() {
-    if (confirm('Are you sure you want to drop from the tournament? This will end the tournament immediately.')) {
+    if (
+      confirm(
+        'Are you sure you want to drop from the tournament? This will end the tournament immediately.'
+      )
+    ) {
       dropFromTournament();
     }
   }
@@ -150,6 +170,10 @@
       </div>
     </div>
     <div class="tournament-info">
+      <div class="info-item">
+        <span class="label">Format:</span>
+        <span class="value">{tournament.format}</span>
+      </div>
       <div class="info-item">
         <span class="label">Type:</span>
         <span class="value">{getTypeText(tournament.tournamentType)}</span>
@@ -191,7 +215,11 @@
     </div>
   {/if}
 
-  {#if tournament.status !== TournamentStatus.Planned}
+  {#if tournament.status === TournamentStatus.Drafting}
+    <DraftTable />
+  {:else if tournament.status === TournamentStatus.DeckBuilding}
+    <DraftDeckEditor />
+  {:else if tournament.status !== TournamentStatus.Planned}
     <div class="tournament-content">
       <!-- Rankings Section -->
       <div class="section">
@@ -235,7 +263,8 @@
     border-radius: 8px;
     padding: 1.5rem;
     color: var(--text-primary, #ffffff);
-    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0 auto;
   }
 
@@ -250,6 +279,8 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   .tournament-header h2 {

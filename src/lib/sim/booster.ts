@@ -6,7 +6,7 @@ import { gs } from '../_state/main.svelte';
 import { getRandomFromArray } from '../_utils/random';
 import { addCardToCollection } from './collection';
 
-function generateBooster(cardSet: CardSet): CardTemplate[] {
+export function generateBooster(cardSet: CardSet): CardTemplate[] {
   const setCards = Object.values(cards).filter((card) => card.cardSet === cardSet);
   const rares = setCards.filter((card) => card.rarity === CardRarity.Rare);
   const uncommons = setCards.filter((card) => card.rarity === CardRarity.Uncommon);

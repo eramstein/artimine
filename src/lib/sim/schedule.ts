@@ -5,6 +5,7 @@ import {
   type Place,
   type Tournament,
   TournamentType,
+  TournamentFormat,
 } from '../_model';
 import { gs } from '../_state/main.svelte';
 import { hideToast, showToast } from '../_state/state-ui.svelte';
@@ -130,11 +131,13 @@ export function fillDefaultActivities(untilDay: number) {
           place = uniCourtyardIndex;
         }
       }
-      // obligatory saturday afternoon gaming
+      // obligatory saturday afternoon gaming, now a draft tournament
       if (weekDay === 0 && dayPeriod === 1) {
-        activityType = ActivityType.Gaming;
-        participants = ['the-dude', 'emma', 'henry', 'molly', 'ousmane'];
+        activityType = ActivityType.Tournament;
+        participants = ['player', 'the-dude', 'emma', 'henry', 'molly', 'ousmane'];
         place = goblinCaveIndex;
+        tournament = getTournament(participants, TournamentType.Swiss, 3);
+        tournament.format = TournamentFormat.Draft;
       }
       // friday evening local tournament
       if (weekDay === 6 && dayPeriod === 2) {

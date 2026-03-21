@@ -4,9 +4,11 @@ import type {
   DayPeriod,
   ItemType,
   NpcPerk,
+  TournamentFormat,
   TournamentStatus,
   TournamentType,
 } from './enums-sim';
+import type { DraftState } from '../battle/draft/model-draft';
 
 export interface GameState {
   time: {
@@ -228,6 +230,8 @@ export interface Tournament {
   winner?: string;
   status: TournamentStatus;
   tournamentType: TournamentType;
+  format: TournamentFormat;
+  draftState?: DraftState;
   rounds?: number; // for swiss tournament, how many rounds will be played
   playedRounds: number; // for swiss tournament, how many rounds have been played
   rankings: Record<string, number>; // character key to current points

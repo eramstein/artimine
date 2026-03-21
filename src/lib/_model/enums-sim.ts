@@ -27,8 +27,15 @@ export enum TournamentType {
   Swiss = 'Swiss',
 }
 
+export enum TournamentFormat {
+  Constructed = 'Constructed', // players create their decks from their collections, all cards allowed
+  Draft = 'Draft', // players build decks from 3 boosters
+}
+
 export enum TournamentStatus {
   Planned = 'Planned',
+  Drafting = 'Drafting',
+  DeckBuilding = 'DeckBuilding',
   PairingsPublished = 'PairingsPublished',
   RoundOngoing = 'RoundOngoing',
   Finished = 'Finished',

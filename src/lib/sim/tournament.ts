@@ -1,8 +1,9 @@
-import { ActivityType, TournamentStatus, TournamentType } from '../_model/enums-sim';
+import { ActivityType, TournamentStatus, TournamentType, TournamentFormat } from '../_model/enums-sim';
 import type { Tournament } from '../_model/model-game';
 import { gs } from '../_state/main.svelte';
 import { generateUniqueId, getRandomFromArray } from '../_utils/random';
 import { saveActivityLog } from '../llm/memories-db';
+import { startDraft } from '../battle/draft/draft-logic';
 
 export function getTournament(
   players: string[],
@@ -13,6 +14,7 @@ export function getTournament(
     players: players,
     tournamentType: tournamentType,
     status: TournamentStatus.Planned,
+    format: TournamentFormat.Constructed,
     rankings: {},
     wonAgainst: {},
     pairings: {},
@@ -73,6 +75,14 @@ export function recordTournamentResult(win: boolean) {
 }
 
 export function initTournament(tournament: Tournament) {
+  if (tournament.format === TournamentFormat.Draft) {
+    startDraft(tournament);
+    return;
+  }
+  startTournamentPairings(tournament);
+}
+
+export function startTournamentPairings(tournament: Tournament) {
   tournament.status = TournamentStatus.PairingsPublished;
   tournament.rankings = {};
   tournament.wonAgainst = {};
