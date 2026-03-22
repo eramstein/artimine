@@ -147,11 +147,11 @@
   function getUnitPosition(unit: (typeof bs.units)[0]) {
     // +1 column to account for the left player lands, 8 for the gap with lands, 4 time column for the gap between units, +20 if over middle gap
     const left =
-      (unit.position.column + 1) * 144 +
+      (unit.position.column + 1) * 142 +
       8 +
       unit.position.column * 4 +
       (unit.position.column > middleColumnIndex ? 20 : 0);
-    const top = unit.position.row * (144 + 4);
+    const top = unit.position.row * (142 + 4);
     return { left, top };
   }
 
