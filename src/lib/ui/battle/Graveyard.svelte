@@ -59,7 +59,10 @@
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 8px;
-    border: 2px solid #666;
+    border: 2px solid #222;
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.4),
+      0 8px 16px rgba(0, 0, 0, 0.3);
   }
 
   .graveyard-card:hover {
@@ -77,25 +80,31 @@
   .dotted-border {
     width: 100%;
     height: 100%;
-    border: 2px dashed #666;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow:
+      inset 0 4px 10px rgba(0, 0, 0, 0.5),
+      0 1px 0 rgba(255, 255, 255, 0.05);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
   }
 
   .dotted-border:hover {
-    border-color: #999;
-    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.3);
   }
 
   .placeholder-text {
-    color: #666;
-    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
   }
 </style>

@@ -65,10 +65,11 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.2),
-      0 4px 8px rgba(0, 0, 0, 0.1),
-      0 8px 16px rgba(0, 0, 0, 0.05);
+      -2px 2px 4px rgba(0, 0, 0, 0.4),
+      -4px 4px 8px rgba(0, 0, 0, 0.3),
+      -8px 8px 16px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
   }
 

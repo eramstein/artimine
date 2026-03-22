@@ -256,9 +256,12 @@
   .side-cell {
     width: 140px;
     height: 140px;
-    background: #2a2a2a;
-    border: 2px solid transparent;
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 4px 10px rgba(0, 0, 0, 0.4),
+      0 1px 0 rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -267,15 +270,17 @@
   }
 
   .side-cell:hover {
-    background: #3a3a3a;
-    border-color: #777;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.6);
+    box-shadow:
+      inset 0 6px 12px rgba(0, 0, 0, 0.6),
+      0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .side-cell:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow:
+      inset 0 8px 16px rgba(0, 0, 0, 0.8),
+      0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .board {
@@ -296,9 +301,12 @@
   .board-cell {
     width: 140px;
     height: 140px;
-    background: rgba(58, 58, 58, 0.6);
-    border: 2px solid #555;
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 4px 10px rgba(0, 0, 0, 0.4),
+      0 1px 0 rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -307,27 +315,32 @@
   }
 
   .board-cell:hover {
-    background: rgba(74, 74, 74, 0.8);
-    border-color: #666;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.6);
+    box-shadow:
+      inset 0 6px 12px rgba(0, 0, 0, 0.6),
+      0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .board-cell:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow:
+      inset 0 8px 16px rgba(0, 0, 0, 0.8),
+      0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .board-cell.drag-over {
-    background: rgba(90, 90, 90, 0.9);
+    background: rgba(191, 161, 74, 0.1);
     border-color: #bfa14a;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(191, 161, 74, 0.6);
+    box-shadow:
+      inset 0 0 20px rgba(191, 161, 74, 0.4),
+      0 0 10px rgba(191, 161, 74, 0.6);
   }
 
   .board-cell.valid-move-target {
     border-color: #4caf50; /* Green border for valid move targets */
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+    box-shadow:
+      inset 0 0 20px rgba(76, 175, 80, 0.4),
+      0 0 10px rgba(76, 175, 80, 0.6);
   }
 
   .unit-container {

@@ -145,18 +145,25 @@
   }
 
   .player {
-    padding: 0.5rem;
-    background: linear-gradient(135deg, #2c3e50, #34495e);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    background: #1a1a1a;
+    border: 2px solid #000;
+    border-radius: 12px;
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     width: 200px;
     height: 200px;
     position: relative;
+    box-sizing: border-box;
   }
 
   .player.valid-target {
-    outline: 2px solid #ff0000;
-    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+    border-color: #ff0000;
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.6),
+      inset 0 0 20px rgba(255, 0, 0, 0.4),
+      0 0 15px rgba(255, 0, 0, 0.6);
     cursor: pointer;
   }
 
@@ -182,9 +189,9 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 6px;
-    aspect-ratio: 1;
-    min-height: 200px;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
   }
 
   .player-info::before {
@@ -194,8 +201,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     z-index: 1;
   }
 
@@ -313,11 +320,15 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     padding: 0.5rem 0.5rem 0.25rem 0.5rem;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
     width: 200px;
-    border: 2px solid transparent;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.5),
+      0 1px 0 rgba(255, 255, 255, 0.05);
     transition: border-color 0.3s ease;
+    box-sizing: border-box;
   }
 
   .player-actions.abilities-available {
