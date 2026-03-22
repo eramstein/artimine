@@ -8,7 +8,6 @@
   import { isPayableAfterColorIncrementation } from '@lib/battle/cost';
   import { usePlayerColorAbility } from '@lib/battle/player';
   import { activateSpell, targetCard } from '@lib/ui/_helpers/targetting';
-  import ManaCost from '../cards/ManaCost.svelte';
   import Abilities from './Abilities.svelte';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
@@ -175,14 +174,24 @@
   onclick={handleClick}
   oncontextmenu={handleContextMenu}
 >
-  <ManaCost cost={card.cost || 0} colors={card.colors || []} />
-
   <!-- Card name bar -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
       ? 'has-unit-types'
       : ''}"
   >
+    {#if card.colors && card.colors.length > 0}
+      <div class="header-colors">
+        {#each card.colors as colorInfo}
+          {#each Array(colorInfo.count) as _}
+            <div
+              class="color-indicator"
+              style="background-image: url('{getColorImagePath(colorInfo.color)}');"
+            ></div>
+          {/each}
+        {/each}
+      </div>
+    {/if}
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
@@ -192,7 +201,25 @@
             <span class="unit-type-text">{unitType}</span>
           {/each}
         </div>
+      {:else}
+        <div class="unit-types-inline">
+          <span class="unit-type-text">{card.type}</span>
+        </div>
       {/if}
+    </div>
+  </div>
+
+  <!-- Mana Bar (Separator) -->
+  <div class="mana-bar">
+    <div class="mana-line"></div>
+    <div class="mana-content">
+      {#if card.cost !== undefined && card.cost > 0}
+        <div class="mana-cost-circle">
+          {card.cost}
+        </div>
+      {/if}
+
+      <div class="mana-spacer"></div>
     </div>
   </div>
 
@@ -276,47 +303,142 @@
   }
 
   .name {
-    background: #000;
-    color: white;
-    padding: 8px 12px 8px 44px;
-    font-weight: bold;
+    background: #e8dcc4 url('/assets/images/parchment.png') center/cover;
+    background-blend-mode: multiply;
+    color: #2c251d;
+    padding: 6px 10px 2px 10px;
+    font-weight: 800;
     font-size: 0.9rem;
+    flex-shrink: 0;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 2px solid #2c251d;
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     gap: 6px;
-    flex-shrink: 0;
-    border-radius: 10px 10px 0 0;
   }
 
-  .card:hover .name.has-unit-types {
-    padding: 4px 12px 4px 44px;
-  }
-
-  .card:hover .name.has-unit-types .name-text {
+  .name.has-unit-types .name-text {
     font-size: 0.85rem;
+  }
+
+  .name.has-unit-types {
+    padding: 6px 10px 2px 10px;
   }
 
   .name-content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .unit-types-inline {
-    display: none;
-    flex-wrap: wrap;
-    margin-left: 8px;
-  }
-
-  .card:hover .unit-types-inline {
     display: flex;
+    justify-content: center;
   }
 
   .unit-type-text {
-    color: #bbb;
-    font-size: 0.65rem;
-    font-weight: normal;
+    color: #554838;
+    font-size: 0.7rem;
+    font-weight: bold;
     text-transform: capitalize;
+  }
+
+  .name-text {
+    font-size: var(--name-font-size, 0.9rem);
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Mana Bar Separator Styles */
+  .mana-bar {
+    position: relative;
+    height: 0;
+    z-index: 10;
+  }
+
+  .mana-line {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #2c251d;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .mana-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .mana-spacer {
+    flex: 1;
+  }
+
+  .mana-cost-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    background-image: radial-gradient(circle at 30% 30%, #4a4a4a, #1a1a1a);
+    border: 2px solid #5a4b3c;
+    color: #f5eedf;
+    font-weight: 900;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.4),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.8),
+      0 2px 4px rgba(0, 0, 0, 0.6);
+    z-index: 2;
+  }
+
+  .header-colors {
+    display: flex;
+    z-index: 2;
+    margin-top: -13px;
+  }
+
+  .color-indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #3a2e24;
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.9),
+      0 2px 3px rgba(0, 0, 0, 0.6);
+    margin-left: -6px;
+    position: relative;
+    filter: contrast(1.1) brightness(1.3);
+  }
+
+  .color-indicator:first-child {
+    margin-left: 0;
   }
 
   .bottom-section {
@@ -329,15 +451,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-  }
-
-  .name-text {
-    padding-left: 8px;
-    font-size: var(--name-font-size, 0.9rem);
-    line-height: 1.1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .abilities-container {
