@@ -177,7 +177,7 @@
 
   .content {
     flex: 1;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
@@ -185,8 +185,6 @@
     justify-content: flex-end;
     padding: 8px var(--left-margin);
     overflow: hidden;
-    border-radius: 0 0 6px 6px;
-    border: 1px solid #5a4b3c;
     border-top: none;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
   }
@@ -281,19 +279,20 @@
   }
 
   .spell-effect {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: 6px 8px;
-    border-radius: 4px;
+    padding: 6px var(--left-margin) 8px var(--left-margin);
     font-size: 0.75rem;
     line-height: 1.2;
     text-align: center;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid var(--color-golden);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
     margin-top: auto;
-    margin-bottom: 4px;
-    max-width: 100%;
+    margin-bottom: -8px;
+    margin-left: calc(var(--left-margin) * -1);
+    margin-right: calc(var(--left-margin) * -1);
     word-wrap: break-word;
+    backdrop-filter: blur(2px);
   }
 
   /* Mana Bar Separator Styles */
