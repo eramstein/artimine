@@ -8,6 +8,7 @@
   import { isPayableAfterColorIncrementation } from '@lib/battle/cost';
   import { usePlayerColorAbility } from '@lib/battle/player';
   import { activateSpell, targetCard } from '@lib/ui/_helpers/targetting';
+  import ManaCost from '../cards/ManaCost.svelte';
   import Abilities from './Abilities.svelte';
   import Keywords from './Keywords.svelte';
   import Stats from './Stats.svelte';
@@ -69,9 +70,10 @@
       return;
     }
 
-    const colorRequirementMet = isPayableAfterColorIncrementation(card);    
+    const colorRequirementMet = isPayableAfterColorIncrementation(card);
     if (inHand && isSpellCard(card) && colorRequirementMet !== false) {
-      if (colorRequirementMet !== true) { // this is the case when incrementing a color makes it playable
+      if (colorRequirementMet !== true) {
+        // this is the case when incrementing a color makes it playable
         usePlayerColorAbility(bs.players[card.ownerPlayerId], colorRequirementMet as CardColor);
       }
       // Check if any effect in the spell has targets
@@ -108,14 +110,15 @@
   // Check if spell is draggable (0 or 1 target)
   function isDraggableSpell(card: Card): boolean {
     if (!isSpellCard(card)) return false;
-    const totalTargets = card.actions.reduce((acc, action) => acc + (action.targets?.length || 0), 0);
+    const totalTargets = card.actions.reduce(
+      (acc, action) => acc + (action.targets?.length || 0),
+      0
+    );
     return totalTargets <= 1;
   }
 
   // Check if this card is currently being dragged
-  let isDragging = $derived(
-    inHand && uiState.battle.draggingCard?.instanceId === card.instanceId
-  );
+  let isDragging = $derived(inHand && uiState.battle.draggingCard?.instanceId === card.instanceId);
 
   // Drag event handlers
   function handleDragStart(event: DragEvent) {
@@ -133,8 +136,7 @@
 
       // Hide the default drag ghost image
       const img = new Image();
-      img.src =
-        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // transparent pixel
+      img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // transparent pixel
       event.dataTransfer.setDragImage(img, 0, 0);
 
       // Initialize dragging state
@@ -173,17 +175,14 @@
   onclick={handleClick}
   oncontextmenu={handleContextMenu}
 >
-  <!-- Card name bar with integrated cost -->
+  <ManaCost cost={card.cost || 0} colors={card.colors || []} />
+
+  <!-- Card name bar -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
       ? 'has-unit-types'
       : ''}"
   >
-    {#if card.cost > 0}
-      <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
-        {card.cost}
-      </div>
-    {/if}
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
@@ -199,22 +198,6 @@
 
   <!-- Content area with card image background -->
   <div class="content" style="background-image: url('{cardImagePath}');">
-    <!-- Color indicators at the top -->
-    <div class="colors">
-      {#each card.colors as colorInfo}
-        <div class="color-stack" title="{colorInfo.color} ({colorInfo.count})">
-          {#each Array(colorInfo.count) as _, index}
-            <div
-              class="color-indicator"
-              style="background-image: url('{getColorImagePath(
-                colorInfo.color
-              )}'); z-index: {index + 1}; top: {index * 10}px;"
-            ></div>
-          {/each}
-        </div>
-      {/each}
-    </div>
-
     <!-- Bottom section with abilities and bottom row -->
     <div class="bottom-section">
       <!-- Abilities display - only for Unit cards with abilities -->
@@ -277,7 +260,7 @@
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 8px var(--left-margin);
     overflow: hidden;
     border-radius: 0 0 10px 10px;
@@ -295,7 +278,7 @@
   .name {
     background: #000;
     color: white;
-    padding: 8px 12px;
+    padding: 8px 12px 8px 44px;
     font-weight: bold;
     font-size: 0.9rem;
     display: flex;
@@ -306,7 +289,7 @@
   }
 
   .card:hover .name.has-unit-types {
-    padding: 4px 12px;
+    padding: 4px 12px 4px 44px;
   }
 
   .card:hover .name.has-unit-types .name-text {
@@ -323,7 +306,6 @@
     display: none;
     flex-wrap: wrap;
     margin-left: 8px;
-    margin-top: -2px;
   }
 
   .card:hover .unit-types-inline {
@@ -331,40 +313,10 @@
   }
 
   .unit-type-text {
-    color: #999;
+    color: #bbb;
     font-size: 0.65rem;
     font-weight: normal;
     text-transform: capitalize;
-  }
-
-  .cost {
-    color: white;
-    font-weight: bold;
-    font-size: 0.9rem;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 0 1px 2px #000;
-    flex-shrink: 0;
-    top: 8px;
-    left: var(--left-margin);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .colors {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .color-stack {
-    position: relative;
-    height: 28px;
-    margin-bottom: 4px;
   }
 
   .bottom-section {
@@ -377,23 +329,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-  }
-
-  .color-indicator {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 
   .name-text {

@@ -6,6 +6,7 @@
   import type { CardTemplate, SpellCardTemplate, UnitCardTemplate } from '@lib/_model/model-battle';
   import { uiState } from '@lib/_state';
   import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
+  import ManaCost from './ManaCost.svelte';
   import Abilities from '../battle/Abilities.svelte';
   import Keywords from '../battle/Keywords.svelte';
   import Stats from '../battle/Stats.svelte';
@@ -95,30 +96,24 @@
 
   // Get the background style (either color or gradient)
   function getCardBackgroundStyle(): string {
-    const background = getCardBackgroundColor();
-    if (background.includes('gradient')) {
-      return `background: ${background};`;
-    } else {
-      return `background-color: ${background};`;
-    }
+    return ''; // No longer coloring the card itself
   }
 </script>
 
 <div
   class="card"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
-    40}px; --name-font-size: {nameFontSize()}rem; {getCardBackgroundStyle()}"
+    40}px; --name-font-size: {nameFontSize()}rem;"
   oncontextmenu={handleContextMenu}
 >
-  <!-- Card name bar with integrated cost -->
+  <ManaCost cost={card.cost || 0} colors={card.colors || []} />
+
+  <!-- Card name bar -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
       ? 'has-unit-types'
       : ''}"
   >
-    <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
-      {card.cost}
-    </div>
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
@@ -134,22 +129,6 @@
 
   <!-- Content area with card image background -->
   <div class="content" style="background-image: url('{cardImagePath}');">
-    <!-- Color indicators at the top -->
-    <div class="colors">
-      {#each card.colors as colorInfo}
-        <div class="color-stack" title="{colorInfo.color} ({colorInfo.count})">
-          {#each Array(colorInfo.count) as _, index}
-            <div
-              class="color-indicator"
-              style="background-image: url('{getColorImagePath(
-                colorInfo.color
-              )}'); z-index: {index + 1}; top: {index * 10}px;"
-            ></div>
-          {/each}
-        </div>
-      {/each}
-    </div>
-
     <!-- Bottom section with abilities and bottom row -->
     <div class="bottom-section">
       <!-- Abilities display - only for Unit cards with abilities -->
@@ -213,7 +192,7 @@
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 8px var(--left-margin);
     overflow: hidden;
     border-radius: 0 0 10px 10px;
@@ -224,8 +203,9 @@
   }
 
   .name {
+    background: #000;
     color: white;
-    padding: 8px 12px;
+    padding: 8px 12px 8px 44px;
     font-weight: bold;
     font-size: 0.9rem;
     display: flex;
@@ -237,6 +217,10 @@
 
   .name.has-unit-types .name-text {
     font-size: 0.85rem;
+  }
+
+  .name.has-unit-types {
+    padding: 8px 12px 8px 44px;
   }
 
   .name-content {
@@ -263,69 +247,13 @@
     text-transform: capitalize;
   }
 
-  .cost {
-    color: white;
-    font-weight: bold;
-    font-size: 0.9rem;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 0 1px 2px #000;
-    flex-shrink: 0;
-    top: 8px;
-    left: var(--left-margin);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .colors {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .color-stack {
-    position: relative;
-    height: 28px;
-    margin-bottom: 4px;
-  }
-
-  .bottom-section {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .bottom-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .color-indicator {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
   .name-text {
     padding-left: 8px;
     font-size: var(--name-font-size, 0.9rem);
     line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .abilities-container {

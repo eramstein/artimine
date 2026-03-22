@@ -6,6 +6,7 @@
   import { KEYWORD_TOOLTIPS } from '../_helpers/keywordTooltips';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
   import Tooltip from '../Tooltip.svelte';
+  import ManaCost from './ManaCost.svelte';
 
   let { card }: { card: CardTemplate | Land } = $props();
 
@@ -128,17 +129,21 @@
 </script>
 
 <div class="card-full">
+  <!-- Cost & Colors corner badge cluster extracted to ManaCost.svelte -->
+  {#if !isLandCard(card)}
+    <div
+      style="transform: scale(1.5); transform-origin: top left; position: absolute; top: 10px; left: 10px; z-index: 10;"
+    >
+      <ManaCost cost={card.cost || 0} colors={card.colors || []} />
+    </div>
+  {/if}
+
   <!-- Card name bar with integrated cost -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
       ? 'has-unit-types'
       : ''}"
   >
-    {#if !isLandCard(card)}
-      <div class="cost" style="background-image: url('{getAssetPath('images/mana-border.png')}');">
-        {card.cost}
-      </div>
-    {/if}
     <div class="name-content">
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
@@ -154,22 +159,6 @@
 
   <!-- Content area with card image background -->
   <div class="content" style="background-image: url('{cardImagePath}');">
-    <!-- Color indicators at the top -->
-    <div class="colors">
-      {#each card.colors as colorInfo}
-        <div class="color-stack" title="{colorInfo.color} ({colorInfo.count})">
-          {#each Array(colorInfo.count) as _, index}
-            <div
-              class="color-indicator"
-              style="background-image: url('{getColorImagePath(
-                colorInfo.color
-              )}'); z-index: {index + 1}; top: {index * 10}px;"
-            ></div>
-          {/each}
-        </div>
-      {/each}
-    </div>
-
     <!-- Bottom section with stats -->
     <div class="bottom-section">
       <!-- Stats display - Unit cards -->
@@ -306,7 +295,7 @@
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: 16px;
     position: relative;
     flex-shrink: 0;
@@ -326,7 +315,7 @@
   .name {
     background: #000;
     color: white;
-    padding: 16px 20px;
+    padding: 16px 20px 16px 80px;
     font-weight: bold;
     font-size: 1.2rem;
     display: flex;
@@ -356,54 +345,6 @@
     background: rgba(255, 255, 255, 0.1);
     padding: 2px 8px;
     border-radius: 12px;
-  }
-
-  .cost {
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 0 2px 4px #000;
-    flex-shrink: 0;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    padding-bottom: 3px;
-  }
-
-  .colors {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .color-stack {
-    position: relative;
-    height: 42px;
-    margin-bottom: 4px;
-  }
-
-  .color-indicator {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--color-golden);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 
   .details-section {
