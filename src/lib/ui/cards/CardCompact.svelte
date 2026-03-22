@@ -213,6 +213,20 @@
     white-space: nowrap;
   }
 
+  .bottom-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+  }
+
   .abilities-container {
     display: flex;
     justify-content: flex-end;
