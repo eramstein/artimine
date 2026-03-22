@@ -5,7 +5,8 @@
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { KEYWORD_TOOLTIPS } from '../_helpers/keywordTooltips';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
-  import Tooltip from '../Tooltip.svelte';  let { card }: { card: CardTemplate | Land } = $props();
+  import Tooltip from '../Tooltip.svelte';
+  let { card }: { card: CardTemplate | Land } = $props();
 
   // Tooltip state
   let hoveredKeyword = $state<string | null>(null);
@@ -305,18 +306,23 @@
   .card-full {
     width: 512px;
     border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    border: 3px solid #bfa14a;
+    box-shadow: 
+      0 8px 16px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid #1a1a1a;
+    background: #444 url('/assets/images/cardboard.png') center/cover;
+    background-blend-mode: multiply;
+    padding: 10px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     position: relative;
     z-index: 1;
-    background: #000;
     overflow: hidden;
   }
 
   .content {
-    width: 512px;
+    width: 100%;
     height: 512px;
     background-size: cover;
     background-position: center;
@@ -348,7 +354,8 @@
     font-weight: 800;
     font-size: 1.8rem;
     flex-shrink: 0;
-    border-radius: 13px 13px 0 0;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid #5a4b3c;
     border-bottom: 3px solid #2c251d;
     box-shadow:
       inset 0 1px 3px rgba(255, 255, 255, 0.4),
@@ -478,13 +485,15 @@
   .details-section {
     background: #000;
     padding: 16px;
-    border-radius: 0 0 16px 16px;
+    border-radius: 0 0 8px 8px;
     display: flex;
     flex-direction: column;
     gap: 16px;
     max-height: 200px;
     overflow-y: auto;
     flex-shrink: 0;
+    border: 1px solid #5a4b3c;
+    border-top: none;
   }
 
   .ability-item {

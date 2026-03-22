@@ -47,10 +47,8 @@
     return card.type === CardType.Spell;
   }
 
-  // Determine border color based on whether the card is payable
-  function getBorderColor() {
-    return isPayableAfterColorIncrementation(card) !== false ? 'var(--color-golden)' : '#666'; // Gold if affordable, gray if not
-  }
+  // Check if the card is playable
+  let isPayable = $derived(isPayableAfterColorIncrementation(card) !== false);
 
   // Helper function to get color image path
   function getColorImagePath(color: CardColor): string {
@@ -163,11 +161,12 @@
 </script>
 
 <div
-  class="card {isPendingSpell ? 'pending-spell' : ''} {isDragging ? 'dragging' : ''}"
+  class="card {isPendingSpell ? 'pending-spell' : ''} {isDragging ? 'dragging' : ''} {isPayable
+    ? 'payable'
+    : ''}"
   style="--card-width: {CARD_WIDTH}px; --card-height: {CARD_HEIGHT +
-    40}px; border-color: {getBorderColor()}; --name-font-size: {nameFontSize()}rem;"
-  draggable={(isUnitCard(card) || isDraggableSpell(card)) &&
-    isPayableAfterColorIncrementation(card) !== false}
+    40}px; --name-font-size: {nameFontSize()}rem;"
+  draggable={(isUnitCard(card) || isDraggableSpell(card)) && isPayable}
   ondragstart={handleDragStart}
   ondrag={handleDrag}
   ondragend={handleDragEnd}
@@ -175,11 +174,7 @@
   oncontextmenu={handleContextMenu}
 >
   <!-- Card name bar -->
-  <div
-    class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
-      ? 'has-unit-types'
-      : ''}"
-  >
+  <div class="name has-unit-types">
     {#if card.colors && card.colors.length > 0}
       <div class="header-colors">
         {#each card.colors as colorInfo}
@@ -267,12 +262,19 @@
     width: var(--card-width);
     height: var(--card-height);
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border: 2px solid #bfa14a;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    background: #444 url('/assets/images/cardboard.png') center/cover;
+    background-blend-mode: multiply;
+    border: 1px solid #1a1a1a;
+    padding: 6px;
+    box-sizing: border-box;
     cursor: pointer;
     transition:
       transform 0.2s ease,
-      box-shadow 0.2s ease;
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
     --left-margin: 12px;
     display: flex;
     flex-direction: column;
@@ -282,7 +284,7 @@
 
   .content {
     flex: 1;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
@@ -290,7 +292,8 @@
     justify-content: flex-end;
     padding: 8px var(--left-margin);
     overflow: hidden;
-    border-radius: 0 0 10px 10px;
+    border-top: none;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
   .card:hover {
@@ -310,10 +313,11 @@
     font-weight: 800;
     font-size: 0.9rem;
     flex-shrink: 0;
-    border-radius: 10px 10px 0 0;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid #5a4b3c;
     border-bottom: 2px solid #2c251d;
     box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.4),
+      inset 0 1px 3px rgba(255, 255, 255, 0.4),
       0 2px 4px rgba(0, 0, 0, 0.3);
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
     position: relative;
@@ -321,6 +325,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    overflow: hidden;
   }
 
   .name.has-unit-types .name-text {
@@ -413,6 +418,15 @@
       inset 0 -2px 3px rgba(0, 0, 0, 0.8),
       0 2px 4px rgba(0, 0, 0, 0.6);
     z-index: 2;
+    transition: all 0.2s ease;
+  }
+
+  .card.payable {
+    border-color: var(--color-golden);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.5),
+      0 0 8px rgba(255, 215, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 
   .header-colors {
@@ -481,19 +495,20 @@
   }
 
   .spell-effect {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: 6px 8px;
-    border-radius: 4px;
+    padding: 6px var(--left-margin) 8px var(--left-margin);
     font-size: 0.75rem;
     line-height: 1.2;
     text-align: center;
-    border: 1px solid var(--color-golden);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid var(--color-golden);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
     margin-top: auto;
-    margin-bottom: 4px;
-    max-width: 100%;
+    margin-bottom: -8px;
+    margin-left: calc(var(--left-margin) * -1);
+    margin-right: calc(var(--left-margin) * -1);
     word-wrap: break-word;
+    backdrop-filter: blur(2px);
     opacity: 0;
     transition: opacity 0.2s ease;
   }
