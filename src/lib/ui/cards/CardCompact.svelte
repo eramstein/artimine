@@ -1,15 +1,15 @@
 <script lang="ts">
   import { isLandCard } from '@/lib/_model';
-  import { CardColor, CardType } from '@/lib/_model/enums-battle';
+  import { CardType } from '@/lib/_model/enums-battle';
   import { DataEffectTemplates } from '@/lib/battle/effects/effect-templates';
   import { CARD_HEIGHT, CARD_WIDTH } from '@lib/_config/ui-config';
   import type { CardTemplate, SpellCardTemplate, UnitCardTemplate } from '@lib/_model/model-battle';
   import { uiState } from '@lib/_state';
-  import { getAssetPath, getCardImagePath } from '@lib/_utils/asset-paths';
-  import ManaCost from './ManaCost.svelte';
+  import { getCardImagePath } from '@lib/_utils/asset-paths';
   import Abilities from '../battle/Abilities.svelte';
   import Keywords from '../battle/Keywords.svelte';
   import Stats from '../battle/Stats.svelte';
+  import ManaCost from './ManaCost.svelte';
 
   let { card }: { card: CardTemplate } = $props();
 
@@ -20,11 +20,6 @@
   let nameFontSize = $derived(() => {
     return card.name.length > 20 ? 0.75 : 0.9;
   });
-
-  // Helper function to get color image path
-  function getColorImagePath(color: CardColor): string {
-    return getAssetPath(`images/color_${color}.png`);
-  }
 
   function isSpellCard(card: CardTemplate): card is SpellCardTemplate {
     return card.type === CardType.Spell;
@@ -57,47 +52,6 @@
     uiState.cardFullOverlay.visible = true;
     uiState.cardFullOverlay.card = card;
   }
-
-  // Get the primary color for the card background
-  function getCardBackgroundColor(): string {
-    if (card.colors.length === 0) {
-      return '#2a2a2a'; // Default gray color
-    }
-
-    // Map card colors to very dark background colors
-    const colorMap: Record<CardColor, string> = {
-      [CardColor.Red]: '#2a0f0f', // Very dark red
-      [CardColor.Blue]: '#0f1a2a', // Very dark blue
-      [CardColor.Green]: '#0f2a0f', // Very dark green
-      [CardColor.Black]: '#1a1a1a', // Very dark gray/black
-    };
-
-    // Map card colors to more contrasting colors for gradients
-    const gradientColorMap: Record<CardColor, string> = {
-      [CardColor.Red]: '#3a1515', // Dark red with more contrast
-      [CardColor.Blue]: '#151f3a', // Dark blue with more contrast
-      [CardColor.Green]: '#153a15', // Dark green with more contrast
-      [CardColor.Black]: '#1f1f1f', // Dark gray/black with more contrast
-    };
-
-    // If single color, return solid color
-    if (card.colors.length === 1) {
-      const primaryColor = card.colors[0].color;
-      return colorMap[primaryColor] || '#2a2a2a';
-    }
-
-    // For multicolor cards, create a gradient with more contrasting colors
-    const gradientColors = card.colors.map(
-      (colorInfo) => gradientColorMap[colorInfo.color] || '#2a2a2a'
-    );
-    const gradient = `linear-gradient(90deg, ${gradientColors.join(', ')})`;
-    return gradient;
-  }
-
-  // Get the background style (either color or gradient)
-  function getCardBackgroundStyle(): string {
-    return ''; // No longer coloring the card itself
-  }
 </script>
 
 <div
@@ -122,6 +76,10 @@
           {#each card.unitTypes as unitType}
             <span class="unit-type-text">{unitType}</span>
           {/each}
+        </div>
+      {:else}
+        <div class="unit-types-inline">
+          <span class="unit-type-text">{card.type}</span>
         </div>
       {/if}
     </div>
@@ -233,7 +191,6 @@
     display: none;
     flex-wrap: wrap;
     margin-left: 8px;
-    margin-top: -2px;
   }
 
   .unit-types-inline {
@@ -241,8 +198,8 @@
   }
 
   .unit-type-text {
-    color: #999;
-    font-size: 0.65rem;
+    color: #bbb;
+    font-size: 0.7rem;
     font-weight: normal;
     text-transform: capitalize;
   }
