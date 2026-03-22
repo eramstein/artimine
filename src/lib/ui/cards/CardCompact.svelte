@@ -197,12 +197,9 @@
     background: #e8dcc4 url('/assets/images/parchment.png') center/cover;
     background-blend-mode: multiply;
     color: #2c251d;
-    padding: 6px 10px 6px 10px;
+    padding: 6px 10px 2px 10px;
     font-weight: 800;
     font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
     flex-shrink: 0;
     border-radius: 6px 6px 0 0;
     border: 1px solid #5a4b3c;
@@ -220,7 +217,7 @@
   }
 
   .name.has-unit-types {
-    padding: 6px 10px 6px 10px;
+    padding: 6px 10px 2px 10px;
   }
 
   .name-content {
@@ -229,12 +226,6 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-  }
-
-  .unit-types-inline {
-    display: none;
-    flex-wrap: wrap;
-    margin-left: 8px;
   }
 
   .unit-types-inline {

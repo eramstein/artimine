@@ -5,10 +5,7 @@
   import { DataEffectTemplates } from '../../battle/effects/effect-templates';
   import { KEYWORD_TOOLTIPS } from '../_helpers/keywordTooltips';
   import { TRIGGER_ICONS } from '../_helpers/triggerIcons';
-  import Tooltip from '../Tooltip.svelte';
-  import ManaCost from './ManaCost.svelte';
-
-  let { card }: { card: CardTemplate | Land } = $props();
+  import Tooltip from '../Tooltip.svelte';  let { card }: { card: CardTemplate | Land } = $props();
 
   // Tooltip state
   let hoveredKeyword = $state<string | null>(null);
@@ -23,6 +20,11 @@
 
   // Create the background image path using the card id
   let cardImagePath = $derived(getCardImagePath(card.id));
+
+  // Calculate font size based on name length
+  let nameFontSize = $derived(() => {
+    return card.name.length > 20 ? 1.5 : 1.8;
+  });
 
   // Check if card is a unit card (works with CardTemplate type)
   function isUnitCard(card: CardTemplate | Land): card is CardTemplate & {
@@ -128,17 +130,8 @@
   });
 </script>
 
-<div class="card-full">
-  <!-- Cost & Colors corner badge cluster extracted to ManaCost.svelte -->
-  {#if !isLandCard(card)}
-    <div
-      style="transform: scale(1.5); transform-origin: top left; position: absolute; top: 10px; left: 10px; z-index: 10;"
-    >
-      <ManaCost cost={card.cost || 0} colors={card.colors || []} />
-    </div>
-  {/if}
-
-  <!-- Card name bar with integrated cost -->
+<div class="card-full" style="--name-font-size: {nameFontSize()}rem;">
+  <!-- Card name bar -->
   <div
     class="name {isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0
       ? 'has-unit-types'
@@ -148,11 +141,46 @@
       <span class="name-text">{card.name}</span>
       <!-- Unit types display - only for Unit cards with unitTypes -->
       {#if isUnitCard(card) && card.unitTypes && card.unitTypes.length > 0}
-        <div class="unit-types">
+        <div class="unit-types-inline">
           {#each card.unitTypes as unitType}
             <span class="unit-type-text">{unitType}</span>
           {/each}
         </div>
+      {:else}
+        <div class="unit-types-inline">
+          <span class="unit-type-text">{card.type}</span>
+        </div>
+      {/if}
+    </div>
+  </div>
+
+  <!-- Mana Bar (Separator) -->
+  <div class="mana-bar">
+    <div class="mana-line"></div>
+    <div class="mana-content">
+      {#if !isLandCard(card)}
+        {#if card.cost !== undefined && card.cost > 0}
+          <div class="mana-cost-circle">
+            {card.cost}
+          </div>
+        {/if}
+
+        <div class="mana-spacer"></div>
+
+        {#if card.colors && card.colors.length > 0}
+          <div class="mana-colors">
+            {#each card.colors as colorInfo}
+              {#each Array(colorInfo.count) as _}
+                <div
+                  class="color-indicator"
+                  style="background-image: url('{getAssetPath(
+                    `images/color_${colorInfo.color}.png`
+                  )}');"
+                ></div>
+              {/each}
+            {/each}
+          </div>
+        {/if}
       {/if}
     </div>
   </div>
@@ -313,38 +341,138 @@
   }
 
   .name {
-    background: #000;
-    color: white;
-    padding: 16px 20px 16px 80px;
-    font-weight: bold;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: #e8dcc4 url('/assets/images/parchment.png') center/cover;
+    background-blend-mode: multiply;
+    color: #2c251d;
+    padding: 12px 20px 4px 20px;
+    font-weight: 800;
+    font-size: 1.8rem;
     flex-shrink: 0;
     border-radius: 13px 13px 0 0;
+    border-bottom: 3px solid #2c251d;
+    box-shadow:
+      inset 0 1px 3px rgba(255, 255, 255, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 2;
+  }
+
+  .name.has-unit-types .name-text {
+    font-size: 1.7rem;
+  }
+
+  .name.has-unit-types {
+    padding: 12px 20px 4px 20px;
   }
 
   .name-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    text-align: center;
   }
 
-  .unit-types {
+  .unit-types-inline {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    justify-content: center;
   }
 
   .unit-type-text {
-    color: #999;
-    font-size: 0.9rem;
-    font-weight: normal;
+    color: #554838;
+    font-size: 1.4rem;
+    font-weight: bold;
     text-transform: capitalize;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 12px;
+  }
+
+  .name-text {
+    font-size: var(--name-font-size, 1.8rem);
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Mana Bar Separator Styles */
+  .mana-bar {
+    position: relative;
+    height: 0;
+    z-index: 10;
+  }
+
+  .mana-line {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #2c251d;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .mana-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .mana-spacer {
+    flex: 1;
+  }
+
+  .mana-cost-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    background-image: radial-gradient(circle at 30% 30%, #4a4a4a, #1a1a1a);
+    border: 3px solid #5a4b3c;
+    color: #f5eedf;
+    font-weight: 900;
+    font-size: 1.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      inset 0 2px 2px rgba(255, 255, 255, 0.4),
+      inset 0 -3px 4px rgba(0, 0, 0, 0.8),
+      0 3px 6px rgba(0, 0, 0, 0.6);
+    z-index: 2;
+  }
+
+  .mana-colors {
+    display: flex;
+    z-index: 2;
+  }
+
+  .color-indicator {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #3a2e24;
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.5),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.9),
+      0 3px 5px rgba(0, 0, 0, 0.6);
+    margin-left: -12px;
+    position: relative;
+    filter: contrast(1.1) brightness(1.3);
+  }
+
+  .color-indicator:first-child {
+    margin-left: 0;
   }
 
   .details-section {
