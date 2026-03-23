@@ -9,10 +9,11 @@ import {
 } from '../_model';
 import { gs } from '../_state/main.svelte';
 import { hideToast, showToast } from '../_state/state-ui.svelte';
-import { endPlayerChat, updateNpcRelation } from '../llm';
+import { updateNpcRelation } from '../llm';
 import { autoResolveActivity } from './activity';
 import { createEventForCurrentActivity } from './event';
 import { adjustNpcDecks, expandNpcCollections, sendNpcsHome } from './npc';
+import { makeNpcInvitations } from './relation';
 import { dayPeriodIndexes, isTimePeriodBefore } from './time';
 import { getTournament } from './tournament';
 
@@ -49,18 +50,37 @@ export function scheduleActivity(
 }
 
 export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
-  showToast('Processing schedule updates...', 'info');
-  await endPlayerChat();
-  // update NPC relations
-  for (const npc of Object.values(gs.characters)) {
-    if (npc.period.interactionsSummary) {
-      await updateNpcRelation(npc);
-    }
-  }
-  resetPeriodState();
-  hideToast();
+  await updateNpcRelationsSummary();
 
-  // auto-resolve activityPlans
+  resetPeriodState();
+
+  autoResolveActivities(day, dayPeriod);
+
+  // update NPCs
+  sendNpcsHome();
+  makeNpcInvitations();
+
+  // clean up passed schedule
+  gs.activityPlans = gs.activityPlans.slice(day);
+  // fill schedule for next days
+  gs.time.day += day;
+  gs.time.period = dayPeriod;
+  fillDefaultActivities(gs.time.day + 14);
+
+  // create current activity from plan
+  const activityPlan = gs.activityPlans[0][dayPeriodIndexes[gs.time.period]];
+  if (!activityPlan) return;
+  gs.activity = activityPlan.activity;
+  gs.player.place = activityPlan.place;
+  createEventForCurrentActivity();
+  activityPlan.activity.participants.forEach((participant) => {
+    if (gs.characters[participant]) {
+      gs.characters[participant].place = activityPlan.place;
+    }
+  });
+}
+
+function autoResolveActivities(day: number, dayPeriod: DayPeriod) {
   gs.activityPlans
     .filter((_, d) => d <= day)
     .forEach((dayActivities) => {
@@ -81,25 +101,6 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
         }
       });
     });
-  // reset NPCs
-  sendNpcsHome();
-  // clean up passed schedule
-  gs.activityPlans = gs.activityPlans.slice(day);
-  // fill schedule for next days
-  gs.time.day += day;
-  gs.time.period = dayPeriod;
-  fillDefaultActivities(gs.time.day + 14);
-  // update activity, time and schedule
-  const activityPlan = gs.activityPlans[0][dayPeriodIndexes[gs.time.period]];
-  if (!activityPlan) return;
-  gs.activity = activityPlan.activity;
-  gs.player.place = activityPlan.place;
-  createEventForCurrentActivity();
-  activityPlan.activity.participants.forEach((participant) => {
-    if (gs.characters[participant]) {
-      gs.characters[participant].place = activityPlan.place;
-    }
-  });
 }
 
 export function fillDefaultActivities(untilDay: number) {
@@ -170,6 +171,17 @@ function resetPeriodState() {
   for (const npc of Object.values(gs.characters)) {
     npc.period.interactionsSummary = '';
     npc.period.trades = 0;
+    npc.invitation = null;
   }
   gs.player.period.improvedRelations = false;
+}
+
+async function updateNpcRelationsSummary() {
+  showToast('Updating NPC relations...', 'info');
+  for (const npc of Object.values(gs.characters)) {
+    if (npc.period.interactionsSummary) {
+      await updateNpcRelation(npc);
+    }
+  }
+  hideToast();
 }

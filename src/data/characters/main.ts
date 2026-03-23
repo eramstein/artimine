@@ -46,6 +46,8 @@ function addDefaultCollectionAndDecks(character: any): Npc {
     gifting: {
       cards: [],
     },
+    relationTags: [],
+    invitation: null,
   };
 }
 

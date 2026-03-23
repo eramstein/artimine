@@ -84,6 +84,7 @@ export const uiState: UiState = $state({
     card: null,
   },
   activeGiftCharacterKey: null,
+  activeInvitationCharacterKey: null,
   consoleCommand: {
     visible: false,
   },

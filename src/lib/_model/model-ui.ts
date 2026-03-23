@@ -111,6 +111,7 @@ export type UiState = {
     card: CardTemplate | null;
   };
   activeGiftCharacterKey: string | null;
+  activeInvitationCharacterKey: string | null;
   consoleCommand: {
     visible: boolean;
   };

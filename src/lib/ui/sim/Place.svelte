@@ -5,10 +5,11 @@
   import { initPlayerChat } from '@/lib/llm/chat';
   import { createEventForCurrentActivity } from '@/lib/sim/event';
   import CharacterPortrait from './characters/CharacterPortrait.svelte';
-  import ShopModal from './ShopModal.svelte';
-  import SocialAction from './SocialAction.svelte';
   import Event from './Event.svelte';
   import Gift from './Gift.svelte';
+  import InvitationReceived from './InvitationReceived.svelte';
+  import ShopModal from './ShopModal.svelte';
+  import SocialAction from './SocialAction.svelte';
 
   let { place }: { place: Place } = $props();
 
@@ -73,10 +74,24 @@
     event.stopPropagation();
     uiState.activeGiftCharacterKey = character.key;
   }
+
+  function handleInvitationClick(event: MouseEvent, character: Npc) {
+    event.stopPropagation();
+    uiState.activeInvitationCharacterKey = character.key;
+  }
 </script>
 
-<div class="main-layout" class:has-event={!!gs.activity.event || !!uiState.activeGiftCharacterKey}>
-  <div class="place-container" style="--bg-image: url('{imagePath}')" onclick={handleBackgroundClick}>
+<div
+  class="main-layout"
+  class:has-event={!!gs.activity.event ||
+    !!uiState.activeGiftCharacterKey ||
+    !!uiState.activeInvitationCharacterKey}
+>
+  <div
+    class="place-container"
+    style="--bg-image: url('{imagePath}')"
+    onclick={handleBackgroundClick}
+  >
     <div class="top-left-controls">
       {#if place.shopInventory && place.shopInventory.length > 0}
         <button class="shop-button" onclick={handleShopClick}>
@@ -105,6 +120,11 @@
           {#if character.gifting?.cards.length > 0}
             <div class="gift-icon" onclick={(e) => handleGiftClick(e, character)}>🎁</div>
           {/if}
+          {#if character.invitation}
+            <div class="invitation-icon" onclick={(e) => handleInvitationClick(e, character)}>
+              📅
+            </div>
+          {/if}
         </div>
       {/each}
     </div>
@@ -132,6 +152,10 @@
   {:else if uiState.activeGiftCharacterKey}
     <div class="event-pane">
       <Gift />
+    </div>
+  {:else if uiState.activeInvitationCharacterKey}
+    <div class="event-pane">
+      <InvitationReceived />
     </div>
   {/if}
 </div>
@@ -283,7 +307,8 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
-  .chat-icon {
+  .chat-icon,
+  .invitation-icon {
     position: absolute;
     top: 8px;
     right: 8px;

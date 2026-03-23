@@ -5,6 +5,7 @@ import type {
   DayPeriod,
   ItemType,
   NpcPerk,
+  RelationTag,
   TournamentFormat,
   TournamentStatus,
   TournamentType,
@@ -48,6 +49,7 @@ export interface Player extends Character {
 export interface Npc extends Character {
   relationSummary: string;
   relationValues: RelationValues;
+  relationTags: RelationTag[];
   chatInitiation?: string; // the NPC has something to say
   period: {
     interactionsSummary: string;
@@ -62,6 +64,7 @@ export interface Npc extends Character {
     cards: string[];
   };
   ambitions: Ambition[];
+  invitation: ActivityPlan | null;
 }
 
 export interface Ambition {

@@ -67,3 +67,14 @@ export enum Difficulty {
 export enum NpcPerk {
   ExtraTrade = 'extra trades', // allows extra trades per period
 }
+
+export enum RelationTag {
+  BestFriend = 'best friend',
+  Lover = 'lover',
+  Mentor = 'mentor',
+  Rival = 'rival',
+  Enemy = 'enemy',
+  Family = 'family',
+  Colleague = 'colleague',
+  Classmate = 'classmate',
+}
