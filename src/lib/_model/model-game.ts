@@ -135,6 +135,7 @@ export interface Event {
   options: EventOption[];
   history: string[];
   outcome?: EventOutcome;
+  relatedAmbition?: { npc: string; index: number };
 }
 
 export interface EventOption {

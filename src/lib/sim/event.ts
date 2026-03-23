@@ -6,6 +6,8 @@ import { gs } from '../_state';
 import { getRandomFromArray, getRandomInteger } from '../_utils/random';
 import { generateEventWithLLM, resolveEventWithLLM } from '../llm/event';
 import { difficultyNumbers } from './actions/general-challenge';
+import { unlockGift } from './gift';
+import { updatedAmbition } from './npc';
 import { updateNpcRelationValue } from './relation';
 import { checkActionSuccess } from './roll';
 
@@ -22,12 +24,13 @@ export async function createEventForCurrentActivity() {
   };
   // TODO: handle events with multiple acting characters
   const actingCharacter = gs.characters[getRandomFromArray(gs.activity.participants)];
-  const plot = getPlot(gs.activity.activityType, actingCharacter);
+  const plot = getPlot(actingCharacter);
   const options = makeEventOptions(actingCharacter, gs.activity.activityType);
-  const llmEvent = await generateEventWithLLM(plot, options, [actingCharacter]);
+  const llmEvent = await generateEventWithLLM(plot.description, options, [actingCharacter]);
   newEvent.participants = [actingCharacter.key];
   newEvent.title = llmEvent.title;
   newEvent.description = llmEvent.description;
+  newEvent.relatedAmbition = plot.relatedAmbition;
   newEvent.options = options.map((option, i) => ({
     ...option,
     description: llmEvent.options[i].description || option.description,
@@ -35,11 +38,23 @@ export async function createEventForCurrentActivity() {
   gs.activity.event = newEvent;
 }
 
-function getPlot(activityType: ActivityType, character: Npc): string {
-  if (character.ambitions.length === 0) {
-    return getRandomFromArray(DEFAULT_PLOTS);
+function getPlot(character: Npc): {
+  description: string;
+  relatedAmbition?: { npc: string; index: number };
+} {
+  const ambitionRoll = Math.random() > 0.5;
+  const ambitionsUnlocked =
+    character.relationValues.friendship > 4 ||
+    character.relationValues.love > 4 ||
+    character.relationValues.respect > 4;
+  if (character.ambitions.length === 0 || !ambitionRoll || !ambitionsUnlocked) {
+    return { description: getRandomFromArray(DEFAULT_PLOTS) };
   }
-  return character.ambitions[0].summary;
+  const ambitionIndex = getRandomInteger(0, character.ambitions.length - 1);
+  return {
+    description: character.ambitions[ambitionIndex].summary,
+    relatedAmbition: { npc: character.key, index: ambitionIndex },
+  };
 }
 
 function makeEventOptions(character: Npc, activityType: ActivityType): EventOption[] {
@@ -109,6 +124,9 @@ export async function setEventOutcome(optionIndex: number) {
  */
 async function handleEventCompletion(event: Event, option: EventOption) {
   const { relatedAttribute, difficulty, description } = option;
+  const ambition = event.relatedAmbition
+    ? gs.characters[event.relatedAmbition.npc].ambitions[event.relatedAmbition.index]
+    : null;
 
   if (relatedAttribute && difficulty) {
     const powerRequirement = difficultyNumbers[difficulty] ?? difficultyNumbers.medium;
@@ -118,8 +136,14 @@ async function handleEventCompletion(event: Event, option: EventOption) {
     const outcomeDescription = await resolveEventWithLLM(
       description,
       checkOutcome.success,
-      checkOutcome.isCritical
+      checkOutcome.isCritical,
+      ambition ? ambition.summary + '\n' + ambition.currentState : undefined
     );
+
+    // If an ambition progressed, unlock a gift
+    if (checkOutcome.success && event.relatedAmbition) {
+      unlockGift(gs.characters[event.relatedAmbition.npc]);
+    }
 
     // Identify which outcome to apply
     const outcomeData = checkOutcome.success ? option.onSuccess : option.onFailure;
@@ -141,9 +165,17 @@ async function handleEventCompletion(event: Event, option: EventOption) {
     });
 
     event.outcome = {
-      description: outcomeDescription,
+      description: outcomeDescription.outcome,
       relationValuesByCharacter,
     };
+
+    if (outcomeDescription.updatedAmbition && event.relatedAmbition) {
+      updatedAmbition(
+        event.relatedAmbition.npc,
+        event.relatedAmbition.index,
+        outcomeDescription.updatedAmbition
+      );
+    }
   } else {
     // Basic resolution if no attribute check is required
     await resolveEventWithLLM(description, true, false);

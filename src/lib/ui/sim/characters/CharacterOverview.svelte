@@ -4,6 +4,7 @@
   import { gs } from '@/lib/_state';
   import { getRelationshipSummaryUpdates } from '@/lib/llm/memories-db';
   import DeckList from '../decks/DeckList.svelte';
+  import CharacterAmbitions from './CharacterAmbitions.svelte';
   import CharacterPortrait from './CharacterPortrait.svelte';
   import RelationBars from './RelationBars.svelte';
 
@@ -79,6 +80,11 @@
         </ul>
       {/if}
     {/if}
+  </div>
+
+  <div class="ambitions">
+    <div class="section-title">Ambitions</div>
+    <CharacterAmbitions ambitions={npc.ambitions} />
   </div>
 
   <div class="decks">
@@ -217,6 +223,12 @@
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
     font-size: 12px;
+  }
+
+  .ambitions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .deck-list {

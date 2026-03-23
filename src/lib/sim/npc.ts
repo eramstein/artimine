@@ -145,3 +145,9 @@ export function sendNpcsHome() {
     npc.place = 0;
   });
 }
+
+export function updatedAmbition(npcKey: string, ambitionIndex: number, newValue: string) {
+  const npc = gs.characters[npcKey];
+  npc.ambitions[ambitionIndex].currentState = newValue;
+  npc.ambitions[ambitionIndex].latestDevelopments += '\n' + newValue;
+}

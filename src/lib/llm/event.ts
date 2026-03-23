@@ -123,8 +123,9 @@ OUTPUT (STRICT JSON):
 export async function resolveEventWithLLM(
   optionDescription: string,
   isSuccess: boolean,
-  isCritical: boolean
-): Promise<string> {
+  isCritical: boolean,
+  relatedAmbition?: string
+): Promise<{ outcome: string; updatedAmbition: string }> {
   const place = gs.places[gs.player.place];
   const timeOfDay = gs.time.period;
   const context = gs.activity.activityType;
@@ -141,9 +142,7 @@ export async function resolveEventWithLLM(
 
 An event occurred. The player chose an action. The outcome is known.
 
-Your task:
-1. Describe what happens next in a short, vivid scene.
-2. Update how each NPC's perception of the player evolves.
+Your task: describe what happens next in a short, vivid scene.
 
 ---
 
@@ -154,10 +153,17 @@ RULES:
 - NPC reactions must be consistent with:
   - their personality
   - their relationship with the player
+- Avoid generic success/failure descriptions.${
+      relatedAmbition && isSuccess
+        ? '\n- The player successfully helped the NPC with their ambition. The narrative MUST significantly progress this ambition.'
+        : ''
+    }
 
-- Avoid generic success/failure descriptions.
-
-OUTPUT: plain text, describing the scene as the player would see it.
+OUTPUT (STRICT JSON):
+{
+  "outcome": "plain text, describing the scene as the player would see it",
+  "updatedAmbition": "if [ACTION] includes progress_ambition, this should be a new version of the ambition describing its state after that event. Otherwise, return an empty string."
+}
 
 ---
 
@@ -181,7 +187,9 @@ ${charactersDescription}
       [ACTION]
       player_action = ${optionDescription}
       outcome = ${isSuccess ? 'success' : 'failure'}
-      critical = ${isCritical ? 'yes' : 'no'}
+      critical = ${isCritical ? 'yes' : 'no'}${
+        relatedAmbition && isSuccess ? `\n      progress_ambition = ${relatedAmbition}` : ''
+      }
     `,
   };
 
@@ -192,9 +200,21 @@ ${charactersDescription}
       model: LLM_API_TOOL_MODEL,
       stream: false,
       messages: [systemPrompt, userPrompt],
+      responseFormat: { type: 'json_object' },
     });
 
-    const outcome = llmService.getMessage(m);
+    const rawMessage = llmService.getMessage(m);
+    let outcome = rawMessage;
+    let updatedAmbition = '';
+
+    try {
+      const parsed = JSON.parse(rawMessage);
+      if (parsed.outcome) outcome = parsed.outcome;
+      if (parsed.updatedAmbition) updatedAmbition = parsed.updatedAmbition;
+    } catch (parseError) {
+      console.error('Failed to parse resolveEventWithLLM JSON format', parseError);
+    }
+
     // save memory in DB
     const summary = await generateSummary(eventDescription + '. ' + outcome);
     saveActivityLog({
@@ -206,7 +226,7 @@ ${charactersDescription}
       summary,
       embedding: [],
     });
-    return outcome;
+    return { outcome, updatedAmbition };
   } catch (e) {
     console.error('Error generating event', e);
     throw e;

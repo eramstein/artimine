@@ -4,15 +4,14 @@ import {
   DayPeriod,
   type Place,
   type Tournament,
-  TournamentType,
   TournamentFormat,
+  TournamentType,
 } from '../_model';
 import { gs } from '../_state/main.svelte';
 import { hideToast, showToast } from '../_state/state-ui.svelte';
 import { endPlayerChat, updateNpcRelation } from '../llm';
 import { autoResolveActivity } from './activity';
 import { createEventForCurrentActivity } from './event';
-import { rollGifts } from './gift';
 import { adjustNpcDecks, expandNpcCollections, sendNpcsHome } from './npc';
 import { dayPeriodIndexes, isTimePeriodBefore } from './time';
 import { getTournament } from './tournament';
@@ -101,8 +100,6 @@ export async function passTimeUntil(day: number, dayPeriod: DayPeriod) {
       gs.characters[participant].place = activityPlan.place;
     }
   });
-  // check for unlocks, quests and gifts
-  rollGifts();
 }
 
 export function fillDefaultActivities(untilDay: number) {

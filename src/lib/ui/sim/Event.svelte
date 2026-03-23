@@ -94,7 +94,7 @@
               {#if option.attribute || option.relatedAttribute}
                 <div class="option-meta">
                   <span class="attribute">[{option.attribute || option.relatedAttribute}]</span>
-                  <span class="difficulty">DC {option.difficulty}</span>
+                  <span class="difficulty">{option.difficulty}</span>
                 </div>
               {/if}
             </button>
