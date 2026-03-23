@@ -11,15 +11,15 @@
   import Board from './Board.svelte';
   import ConfirmPopover from './ConfirmPopover.svelte';
   import DeckModal from './DeckModal.svelte';
+  import DragPreview from './DragPreview.svelte';
   import GameWonModal from './GameWonModal.svelte';
+  import GoldCost from './GoldCost.svelte';
   import GraveyardModal from './GraveyardModal.svelte';
   import Hand from './Hand.svelte';
   import Player from './Player.svelte';
   import Shop from './Shop.svelte';
-  import GoldCost from './GoldCost.svelte';
   import SpellDimOverlay from './SpellDimOverlay.svelte';
   import SpellTargetArrows from './SpellTargetArrows.svelte';
-  import DragPreview from './DragPreview.svelte';
   import TargetPrompt from './TargetPrompt.svelte';
 
   // Derived value to check if game is won
@@ -296,7 +296,6 @@
     pointer-events: none;
     display: block;
   }
-
 
   .bottom-section {
     display: flex;

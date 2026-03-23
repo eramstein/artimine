@@ -268,7 +268,7 @@
     background: #444 url('/assets/images/cardboard.png') center/cover;
     background-blend-mode: multiply;
     border: 1px solid #1a1a1a;
-    padding: 6px;
+    padding: 4px;
     box-sizing: border-box;
     cursor: pointer;
     transition:
