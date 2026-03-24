@@ -71,6 +71,7 @@ export interface Ambition {
   summary: string;
   currentState: string;
   latestDevelopments: string;
+  lastUpdatedOn: number;
 }
 
 export interface RelationValues {
@@ -162,6 +163,7 @@ export interface EventOption {
 export interface EventOutcome {
   description: string;
   relationValuesByCharacter: Record<string, RelationValues>; // character keys
+  tagConfirmationByCharacter: Record<string, RelationTag>; // character keys
 }
 
 export interface ActivityPlan {

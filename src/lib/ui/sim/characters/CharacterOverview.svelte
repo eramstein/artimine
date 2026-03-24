@@ -42,7 +42,16 @@
       <CharacterPortrait character={npc} />
     </div>
     <div class="identity">
-      <div class="name">{npc.name}</div>
+      <div class="name-row">
+        <div class="name">{npc.name}</div>
+        {#if npc.relationTags.length > 0}
+          <div class="relation-tags">
+            {#each npc.relationTags as tag}
+              <span class="relation-tag">{tag}</span>
+            {/each}
+          </div>
+        {/if}
+      </div>
       <div class="bio-container">
         <div class="bio">{npc.bio}</div>
         <RelationBars
@@ -145,11 +154,18 @@
     gap: 50px;
   }
 
+  .name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
   .identity .name {
     color: rgba(255, 255, 255, 0.95);
     font-weight: 800;
     font-size: 20px;
-    margin-bottom: 6px;
   }
 
   .identity .bio {
@@ -163,6 +179,25 @@
   .relation-summary {
     color: rgba(255, 255, 255, 0.7);
     max-width: 1200px;
+  }
+
+  .relation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .relation-tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: rgba(180, 140, 255, 0.15);
+    border: 1px solid rgba(180, 140, 255, 0.35);
+    color: rgba(210, 180, 255, 0.95);
   }
 
   .section-title {

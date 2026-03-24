@@ -66,6 +66,7 @@ export enum Difficulty {
 // bonuses or extra abilities the player has with a given NPC
 export enum NpcPerk {
   ExtraTrade = 'extra trades', // allows extra trades per period
+  Team = 'can be team mate',
 }
 
 export enum RelationTag {

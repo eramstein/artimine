@@ -1,6 +1,14 @@
 import { DEFAULT_PLOTS } from '@/data/text/plots';
 import { antagonisticReactions, positiveReactions } from '@/data/text/reactions';
-import type { CharacterAttributes, Event, EventOption, Npc, RelationValues } from '../_model';
+import { config } from '../_config';
+import type {
+  CharacterAttributes,
+  Event,
+  EventOption,
+  Npc,
+  RelationTag,
+  RelationValues,
+} from '../_model';
 import { ActivityType, Difficulty } from '../_model';
 import { gs } from '../_state';
 import { getRandomFromArray, getRandomInteger } from '../_utils/random';
@@ -8,7 +16,7 @@ import { generateEventWithLLM, resolveEventWithLLM } from '../llm/event';
 import { difficultyNumbers } from './actions/general-challenge';
 import { unlockGift } from './gift';
 import { updatedAmbition } from './npc';
-import { updateNpcRelationValue } from './relation';
+import { checkForRelationChange, updateNpcRelationValue } from './relation';
 import { checkActionSuccess } from './roll';
 
 export async function createEventForCurrentActivity() {
@@ -47,10 +55,19 @@ function getPlot(character: Npc): {
     character.relationValues.friendship > 4 ||
     character.relationValues.love > 4 ||
     character.relationValues.respect > 4;
-  if (character.ambitions.length === 0 || !ambitionRoll || !ambitionsUnlocked) {
+  if (
+    character.ambitions.filter(
+      (ambition) =>
+        !ambition.lastUpdatedOn ||
+        ambition.lastUpdatedOn < gs.time.day - config.lockAmbitionsForDays
+    ).length === 0 ||
+    !ambitionRoll ||
+    !ambitionsUnlocked
+  ) {
     return { description: getRandomFromArray(DEFAULT_PLOTS) };
   }
   const ambitionIndex = getRandomInteger(0, character.ambitions.length - 1);
+  character.ambitions[ambitionIndex].lastUpdatedOn = gs.time.day;
   return {
     description: character.ambitions[ambitionIndex].summary,
     relatedAmbition: { npc: character.key, index: ambitionIndex },
@@ -148,25 +165,29 @@ async function handleEventCompletion(event: Event, option: EventOption) {
     // Identify which outcome to apply
     const outcomeData = checkOutcome.success ? option.onSuccess : option.onFailure;
     const relationValuesByCharacter: Record<string, RelationValues> = {};
+    const tagConfirmationByCharacter: Record<string, RelationTag> = {};
 
     event.participants.forEach((npcKey) => {
       const npc = gs.characters[npcKey];
       const characterUpdates: RelationValues = { friendship: 0, love: 0, respect: 0 };
-
       if (outcomeData?.relation) {
         Object.entries(outcomeData.relation).forEach(([key, value]) => {
           const relationKey = key as keyof RelationValues;
           updateNpcRelationValue(npc, relationKey, value);
+          const confirmationForTag = checkForRelationChange(npc, gs.activity.activityType);
           characterUpdates[relationKey] = value;
+          if (confirmationForTag) {
+            tagConfirmationByCharacter[npcKey] = confirmationForTag;
+          }
         });
       }
-
       relationValuesByCharacter[npcKey] = characterUpdates;
     });
 
     event.outcome = {
       description: outcomeDescription.outcome,
       relationValuesByCharacter,
+      tagConfirmationByCharacter,
     };
 
     if (outcomeDescription.updatedAmbition && event.relatedAmbition) {
@@ -210,4 +231,9 @@ async function handleEventContinuation(event: Event, option: EventOption) {
     history,
     options: finalOptions,
   };
+}
+
+export function addEventScene(event: Event, scene: string) {
+  event.history = [...event.history, event.description];
+  event.description = scene;
 }

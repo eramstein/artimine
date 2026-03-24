@@ -226,6 +226,10 @@ ${charactersDescription}
       summary,
       embedding: [],
     });
+    // update NPC daily interactions summary
+    for (const npc of characters) {
+      npc.period.interactionsSummary += '\n' + summary;
+    }
     return { outcome, updatedAmbition };
   } catch (e) {
     console.error('Error generating event', e);

@@ -1,6 +1,9 @@
 <script lang="ts">
+  import type { RelationTag } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
-  import { setEventOutcome } from '@/lib/sim/event';
+  import { writeRelationChange } from '@/lib/llm/relation-tag';
+  import { addEventScene, setEventOutcome } from '@/lib/sim/event';
+  import { updateNpcRelationTag } from '@/lib/sim/relation';
 
   let eventData = $derived(gs.activity.event);
 
@@ -9,7 +12,34 @@
   let options = $derived(eventData?.options || []);
   let outcome = $derived(eventData?.outcome);
 
+  // First entry in tagConfirmationByCharacter (only one at a time for now)
+  let pendingTagEntry = $derived(
+    outcome?.tagConfirmationByCharacter
+      ? (Object.entries(outcome.tagConfirmationByCharacter)[0] as [string, RelationTag] | undefined)
+      : undefined
+  );
+
   let pending = $state(false);
+  let tagScenePending = $state(false);
+  let tagSceneLoaded = $state(false);
+
+  // Load relation change scene when a tag confirmation appears
+  $effect(() => {
+    if (pendingTagEntry && eventData && !tagSceneLoaded) {
+      const [npcKey, tag] = pendingTagEntry;
+      tagScenePending = true;
+      writeRelationChange(npcKey, tag).then((scene) => {
+        if (scene && eventData) {
+          addEventScene(eventData, scene);
+        }
+        tagScenePending = false;
+        tagSceneLoaded = true;
+      });
+    }
+    if (!pendingTagEntry) {
+      tagSceneLoaded = false;
+    }
+  });
 
   async function handleOptionClick(index: number) {
     if (pending) return;
@@ -23,6 +53,22 @@
 
   function handleClose() {
     gs.activity.event = undefined;
+  }
+
+  function handleAcceptTag() {
+    if (!pendingTagEntry) return;
+    const [npcKey, tag] = pendingTagEntry;
+    const npc = gs.characters[npcKey];
+    if (npc) {
+      updateNpcRelationTag(npc, tag);
+      const scene = eventData?.description || '';
+      npc.period.interactionsSummary += `\n${scene}\n${gs.player.name} accepted.`;
+    }
+    handleClose();
+  }
+
+  function handleRefuseTag() {
+    handleClose();
   }
 </script>
 
@@ -80,7 +126,22 @@
               {/each}
             </div>
           {/if}
-          <button class="close-button" onclick={handleClose}> Continue </button>
+
+          {#if pendingTagEntry}
+            {#if tagScenePending}
+              <div class="pending-hint">The world is reacting...</div>
+            {:else}
+              <div class="description">
+                {description}
+              </div>
+              <div class="tag-confirm-buttons">
+                <button class="accept-button" onclick={handleAcceptTag}>Accept</button>
+                <button class="refuse-button" onclick={handleRefuseTag}>Refuse</button>
+              </div>
+            {/if}
+          {:else}
+            <button class="close-button" onclick={handleClose}> Continue </button>
+          {/if}
         </div>
       {:else}
         <div class="options-container" class:pending>
@@ -379,5 +440,49 @@
     color: #f87171;
     background: rgba(248, 113, 113, 0.1);
     border-color: rgba(248, 113, 113, 0.2);
+  }
+
+  /* Tag confirmation buttons */
+  .tag-confirm-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .accept-button,
+  .refuse-button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .accept-button {
+    background: #4f46e5;
+    color: white;
+  }
+
+  .accept-button:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  }
+
+  .refuse-button {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .refuse-button:hover {
+    background: rgba(248, 113, 113, 0.1);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+    transform: translateY(-2px);
   }
 </style>

@@ -2,6 +2,8 @@ import { config } from '../_config';
 import {
   ActivityType,
   DayPeriod,
+  NpcPerk,
+  RelationTag,
   type Activity,
   type ActivityPlan,
   type Npc,
@@ -18,9 +20,52 @@ export function updateNpcRelationValue(npc: Npc, relation: keyof RelationValues,
   );
 }
 
+export function updateNpcRelationTag(npc: Npc, tag: RelationTag) {
+  if (npc.relationTags.includes(tag)) return;
+  npc.relationTags.push(tag);
+  // first time a tag is added, unlock perks
+  switch (tag) {
+    case RelationTag.BestFriend:
+      npc.perks[NpcPerk.ExtraTrade] = (npc.perks[NpcPerk.ExtraTrade] || 0) + 1;
+      npc.perks[NpcPerk.Team] = 1;
+      break;
+    case RelationTag.Mentor:
+      npc.perks[NpcPerk.Team] = 1;
+      break;
+    default:
+      break;
+  }
+}
+
+/*
+ ** Updates npc relation tags based on current activity and relation values
+ ** If player confirmation is required, don't do the update yet, return the tag
+ */
+export function checkForRelationChange(npc: Npc, activityType: ActivityType): RelationTag | null {
+  let tag = null;
+  switch (activityType) {
+    case (ActivityType.Gaming, ActivityType.Study):
+      if (npc.relationValues.friendship < -2 && npc.relationValues.respect > 8)
+        tag = RelationTag.Rival;
+      if (npc.relationValues.friendship > 0 && npc.relationValues.respect > 9)
+        tag = RelationTag.Mentor;
+      break;
+    case ActivityType.Social:
+      if (npc.relationValues.friendship > 9) tag = RelationTag.BestFriend;
+      break;
+    case ActivityType.Date:
+      if (npc.relationValues.love > 8) tag = RelationTag.Lover;
+      break;
+    default:
+      break;
+  }
+  if (!tag) return null;
+  return tag;
+}
+
 export function makeNpcInvitations() {
   Object.values(gs.characters).forEach((character) => {
-    if (Math.random() < 0.0) return;
+    if (Math.random() < 0.5) return;
 
     const possibleActivityTypes = Object.keys(unlockedActivities).filter((activityType) => {
       const activity = unlockedActivities[activityType as ActivityType];

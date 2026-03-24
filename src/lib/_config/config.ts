@@ -7,6 +7,7 @@ export const config = {
   attributesMaxValue: 10,
   opinionMaxValue: 20,
   maxTradesPerPeriod: 1,
+  lockAmbitionsForDays: 7, // how many days have to pass before progressing an ambition
   // battle
   initialMana: 2,
   initialHandSize: 7,
