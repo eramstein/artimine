@@ -14,7 +14,7 @@ import { getEmptyCells } from '../../boards';
 import { attackLand, attackPlayer, attackUnit } from '../../combat';
 import { moveUnit } from '../../move';
 import { playSpell } from '../../spell';
-import { deployUnit } from '../../unit';
+import { deployUnit, getAdjacentUnitsInColumn, getClosestEnnemyInRow } from '../../unit';
 import type { PossibleActions } from '../model';
 import { type AiPersona } from '../model';
 import { spellWouldKillUnit } from '../spells';
@@ -132,8 +132,7 @@ function handleDeployedUnits(possibleActions: PossibleActions): boolean {
   if (breachGoal && possibleActions.unitsWhoCanAttack?.length > 0) {
     const candidates = possibleActions.unitsWhoCanAttack.filter(
       (u) =>
-        u.keywords?.moveAndAttack &&
-        possibleActions.unitsWhoCanMove?.some((m) => m.id === u.id)
+        u.keywords?.moveAndAttack && possibleActions.unitsWhoCanMove?.some((m) => m.id === u.id)
     );
     if (candidates.length > 0) {
       const strongest = candidates.slice().sort((a, b) => b.power - a.power)[0];
@@ -224,13 +223,23 @@ function getUnitWhoShouldAttackFirst(unitsWhoCanAttack: UnitDeployed[]): UnitDep
   // else, considering attacking with the other attacker in the row
   // ------------------------------------------------------------------------------------
 
-  // if an attack has lance and there are several blockers, use it
+  // if an attacker has lance and there are several blockers, use it
   const lanceAttackers = attackersInSameRow.filter((u) => u.keywords?.lance);
   if (lanceAttackers.length > 0 && blockers.length > 1) {
     return lanceAttackers[0];
   }
 
-  // TODO: handle cleave
+  // if an attacker has cleave and the closest blocker has neighbors above or below, use it
+  const cleaveAttackers = attackersInSameRow.filter((u) => u.keywords?.cleave);
+  if (cleaveAttackers.length > 0) {
+    const closestBlocker = getClosestEnnemyInRow(unit);
+    if (closestBlocker) {
+      const neighbors = getAdjacentUnitsInColumn(closestBlocker);
+      if (neighbors.length > 0) {
+        return cleaveAttackers[0];
+      }
+    }
+  }
 
   // can our smallest attacker kill the front blocker? if yes do it, else attack with the big one
   const frontBlocker = blockers.sort((a, b) => b.position.column - a.position.column)[0];

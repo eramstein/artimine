@@ -2,6 +2,8 @@ import { cards } from '@/data';
 import type { Card } from '../../_model';
 import type { RelationValues } from '../../_model/model-game';
 import { bs, gs } from '../../_state';
+import { makeUnit, summonUnit } from '../../battle/unit';
+import { config } from '../../_config';
 
 export interface CommandResult {
   ok: boolean;
@@ -94,6 +96,37 @@ export function executeCommand(input: string): CommandResult {
 
       player.gold = amount;
       return { ok: true, message: `Set player gold to ${amount}` };
+    }
+
+    case 'spawn': {
+      // /spawn <cardKey> <row-column>
+      const [, cardKey, posStr] = parts;
+      if (!cardKey || !posStr) {
+        return { ok: false, message: 'Usage: /spawn <cardKey> <row-column>' };
+      }
+
+      const cardTemplate = cards[cardKey];
+      if (!cardTemplate) {
+        return { ok: false, message: `Unknown card: ${cardKey}` };
+      }
+
+      const [rowStr, colStr] = posStr.split('-');
+      const row = Number(rowStr);
+      const column = Number(colStr);
+      if (isNaN(row) || isNaN(column)) {
+        return { ok: false, message: `Invalid position: ${posStr}. Expected format: row-column (e.g. 2-1)` };
+      }
+
+      const position = { row, column };
+      const ownerPlayerId = column < config.boardColumns / 2 ? 0 : 1;
+
+      if (!bs.players?.[ownerPlayerId]) {
+        return { ok: false, message: 'No active battle' };
+      }
+
+      const unit = makeUnit(ownerPlayerId, cardTemplate as Parameters<typeof makeUnit>[1]);
+      summonUnit(unit, position);
+      return { ok: true, message: `Spawned ${cardTemplate.name} at row ${row}, col ${column}` };
     }
 
     default:
