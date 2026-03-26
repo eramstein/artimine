@@ -17,11 +17,12 @@ import { playSpell } from '../../spell';
 import { deployUnit } from '../../unit';
 import type { PossibleActions } from '../model';
 import { type AiPersona } from '../model';
+import { spellWouldKillUnit } from '../spells';
 import { selectAiSpellTargets } from '../target';
 import { isAttackTargetLand, isAttackTargetPlayer, isAttackTargetUnit } from '../type-checks';
 import { getHighestValueTarget } from '../valuations/attack';
 import { getCounterAttackValue } from '../valuations/counter-attack';
-import { getHighestMoveValue } from '../valuations/move';
+import { getHighestMoveValue, getHighestMoveValueInRow } from '../valuations/move';
 import { valueUnit, wouldBeDestroyed } from '../valuations/unit';
 
 export const AiPersonaNormal: AiPersona = {
@@ -36,29 +37,32 @@ export const AiPersonaNormal: AiPersona = {
 };
 
 function handleCardsToPlay(possibleActions: PossibleActions): boolean {
-  const goalsMap = bs.aiState.goals.reduce(
-    (acc, curr) => {
-      acc[curr.goal] = curr.args;
-      return acc;
-    },
-    {} as Record<AiTurnGoal, any>
-  );
   // priority 1: cards that match a goal
   if (bs.aiState.goals.length > 0) {
-    for (const spell of possibleActions.playableSpells) {
-      if (spell.aiHints?.some((hint) => goalsMap[hint])) {
-        const targets = selectAiSpellTargets(spell);
+    for (const goalEntry of bs.aiState.goals) {
+      const matchingSpells = possibleActions.playableSpells.filter((spell) =>
+        spell.aiHints?.includes(goalEntry.goal)
+      );
+      const best = selectBestSpellForGoal(goalEntry.goal, goalEntry.args, matchingSpells);
+      if (best) {
+        const targets = selectAiSpellTargets(best);
         if (targets) {
-          playSpell(spell, targets);
+          playSpell(best, targets);
           return true;
         } else {
-          bs.aiState.dismissedCards[spell.id] = true;
+          bs.aiState.dismissedCards[best.id] = true;
         }
       }
     }
-    for (const unit of possibleActions.deployableUnits) {
-      if (unit.aiHints?.some((hint) => goalsMap[hint])) {
-        const bestPosition = getHighestMoveValue(unit as UnitDeployed);
+    for (const goalEntry of bs.aiState.goals) {
+      const matchingUnits = possibleActions.deployableUnits
+        .filter((unit) => unit.aiHints?.includes(goalEntry.goal))
+        .sort((a, b) => b.cost - a.cost);
+      for (const unit of matchingUnits) {
+        const bestPosition =
+          goalEntry.goal === AiTurnGoal.BreachRow
+            ? getHighestMoveValueInRow(unit as UnitDeployed, goalEntry.args.row)
+            : getHighestMoveValue(unit as UnitDeployed);
         if (bestPosition) {
           deployUnit(unit, bestPosition.cell);
           return true;
@@ -97,7 +101,50 @@ function handleCardsToPlay(possibleActions: PossibleActions): boolean {
   return false;
 }
 
+function selectBestSpellForGoal(
+  goal: AiTurnGoal,
+  args: any,
+  spells: SpellCard[]
+): SpellCard | null {
+  if (spells.length === 0) return null;
+  if (goal === AiTurnGoal.RemoveUnit) {
+    return selectBestSpellForRemoveUnit(args.unit as UnitDeployed, spells);
+  }
+  // default: cheapest spell
+  return spells.slice().sort((a, b) => a.cost - b.cost)[0];
+}
+
+function selectBestSpellForRemoveUnit(unit: UnitDeployed, spells: SpellCard[]): SpellCard | null {
+  const killers = spells.filter((s) => spellWouldKillUnit(s, unit) >= 1);
+  if (killers.length > 0) {
+    // prefer the cheapest kill
+    return killers.slice().sort((a, b) => a.cost - b.cost)[0];
+  }
+  // no kill available: pick the spell that deals the most damage
+  return spells
+    .slice()
+    .sort((a, b) => spellWouldKillUnit(b, unit) - spellWouldKillUnit(a, unit))[0];
+}
+
 function handleDeployedUnits(possibleActions: PossibleActions): boolean {
+  // special case: if a BreachRow goal is active, move the strongest moveAndAttack unit into that row
+  const breachGoal = bs.aiState.goals.find((g) => g.goal === AiTurnGoal.BreachRow);
+  if (breachGoal && possibleActions.unitsWhoCanAttack?.length > 0) {
+    const candidates = possibleActions.unitsWhoCanAttack.filter(
+      (u) =>
+        u.keywords?.moveAndAttack &&
+        possibleActions.unitsWhoCanMove?.some((m) => m.id === u.id)
+    );
+    if (candidates.length > 0) {
+      const strongest = candidates.slice().sort((a, b) => b.power - a.power)[0];
+      const bestPosition = getHighestMoveValueInRow(strongest, breachGoal.args.row);
+      if (bestPosition) {
+        moveUnit(strongest, bestPosition.cell);
+        return true;
+      }
+    }
+  }
+
   if (possibleActions.unitsWhoCanAttack?.length > 0) {
     const unit = getUnitWhoShouldAttackFirst(possibleActions.unitsWhoCanAttack);
     const canAlsoMove = possibleActions.unitsWhoCanMove?.findIndex((u) => u.id === unit.id) !== -1;

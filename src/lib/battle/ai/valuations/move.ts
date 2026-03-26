@@ -29,6 +29,31 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   };
 }
 
+export function getHighestMoveValueInRow(
+  unit: UnitDeployed,
+  preferredRow: number
+): { value: number; cell: Position } | null {
+  const cells = getEmptyCells(false);
+  const rowCells = cells.filter((c) => c.row === preferredRow);
+  if (rowCells.length === 0) {
+    return getHighestMoveValue(unit);
+  }
+
+  const ennemyPowerPerRow = getOpponentUnitDamagePerRow();
+  const dangerLevelPerRow = getDangerLevelPerRow();
+  const ennemyCountPerRow = getOpponentCountPerRow();
+  const moveValues = rowCells.map((cell) =>
+    getMoveValue(unit, cell, dangerLevelPerRow, ennemyPowerPerRow, ennemyCountPerRow)
+  );
+  const maxValue = Math.max(...moveValues);
+  if (maxValue > -Infinity) {
+    const best = rowCells[moveValues.indexOf(maxValue)];
+    return { value: maxValue, cell: best };
+  }
+
+  return getHighestMoveValue(unit);
+}
+
 const getMoveValue = (
   unit: UnitDeployed,
   cell: Position,

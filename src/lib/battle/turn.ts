@@ -1,5 +1,5 @@
 import type { Player, UnitDeployed } from '../_model';
-import { bs, saveStateToLocalStorage } from '../_state';
+import { bs } from '../_state';
 import { clearSelections } from '../ui/_helpers/selections';
 import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
@@ -26,7 +26,6 @@ export function nextTurn() {
     playAiTurn();
   } else {
     rollShopCards();
-    saveStateToLocalStorage();
   }
 }
 

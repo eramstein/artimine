@@ -27,7 +27,7 @@ export function getAiGoals(persona: PersonaType): { goal: AiTurnGoal; args: any 
 
   // check if we need to reset the board
   const boardValueDiff = valueBoard();
-  if (boardValueDiff <= -baordWipeThreshold) {
+  if (boardValueDiff.abs <= -baordWipeThreshold) {
     return [{ goal: AiTurnGoal.Reset, args: {} }];
   }
   return [];

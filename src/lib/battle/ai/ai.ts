@@ -5,14 +5,13 @@ import { isBoardSizeFull } from '../boards';
 import { canAttack } from '../combat';
 import { isPayable } from '../cost';
 import { canMove } from '../move';
-import { usePlayerColorAbility } from '../player';
+import { getAiPlayer, usePlayerColorAbility } from '../player';
 import { nextTurn } from '../turn';
 import { getColorToIncrement, incrementRandomColor } from './colors';
 import { getAiGoals } from './goals';
 import { usePlayerLandAbility } from './lands';
 import { PersonaType, type AiPersona, type PossibleActions } from './model';
-import { AiPersonaAggro } from './personas/aggro';
-import { AiPersonaNormal } from './personas/normal';
+import { AiPersonaToType } from './personas/mappings';
 import { getAiStrategy } from './strategy';
 
 const AI_PERSONA: PersonaType = PersonaType.Normal;
@@ -20,16 +19,7 @@ const MAX_ACTIONS_SAFETY_NET = 100;
 let actionsPlayedthisTurn = 0;
 
 export function playAiTurn() {
-  let persona: AiPersona;
-  switch (AI_PERSONA) {
-    case PersonaType.Aggro:
-      persona = AiPersonaAggro;
-      break;
-    case PersonaType.Normal:
-    default:
-      persona = AiPersonaNormal;
-      break;
-  }
+  const persona: AiPersona = AiPersonaToType[AI_PERSONA];
 
   bs.aiState.strategy = getAiStrategy(AI_PERSONA);
   bs.aiState.goals = getAiGoals(AI_PERSONA);
@@ -43,7 +33,6 @@ export function playAiTurn() {
 function loopAiActions(persona: AiPersona) {
   actionsPlayedthisTurn++;
 
-  const player = bs.players[1];
   const possibleActions = getPossibleActions(false);
 
   if (possibleActions.count === 0 || actionsPlayedthisTurn > MAX_ACTIONS_SAFETY_NET) {
@@ -53,7 +42,7 @@ function loopAiActions(persona: AiPersona) {
   }
 
   if (possibleActions.playerAbility) {
-    usePlayerAbility(persona, player);
+    usePlayerAbility(persona, getAiPlayer());
   } else {
     persona.executeAction(possibleActions);
   }

@@ -1,8 +1,9 @@
-import { bs } from '../../_state';
+import { bs, saveStateToLocalStorage } from '../../_state';
 import { uiState } from '../../_state/state-ui.svelte';
 import { nextTurn } from '../../battle/turn';
 
 export function handleEndTurn() {
+  saveStateToLocalStorage();
   if (bs.players[0].abilityUsed) {
     nextTurn();
   } else {

@@ -1,5 +1,6 @@
 import { AiTurnStrategy } from '@/lib/_model';
 import { PersonaType } from './model';
+import { valueBoard } from './valuations/unit';
 
 /*
 The strategy is evaluated at the start of the turn
@@ -9,6 +10,12 @@ export function getAiStrategy(persona: PersonaType): AiTurnStrategy {
   if (persona === PersonaType.Aggro) {
     return AiTurnStrategy.Attack;
   }
-  // TODO: assess board state and set strategy
+  const boardControl = valueBoard().rel;
+  if (boardControl < 0.3) {
+    return AiTurnStrategy.Defend;
+  }
+  if (boardControl > 0.7) {
+    return AiTurnStrategy.Attack;
+  }
   return AiTurnStrategy.Normal;
 }

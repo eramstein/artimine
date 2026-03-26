@@ -1,5 +1,9 @@
 import { config } from '@/lib/_config/config';
+import { isUnitCard, type UnitCard } from '@/lib/_model';
 import { bs } from '@/lib/_state';
+import { canAttack } from '../combat';
+import { canMove } from '../move';
+import { getAiPlayer } from '../player';
 import { landDestructionValue, landLifeValue, playerLifeValue } from './valuations/config';
 
 function getPowerPerRow(opponent: boolean = true): Record<number, number> {
@@ -81,11 +85,20 @@ export function getDangerLevelPerRow(): Record<number, number> {
 }
 
 // look for a row where we have enough power to win if we clear the blockers
+// take into account units with moveAndAttack in other rows and haste units in hand
 export function lookForLethalRow(): number | null {
   const opponent = bs.players[0];
   for (let row = 0; row < config.boardRows; row++) {
     const powerInRow = getPowerPerRow(false)[row];
-    if (powerInRow < opponent.life) {
+    const hasteUnitsMaxPower = getAiPlayer()
+      .hand.filter((u) => isUnitCard(u) && u.keywords?.haste)
+      .reduce((max, u) => Math.max(max, (u as UnitCard).power), 0);
+    const moveAndAttackUnitsMaxPower = bs.units
+      .filter(
+        (u) => u.ownerPlayerId !== 0 && u.keywords?.moveAndAttack && canMove(u) && canAttack(u)
+      )
+      .reduce((max, u) => Math.max(max, (u as UnitCard).power), 0);
+    if (powerInRow + hasteUnitsMaxPower + moveAndAttackUnitsMaxPower < opponent.life) {
       continue;
     }
     const land = opponent.lands.find((l) => l.position === row);

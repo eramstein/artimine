@@ -1,2 +1,1 @@
 - protect ranged units, in general put fragile units behind solid ones
-- anticipate poison damage

@@ -15,10 +15,12 @@ export function valueUnit(unit: UnitDeployed) {
   return baseValue * damageDiscount * onDeployDiscount;
 }
 
+function getDamagePotential(unit: UnitDeployed) {
+  return unit.power + (unit.counters?.rage || 0) + (unit.keywords?.poisonous || 0);
+}
+
 export function wouldBeDestroyed(unit: UnitDeployed, attacker: UnitDeployed) {
-  return (
-    attacker.power + (attacker.counters?.rage || 0) >= unit.health + (unit.keywords?.armor || 0)
-  );
+  return getDamagePotential(attacker) >= unit.health + (unit.keywords?.armor || 0);
 }
 
 export function wouldBeDestroyedBySpell(unit: UnitDeployed, spell: SpellCard) {
@@ -43,17 +45,20 @@ export function wouldBeDestroyedByCounterAttack(
 ) {
   let damage = 0;
   counterAttackers.forEach((attacker) => {
-    damage += attacker.power + (attacker.counters?.rage || 0) - (unit.keywords?.armor || 0);
+    damage += getDamagePotential(attacker) - (unit.keywords?.armor || 0);
   });
   return damage >= unit.health;
 }
 
 // returns total AI units values minus total player units values
-export function valueBoard(): number {
+export function valueBoard(): { abs: number; rel: number } {
   const playerId = bs.players.filter((player) => player.isPlayer)[0].id;
   const aiUnits = bs.units.filter((unit) => unit.ownerPlayerId !== playerId);
   const playerUnits = bs.units.filter((unit) => unit.ownerPlayerId === playerId);
   const aiUnitsValue = aiUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
   const playerUnitsValue = playerUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
-  return aiUnitsValue - playerUnitsValue;
+  return {
+    abs: aiUnitsValue - playerUnitsValue,
+    rel: aiUnitsValue / (aiUnitsValue + playerUnitsValue),
+  };
 }
