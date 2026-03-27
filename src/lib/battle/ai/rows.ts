@@ -1,10 +1,11 @@
 import { config } from '@/lib/_config/config';
-import { isUnitCard, type UnitCard } from '@/lib/_model';
+import { isUnitCard, type UnitCard, type UnitDeployed } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { canAttack } from '../combat';
 import { canMove } from '../move';
 import { getAiPlayer } from '../player';
 import { landDestructionValue, landLifeValue, playerLifeValue } from './valuations/config';
+import { getDamagePotential, getNonUnitDamagePotential } from './valuations/unit';
 
 function getPowerPerRow(opponent: boolean = true): Record<number, number> {
   const units = opponent
@@ -12,7 +13,7 @@ function getPowerPerRow(opponent: boolean = true): Record<number, number> {
     : bs.units.filter((u) => u.ownerPlayerId !== 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
-      acc[u.position.row] = (acc[u.position.row] || 0) + u.power + (u.counters?.rage || 0);
+      acc[u.position.row] = (acc[u.position.row] || 0) + getNonUnitDamagePotential(u);
       return acc;
     },
     {} as Record<number, number>
@@ -25,7 +26,7 @@ export function getOpponentUnitDamagePerRow(): Record<number, number> {
   const units = bs.units.filter((u) => u.ownerPlayerId === 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
-      const damage = u.power + (u.counters?.rage || 0) + (u.keywords?.poisonous || 0);
+      const damage = getDamagePotential(u);
       acc[u.position.row] = (acc[u.position.row] || 0) + damage;
       if (u.keywords?.cleave) {
         acc[u.position.row - 1] = (acc[u.position.row - 1] || 0) + damage;
@@ -50,8 +51,11 @@ export function getOpponentCountPerRow(): Record<number, number> {
   return countPerRow;
 }
 
-export function getAlliedHealthPerRow(): Record<number, number> {
-  const units = bs.units.filter((u) => u.ownerPlayerId !== 0);
+export function getAlliedHealthPerRow(unitWhoWouldMove?: UnitDeployed): Record<number, number> {
+  const units = bs.units.filter(
+    (u) =>
+      u.ownerPlayerId !== 0 && (!unitWhoWouldMove || u.instanceId !== unitWhoWouldMove.instanceId)
+  );
   const healthPerRow = units.reduce(
     (acc, u) => {
       acc[u.position.row] = (acc[u.position.row] || 0) + u.health;
@@ -62,10 +66,10 @@ export function getAlliedHealthPerRow(): Record<number, number> {
   return healthPerRow;
 }
 
-export function getDangerLevelPerRow(): Record<number, number> {
+export function getDangerLevelPerRow(unitWhoWouldMove?: UnitDeployed): Record<number, number> {
   const dangerLevels: Record<number, number> = {};
   for (let row = 0; row < config.boardRows; row++) {
-    const alliedHealth = getAlliedHealthPerRow()[row];
+    const alliedHealth = getAlliedHealthPerRow(unitWhoWouldMove)[row] ?? 0;
     const opponentPower = getPowerPerRow()[row];
     const diff = opponentPower - alliedHealth;
     if (diff <= 0) {

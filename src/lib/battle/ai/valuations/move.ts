@@ -10,7 +10,7 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   cell: Position;
 } | null {
   const ennemyPowerPerRow = getOpponentUnitDamagePerRow();
-  const dangerLevelPerRow = getDangerLevelPerRow();
+  const dangerLevelPerRow = getDangerLevelPerRow(unit);
   const ennemyCountPerRow = getOpponentCountPerRow();
   const cells = getEmptyCells(false);
   const moveValues = cells.map((cell) =>
@@ -23,6 +23,7 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   if (cellsToConsider.length === 0) {
     return null;
   }
+  console.log(unit, dangerLevelPerRow, moveValues, maxValue, cellsToConsider);
   return {
     value: maxValue,
     cell: cells[getRandomFromArray(cellsToConsider).index],

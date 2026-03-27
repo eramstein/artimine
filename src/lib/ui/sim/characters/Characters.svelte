@@ -112,4 +112,11 @@
     font-size: 14px;
     margin-top: 4px;
   }
+
+  .content {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    min-width: 0;
+  }
 </style>

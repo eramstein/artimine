@@ -120,7 +120,7 @@
 
       {#if selectedDeck}
         <div class="deck-preview">
-          <DeckList deck={selectedDeck} />
+          <DeckList deck={selectedDeck} readOnly={true} />
         </div>
       {/if}
     </div>
@@ -173,7 +173,7 @@
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 8px;
-    width: 600px;
+    max-width: 600px;
   }
 
   .relation-summary {
@@ -317,7 +317,7 @@
 
   .deck-preview {
     min-width: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .empty {

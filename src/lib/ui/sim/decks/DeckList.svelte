@@ -5,11 +5,17 @@
   import { getAssetPath } from '@/lib/_utils/asset-paths';
   import { removeCardFromDeck } from '@/lib/sim/decks';
 
+  import CardFull from '../../cards/CardFull.svelte';
+  import type { CardTemplate, Land } from '@/lib/_model/model-battle';
+
   interface Props {
     deck: Deck;
+    readOnly?: boolean;
   }
 
-  let { deck }: Props = $props();
+  let { deck, readOnly = false }: Props = $props();
+
+  let selectedCard = $state<CardTemplate | Land | null>(null);
 
   // Create sorted cards array by mana cost ascending
   let sortedCards = $derived(
@@ -78,9 +84,18 @@
       uiState.cardFullOverlay.card = cardTemplate;
     }
   }
+
+  function handleCardClick(cardTemplateId: string) {
+    if (readOnly) {
+      selectedCard = getCardTemplate(cardTemplateId);
+    } else {
+      removeCardFromDeck(deck, cardTemplateId);
+    }
+  }
 </script>
 
-<div class="deck-list-container">
+<div class="deck-list-wrapper">
+  <div class="deck-list-container">
   {#if manaData.buckets.length > 1}
     <div class="mana-chart" aria-hidden="true">
       {#each manaData.buckets as count, index}
@@ -108,8 +123,8 @@
       <div class="cards-list">
         {#each sortedCards as card}
           <div
-            class="card-item"
-            onclick={() => removeCardFromDeck(deck, card.cardTemplateId)}
+            class="card-item {selectedCard && selectedCard.id === card.cardTemplateId ? 'selected' : ''}"
+            onclick={() => handleCardClick(card.cardTemplateId)}
             oncontextmenu={(e: MouseEvent) => {
               e.preventDefault();
               displayCardFull(e, card.cardTemplateId);
@@ -144,19 +159,39 @@
     <div class="lands-section">
       <div class="lands-list">
         {#each deck.lands as land}
-          <div class="card-item">
+          <div 
+            class="card-item {selectedCard && selectedCard.id === land ? 'selected' : ''}"
+            onclick={() => handleCardClick(land)}
+          >
             <span class="card-name">{getLandName(land)}</span>
           </div>
         {/each}
       </div>
     </div>
   {/if}
+  </div>
+
+  {#if readOnly && selectedCard}
+    <div class="card-aside">
+      <div class="sticky-container">
+        <CardFull card={selectedCard} />
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
+  .deck-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
   .deck-list-container {
     color: white;
-    max-width: 400px;
+    width: 400px;
+    flex-shrink: 0;
   }
 
   .mana-chart {
@@ -247,6 +282,15 @@
     border-radius: 4px;
   }
 
+  .card-item.selected {
+    background: rgba(74, 158, 255, 0.2);
+    border-color: rgba(74, 158, 255, 0.4);
+    margin: 0 -0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 4px;
+  }
+
   .card-item:last-child {
     border-bottom: none;
   }
@@ -326,5 +370,17 @@
       width: 14px;
       height: 14px;
     }
+  }
+
+  .card-aside {
+    flex: 1;
+    min-width: 512px;
+  }
+
+  .sticky-container {
+    position: sticky;
+    top: 20px;
+    transform: scale(0.85);
+    transform-origin: top left;
   }
 </style>

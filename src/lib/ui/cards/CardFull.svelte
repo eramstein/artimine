@@ -306,7 +306,7 @@
   .card-full {
     width: 512px;
     border-radius: 16px;
-    box-shadow: 
+    box-shadow:
       0 8px 16px rgba(0, 0, 0, 0.4),
       inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     border: 1px solid #1a1a1a;
@@ -322,7 +322,6 @@
   }
 
   .content {
-    width: 100%;
     height: 512px;
     background-size: cover;
     background-position: center;

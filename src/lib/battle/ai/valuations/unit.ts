@@ -15,11 +15,16 @@ export function valueUnit(unit: UnitDeployed) {
   return baseValue * damageDiscount * onDeployDiscount;
 }
 
-function getDamagePotential(unit: UnitDeployed) {
-  return unit.power + (unit.counters?.rage || 0) + (unit.keywords?.poisonous || 0);
+export function getDamagePotential(unit: UnitDeployed): number {
+  return getNonUnitDamagePotential(unit) + (unit.keywords?.poisonous || 0);
 }
 
-export function wouldBeDestroyed(unit: UnitDeployed, attacker: UnitDeployed) {
+// this doesn't take into account damage that applies only to units like poison or decay counters
+export function getNonUnitDamagePotential(unit: UnitDeployed): number {
+  return unit.power + (unit.counters?.rage || 0);
+}
+
+export function wouldBeDestroyed(unit: UnitDeployed, attacker: UnitDeployed): boolean {
   return getDamagePotential(attacker) >= unit.health + (unit.keywords?.armor || 0);
 }
 
