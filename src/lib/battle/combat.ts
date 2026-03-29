@@ -152,14 +152,16 @@ function recordUnitHasAttacked(unit: UnitDeployed) {
   if (!unit.keywords?.moveAndAttack || unit.hasMoved) {
     unit.exhausted = true;
   }
-  // Play attack sound based on unit power
-  soundManager.playAttackSound(unit.power);
-  // Trigger attack animation
-  uiState.battle.attackingUnitId = unit.instanceId;
-  // Reset animation after a short delay
-  setTimeout(() => {
-    uiState.battle.attackingUnitId = null;
-  }, 300);
+  if (!uiState.isHeadless) {
+    // Play attack sound based on unit power
+    soundManager.playAttackSound(unit.power);
+    // Trigger attack animation
+    uiState.battle.attackingUnitId = unit.instanceId;
+    // Reset animation after a short delay
+    setTimeout(() => {
+      uiState.battle.attackingUnitId = null;
+    }, 300);
+  }
 }
 
 export function autoAttack(unit: UnitDeployed) {

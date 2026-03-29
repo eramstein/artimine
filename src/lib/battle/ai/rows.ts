@@ -4,13 +4,14 @@ import { bs } from '@/lib/_state';
 import { canAttack } from '../combat';
 import { canMove } from '../move';
 import { getAiPlayer } from '../player';
+import { simulatedNextTurn } from './ai';
 import { landDestructionValue, landLifeValue, playerLifeValue } from './valuations/config';
 import { getDamagePotential, getNonUnitDamagePotential } from './valuations/unit';
 
 function getPowerPerRow(opponent: boolean = true): Record<number, number> {
   const units = opponent
-    ? bs.units.filter((u) => u.ownerPlayerId === 0)
-    : bs.units.filter((u) => u.ownerPlayerId !== 0);
+    ? (simulatedNextTurn ?? bs).units.filter((u) => u.ownerPlayerId === 0)
+    : (simulatedNextTurn ?? bs).units.filter((u) => u.ownerPlayerId !== 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
       acc[u.position.row] = (acc[u.position.row] || 0) + getNonUnitDamagePotential(u);
@@ -23,7 +24,7 @@ function getPowerPerRow(opponent: boolean = true): Record<number, number> {
 
 // this one takes poison and cleave into account
 export function getOpponentUnitDamagePerRow(): Record<number, number> {
-  const units = bs.units.filter((u) => u.ownerPlayerId === 0);
+  const units = (simulatedNextTurn ?? bs).units.filter((u) => u.ownerPlayerId === 0);
   const powerPerRow = units.reduce(
     (acc, u) => {
       const damage = getDamagePotential(u);
@@ -40,7 +41,7 @@ export function getOpponentUnitDamagePerRow(): Record<number, number> {
 }
 
 export function getOpponentCountPerRow(): Record<number, number> {
-  const units = bs.units.filter((u) => u.ownerPlayerId === 0);
+  const units = (simulatedNextTurn ?? bs).units.filter((u) => u.ownerPlayerId === 0);
   const countPerRow = units.reduce(
     (acc, u) => {
       acc[u.position.row] = (acc[u.position.row] || 0) + 1;
@@ -52,7 +53,7 @@ export function getOpponentCountPerRow(): Record<number, number> {
 }
 
 export function getAlliedHealthPerRow(unitWhoWouldMove?: UnitDeployed): Record<number, number> {
-  const units = bs.units.filter(
+  const units = (simulatedNextTurn ?? bs).units.filter(
     (u) =>
       u.ownerPlayerId !== 0 && (!unitWhoWouldMove || u.instanceId !== unitWhoWouldMove.instanceId)
   );

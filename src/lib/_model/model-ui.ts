@@ -115,6 +115,8 @@ export type UiState = {
   consoleCommand: {
     visible: boolean;
   };
+  isHeadless?: boolean;
+  suppressAnimations?: boolean;
 };
 
 export enum UiView {

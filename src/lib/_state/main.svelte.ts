@@ -70,3 +70,7 @@ export const resetBattleState = (): void => {
 export const getCurrentBattleState = () => {
   return JSON.parse(JSON.stringify({ ...bs }));
 };
+
+export const populateBattleState = (state: BattleState) => {
+  Object.assign(bs, state);
+};

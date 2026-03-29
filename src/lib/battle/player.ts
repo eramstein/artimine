@@ -35,19 +35,21 @@ export function untapPlayer(player: Player) {
 
 export function incrementColor(player: Player, color: CardColor, value: number) {
   player.colors[color] = (player.colors[color] || 0) + value;
-  // Trigger animation
-  uiState.battle.colorBeingIncremented = color;
-  // Reset animation after a short delay
-  setTimeout(() => {
-    uiState.battle.colorBeingIncremented = null;
-  }, 500);
+  if (!uiState.isHeadless) {
+    // Trigger animation
+    uiState.battle.colorBeingIncremented = color;
+    // Reset animation after a short delay
+    setTimeout(() => {
+      uiState.battle.colorBeingIncremented = null;
+    }, 500);
+  }
 }
 
 export function usePlayerColorAbility(player: Player, color: CardColor) {
   if (player.colors[color] === undefined || player.abilityUsed) {
     return;
   }
-  soundManager.playSound('button2');
+  if (!uiState.isHeadless) soundManager.playSound('button2');
   incrementColor(player, color, 1);
   player.abilityUsed = true;
 }
@@ -64,6 +66,6 @@ export function gainGold(player: Player, amount: number, steal = 0) {
     targetPlayer.gold -= stolenAmount;
     player.gold += stolenAmount;
   }
-  soundManager.playGoldSound();
+  if (!uiState.isHeadless) soundManager.playGoldSound();
   onGoldGained(player, amount);
 }

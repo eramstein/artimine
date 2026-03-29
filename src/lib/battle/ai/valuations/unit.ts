@@ -1,6 +1,7 @@
 import { TriggerType, type SpellCard, type UnitDeployed } from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { getBudgetForUnit } from '@/tools/generator/budgets';
+import { simulatedNextTurn } from '../ai';
 
 export function valueUnit(unit: UnitDeployed) {
   const baseValue = getBudgetForUnit(unit.cost, unit.colors);
@@ -57,9 +58,11 @@ export function wouldBeDestroyedByCounterAttack(
 
 // returns total AI units values minus total player units values
 export function valueBoard(): { abs: number; rel: number } {
-  const playerId = bs.players.filter((player) => player.isPlayer)[0].id;
-  const aiUnits = bs.units.filter((unit) => unit.ownerPlayerId !== playerId);
-  const playerUnits = bs.units.filter((unit) => unit.ownerPlayerId === playerId);
+  const playerId = (simulatedNextTurn ?? bs).players.filter((player) => player.isPlayer)[0].id;
+  const aiUnits = (simulatedNextTurn ?? bs).units.filter((unit) => unit.ownerPlayerId !== playerId);
+  const playerUnits = (simulatedNextTurn ?? bs).units.filter(
+    (unit) => unit.ownerPlayerId === playerId
+  );
   const aiUnitsValue = aiUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
   const playerUnitsValue = playerUnits.reduce((acc, unit) => acc + valueUnit(unit), 0);
   return {

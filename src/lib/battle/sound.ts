@@ -20,6 +20,11 @@ class SoundManager {
       gold: getSoundPath('gold'),
     };
 
+    if (typeof Audio === 'undefined') {
+      console.warn('Audio is not supported in this environment');
+      return;
+    }
+
     for (const [name, path] of Object.entries(soundFiles)) {
       const audio = new Audio(path);
       audio.preload = 'auto';
@@ -28,6 +33,7 @@ class SoundManager {
   }
 
   playSound(soundName: string) {
+    if (typeof Audio === 'undefined') return;
     const sound = this.sounds.get(soundName);
     if (sound) {
       // Reset to beginning and play
@@ -55,6 +61,10 @@ class SoundManager {
   }
 
   playGoldSound() {
+    if (typeof window === 'undefined') {
+      this.playSound('gold');
+      return;
+    }
     window.setTimeout(() => {
       this.playSound('gold');
     }, 100);

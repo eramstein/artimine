@@ -88,6 +88,8 @@ export const uiState: UiState = $state({
   consoleCommand: {
     visible: false,
   },
+  isHeadless: false,
+  suppressAnimations: false,
 });
 
 export function addRollResult(result: {

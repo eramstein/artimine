@@ -1,6 +1,7 @@
 import type { Position, StatusType, UnitCard, UnitCardTemplate, UnitDeployed } from '@/lib/_model';
 import { config } from '../_config';
 import { bs } from '../_state';
+import { uiState } from '../_state/state-ui.svelte';
 import { clearUnitStaticAbilities } from './ability-static';
 import { isCellFree, isOnPlayersSide } from './boards';
 import { chatOnLargeCardPlayed } from './chat';
@@ -21,14 +22,17 @@ export function deployUnit(unit: UnitCard, position: Position) {
     (card) => card.instanceId !== unit.instanceId
   );
 
-  // Play deploy sound
-  soundManager.playDeploySound();
+  if (!uiState.isHeadless) {
+    // Play deploy sound
+    soundManager.playDeploySound();
+    // Hint to LLM that a unit was deployed
+    if (unit.cost >= 7) {
+      chatOnLargeCardPlayed(unit);
+    }
+  }
+
   // Trigger activated abilities
   onDeployUnit(bs.units[bs.units.length - 1]);
-  // Hint to LLM that a unit was deployed
-  if (unit.cost >= 7) {
-    chatOnLargeCardPlayed(unit);
-  }
 }
 
 export function makeUnit(leaderIndex: number, core: UnitCardTemplate): UnitCard {

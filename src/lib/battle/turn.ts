@@ -1,5 +1,6 @@
 import type { Player, UnitDeployed } from '../_model';
 import { bs } from '../_state';
+import { uiState } from '../_state/state-ui.svelte';
 import { clearSelections } from '../ui/_helpers/selections';
 import { playAiTurn } from './ai/ai';
 import { autoAttack } from './combat';
@@ -12,7 +13,7 @@ import { removeTemporaryEffects } from './temporary-effects';
 import { damageUnit, healUnit } from './unit';
 
 export function nextTurn() {
-  clearSelections();
+  if (!uiState.isHeadless) clearSelections();
   const previousPlayer = bs.isPlayersTurn ? bs.players[0] : bs.players[1];
   updateGold(previousPlayer);
   updateStatuses(previousPlayer);
@@ -22,10 +23,10 @@ export function nextTurn() {
   initPlayerTurn(player);
   onTurnStart(player);
   if (!bs.isPlayersTurn) {
-    soundManager.playSound('button');
+    if (!uiState.isHeadless) soundManager.playSound('button');
     playAiTurn();
   } else {
-    rollShopCards();
+    if (!uiState.isHeadless) rollShopCards();
   }
 }
 

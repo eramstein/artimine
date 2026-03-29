@@ -1,5 +1,12 @@
 import { config } from '@/lib/_config';
-import { CardType, isUnitCard, type Player, type SpellCard, type UnitCard } from '@/lib/_model';
+import {
+  CardType,
+  isUnitCard,
+  type BattleState,
+  type Player,
+  type SpellCard,
+  type UnitCard,
+} from '@/lib/_model';
 import { bs } from '@/lib/_state';
 import { isBoardSizeFull } from '../boards';
 import { canAttack } from '../combat';
@@ -7,6 +14,7 @@ import { isPayable } from '../cost';
 import { canMove } from '../move';
 import { getAiPlayer, usePlayerColorAbility } from '../player';
 import { nextTurn } from '../turn';
+import AiWorker from './ai.worker?worker';
 import { getColorToIncrement, incrementRandomColor } from './colors';
 import { getAiGoals } from './goals';
 import { usePlayerLandAbility } from './lands';
@@ -17,6 +25,7 @@ import { getAiStrategy } from './strategy';
 const AI_PERSONA: PersonaType = PersonaType.Normal;
 const MAX_ACTIONS_SAFETY_NET = 100;
 let actionsPlayedthisTurn = 0;
+export let simulatedNextTurn: BattleState | null = null;
 
 export function playAiTurn() {
   const persona: AiPersona = AiPersonaToType[AI_PERSONA];
@@ -30,10 +39,11 @@ export function playAiTurn() {
   }, 500);
 }
 
-function loopAiActions(persona: AiPersona) {
+async function loopAiActions(persona: AiPersona) {
   actionsPlayedthisTurn++;
 
   const possibleActions = getPossibleActions(false);
+  simulatedNextTurn = await evaluateMove(bs, 'EVALUATE_PASS_TURN');
 
   if (possibleActions.count === 0 || actionsPlayedthisTurn > MAX_ACTIONS_SAFETY_NET) {
     console.log('No actions screenLeft, passing', actionsPlayedthisTurn);
@@ -99,4 +109,27 @@ function getPossibleActions(isLeaderPlayer: boolean): PossibleActions {
       playableSpells.length +
       (playerAbility ? 1 : 0),
   };
+}
+
+/**
+ * Runs a simulation in a worker to see "what if" a certain action is taken.
+ */
+export async function evaluateMove(
+  snapshot: BattleState,
+  type: 'EVALUATE_PASS_TURN'
+): Promise<BattleState> {
+  return new Promise((resolve) => {
+    const worker = new AiWorker();
+
+    worker.onmessage = (event) => {
+      const { resultingState } = event.data;
+      worker.terminate();
+      resolve(resultingState);
+    };
+
+    worker.postMessage({
+      type,
+      snapshot: JSON.parse(JSON.stringify(snapshot)),
+    });
+  });
 }

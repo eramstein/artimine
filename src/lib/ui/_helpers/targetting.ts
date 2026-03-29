@@ -102,7 +102,7 @@ export function activateSpell(spell: SpellCard) {
 
 export function activateTriggeredAbility(unit: UnitDeployed, ability: Ability, triggerParams: any) {
   if (
-    unit.ownerPlayerId !== getHumanPlayer().id &&
+    (uiState.isHeadless || unit.ownerPlayerId !== getHumanPlayer().id) &&
     ability.actions.length > 0 &&
     ability.actions.some((action) => action.targets && action.targets.length > 0)
   ) {
