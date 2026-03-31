@@ -45,13 +45,12 @@
     <Hand player={bs.players[0]} />
     <div class="turn-section">
       <button
-        class="end-turn-btn"
+        class="chip-btn end-turn-btn"
         class:disabled={!bs.isPlayersTurn}
         onclick={handleEndTurn}
         disabled={!bs.isPlayersTurn}
-        aria-label="End Turn"
       >
-        <img src="/assets/images/pass_turn.png" alt="End Turn" />
+        END<br/>TURN
       </button>
     </div>
     {#if !uiState.battle.displayChat}
@@ -178,7 +177,42 @@
     margin: 0;
   }
 
-  .end-turn-btn {
+  .chip-btn {
+    background: url('/assets/images/wood_chip_base.png') center/cover no-repeat;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    box-shadow:
+      0 6px 0px #3a221f,
+      0 10px 15px rgba(0, 0, 0, 0.6);
+    position: relative;
+    transform: translateY(-6px);
+    
+    /* Text styling */
+    color: #2a110a; /* Dark brown ink */
+    font-family: inherit;
+    font-weight: 800;
+    line-height: 1.1;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .chip-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -5px 8px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  /* Reverted shop button to use original image styling */
+  .shop-btn {
     background: transparent;
     border: none;
     border-radius: 50%;
@@ -187,28 +221,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    box-shadow:
-      0 4px 15px rgba(0, 0, 0, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
   }
 
-  .end-turn-btn:hover {
+  .shop-btn:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 6px 20px rgba(0, 0, 0, 0.4),
-      0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
-  .end-turn-btn:active {
+  .shop-btn:active {
     transform: translateY(0);
-    box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      0 1px 4px rgba(0, 0, 0, 0.2);
   }
 
-  .end-turn-btn img {
+  .shop-btn img {
     width: 80px;
     height: 80px;
     object-fit: contain;
@@ -216,19 +240,38 @@
     display: block;
   }
 
-  .end-turn-btn.disabled {
+  .end-turn-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .chip-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-8px);
+    box-shadow:
+      0 8px 0px #3a221f,
+      0 14px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .chip-btn:active {
+    transform: translateY(0);
+    box-shadow:
+      0 0px 0px #3a221f,
+      0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .chip-btn.disabled,
+  .chip-btn:disabled {
     cursor: not-allowed;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .end-turn-btn.disabled img {
-    filter: grayscale(60%);
-    opacity: 0.6;
-  }
-
-  .end-turn-btn.disabled:hover {
-    transform: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    filter: grayscale(80%) brightness(0.8);
+    box-shadow:
+      0 2px 0px #1a1a1a,
+      0 4px 6px rgba(0, 0, 0, 0.4);
+    color: #777;
+    text-shadow: none;
   }
 
   .chat-fab {
@@ -267,34 +310,6 @@
     justify-content: center;
     gap: 1rem;
     z-index: 1001;
-  }
-
-  .shop-btn {
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    padding: 0px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .shop-btn:hover {
-    transform: translateY(-2px);
-  }
-
-  .shop-btn:active {
-    transform: translateY(0);
-  }
-
-  .shop-btn img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    pointer-events: none;
-    display: block;
   }
 
   .bottom-section {
