@@ -1,4 +1,5 @@
 import type { Position, UnitDeployed } from '@/lib/_model';
+import { bs } from '@/lib/_state';
 import { getRandomFromArray } from '@/lib/_utils/random';
 import { getEmptyCells } from '../../boards';
 import { getDangerLevelPerRow, getOpponentCountPerRow, getOpponentUnitDamagePerRow } from '../rows';
@@ -23,7 +24,6 @@ export function getHighestMoveValue(unit: UnitDeployed): {
   if (cellsToConsider.length === 0) {
     return null;
   }
-  console.log(unit, dangerLevelPerRow, moveValues, maxValue, cellsToConsider);
   return {
     value: maxValue,
     cell: cells[getRandomFromArray(cellsToConsider).index],
@@ -83,12 +83,34 @@ const getMoveValue = (
     return landDestructionValue;
   }
 
-  // If would be destroyed
+  // Other cases: add up values based on various criteria
+  let moveValue = 0;
+
   if (wouldBeDestroyed) {
-    return -valueUnit(unit);
+    moveValue -= valueUnit(unit);
+  }
+
+  // favorable matchup
+  if (ennemyPower <= unit.power && !wouldBeDestroyed) {
+    moveValue++;
+  }
+
+  // defensive unit blocking
+  if (unit.maxHealth > unit.power + 1 && ennemyPower) {
+    moveValue++;
+  }
+
+  // protecting vulnerable valuable unit
+  const alliedUnitInBackRow = bs.units.find(
+    (u) =>
+      u.position?.row === cell.row &&
+      u.position?.column > cell.column &&
+      u.ownerPlayerId === unit.ownerPlayerId
+  );
+  if (alliedUnitInBackRow && alliedUnitInBackRow.health < ennemyPower) {
+    moveValue += valueUnit(alliedUnitInBackRow) / 2;
   }
 
   // Else, neutral value
-  // TODO: add value if protecting vulnerable valuable unit
-  return 0;
+  return moveValue;
 };

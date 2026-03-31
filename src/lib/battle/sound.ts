@@ -21,7 +21,9 @@ class SoundManager {
     };
 
     if (typeof Audio === 'undefined') {
-      console.warn('Audio is not supported in this environment');
+      if (typeof window !== 'undefined') {
+        console.warn('Audio is not supported in this environment');
+      }
       return;
     }
 
