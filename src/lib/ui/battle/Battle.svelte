@@ -42,20 +42,26 @@
     <Player player={bs.players[1]} />
   </div>
   <div class="bottom-section">
-    <Hand player={bs.players[0]} />
-    <div class="turn-section">
+    <div class="hands-container">
+      <Hand player={bs.players[0]} />
+      {#if !uiState.battle.displayChat}
+        <Hand player={bs.players[1]} />
+      {:else}
+        <div class="hand-placeholder"></div>
+      {/if}
+    </div>
+
+    <div class="turn-slider-bar">
       <button
-        class="chip-btn end-turn-btn"
+        class="chip-btn end-turn-btn slider-button"
+        class:is-p2={!bs.isPlayersTurn}
         class:disabled={!bs.isPlayersTurn}
         onclick={handleEndTurn}
         disabled={!bs.isPlayersTurn}
       >
-        END<br/>TURN
+        <span>End<br />Turn</span>
       </button>
     </div>
-    {#if !uiState.battle.displayChat}
-      <Hand player={bs.players[1]} />
-    {/if}
   </div>
   <ConfirmPopover />
 </div>
@@ -170,13 +176,6 @@
     margin-bottom: 1rem;
   }
 
-  .turn-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-  }
-
   .chip-btn {
     background: url('/assets/images/wood_chip_base.png') center/cover no-repeat;
     border: 1px solid rgba(0, 0, 0, 0.4);
@@ -189,11 +188,10 @@
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
     box-shadow:
-      0 6px 0px #3a221f,
-      0 10px 15px rgba(0, 0, 0, 0.6);
+      0 4px 0px #3a221f,
+      0 8px 12px rgba(0, 0, 0, 0.5);
     position: relative;
-    transform: translateY(-6px);
-    
+
     /* Text styling */
     color: #2a110a; /* Dark brown ink */
     font-family: inherit;
@@ -205,9 +203,14 @@
   .chip-btn::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: 50%;
-    box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -5px 8px rgba(0,0,0,0.5);
+    box-shadow:
+      inset 0 2px 5px rgba(255, 255, 255, 0.3),
+      inset 0 -5px 8px rgba(0, 0, 0, 0.5);
     pointer-events: none;
   }
 
@@ -241,25 +244,38 @@
   }
 
   .end-turn-btn {
-    width: 80px;
-    height: 80px;
-    font-size: 1rem;
-    letter-spacing: -0.02em;
+    width: 72px;
+    height: 72px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .slider-button {
+    pointer-events: auto;
+    position: absolute;
+    left: 25%;
+    transform: translateX(-50%);
+    transition:
+      left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+      filter 0.2s ease,
+      box-shadow 0.2s ease;
+    z-index: 10;
+  }
+
+  .slider-button.is-p2 {
+    left: 75%;
   }
 
   .chip-btn:hover {
     filter: brightness(1.1);
-    transform: translateY(-8px);
     box-shadow:
-      0 8px 0px #3a221f,
-      0 14px 20px rgba(0, 0, 0, 0.5);
+      0 6px 0px #3a221f,
+      0 10px 15px rgba(0, 0, 0, 0.4);
   }
 
   .chip-btn:active {
-    transform: translateY(0);
-    box-shadow:
-      0 0px 0px #3a221f,
-      0 2px 4px rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%) translateY(2px);
   }
 
   .chip-btn.disabled,
@@ -314,10 +330,35 @@
 
   .bottom-section {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
     width: 100%;
+    gap: 0;
+  }
+
+  .hands-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 0 2rem;
+  }
+
+  .hand-placeholder {
+    width: 550px;
+    height: 220px;
+  }
+
+  .turn-slider-bar {
+    width: 100%;
+    max-width: 1200px;
+    height: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    margin-top: 40px;
   }
 
   .card-full-overlay {
