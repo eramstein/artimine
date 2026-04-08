@@ -122,7 +122,7 @@ export function getRangeLabel(filterArgs: UnitFilterArgs) {
     labels.push('with ' + filterArgs.unitType);
   }
   if (filterArgs.hasKeyword) {
-    labels.push(filterArgs.hasKeyword);
+    labels.push('has ' + filterArgs.hasKeyword);
   }
   if (filterArgs.excludeSelf) {
     labels.push('(others)');

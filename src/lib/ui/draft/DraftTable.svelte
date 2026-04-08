@@ -1,19 +1,39 @@
 <script lang="ts">
   import { cards } from '@/data';
+  import type { Deck } from '@/lib/_model';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
   import { processDraftTurn } from '@/lib/battle/draft/draft-logic';
   import CardCompact from '../cards/CardCompact.svelte';
   import CardFull from '../cards/CardFull.svelte';
+  import DeckList from '../sim/decks/DeckList.svelte';
 
   let tournament = $derived(gs.activity.tournament);
   let draftState = $derived(tournament?.draftState);
   let playerBoosterIds = $derived(draftState ? draftState.activeBoosters[gs.player.key] : []);
 
+  // Transform flat list of drafted card IDs into a Deck object for DeckList component
+  let draftedDeck = $derived({
+    key: 'draft-pool',
+    name: 'Draft Pool',
+    cards: (() => {
+      const draftedIds = draftState?.draftedCards[gs.player.key] || [];
+      const counts = new Map<string, number>();
+      for (const id of draftedIds) {
+        counts.set(id, (counts.get(id) || 0) + 1);
+      }
+      return Array.from(counts.entries()).map(([cardTemplateId, count]) => ({
+        cardTemplateId,
+        count,
+      }));
+    })(),
+    lands: [],
+    record: { wins: 0, losses: 0, cardResults: {} },
+  } as Deck);
+
   function handlePick(cardId: string) {
     if (tournament) {
       processDraftTurn(tournament, cardId);
-      // Wait, isDraftTurn sync or async? Sync. The state updates immediately.
     }
   }
 
@@ -25,29 +45,45 @@
 </script>
 
 {#if tournament && draftState}
-  <div class="draft-table-container">
-    <div class="draft-header">
-      <h2>Draft Pack {draftState.packNumber}</h2>
-      <p class="subtitle">Pick a card to add to your draft pool! Passes to the {draftState.direction === 1 ? 'left' : 'right'}.</p>
+  <div class="draft-layout">
+    <div class="draft-table-container">
+      <div class="draft-header">
+        <h2>Draft Pack {draftState.packNumber}</h2>
+        <p class="subtitle">
+          Pick a card to add to your draft pool! Passes to the {draftState.direction === 1
+            ? 'left'
+            : 'right'}.
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        {#each playerBoosterIds as cardId, index (index)}
+          {@const card = cards[cardId]}
+          {#if card}
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div
+              class="card-wrapper"
+              onclick={() => handlePick(cardId)}
+              oncontextmenu={(e) => displayCardFull(e, card)}
+            >
+              <div class="card-container">
+                <CardCompact {card} />
+              </div>
+            </div>
+          {/if}
+        {/each}
+        {#if playerBoosterIds.length === 0}
+          <div class="waiting-message">Waiting for other players...</div>
+        {/if}
+      </div>
     </div>
 
-    <div class="cards-grid">
-      {#each playerBoosterIds as cardId, index (index)}
-        {@const card = cards[cardId]}
-        {#if card}
-          <!-- svelte-ignore a11y_click_events_have_key_events -->
-          <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <div class="card-wrapper" onclick={() => handlePick(cardId)} oncontextmenu={(e) => displayCardFull(e, card)}>
-            <div class="card-container">
-              <CardCompact {card} />
-            </div>
-          </div>
-        {/if}
-      {/each}
-      {#if playerBoosterIds.length === 0}
-        <div class="waiting-message">Waiting for other players...</div>
-      {/if}
-    </div>
+    <aside class="draft-sidebar">
+      <div class="sidebar-content">
+        <DeckList deck={draftedDeck} readOnly={true} />
+      </div>
+    </aside>
   </div>
 {/if}
 
@@ -63,13 +99,45 @@
 {/if}
 
 <style>
+  .draft-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    align-items: stretch;
+  }
+
   .draft-table-container {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background: var(--bg-secondary, #2a2a2a);
-    border-radius: 8px;
     color: white;
+    overflow: hidden;
+  }
+
+  .draft-sidebar {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-left: 20px;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
+  }
+
+  /* Adjust DeckList internal styles if needed through container */
+  .sidebar-content :global(.deck-list-container) {
+    width: 100%;
+  }
+
+  .sidebar-content :global(.deck-list-wrapper) {
+    flex-direction: column;
   }
 
   .draft-header {
@@ -85,15 +153,15 @@
   .subtitle {
     color: #aaa;
     margin-top: 5px;
+    font-size: 0.9rem;
   }
 
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
     justify-items: center;
-    max-height: 70vh;
-    overflow-y: auto;
+    max-height: 80vh;
     padding: 10px;
   }
 
@@ -110,7 +178,7 @@
   }
 
   .card-container {
-    width: 200px;
+    width: 180px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
@@ -143,5 +211,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  @media (max-width: 1200px) {
+    .draft-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+      border-top: none;
+    }
+
+    .draft-sidebar {
+      border-left: none;
+      border-top: 1px solid #444;
+      padding-left: 0;
+      padding-top: 20px;
+      max-height: 500px;
+    }
   }
 </style>

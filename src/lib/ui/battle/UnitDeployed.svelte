@@ -243,7 +243,7 @@
   .counters-container {
     position: absolute;
     bottom: 70px;
-    left: 4px;
+    left: 8px;
     z-index: 2;
   }
 

@@ -4686,7 +4686,23 @@
         "effect": {
           "name": "incrementColor",
           "args": {
-            "color": "green"
+            "color": "blue"
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "incrementColor",
+          "args": {
+            "color": "red"
+          }
+        }
+      },
+      {
+        "effect": {
+          "name": "incrementColor",
+          "args": {
+            "color": "black"
           }
         }
       }
