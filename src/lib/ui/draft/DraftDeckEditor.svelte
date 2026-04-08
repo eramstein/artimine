@@ -1,5 +1,6 @@
 <script lang="ts">
   import { cards, lands } from '@/data';
+  import { config } from '@/lib/_config';
   import { TournamentFormat } from '@/lib/_model/enums-sim';
   import { gs } from '@/lib/_state/main.svelte';
   import { uiState } from '@/lib/_state/state-ui.svelte';
@@ -15,6 +16,8 @@
   // Initialize or fetch the player's draft deck
   let draftDeckKey = TournamentFormat.Draft;
   let draftDeck = $derived(gs.player.decks.find((d) => d.key === draftDeckKey));
+  let totalCardsInDeck = $derived(draftDeck?.cards.reduce((sum, c) => sum + c.count, 0) || 0);
+  let canFinish = $derived(totalCardsInDeck >= config.draftDeckMinCards);
 
   // Ensure the deck exists
   $effect(() => {
@@ -84,8 +87,10 @@
 <div class="draft-deck-editor">
   <div class="header">
     <h2>Build your Draft Deck</h2>
-    <p>Include exactly 30 cards total to start matches.</p>
-    <button class="finish-button" onclick={finishDeckBuilding}>Finish & Start Matches</button>
+    <p>Include at least {config.draftDeckMinCards} cards total to start matches ({totalCardsInDeck}/{config.draftDeckMinCards}).</p>
+    <button class="finish-button" onclick={finishDeckBuilding} disabled={!canFinish}>
+      Finish & Start Matches
+    </button>
   </div>
   <div class="content">
     <div class="pool-panel">
@@ -153,8 +158,14 @@
     cursor: pointer;
     transition: background 0.2s;
   }
-  .finish-button:hover {
+  .finish-button:hover:not(:disabled) {
     background: #45a049;
+  }
+  .finish-button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 
   .content {

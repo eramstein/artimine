@@ -4602,6 +4602,7 @@
         ]
       }
     ],
+    "aiHints": ["Remove Unit"],
     "cardSet": "alpha"
   },
   {

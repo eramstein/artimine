@@ -9,7 +9,7 @@
 
   $effect(() => {
     if (uiState.consoleCommand.visible) {
-      inputValue = '';
+      inputValue = '/';
       resultMessage = '';
       // Focus after the DOM updates
       setTimeout(() => inputEl?.focus(), 0);
@@ -20,22 +20,23 @@
     uiState.consoleCommand.visible = false;
   }
 
-  function submit() {
-    if (!inputValue.trim()) {
+  function submit(keepOpen = false) {
+    const trimmed = inputValue.trim();
+    if (!trimmed || trimmed === '/') {
       close();
       return;
     }
     const result = executeCommand(inputValue);
     resultOk = result.ok;
     resultMessage = result.message;
-    if (result.ok) {
+    if (result.ok && !keepOpen) {
       setTimeout(close, 800);
     }
   }
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Enter') {
-      submit();
+      submit(e.shiftKey);
     } else if (e.key === 'Escape') {
       close();
     }

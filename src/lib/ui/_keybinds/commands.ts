@@ -1,9 +1,9 @@
 import { cards } from '@/data';
+import { config } from '../../_config';
 import type { Card } from '../../_model';
 import type { RelationValues } from '../../_model/model-game';
 import { bs, gs } from '../../_state';
 import { makeUnit, summonUnit } from '../../battle/unit';
-import { config } from '../../_config';
 
 export interface CommandResult {
   ok: boolean;
@@ -50,10 +50,10 @@ export function executeCommand(input: string): CommandResult {
     }
 
     case 'get-card': {
-      // /get-card <cardKey>
-      const [, cardKey] = parts;
+      // /get-card <cardKey> [playerIndex]
+      const [, cardKey, playerIndexStr] = parts;
       if (!cardKey) {
-        return { ok: false, message: 'Usage: /get-card <cardKey>' };
+        return { ok: false, message: 'Usage: /get-card <cardKey> [playerIndex]' };
       }
 
       const cardTemplate = cards[cardKey];
@@ -61,20 +61,31 @@ export function executeCommand(input: string): CommandResult {
         return { ok: false, message: `Unknown card: ${cardKey}` };
       }
 
-      if (!bs.players?.[0]) {
+      const playerIndex = playerIndexStr === '1' || playerIndexStr === 'opponent' ? 1 : 0;
+
+      if (!bs.players?.[playerIndex]) {
         return { ok: false, message: 'No active battle' };
       }
 
       const card: Card = {
         ...cardTemplate,
-        ownerPlayerId: 0,
+        ownerPlayerId: playerIndex,
         instanceId: crypto.randomUUID(),
         cost: 0,
         colors: [],
       } as Card;
 
-      bs.players[0].hand.push(card);
-      return { ok: true, message: `Added ${cardTemplate.name} to hand` };
+      bs.players[playerIndex].hand.push(card);
+      return {
+        ok: true,
+        message: `Added ${cardTemplate.name} to ${playerIndex === 1 ? "opponent's " : ''}hand`,
+      };
+    }
+
+    case 'discard-hand': {
+      // /discard-hand
+      bs.players[1].hand = [];
+      return { ok: true, message: `Discarded opponent's hand` };
     }
 
     case 'gold': {
@@ -114,7 +125,10 @@ export function executeCommand(input: string): CommandResult {
       const row = Number(rowStr);
       const column = Number(colStr);
       if (isNaN(row) || isNaN(column)) {
-        return { ok: false, message: `Invalid position: ${posStr}. Expected format: row-column (e.g. 2-1)` };
+        return {
+          ok: false,
+          message: `Invalid position: ${posStr}. Expected format: row-column (e.g. 2-1)`,
+        };
       }
 
       const position = { row, column };

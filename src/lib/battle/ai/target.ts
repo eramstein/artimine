@@ -94,9 +94,8 @@ function selectTarget(
     if (creaturesToRemove.length > 0) {
       return getHighestKillValueTarget(spell, creaturesToRemove);
     }
-    return getHighestKillValueTarget(spell, potentialTargets as UnitDeployed[]);
+    return getHighestKillValueTarget(spell, potentialTargets as (UnitDeployed | Position)[]);
   }
-
   // by default, pick at random
   return getRandomFromArray(potentialTargets);
 }
@@ -104,8 +103,10 @@ function selectTarget(
 // get which target would yield the best value, including ranges
 function getHighestKillValueTarget(
   spell: SpellCard,
-  potentialTargets: UnitDeployed[]
-): UnitDeployed {
+  potentialTargets: (UnitDeployed | Position)[]
+): UnitDeployed | Position {
+  console.log(spell, potentialTargets);
+
   let range: UnitFilterArgs | null = null;
   spell.actions.forEach((action) => {
     if (action.effect.args.range) {
@@ -119,10 +120,17 @@ function getHighestKillValueTarget(
 }
 
 // if the spell only affects one target (no range), simply pick the highest value target that would be killed
-function getBestSingleTarget(spell: SpellCard, potentialTargets: UnitDeployed[]): UnitDeployed {
-  const killableTargets = potentialTargets.filter((t) => wouldBeDestroyedBySpell(t, spell));
+function getBestSingleTarget(
+  spell: SpellCard,
+  potentialTargets: (UnitDeployed | Position)[]
+): UnitDeployed | Position {
+  const units = potentialTargets.filter((t) => 'instanceId' in t) as UnitDeployed[];
+  if (units.length === 0) {
+    return getRandomFromArray(potentialTargets);
+  }
+  const killableTargets = units.filter((t) => wouldBeDestroyedBySpell(t, spell));
   if (killableTargets.length === 0) {
-    return potentialTargets.sort((b, a) => valueUnit(a) - valueUnit(b))[0];
+    return units.sort((b, a) => valueUnit(a) - valueUnit(b))[0];
   }
   return killableTargets.sort((b, a) => valueUnit(a) - valueUnit(b))[0];
 }
@@ -131,14 +139,25 @@ function getBestSingleTarget(spell: SpellCard, potentialTargets: UnitDeployed[])
 // TODO: for now it only works if the spell has only one range
 function getBestRangeTarget(
   spell: SpellCard,
-  potentialTargets: UnitDeployed[],
+  potentialTargets: (UnitDeployed | Position)[],
   range: UnitFilterArgs
-): UnitDeployed {
-  const targetValues: Record<string, number> = {}; // target instanceId to damage value
+): UnitDeployed | Position {
+  const targetValues: Record<string, number> = {}; // target key to damage value
   potentialTargets.forEach((t) => {
-    const targetsInRange = getUnitsInRange([[t]], range, t, bs.players[spell.ownerPlayerId]);
-    targetValues[t.instanceId] = targetsInRange.reduce((acc, u) => acc + valueUnit(u), 0);
+    const targetsInRange = getUnitsInRange(
+      [[t]] as any,
+      range,
+      t as any,
+      bs.players[spell.ownerPlayerId]
+    );
+    const key = 'instanceId' in t ? t.instanceId : `${t.row},${t.column}`;
+    targetValues[key] = targetsInRange.reduce((acc, u) => acc + valueUnit(u), 0);
   });
-  const highestValueTarget = Object.entries(targetValues).sort((b, a) => a[1] - b[1])[0][0];
-  return bs.units.find((u) => u.instanceId === highestValueTarget) as UnitDeployed;
+  const highestValueTargetKey = Object.entries(targetValues).sort((b, a) => a[1] - b[1])[0][0];
+  return potentialTargets.find((t) => {
+    if ('instanceId' in t) {
+      return t.instanceId === highestValueTargetKey;
+    }
+    return `${t.row},${t.column}` === highestValueTargetKey;
+  }) as UnitDeployed | Position;
 }

@@ -183,7 +183,7 @@ export function autoBuildBotDecks(tournament: Tournament) {
     );
 
     // Specific lands: 1 city, 1 island, 1 mountain, 1 forest
-    const landsIds = ['city', 'island', 'mountain', 'forest']; // Assuming these are the land keys
+    const landsIds = ['city', 'island', 'mountain', 'forest'];
     const actualLands = landsIds.filter((l) => lands[l]).map((l) => lands[l].id);
 
     // Overwrite previous draft deck for the bot
@@ -201,11 +201,5 @@ export function autoBuildBotDecks(tournament: Tournament) {
     };
 
     bot.decks.push(newDeck);
-
-    // Usually NPCs don't have a "current selected deck" specific to the tournament stored globally,
-    // they pick their deck at battle start. But maybe we need to ensure they play this one?
-    // According to existing game logic, an NPC picks a deck randomly or best deck.
-    // Let's name it something specific or clear previous ones for the tournament,
-    // OR just adding it to `decks` is enough for now, as that's what was implied.
   }
 }

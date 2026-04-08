@@ -16,4 +16,5 @@ export const config = {
   boardColumns: 4,
   aiActionInterval: 1000,
   shopCards: 3,
+  draftDeckMinCards: 24,
 };
